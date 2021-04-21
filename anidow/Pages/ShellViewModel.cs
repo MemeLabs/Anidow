@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using Anidow.Services;
+using Anidow.Utils;
 using Humanizer;
 using Serilog;
 using Stylet;
@@ -17,6 +19,7 @@ namespace Anidow.Pages
         private readonly IWindowManager _windowManager;
         private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
+        public string WindowTitle => $"Anidow v{Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)}";
 
         public ShellViewModel(
             MainViewModel mainViewModel,
@@ -43,11 +46,11 @@ namespace Anidow.Pages
             _windowManager = windowManager;
             _logger = logger;
             ActiveItem = mainViewModel;
+
         }
 
         public bool CanForceCheck { get; set; } = true;
         public string NextCheckIn { get; set; }
-
         public Timer NextCheckTimer { get; set; }
 
         protected override async void OnInitialActivate()
@@ -81,6 +84,11 @@ namespace Anidow.Pages
         public void Close()
         {
             Application.Current.Shutdown(0);
+        }
+
+        public void OpenGithub()
+        {
+            LinkUtil.Open("https://github.com/MemeLabs/Anidow");
         }
     }
 }

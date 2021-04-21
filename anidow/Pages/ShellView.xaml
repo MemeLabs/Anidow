@@ -10,7 +10,7 @@
     xmlns:pages="clr-namespace:Anidow.Pages"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:tb="http://www.hardcodet.net/taskbar"
-    Title="Anidow"
+    Title="{Binding WindowTitle}"
     Width="800"
     Height="450"
     MinWidth="800"
@@ -28,6 +28,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="1"
@@ -44,6 +45,13 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <Button
+                Grid.Column="2"
+                Command="{s:Action OpenGithub,
+                                   ActionNotFound=Disable}"
+                Content="{iconPacks:FontAwesome GithubBrands}"
+                Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
+                ToolTip="Open on Github" />
         </Grid>
     </controls:AdonisWindow.TitleBarContent>
     <Grid>
