@@ -1,0 +1,141 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI">
+    <ControlTemplate x:Key="TabControlCustomHorizontal" TargetType="{x:Type TabControl}">
+        <Grid KeyboardNavigation.TabNavigation="Local">
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="RowDefinition0" Height="Auto" />
+                <RowDefinition x:Name="RowDefinition1" Height="*" />
+            </Grid.RowDefinitions>
+            <Grid x:Name="HeaderPanelScroll">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions>
+
+                <Grid x:Name="HeaderPanelGrid" Grid.Column="2">
+                    <TabPanel
+                        x:Name="HeaderPanel"
+                        IsItemsHost="true"
+                        KeyboardNavigation.TabIndex="1" />
+                </Grid>
+            </Grid>
+            <Grid
+                x:Name="ContentPanel"
+                Grid.Row="1"
+                UseLayoutRounding="True">
+                <ContentPresenter
+                    x:Name="PART_SelectedContentHost"
+                    Margin="{TemplateBinding Padding}"
+                    ContentSource="SelectedContent"
+                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                    UseLayoutRounding="False" />
+            </Grid>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <!--<Trigger Property="mah:TabControlHelper.Underlined" Value="TabPanel">
+                <Setter TargetName="Underline" Property="Visibility" Value="Visible" />
+            </Trigger>-->
+            <Trigger Property="TabStripPlacement" Value="Top">
+                <Setter TargetName="ContentPanel" Property="Grid.Row" Value="1" />
+                <Setter TargetName="HeaderPanelScroll" Property="Grid.Row" Value="0" />
+                <Setter TargetName="HeaderPanelScroll" Property="Margin" Value="2,2,2,0" />
+                <Setter TargetName="RowDefinition0" Property="Height" Value="Auto" />
+                <Setter TargetName="RowDefinition1" Property="Height" Value="*" />
+                <!--<Setter TargetName="Underline" Property="Placement" Value="Bottom" />-->
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate x:Key="TabControlCustomHorizontalLeft" TargetType="{x:Type TabControl}">
+        <Grid KeyboardNavigation.TabNavigation="Local">
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="RowDefinition0" Height="Auto" />
+                <RowDefinition x:Name="RowDefinition1" Height="*" />
+            </Grid.RowDefinitions>
+            <Grid x:Name="HeaderPanelScroll" Background="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}">
+                <Grid x:Name="HeaderPanelGrid">
+                    <TabPanel
+                        x:Name="HeaderPanel"
+                        IsItemsHost="true"
+                        KeyboardNavigation.TabIndex="1" />
+                </Grid>
+            </Grid>
+            <Grid
+                x:Name="ContentPanel"
+                Grid.Row="1"
+                UseLayoutRounding="True">
+                <ContentPresenter
+                    x:Name="PART_SelectedContentHost"
+                    Margin="{TemplateBinding Padding}"
+                    ContentSource="SelectedContent"
+                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                    UseLayoutRounding="False" />
+            </Grid>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <!--<Trigger Property="mah:TabControlHelper.Underlined" Value="TabPanel">
+                <Setter TargetName="Underline" Property="Visibility" Value="Visible" />
+            </Trigger>-->
+            <Trigger Property="TabStripPlacement" Value="Top">
+                <Setter TargetName="ContentPanel" Property="Grid.Row" Value="1" />
+                <Setter TargetName="HeaderPanelScroll" Property="Grid.Row" Value="0" />
+                <Setter TargetName="HeaderPanelScroll" Property="Margin" Value="2,2,2,0" />
+                <Setter TargetName="RowDefinition0" Property="Height" Value="Auto" />
+                <Setter TargetName="RowDefinition1" Property="Height" Value="*" />
+                <!--<Setter TargetName="Underline" Property="Placement" Value="Bottom" />-->
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style
+        x:Key="TabControlCustom"
+        BasedOn="{StaticResource {x:Type TabControl}}"
+        TargetType="{x:Type TabControl}">
+        <Style.Triggers>
+            <Trigger Property="TabStripPlacement" Value="Top">
+                <Setter Property="Template" Value="{StaticResource TabControlCustomHorizontal}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style
+        x:Key="TabControlCustomAnimeBytes"
+        BasedOn="{StaticResource {x:Type TabControl}}"
+        TargetType="{x:Type TabControl}">
+        <Style.Triggers>
+            <Trigger Property="TabStripPlacement" Value="Top">
+                <Setter Property="Template" Value="{StaticResource TabControlCustomHorizontalLeft}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border Name="Border" Background="Transparent" CornerRadius="2">
+                        <ContentPresenter
+                            x:Name="ContentSite"
+                            Margin="10,4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            ContentSource="Header" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
