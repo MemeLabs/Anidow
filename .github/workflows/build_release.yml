@@ -1,0 +1,67 @@
+name: Build & Create Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "5.0.x"
+      - name: Restore
+        run: dotnet restore
+
+      - name: Publish
+        run: dotnet publish anidow --no-restore --configuration Release --self-contained true --runtime win-x64 --output windows
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Anidow.exe
+          path: windows/Anidow.exe
+
+  create-release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: Anidow.exe
+          path: windows
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: windows
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: windows/Anidow.exe
+          asset_name: Anidow.exe
+          asset_content_type: application/octet-stream
