@@ -93,7 +93,7 @@ namespace Anidow.Pages
             await using var db = new TrackContext();
             var tracked = await db.Anime.Select(a => a.GroupId).ToListAsync();
 
-            var items = await Task.Run(async ()=>  SelectedFilterIndex switch
+            var items = await Task.Run(async () => SelectedFilterIndex switch
             {
                 0 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.All),
                 1 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.Airing),

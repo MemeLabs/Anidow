@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -85,10 +84,10 @@ namespace Anidow
                 AutomaticDecompression = DecompressionMethods.All,
                 UseCookies = true
             };
-            var httpClient = new HttpClient(clientHandler) {Timeout = TimeSpan.FromSeconds(10)};
+            var httpClient = new HttpClient(clientHandler) { Timeout = TimeSpan.FromSeconds(10) };
             httpClient.DefaultRequestHeaders.UserAgent.Clear();
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36");
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36");
             httpClient.DefaultRequestHeaders.Add("dnt", "1");
             httpClient.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
             httpClient.DefaultRequestHeaders.Accept.ParseAdd("*/*");
@@ -102,11 +101,12 @@ namespace Anidow
             var tracker = new Tracker(new JsonFileStore(Environment.SpecialFolder.CommonApplicationData));
             tracker.Configure<ShellView>()
                 .Id(w => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
-                .Properties(w => new {w.Height, w.Width, w.Left, w.Top, w.WindowState})
+                .Properties(w => new { w.Height, w.Width, w.Left, w.Top, w.WindowState })
                 .PersistOn(nameof(ShellView.Closing))
                 .StopTrackingOn(nameof(ShellView.Closing));
             return tracker;
         }
+
         private void InitLogger(ILogEventSink logViewModel)
         {
             var logConfiguration = new LoggerConfiguration()
@@ -114,7 +114,8 @@ namespace Anidow
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.Sink(logViewModel, LogEventLevel.Verbose)
-                .WriteTo.File("./logs/log-.txt", rollingInterval: RollingInterval.Day);
+                .WriteTo.File(
+                    "./logs/log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7);
 
             _logger = logConfiguration.CreateLogger();
         }
