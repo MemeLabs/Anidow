@@ -19,18 +19,31 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      - name: Publish
-        run: dotnet publish --no-restore --configuration Release --self-contained true --runtime win-x64 --output windows
+      - name: Publish self-contained
+        run: dotnet publish --no-restore --configuration Release --self-contained true --runtime win-x64 --output windows/self-contained
 
-      - name: zip win artifact
+      - name: Publish framework-dependent
+        run: dotnet publish --no-restore --configuration Release --self-contained false --runtime win-x64 --output windows/framework-dependent
+
+      - name: zip win artifact self-contained
         run: |
-          powershell Compress-Archive windows/anidow.exe windows/anidow.zip
+          powershell Compress-Archive windows/self-contained/anidow.exe windows/self-contained/anidow-full.zip
 
-      - name: Upload artifact
+      - name: zip win artifact framework-dependent
+        run: |
+          powershell Compress-Archive windows/framework-dependent/anidow.exe windows/framework-dependent/anidow.zip
+
+      - name: Upload artifact self-contained
+        uses: actions/upload-artifact@v2
+        with:
+          name: anidow-full.zip
+          path: windows/self-contained/anidow-full.zip
+
+      - name: Upload artifact framework-dependent
         uses: actions/upload-artifact@v2
         with:
           name: anidow.zip
-          path: windows/anidow.zip
+          path: windows/framework-dependent/anidow.zip
 
   create-release:
     needs: build
@@ -41,31 +54,23 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
+          name: anidow-full.zip
+          path: windows/self-contained
+
+      - uses: actions/download-artifact@v2
+        with:
           name: anidow.zip
-          path: windows
+          path: windows/framework-dependent
 
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: windows
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            windows/self-contained/anidow-full.zip
+            windows/framework-dependent/anidow.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: true
-          prerelease: false
-
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: windows/anidow.zip
-          asset_name: anidow.zip
-          asset_content_type: application/octet-stream
