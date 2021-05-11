@@ -20,7 +20,7 @@ namespace Anidow.Pages
     {
         private readonly ILogger _logger;
 
-        private readonly Regex _regex = new Regex("[^0-9]+");
+        private readonly Regex _regex = new("[^0-9]+");
 
         public SettingsViewModel(ILogger logger, SettingsService settingsService)
         {

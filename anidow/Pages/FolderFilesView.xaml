@@ -15,6 +15,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Model"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Width="800"
     Height="450"
     d:DataContext="{d:DesignInstance local:FolderFilesViewModel}"
@@ -25,6 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.Resources>
             <helpers:BindingProxy x:Key="Proxy" Data="{Binding}" />
@@ -33,16 +35,29 @@
         <GroupBox>
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="8" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox PreviewKeyDown="{s:Action OnPreviewKeyDown}" Text="{Binding Folder, UpdateSourceTrigger=PropertyChanged}" />
+                <Button
+                    Command="{s:Action OpenFolderInExplorer,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome FolderOpenSolid}"
+                    ToolTip="Open folder in Explorer" />
+                <TextBox
+                    Grid.Column="1"
+                    Margin="8,0"
+                    PreviewKeyDown="{s:Action OnPreviewKeyDown}"
+                    Text="{Binding Folder, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Grid.Column="2"
                     Command="{s:Action GetFilesFromFolder,
                                        ActionNotFound=Disable}"
-                    Content="Go" />
+                    Content="Go">
+                    <Button.CommandParameter>
+                        <system:Boolean>true</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
             </Grid>
 
         </GroupBox>
@@ -50,11 +65,43 @@
         <ListView
             Grid.Row="1"
             listViewLayout:ListViewLayoutManager.Enabled="true"
-            ItemsSource="{Binding FileInfos, Mode=OneWay}"
+            ItemsSource="{Binding FileInfos}"
+            ScrollViewer.CanContentScroll="True"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-            VirtualizingPanel.ScrollUnit="Pixel"
-            VirtualizingPanel.VirtualizationMode="Recycling">
+            VirtualizingPanel.VirtualizationMode="Standard">
+            <!--<ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Margin" Value="0,0,0,5" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander
+                                            Style="{StaticResource ExpanderCustom}"
+                                            IsExpanded="True">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock
+                                                        Width="100"
+                                                        Margin="5,0,0,0"
+                                                        FontWeight="Bold"
+                                                        Text="{Binding Name}" />
+                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}" />
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <Expander.Content>
+                                                <ItemsPresenter Margin="0,4"/>
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListView.GroupStyle>-->
             <ListView.ItemContainerStyle>
                 <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
                     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -111,7 +158,6 @@
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"
-                        Header=""
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="io:FileInfo">
@@ -128,5 +174,14 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button
+            Grid.Row="2"
+            Margin="8,4"
+            HorizontalAlignment="Center"
+            Command="{s:Action LoadMore,
+                               ActionNotFound=Disable}"
+            Visibility="{Binding CanLoadMore, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+            load more...
+        </Button>
     </Grid>
 </controls:AdonisWindow>

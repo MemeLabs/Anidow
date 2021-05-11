@@ -96,6 +96,7 @@
                 TargetType="{x:Type GridViewColumnHeader}">
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Margin" Value="2" />
             </Style>
 

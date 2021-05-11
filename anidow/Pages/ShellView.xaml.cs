@@ -1,15 +1,12 @@
-﻿using Hardcodet.Wpf.TaskbarNotification;
-using Jot;
-using System;
+﻿using Jot;
 
 namespace Anidow.Pages
 {
     public partial class ShellView
     {
-        public ShellView(Tracker tracker, TaskbarIcon taskbarIcon)
+        public ShellView(Tracker tracker)
         {
             InitializeComponent();
-            TaskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
             tracker.Track(this);
         }
     }

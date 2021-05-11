@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using Serilog.Core;
 using Serilog.Events;
@@ -8,7 +9,7 @@ using Stylet;
 
 namespace Anidow.Pages
 {
-    public class LogViewModel: PropertyChangedBase, ILogEventSink
+    public class LogViewModel: Screen, ILogEventSink
     {
         public ObservableCollection<LogEvent> Items { get; }
         public LogViewModel()

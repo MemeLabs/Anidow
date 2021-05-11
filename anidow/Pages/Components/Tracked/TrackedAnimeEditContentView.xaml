@@ -1,0 +1,180 @@
+﻿<UserControl
+    x:Class="Anidow.Pages.Components.Tracked.TrackedAnimeEditContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+    xmlns:converters="clr-namespace:Anidow.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enums="clr-namespace:Anidow.Enums"
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+    xmlns:helpers="clr-namespace:Anidow.Helpers"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:Anidow.Pages.Components.Tracked"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <Grid Margin="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Image
+            MaxHeight="{Binding ElementName=Panel, Path=ActualHeight, Mode=OneWay, FallbackValue=100}"
+            Margin="0,0,8,0"
+            VerticalAlignment="Top"
+            Source="{Binding CoverData.FilePath, IsAsync=True}"
+            Visibility="{Binding CoverData.File, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+
+        <Grid
+            x:Name="Panel"
+            Grid.Column="1"
+            VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
+                <TextBlock
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="Added:" />
+                <TextBlock
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding ReleasedString}" />
+                <TextBlock
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="Status:" />
+                <ComboBox
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    SelectedItem="{Binding Status, Mode=TwoWay}">
+                    <enums:AnimeStatus>Watching</enums:AnimeStatus>
+                    <enums:AnimeStatus>Finished</enums:AnimeStatus>
+                    <enums:AnimeStatus>Dropped</enums:AnimeStatus>
+                </ComboBox>
+                <TextBlock
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="Resolution:" />
+                <ComboBox
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    SelectedItem="{Binding Resolution, Mode=TwoWay}">
+                    <system:String>720p</system:String>
+                    <system:String>1080p</system:String>
+                </ComboBox>
+            </StackPanel>
+            <Grid Grid.Row="1" Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="Folder:" />
+
+                <TextBox
+                    Grid.Column="1"
+                    IsReadOnly="True"
+                    Text="{Binding Folder}"
+                    TextAlignment="Left"
+                    TextWrapping="Wrap" />
+
+                <Button
+                    Grid.Column="2"
+                    Margin="8,0,8,0"
+                    Command="{s:Action OpenFolderBrowserDialog,
+                                       ActionNotFound=Disable}"
+                    CommandParameter="{Binding}"
+                    Content="{iconPacks:FontAwesome FolderPlusSolid}"
+                    ToolTip="Set new folder" />
+
+                <Button
+                    Grid.Column="3"
+                    Command="{s:Action OpenFolderFilesWindow,
+                                       ActionNotFound=Disable}"
+                    CommandParameter="{Binding}"
+                    Content="{iconPacks:FontAwesome FolderOpenSolid}"
+                    ToolTip="Open folder" />
+            </Grid>
+            <Grid Grid.Row="2" Margin="0,4,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="Episodes:" />
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Text="{Binding Episodes}" />
+
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="8,0,4,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="Group:" />
+                <TextBox
+                    Grid.Column="3"
+                    MinWidth="150"
+                    VerticalAlignment="Center"
+                    Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+
+                <TextBlock
+                    Grid.Column="4"
+                    Margin="8,0,4,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Text="{Binding Notification, Mode=OneWay}" />
+
+                <Button
+                    Grid.Column="5"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Command="{s:Action SaveAnime,
+                                       ActionNotFound=Disable}"
+                    CommandParameter="{Binding}"
+                    Content="Save"
+                    ToolTip="Save changes" />
+
+                <Button
+                    Grid.Column="6"
+                    Margin="4,0,0,0"
+                    VerticalAlignment="Center"
+                    extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
+                    extensions:RippleExtension.BackgroundBrush="#EF5350"
+                    Background="#F44336"
+                    Command="{s:Action Delete}"
+                    CommandParameter="{Binding}"
+                    Content="Delete"
+                    Foreground="White" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

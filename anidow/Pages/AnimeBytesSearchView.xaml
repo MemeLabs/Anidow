@@ -12,6 +12,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Anidow.Model"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance local:AnimeBytesSearchViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -84,8 +85,20 @@
                                 <TextBlock
                                     Text="{Binding FullName}"
                                     TextTrimming="CharacterEllipsis"
-                                    TextWrapping="NoWrap"
-                                    ToolTip="{Binding FullName}" />
+                                    TextWrapping="NoWrap">
+                                    <TextBlock.ToolTip>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding FullName}" />
+                                            <ItemsControl ItemsSource="{Binding SynonymnsList}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding}" />
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
 
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -165,6 +178,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
@@ -191,8 +205,9 @@
                         VerticalAlignment="Center"
                         Opacity=".7"
                         Text="{Binding ActiveItem.Torrents.Length, StringFormat=Torrents: {0}}" />
+
                     <Button
-                        Grid.Column="5"
+                        Grid.Column="6"
                         Command="{s:Action DeselectItem}"
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
@@ -208,10 +223,12 @@
                 </Grid.ColumnDefinitions>
 
                 <Image
+                    MaxWidth="150"
                     MaxHeight="{Binding ElementName=Panel, Path=ActualHeight, Mode=OneWay, FallbackValue=100}"
                     Margin="0,0,8,0"
                     VerticalAlignment="Top"
-                    Source="{Binding ActiveItem.Image}">
+                    Source="{Binding ActiveItem.Image, IsAsync=True}"
+                    ToolTipService.ShowDuration="9999999">
                     <Image.ToolTip>
                         <TextBlock
                             MaxWidth="400"
@@ -225,6 +242,7 @@
                 <StackPanel x:Name="Panel" Grid.Column="1">
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -249,10 +267,7 @@
                                 </ComboBox.ItemsPanel>
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock>
-                                            <Run Text="{Binding EditionData.EditionTitle}" />
-                                            <Run Text="{Binding Property}" />
-                                        </TextBlock>
+                                        <TextBlock Text="{Binding Name}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
@@ -267,7 +282,19 @@
                                 IsReadOnly="True"
                                 Text="{Binding ActiveItem.FullName}"
                                 TextAlignment="Left"
-                                TextWrapping="Wrap" />
+                                TextWrapping="Wrap"
+                                ToolTipService.Placement="Bottom"
+                                ToolTipService.ShowDuration="999999">
+                                <TextBox.ToolTip>
+                                    <ItemsControl ItemsSource="{Binding ActiveItem.SynonymnsList}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </TextBox.ToolTip>
+                            </TextBox>
                             <Button
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
@@ -308,8 +335,52 @@
                                 Text="{Binding ActiveItem.TagsString}"
                                 TextWrapping="Wrap" />
                         </Grid>
+                        <Grid
+                            Grid.Row="4"
+                            Margin="0,4"
+                            Visibility="{Binding ActiveItem.LinksDict.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Margin="0,0,8,0"
+                                FontWeight="Bold"
+                                Text="Links:" />
+                            <ItemsControl
+                                Grid.Column="1"
+                                ItemsSource="{Binding ActiveItem.LinksDict}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Margin="0,-4"
+                                            VerticalAlignment="Center"
+                                            Command="{s:Action OpenLink,
+                                                               ActionNotFound=Disable}"
+                                            CommandParameter="{Binding Value}"
+                                            Content="{Binding Key}"
+                                            ToolTipService.Placement="Top">
+                                            <Button.ToolTip>
+                                                <TextBlock>
+                                                    <Run Text="Open"/>
+                                                    <Run Text="{Binding Key, Mode=OneWay}"/>
+                                                    <Run Text="in browser"></Run>
+                                                </TextBlock>
+                                            </Button.ToolTip>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
 
-                        <Grid Grid.Row="4" Margin="0,4,0,0">
+
+
+                        <Grid Grid.Row="5" Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />

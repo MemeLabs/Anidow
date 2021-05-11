@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,16 +31,18 @@ namespace Anidow.Pages
     {
         private readonly AnimeBytesService _animeBytesService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
         private readonly TorrentService _torrentService;
         private ScrollViewer _scrollViewer;
 
-        public AnimeBytesRssViewModel(ILogger logger, IEventAggregator eventAggregator,
+        public AnimeBytesRssViewModel(ILogger logger, IEventAggregator eventAggregator, HttpClient httpClient,
             AnimeBytesService animeBytesService, TorrentService torrentService, SettingsService settingsService)
         {
             _logger = logger;
             _eventAggregator = eventAggregator;
+            _httpClient = httpClient;
             _animeBytesService = animeBytesService;
             _torrentService = torrentService;
             _settingsService = settingsService;
@@ -99,7 +102,7 @@ namespace Anidow.Pages
                 1 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.Airing),
                 _ => throw new NotImplementedException()
             });
-            if (items == default || items.Count <= 0)
+            if (items is not {Count: > 0})
             {
                 CanGetItems = true;
                 return;
@@ -192,11 +195,13 @@ namespace Anidow.Pages
                 Group = item.GetReleaseGroup(),
                 Status = AnimeStatus.Watching,
             };
+            anime.CoverData = await anime.Cover.GetCoverData(anime, _httpClient, _logger);
 
             await db.Anime.AddAsync(anime);
             await db.SaveChangesAsync();
             item.CanTrack = false;
         }
+
 
         public void OpenFolderBrowserDialog()
         {

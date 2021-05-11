@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
@@ -25,6 +30,7 @@ using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
+using Timer = System.Timers.Timer;
 
 namespace Anidow.Pages
 {
@@ -37,6 +43,7 @@ namespace Anidow.Pages
         private readonly IWindowManager _windowManager;
         private readonly SettingsService _settingsService;
         private readonly TaskbarIcon _taskbarIcon;
+        private readonly HttpClient _httpClient;
         private readonly TorrentService _torrentService;
         private Timer _getTorrentsStatusTimer;
 
@@ -44,7 +51,7 @@ namespace Anidow.Pages
         public MainViewModel(IEventAggregator eventAggregator, ILogger logger,
             IWindowManager windowManager, AnimeBytesService animeBytesService,
             TorrentService torrentService, SettingsService settingsService,
-            TaskbarIcon taskbarIcon)
+            TaskbarIcon taskbarIcon, HttpClient httpClient)
         {
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -53,6 +60,7 @@ namespace Anidow.Pages
             _torrentService = torrentService;
             _settingsService = settingsService;
             _taskbarIcon = taskbarIcon;
+            _httpClient = httpClient;
             DisplayName = "Home";
             eventAggregator.Subscribe(this);
         }
@@ -61,6 +69,7 @@ namespace Anidow.Pages
         public bool CanForceCheck { get; set; } = true;
         public string NextCheckIn { get; set; }
         public Timer NextCheckTimer { get; set; }
+        public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
         
         private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
@@ -70,7 +79,7 @@ namespace Anidow.Pages
             }
             var lastCheck = AnimeBytesService.LastCheck;
             var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.GetSettings().RefreshTime);
-            NextCheckIn = $"next check in {(nextCheck - DateTime.Now):mm\\:ss} min";
+            NextCheckIn = $"next check in {nextCheck - DateTime.Now:mm\\:ss} min";
         }
 
         public async Task ForceCheck()
@@ -78,6 +87,7 @@ namespace Anidow.Pages
             CanForceCheck = false;
             _logger.Verbose("Test");
             await AnimeBytesService.CheckForNewEpisodes();
+            await GetAiringEpisodesForToday();
             CanForceCheck = true;
         }
 
@@ -107,11 +117,11 @@ namespace Anidow.Pages
                 },
                 AnimeBytesScrapeAnime ab => new Episode
                 {
-                    Name = CreatePrpertyEpisode(ab),
+                    Name = CreatePropertyEpisode(ab),
                     Site = Site.AnimeBytes,
                     Released = DateTime.Parse(ab.SelectedTorrent.UploadTime),
                     Folder = ab.SelectedTorrent.Folder,
-                    Link = $"https://animebytes.tv/torrent/{ab.ID}/group",
+                    Link = $"https://animebytes.tv/torrent/{ab.SelectedTorrent.ID}/group",
                     DownloadLink = ab.SelectedTorrent.DownloadLink,
                     Cover = ab.Image
                 },
@@ -125,6 +135,7 @@ namespace Anidow.Pages
                 if (anime != null)
                 {
                     item.AnimeId = anime.GroupId;
+                    item.CoverData ??= anime.CoverData;
                 }
             }
 
@@ -136,10 +147,10 @@ namespace Anidow.Pages
             await db.AddAsync(item);
             await db.SaveChangesAsync();
             Items.Add(item);
-
+            await GetAiringEpisodesForToday();
         }
 
-        private string CreatePrpertyEpisode(AnimeBytesScrapeAnime ab)
+        private string CreatePropertyEpisode(AnimeBytesScrapeAnime ab)
         {
             try
             {
@@ -156,6 +167,7 @@ namespace Anidow.Pages
         public async void Handle(RefreshHomeEvent _)
         {
             await LoadEpisodes();
+            await GetAiringEpisodesForToday();
         }
 
         public async Task DeleteItem(Episode episode)
@@ -168,7 +180,7 @@ namespace Anidow.Pages
             }
 
             episode.Hide = true;
-            episode.HideDate = DateTime.Now;
+            episode.HideDate = DateTime.UtcNow;
 
             try
             {
@@ -181,11 +193,6 @@ namespace Anidow.Pages
 
             Items.Remove(episode);
             DeselectItem();
-            //if (index > 0 && Items.Count > 0 && ActiveItem != null)
-            //{
-            //    ActiveItem = Items[index - 1];
-            //}
-
         }
 
         public void DeselectItem()
@@ -218,8 +225,8 @@ namespace Anidow.Pages
                 return;
             }
 
-            anime.WatchedDate = anime.Watched ? anime.WatchedDate : DateTime.Now;
             anime.Watched = !anime.Watched;
+            anime.WatchedDate = anime.Watched ? DateTime.UtcNow : default;
             await anime.UpdateInDatabase();
         }
 
@@ -236,7 +243,7 @@ namespace Anidow.Pages
                 ProcessUtil.OpenFile(anime.File);
 
                 anime.Watched = true;
-                anime.WatchedDate = DateTime.Now;
+                anime.WatchedDate = DateTime.UtcNow;
                 await anime.UpdateInDatabase();
             }
             catch (Exception e)
@@ -290,7 +297,7 @@ namespace Anidow.Pages
         protected override void OnInitialActivate()
         {
             _getTorrentsStatusTimer = new Timer {Interval = 5000};
-            _getTorrentsStatusTimer.Elapsed += async (sender, args) =>
+            _getTorrentsStatusTimer.Elapsed += async (_, _) =>
             {
                 await UpdateTorrents();
             };
@@ -299,6 +306,32 @@ namespace Anidow.Pages
             NextCheckTimer = new Timer(100);
             NextCheckTimer.Elapsed += NextCheckTimerOnElapsed;
             NextCheckTimer.Start();
+
+            _ = DownloadMissingCovers();
+            _ = GetAiringEpisodesForToday();
+        }
+
+        private async Task DownloadMissingCovers()
+        {
+            await using var db = new TrackContext();
+            var animes = await db.Anime.ToListAsync();
+            var rows = 0;
+            foreach (var anime in animes)
+            {
+                var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);
+                anime.CoverData ??= coverData;
+                var episodes = db.Episodes.Where(e => e.AnimeId == anime.GroupId);
+                foreach (var episode in episodes)
+                {
+                    episode.CoverData ??= coverData;
+                }
+                rows += await db.SaveChangesAsync();
+            }
+
+            if (rows >= 1)
+            {
+                _logger.Information($"updated {rows} rows with CoverData");
+            }
         }
 
         protected override async void OnActivate()
@@ -309,7 +342,9 @@ namespace Anidow.Pages
         private async Task LoadEpisodes()
         {
             await using var db = new TrackContext();
-            var episodes = await db.Episodes.Where(e => !e.Hide).ToListAsync();
+            var episodes = await db.Episodes.Where(e => !e.Hide)
+                .Include(e => e.CoverData)
+                .ToListAsync();
             
             _orderType = "DESC";
             Items.Clear();
@@ -347,7 +382,7 @@ namespace Anidow.Pages
                     var anime1 = anime;
                     anime.TorrentId = _settingsService.GetSettings().TorrentClient switch
                     {
-                        TorrentClient.QBitTorrent => list.Select(ToObject<QBitTorrentEntry>)
+                        TorrentClient.QBitTorrent => list.Select(j => j.ToObject<QBitTorrentEntry>())
                             .FirstOrDefault(i => i.name == anime1.Name)
                             ?.hash,
                         _ => anime.TorrentId
@@ -359,12 +394,56 @@ namespace Anidow.Pages
                 }
         }
 
-        private T ToObject<T>(JsonElement element)
+        public async Task GetAiringEpisodesForToday()
         {
-            var json = element.GetRawText();
-            return JsonSerializer.Deserialize<T>(json);
-        }
+            var animesToday = new List<FutureEpisode>();
+            await using var db = new TrackContext();
+            var animes = db.Anime.Where(a => a.Status == AnimeStatus.Watching);
+            if (!animes.Any())
+            {
+                return;
+            }
 
+            foreach (var anime in animes)
+            {
+                var lastEpisode = await db.Episodes
+                    .Where(e => e.AnimeId == anime.GroupId)
+                    .OrderBy(e => e.Released)
+                    .LastOrDefaultAsync();
+                if (lastEpisode == default)
+                {
+                    continue;
+                }
+
+                var potentialNextRelease = lastEpisode.Released + TimeSpan.FromDays(7);
+                if (potentialNextRelease.Date == DateTime.Today)
+                {
+
+                    animesToday.Add(new FutureEpisode
+                    {
+                        Name = anime.Name,
+                        Date = potentialNextRelease.Humanize()
+                    });
+                }
+            }
+
+
+            AnimesToday.Clear();
+            if (animesToday.Any()) AnimesToday.AddRange(animesToday);
+#if DEBUG
+            AnimesToday.Add(new FutureEpisode
+            {
+                Name = "Test0",
+                Date = DateTime.Now.Humanize()
+            });
+            AnimesToday.Add(new FutureEpisode
+            {
+                Name = "Test1",
+                Date = DateTime.Now.Humanize()
+            });
+#endif
+        }
+        
 
         private string _orderType = "DESC";
         private string _orderColumn = "Added";
@@ -425,5 +504,11 @@ namespace Anidow.Pages
             Items.AddRange(orderedItems);
             e.Handled = true;
         }
+    }
+
+    public class FutureEpisode
+    {
+        public string Name { get; set; }
+        public string Date { get; set; }
     }
 }

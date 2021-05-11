@@ -1,28 +1,40 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using AdonisUI.Controls;
-using Anidow.Database;
+﻿using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Extensions;
+using Anidow.Services;
 using Anidow.Utils;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
+using Hardcodet.Wpf.TaskbarNotification;
 using MessageBox = AdonisUI.Controls.MessageBox;
+using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
+using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
+using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class TrackedViewModel : Conductor<Anime>.Collection.OneActive
     {
+        private readonly SettingsService _settingsService;
+        private readonly HttpClient _httpClient;
+        private readonly TaskbarIcon _taskbarIcon;
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly ILogger _logger;
         private string _search;
+        private ScrollViewer[] _scrollViewers;
 
         public AnimeStatus FilterStatus { get; set; } = AnimeStatus.Watching;
 
@@ -31,34 +43,47 @@ namespace Anidow.Pages
             get => _search;
             set
             {
-                SetAndNotify(ref this._search, value);
-                Debouncer.DebounceAction("load_tracked", async config =>
+                SetAndNotify(ref _search, value);
+                Debouncer.DebounceAction("load_tracked", async _ =>
                 {
                     await Load();
                 });
             }
         }
 
-        public TrackedViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, ILogger logger)
+        public TrackedViewModel(SettingsService settingsService, HttpClient httpClient, TaskbarIcon taskbarIcon,
+            IEventAggregator eventAggregator, IWindowManager windowManager, ILogger logger)
         {
+            _settingsService = settingsService;
+            _httpClient = httpClient;
+            _taskbarIcon = taskbarIcon;
+            _settingsService.SettingsSaved += OnSettingsSaved;
             _eventAggregator = eventAggregator;
             _windowManager = windowManager;
             _logger = logger;
             DisplayName = "Tracked";
         }
 
+        public bool ViewToggle { get; set; }
+
         protected override async void OnInitialActivate()
         {
+            ViewToggle = _settingsService.GetSettings().TrackedIsCardView;
             await Load();
         }
+        private void OnSettingsSaved(object sender, EventArgs e)
+        {
+            ViewToggle = _settingsService.GetSettings().TrackedIsCardView;
+        }
+
 
         public bool CanLoad { get; set; }
-
         public async Task Load()
         {
             CanLoad = false;
             await using var db = new TrackContext();
             var anime = await Task.Run(async () => await db.Anime
+                .Include(a => a.CoverData)
                 .OrderByDescending(a => a.Released)
                 .ToListAsync());
 
@@ -71,18 +96,29 @@ namespace Anidow.Pages
             {
                 AnimeStatus.Watching => anime.Where(a => a.Status == AnimeStatus.Watching).ToList(),
                 AnimeStatus.Finished => anime.Where(a => a.Status == AnimeStatus.Finished).ToList(),
+                AnimeStatus.Dropped => anime.Where(a => a.Status == AnimeStatus.Dropped).ToList(),
                 _ => anime
             };
 
+            ScrollToTop();
             Items.Clear();
             foreach (var a in anime)
             {
                 a.Episodes = await db.Episodes.CountAsync(e => e.AnimeId == a.GroupId);
-                Execute.OnUIThreadSync(() => Items.Add(a));
-                await Task.Delay(1);
+                await Execute.OnUIThreadAsync(() => Items.Add(a));
             }
 
             CanLoad = true;
+        }
+
+        private void ScrollToTop()
+        {
+            if (_scrollViewers == null)
+            {
+                return;
+            }
+
+            Array.ForEach(_scrollViewers, s => s.ScrollToTop());
         }
 
         public async Task Delete(Anime anime)
@@ -124,6 +160,15 @@ namespace Anidow.Pages
         public async Task SaveAnime(Anime anime)
         {
             await anime.UpdateInDatabase();
+            anime.Notification = "Saved!";
+            if (_settingsService.GetSettings().Notifications)
+            {
+                _taskbarIcon.ShowBalloonTip("Saved", anime.Name, BalloonIcon.Info);
+            }
+            Debouncer.DebounceAction($"save-anime-{anime.GroupId}", async _ =>
+            {
+                await Task.Delay(2500).ContinueWith(_ => anime.Notification = string.Empty);
+            });
         }
 
 
@@ -145,6 +190,64 @@ namespace Anidow.Pages
         public void OpenFolderFilesWindow(Anime anime)
         {
             _windowManager.ShowWindow(new FolderFilesViewModel(ref anime, _eventAggregator, _logger));
+        }
+
+        public void EditAnime(object sender, MouseButtonEventArgs _)
+        {
+            var anime = (Anime)((Border)sender).DataContext;
+            DeselectItem();
+            anime.TrackedViewSelected = true;
+            ActivateItem(anime);
+        }
+
+        public void DeselectItem()
+        {
+            if (ActiveItem is null)
+            {
+                return;
+            }
+            ActiveItem.TrackedViewSelected = false;
+            ActivateItem(null);
+        }
+
+
+        public void TrackedLoaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is not UserControl listView)
+            {
+                return;
+            }
+
+            var scrollView = listView.FindVisualChildren<ScrollViewer>();
+            if (scrollView == null)
+            {
+                return;
+            }
+
+            _scrollViewers = scrollView.ToArray();
+        }
+
+        public async Task DownloadCover((object url, object anime) data)
+        {
+            try
+            {
+                var anime = (Anime)data.anime;
+                var url = (string)data.url;
+                Uri.TryCreate(url, UriKind.Absolute, out var uri);
+                if (uri == null)
+                {
+                    return;
+                }
+
+                anime.Cover = url;
+                anime.CoverData = await url.GetCoverData(anime, _httpClient, _logger);
+                await SaveAnime(anime);
+
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed downloading Cover");
+            }
         }
     }
 }

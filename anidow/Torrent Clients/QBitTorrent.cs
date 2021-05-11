@@ -7,6 +7,7 @@ using Anidow.Database.Models;
 using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Services;
+using Castle.Core.Internal;
 using Serilog;
 
 namespace Anidow.Torrent_Clients
@@ -75,15 +76,20 @@ namespace Anidow.Torrent_Clients
             return false;
         }
 
-        public async Task<bool> Remove(Episode anime, bool withFile = false)
+        public async Task<bool> Remove(Episode episode, bool withFile = false)
         {
+            if (string.IsNullOrEmpty(episode.TorrentId))
+            {
+                return true;
+            }
+
             await Login();
             // /api/v2/torrents/delete?hashes=8c212779b4abde7c6bc608063a0d008b7e40ce32&deleteFiles=false
             try
             {
                 var response =
                     await _httpClient.GetAsync(
-                        $"{ApiUrl}/api/v2/torrents/delete?hashes={anime.TorrentId}&deleteFiles={withFile}");
+                        $"{ApiUrl}/api/v2/torrents/delete?hashes={episode.TorrentId}&deleteFiles={withFile}");
                 return response?.IsSuccessStatusCode ?? false;
             }
             catch (Exception e)

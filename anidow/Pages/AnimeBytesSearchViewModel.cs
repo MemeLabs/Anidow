@@ -132,6 +132,11 @@ namespace Anidow.Pages
             LinkUtil.Open($"https://animebytes.tv/series.php?id={item.SeriesID}");
         }
 
+        public void OpenLink(string link)
+        {
+            LinkUtil.Open(link);
+        }
+
         public async void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)

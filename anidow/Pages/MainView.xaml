@@ -21,7 +21,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
+    <Grid x:Name="BaseGrid">
         <Grid.Resources>
             <helpers:BindingProxy x:Key="Proxy" Data="{Binding}" />
         </Grid.Resources>
@@ -130,18 +130,17 @@
                     <GridViewColumn
                         Width="120"
                         listViewLayout:FixedColumn.Width="120"
-                        DisplayMemberBinding="{Binding Released, Converter={x:Static converters:DateTimeToStringConverter.Instance}}"
+                        DisplayMemberBinding="{Binding ReleasedString}"
                         Header="Added"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"
-                        Header=""
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
                                 <Button
-                                    Width="68"
+                                    Width="66"
                                     Command="{s:Action Watch}"
                                     CommandParameter="{Binding}"
                                     Content="Watch"
@@ -152,6 +151,59 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Grid
+            Grid.Row="0"
+            Margin="2,-29"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Visibility="{Binding AnimesToday.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+            <ToggleButton
+                x:Name="PredictedToggleButton"
+                extensions:CornerRadiusExtension.CornerRadius="4"
+                Background="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}"
+                BorderThickness="0"
+                Command="{s:Action GetAiringEpisodesForToday}"
+                Content="{Binding AnimesToday.Count}" />
+            <Popup
+                AllowsTransparency="True"
+                HorizontalOffset="-4"
+                IsOpen="{Binding ElementName=PredictedToggleButton, Path=IsChecked}"
+                Placement="Bottom"
+                PlacementTarget="{Binding ElementName=PredictedToggleButton}"
+                StaysOpen="False"
+                VerticalOffset="4">
+                <Border
+                    Padding="8"
+                    Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+                    BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer2BorderBrush}}"
+                    BorderThickness="2"
+                    CornerRadius="4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock>Predicted new releases today:</TextBlock>
+                        <Separator Grid.Row="1" />
+                        <ItemsControl
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            ItemsSource="{Binding AnimesToday}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock MinWidth="150" Text="{Binding Date}" />
+                                        <TextBlock Margin="16,0" Text="|" />
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+            </Popup>
+        </Grid>
         <Expander
             Grid.Row="1"
             VerticalAlignment="Bottom"

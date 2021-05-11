@@ -19,7 +19,7 @@ namespace Anidow.Interfaces
         public string Link { get; set; }
 
         public string ReleasedString { get; }
-        public string WatchedDateString { get; }
+        public string WatchedString { get; }
         public string EpisodeNum { get; }
 
         public string AnimeId { get; set; }

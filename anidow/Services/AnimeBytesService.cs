@@ -23,6 +23,7 @@ using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;
 using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using Stylet;
 
@@ -51,7 +52,7 @@ namespace Anidow.Services
             _torrentService = torrentService;
             _taskbarIcon = taskbarIcon;
         }
-        
+
         private SettingsModel Settings => _settingsService.GetSettings();
 
         private string AllAnimeUrl => $"https://animebytes.tv/feed/rss_torrents_anime/{Settings.AnimeBytesSettings.PassKey}";
@@ -61,7 +62,7 @@ namespace Anidow.Services
         public DateTime LastCheck { get; private set; }
         public void InitTracker()
         {
-            _tracker = new Timer {Interval = 1000 * 60 * _settingsService.GetSettings().RefreshTime};
+            _tracker = new Timer { Interval = 1000 * 60 * _settingsService.GetSettings().RefreshTime };
             _tracker.Elapsed += TrackerOnElapsed;
             StartTracker();
             _initialRefreshTime = _settingsService.GetSettings().RefreshTime;
@@ -109,7 +110,7 @@ namespace Anidow.Services
 
             await using var db = new TrackContext();
             var anime = await db.Anime
-                .Where(a => a.Site == Site.AnimeBytes 
+                .Where(a => a.Site == Site.AnimeBytes
                             && a.Status == AnimeStatus.Watching)
                 .ToListAsync();
             var feedItems = await GetFeedItems(AnimeBytesFilter.Airing);
@@ -137,7 +138,7 @@ namespace Anidow.Services
                     {
                         // item is probably a batch and we don't want to download it (no batches in airing feed)
                         // or something else idk
-                        _logger.Information("item.GetEpisode() returned null or empty string");
+                        _logger.Information("item.GetEpisode() returned null or empty string", item);
                         _logger.Debug($"{JsonSerializer.Serialize(item)}");
                         continue;
                     }
@@ -164,13 +165,18 @@ namespace Anidow.Services
                         {
                             AnimeId = a.GroupId,
                             Name = item.Name,
+                            Cover = a.Cover,
+                            CoverData = a.CoverData,
                             Folder = a.Folder,
                             Released = item.Released,
                             DownloadLink = item.DownloadLink,
-                            Link = item.GroupUrl
+                            Link = item.GroupUrl,
+                            Site = Site.AnimeBytes
                         };
+
                         await db.AddAsync(newEpisode);
                         await db.SaveChangesAsync();
+
                         _eventAggregator.PublishOnUIThread(new RefreshHomeEvent());
 
                         if (_settingsService.GetSettings().Notifications)
@@ -238,7 +244,12 @@ namespace Anidow.Services
             {
                 var response = await _httpClient.GetStringAsync(url);
                 var anime = JsonSerializer.Deserialize<AnimeBytesScrapeResult>(response);
-                
+                if (anime == null)
+                {
+                    _logger.Error("AnimeBytesScrapeResult is null");
+                    return default;
+                }
+
                 var minSeeders = _settingsService.GetSettings().NyaaSettings.HideTorrentsBelowSeeders;
 
                 foreach (var a in anime.Groups)
@@ -256,6 +267,28 @@ namespace Anidow.Services
                     {
                         a.Torrents = a.Torrents.Where(i => i.Seeders >= minSeeders).ToArray();
                     }
+
+                    var je = (JsonElement)a.Synonymns;
+                    var json = je.GetRawText();
+
+                    a.SynonymnsList = json switch
+                    {
+                        { } j when j.StartsWith("[") =>
+                            JsonSerializer.Deserialize<List<string>>(json),
+                        { } j when j.StartsWith("{") =>
+                            JsonSerializer.Deserialize<Dictionary<string, string>>(json)?.Values.ToList(),
+                        _ => new List<string>()
+                    };
+
+                    je = (JsonElement)a.Links;
+                    json = je.GetRawText();
+
+                    a.LinksDict = json switch
+                    {
+                        { } j when j.StartsWith("{") =>
+                            JsonSerializer.Deserialize<Dictionary<string, string>>(json),
+                        _ => new Dictionary<string, string>()
+                    };
                 }
                 return anime;
 

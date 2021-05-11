@@ -16,6 +16,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using Anidow.Enums;
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
@@ -24,11 +26,11 @@ using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace Anidow.Pages
 {
-    public enum Filter
+    public static class HistoryFilterType
     {
-        All,
-        Watched,
-        NotWatched
+        public const string All = "All";
+        public const string Watched = "Watched";
+        public const string NotWatched = "Not watched";
     }
     public class HistoryViewModel : Conductor<IEpisode>.Collection.OneActive
     {
@@ -37,8 +39,14 @@ namespace Anidow.Pages
         private readonly IWindowManager _windowManager;
         private readonly TorrentService _torrentService;
         private string _search;
-        
-        public Filter FilterStatus { get; set; } = Filter.All;
+
+        private List<Episode> _episodes;
+        private readonly int _maxFilesInView = 50;
+        private ScrollViewer _scrollViewer;
+
+        public string[] HistoryFilters => new[]
+            {HistoryFilterType.All, HistoryFilterType.Watched, HistoryFilterType.NotWatched};
+        public string FilterStatus { get; set; } = HistoryFilterType.All;
 
         public string Search
         {
@@ -52,6 +60,8 @@ namespace Anidow.Pages
                 });
             }
         }
+
+        public string EpisodesLoaded { get; set; }
 
         public HistoryViewModel(IEventAggregator eventAggregator, ILogger logger,
             IWindowManager windowManager, TorrentService torrentService)
@@ -70,30 +80,37 @@ namespace Anidow.Pages
         }
 
 
-        public async Task LoadEpisodes()
+        public async Task LoadEpisodes(bool clear = false)
         {
             await using var db = new TrackContext();
             var episodes = await db.Episodes.Where(e => e.Hide)
                 .ToListAsync();
 
-            Items.Clear();
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
                 episodes = episodes.Where(a => a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase)).ToList();
             }
 
-
+            
             episodes = FilterStatus switch
             {
-                Filter.Watched => episodes.Where(a => a.Watched).ToList(),
-                Filter.NotWatched => episodes.Where(a => !a.Watched).ToList(),
+                HistoryFilterType.Watched => episodes.Where(a => a.Watched).ToList(),
+                HistoryFilterType.NotWatched => episodes.Where(a => !a.Watched).ToList(),
                 _ => episodes
             };
 
-            Items.AddRange(episodes
+            _episodes = episodes
                 .OrderByDescending(e => e.HideDate)
-                .ThenByDescending(e => e.Released));
+                .ThenByDescending(e => e.Released)
+                .ToList();
+
+            if (clear)
+            {
+                Items.Clear();
+            }
+            _scrollViewer?.ScrollToTop();
+            LoadMore();
             ActiveItem = null;
 #if DEBUG
             Items.Add(new Episode
@@ -105,6 +122,14 @@ namespace Anidow.Pages
 #endif
         }
 
+        public bool CanLoadMore { get; set; } = true;
+        public void LoadMore()
+        {
+            Items.AddRange(_episodes.Skip(Items.Count).Take(_maxFilesInView));
+            CanLoadMore = Items.Count < _episodes.Count;
+            EpisodesLoaded = $"{Items.Count}/{_episodes.Count}";
+        }
+
         public async Task ToggleWatch(Episode anime)
         {
             if (anime == null)
@@ -112,8 +137,8 @@ namespace Anidow.Pages
                 return;
             }
 
-            anime.WatchedDate = anime.Watched ? anime.WatchedDate : DateTime.Now;
             anime.Watched = !anime.Watched;
+            anime.WatchedDate = anime.Watched ? DateTime.UtcNow : default;
             await anime.UpdateInDatabase();
         }
 
@@ -131,7 +156,7 @@ namespace Anidow.Pages
                 ProcessUtil.OpenFile(anime.File);
 
                 anime.Watched = true;
-                anime.WatchedDate = DateTime.Now;
+                anime.WatchedDate = DateTime.UtcNow;
                 await anime.UpdateInDatabase();
             }
             catch (Exception e)
@@ -139,46 +164,70 @@ namespace Anidow.Pages
                 _logger.Error(e, "failed opening file to watch");
             }
         }
-
-
-        public async Task DeleteWithFile()
+        public async Task DeleteItem(Episode episode)
         {
-            var anime = (Episode)ActiveItem;
-            var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{anime.Name}", "Delete",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Cancel)
-            {
-                return;
-            }
-
-            Items.Remove(anime);
-
-            await using var db = new TrackContext();
-            db.Attach(anime);
-            db.Remove(anime);
-            await db.SaveChangesAsync();
-
-            var success = await _torrentService.Remove(anime, true);
-
-            // wait 1 second for the torrent client to delete the file
-            await Task.Delay(1.Seconds());
-
-            if (success && !File.Exists(anime.File))
+            episode ??= (Episode)ActiveItem;
+            var index = Items.IndexOf(episode);
+            if (index == -1)
             {
                 return;
             }
 
             try
             {
-                File.Delete(anime.File);
+                await using var db = new TrackContext();
+                db.Attach(episode);
+                db.Remove(episode);
+                await db.SaveChangesAsync();
             }
             catch (Exception e)
             {
-                _logger.Error(e, $"failed deleting file {anime.File}");
+                _logger.Error(e, "failed deleting episode in database");
+            }
+
+            Items.Remove(episode);
+            DeselectItem();
+        }
+
+
+        public async Task DeleteWithFile(Episode episode)
+        {
+            episode ??= (Episode)ActiveItem;
+            var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{episode.Name}", "Delete",
+                MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Cancel)
+            {
+                return;
+            }
+
+            Items.Remove(episode);
+
+            await using var db = new TrackContext();
+            db.Attach(episode);
+            db.Remove(episode);
+            await db.SaveChangesAsync();
+
+            var success = await _torrentService.Remove(episode, true);
+
+            // wait 1 second for the torrent client to delete the file
+            await Task.Delay(1.Seconds());
+
+            if (success && !File.Exists(episode.File))
+            {
+                return;
+            }
+
+            try
+            {
+                File.Delete(episode.File);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, $"failed deleting file {episode.File}");
             }
         }
 
-        public async Task UnDeleteItem(Episode episode)
+        public async Task UnWatchItem(Episode episode)
         {
             episode ??= (Episode)ActiveItem;
             var index = Items.IndexOf(episode);
@@ -210,6 +259,27 @@ namespace Anidow.Pages
         public void OpenFolder(Episode anime)
         {
             _windowManager.ShowWindow(new FolderFilesViewModel(ref anime, _eventAggregator, _logger));
+        }
+
+        public void DeselectItem()
+        {
+            ChangeActiveItem(null, false);
+        }
+
+        public void ListLoaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is not ListView listView || _scrollViewer != null)
+            {
+                return;
+            }
+
+            var scrollView = listView.FindVisualChildren<ScrollViewer>().FirstOrDefault();
+            if (scrollView == null)
+            {
+                return;
+            }
+
+            _scrollViewer ??= scrollView;
         }
     }
 }

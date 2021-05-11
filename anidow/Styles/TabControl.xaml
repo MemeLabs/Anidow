@@ -116,7 +116,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
-                    <Border Name="Border" Background="Transparent" CornerRadius="2">
+                    <Border
+                        Name="Border"
+                        Background="Transparent"
+                        CornerRadius="2">
                         <ContentPresenter
                             x:Name="ContentSite"
                             Margin="10,4"

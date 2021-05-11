@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using Serilog;
 
 namespace Anidow.Services
 {
@@ -49,7 +48,7 @@ namespace Anidow.Services
             try
             {
                 var response = await _httpClient.GetAsync(url);
-                if (response == null || !response.IsSuccessStatusCode)
+                if (response is not {IsSuccessStatusCode: true})
                 {
                     _logger.Information($"getting {url} returned null");
                     return default;
@@ -57,6 +56,12 @@ namespace Anidow.Services
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.Information($"getting {url} returned unsuccessful status code {response.StatusCode}");
+                    return default;
+                }
+
+                if (response.Content.Headers.ContentType == null)
+                {
+                    _logger.Warning($"got empty ContentType {url}");
                     return default;
                 }
 
@@ -70,6 +75,7 @@ namespace Anidow.Services
                 }
 
                 _logger.Error($"wrong content-type, expected 'application/xml' got '{mediaType}'");
+
                 return default;
 
             }

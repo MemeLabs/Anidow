@@ -13,7 +13,7 @@ namespace Anidow.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var s = ((DateTime)value!).ToLocalTime().Humanize();
+            var s = ((DateTime)value!).Humanize();
             return s;
         }
 

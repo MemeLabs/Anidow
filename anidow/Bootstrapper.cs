@@ -21,19 +21,19 @@ using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
-
 #if RELEASE
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
+
 #endif
 
 namespace Anidow
 {
     public class Bootstrapper : Bootstrapper<ShellViewModel>
     {
-        private ILogger _logger;
         private HttpClient _httpClient;
+        private ILogger _logger;
 
         // Configure the IoC container in here
         protected override void ConfigureIoC(IStyletIoCBuilder builder)
@@ -60,7 +60,9 @@ namespace Anidow
 
             _httpClient = InitHttpClient();
             builder.Bind<HttpClient>().ToInstance(_httpClient);
-            builder.Bind<TaskbarIcon>().ToSelf().InSingletonScope();
+            var shell = new ShellView(tracker);
+            builder.Bind<TaskbarIcon>().ToInstance(shell.TaskbarIcon);
+            builder.Bind<ShellView>().ToInstance(shell);
 
             //BindViewModels(builder);
         }
@@ -100,7 +102,7 @@ namespace Anidow
         {
             var tracker = new Tracker(new JsonFileStore(Environment.SpecialFolder.CommonApplicationData));
             tracker.Configure<ShellView>()
-                .Id(w => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
+                .Id(_ => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
                 .Properties(w => new { w.Height, w.Width, w.Left, w.Top, w.WindowState })
                 .PersistOn(nameof(ShellView.Closing))
                 .StopTrackingOn(nameof(ShellView.Closing));
@@ -127,12 +129,21 @@ namespace Anidow
                 await using var db = new TrackContext();
                 await db.Database.MigrateAsync();
             }
+
+            var selfContained = false;
+#if SELF_CONTAINED && RELEASE
+            selfContained = true;
+#endif
+
 #if RELEASE
             try
             {
-
                 var manager = new UpdateManager(
-                    new GithubPackageResolver(_httpClient, "MemeLabs", "Anidow", "anidow*.zip"),
+                    new GithubPackageResolver(
+                        _httpClient,
+                        "MemeLabs",
+                        "Anidow",
+                        selfContained ? "anidow-full.zip" : "anidow.zip"),
                     new ZipPackageExtractor());
 
                 var check = await manager.CheckForUpdatesAsync();
@@ -155,7 +166,6 @@ namespace Anidow
             }
 #endif
         }
-
 #if RELEASE
         protected override void OnUnhandledException(DispatcherUnhandledExceptionEventArgs e)
         {

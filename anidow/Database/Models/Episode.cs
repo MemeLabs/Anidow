@@ -25,11 +25,11 @@ namespace Anidow.Database.Models
         public bool Hide { get; set; }
         public DateTime HideDate { get; set; }
         public string Cover { get; set; }
-
+        public virtual Cover CoverData { get; set; }
         public string Link { get; set; }
 
         [NotMapped] public string ReleasedString => Released.Humanize();
-        [NotMapped] public string WatchedDateString => WatchedDate.Humanize();
+        [NotMapped] public string WatchedString => WatchedDate == default ? string.Empty : WatchedDate.Humanize();
         [NotMapped] public string EpisodeNum => Name.GetEpisode();
 
         public string AnimeId { get; set; }

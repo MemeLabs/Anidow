@@ -212,7 +212,8 @@
                     MaxHeight="{Binding ElementName=Panel, Path=ActualHeight, Mode=OneWay, FallbackValue=100}"
                     Margin="0,0,8,0"
                     VerticalAlignment="Top"
-                    Source="{Binding ActiveItem.Cover}">
+                    Source="{Binding ActiveItem.Cover, IsAsync=True}"
+                    ToolTipService.ShowDuration="9999999">
                     <Image.ToolTip>
                         <TextBlock
                             MaxWidth="400"

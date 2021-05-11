@@ -8,6 +8,7 @@ namespace Anidow.Database
     {
         public DbSet<Anime> Anime { get; set; }
         public DbSet<Episode> Episodes { get; set; }
+        public DbSet<Cover> Covers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

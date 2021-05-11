@@ -69,6 +69,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <TextBlock>Anime folder path</TextBlock>
                         <Grid Grid.Row="1" Margin="0,4">
@@ -164,6 +165,20 @@
                                 FontSize="12"
                                 Opacity=".7"
                                 Text="Downloads etc." />
+                        </Grid>
+                        <Grid Grid.Row="6" Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Tracked view List" />
+                            <ToggleButton
+                                Grid.Column="1"
+                                Margin="8,0"
+                                IsChecked="{Binding Settings.TrackedIsCardView}"
+                                Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
+                            <TextBlock Grid.Column="2" Text="Card" />
                         </Grid>
                     </Grid>
                 </Expander>

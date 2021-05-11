@@ -23,12 +23,16 @@ namespace Anidow.Services
 
         public async Task<bool> Download(ITorrentItem item)
         {
+#if RELEASE
             return _settings.TorrentClient switch
             {
                 TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.Add(item),
                 TorrentClient.Deluge => throw new NotImplementedException(),
                 _ => false
             };
+#else
+            return true;
+#endif
         }
 
         public async Task<bool> Remove(Episode anime, bool withFile = false)
