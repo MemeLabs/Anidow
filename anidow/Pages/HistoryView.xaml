@@ -111,6 +111,7 @@
             listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemsSource="{Binding Items}"
             Loaded="{s:Action ListLoaded}"
+            extensions:GridViewSortExtension.AutoSort="True"
             ScrollViewer.CanContentScroll="True"
             SelectedItem="{Binding ActiveItem}"
             VirtualizingPanel.IsVirtualizing="True"
@@ -136,6 +137,7 @@
                     <GridViewColumn
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
+                        extensions:GridViewSortExtension.PropertyName="Name"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
@@ -180,9 +182,10 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
-                        Width="80"
-                        listViewLayout:FixedColumn.Width="80"
+                        Width="85"
+                        listViewLayout:FixedColumn.Width="85"
                         Header="Episode"
+                        extensions:GridViewSortExtension.PropertyName="EpisodeNum"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
@@ -197,12 +200,14 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Width="120"
+                        extensions:GridViewSortExtension.PropertyName="WatchedDate"
                         listViewLayout:FixedColumn.Width="120"
                         DisplayMemberBinding="{Binding WatchedString}"
                         Header="Watched"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
                     <GridViewColumn
                         Width="120"
+                        extensions:GridViewSortExtension.PropertyName="Released"
                         listViewLayout:FixedColumn.Width="120"
                         DisplayMemberBinding="{Binding ReleasedString}"
                         Header="Added"

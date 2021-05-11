@@ -67,8 +67,7 @@ namespace Anidow.Pages
             {
                 return;
             }
-
-            _orderType = "DESC";
+            
             Items.Clear();
             Items.AddRange(items);
 
@@ -131,73 +130,7 @@ namespace Anidow.Pages
                 ActiveItem.Folder = dialog.SelectedPath;
             }
         }
-
-        private string _orderType = "DESC";
-        private string _orderColumn = "Added";
-
-        public void Sort(object sender, RoutedEventArgs e)
-        {
-            if (e.OriginalSource is not GridViewColumnHeader header)
-            {
-                return;
-            }
-
-            var columnName = header.Column.Header.ToString();
-
-            if (columnName != _orderColumn)
-            {
-                _orderType = "DESC";
-            }
-
-            var orderedItems = columnName switch
-            {
-                "Added" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i => i.Released).ToList(),
-                    "ASC" => Items.OrderByDescending(i => i.Released).ToList(),
-                    _ => Items.OrderByDescending(i => i.Released).ToList()
-                },
-                "Name" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i => i.Name).ToList(),
-                    "ASC" => Items.OrderByDescending(i => i.Name).ToList(),
-                    _ => Items.OrderByDescending(i => i.Name).ToList()
-                },
-                "Seeders" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Seeders) ? "0" : i.Seeders)).ToList(),
-                    "ASC" => Items.OrderByDescending(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Seeders) ? "0" : i.Seeders)).ToList(),
-                    _ => Items.OrderByDescending(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Seeders) ? "0" : i.Seeders)).ToList(),
-                },
-                "Leechers" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Leechers) ? "0" : i.Leechers)).ToList(),
-                    "ASC" => Items.OrderByDescending(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Leechers) ? "0" : i.Leechers)).ToList(),
-                    _ => Items.OrderByDescending(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Leechers) ? "0" : i.Leechers)).ToList(),
-                },
-                _ => Items.ToList(),
-            };
-
-            _orderColumn = columnName;
-            _orderType = _orderType switch
-            {
-                "DESC" => "ASC",
-                "ASC" => "DESC",
-                _ => "DESC"
-            };
-
-            Items.Clear();
-            Items.AddRange(orderedItems);
-            _scrollViewer?.ScrollToTop();
-            e.Handled = true;
-        }
-
+        
         public void ListLoaded(object sender, RoutedEventArgs e)
         {
             if (sender is not ListView listView || _scrollViewer != null)

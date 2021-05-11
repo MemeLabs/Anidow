@@ -73,7 +73,6 @@ namespace Anidow.Pages
             Items.AddRange(response.Groups);
 
             _scrollViewer?.ScrollToTop();
-            _orderType = "DESC";
             ActiveItem = null!;
             LastSearch = DateTime.Now;
             CanGetItems = true;
@@ -147,56 +146,6 @@ namespace Anidow.Pages
             await GetItems().ConfigureAwait(false);
             e.Handled = true;
         }
-
-
-        private string _orderType = "DESC";
-        private string _orderColumn = "Name";
-
-        public void Sort(object sender, RoutedEventArgs e)
-        {
-            if (e.OriginalSource is not GridViewColumnHeader header)
-            {
-                return;
-            }
-
-            var columnName = header.Column.Header.ToString();
-
-            if (columnName != _orderColumn)
-            {
-                _orderType = "DESC";
-            }
-
-            var orderedItems = columnName switch
-            {
-                "Name" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i => i.FullName).ToList(),
-                    "ASC" => Items.OrderByDescending(i => i.FullName).ToList(),
-                    _ => Items.OrderByDescending(i => i.FullName).ToList()
-                },
-                "Torrents" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i => i.Torrents.Length).ToList(),
-                    "ASC" => Items.OrderByDescending(i => i.Torrents.Length).ToList(),
-                    _ => Items.OrderByDescending(i => i.Torrents.Length).ToList(),
-                },
-                _ => Items.ToList(),
-            };
-
-            _orderColumn = columnName;
-            _orderType = _orderType switch
-            {
-                "DESC" => "ASC",
-                "ASC" => "DESC",
-                _ => "DESC"
-            };
-
-            Items.Clear();
-            Items.AddRange(orderedItems);
-            _scrollViewer?.ScrollToTop();
-            e.Handled = true;
-        }
-
 
         public void ListLoaded(object sender, RoutedEventArgs e)
         {

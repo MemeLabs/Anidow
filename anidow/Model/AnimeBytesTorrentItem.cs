@@ -25,6 +25,7 @@ namespace Anidow.Model
         public string DownloadLink { get; set; }
         public string Folder { get; set; }
         public string Episode => this.GetEpisode();
+        public int EpisodeInt => this.GetEpisodeInt();
         public string Resolution => this.GetResolution();
         public bool ShowInList { get; set; } = true;
     }

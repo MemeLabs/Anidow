@@ -26,6 +26,7 @@ namespace Anidow.Model
     public class AnimeBytesScrapeAnime : ObservableObject
     {
         public int ID { get; set; }
+        public int Row { get; set; }
         public string CategoryName { get; set; }
         public string FullName { get; set; }
         public string GroupName { get; set; }

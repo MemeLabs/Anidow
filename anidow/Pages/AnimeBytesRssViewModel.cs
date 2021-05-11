@@ -119,7 +119,6 @@ namespace Anidow.Pages
             }
 
             _scrollViewer?.ScrollToTop();
-            _orderType = "DESC";
             ActiveItem = null!;
             LastSearch = $"{DateTime.Now:T}";
             CanGetItems = true;
@@ -216,70 +215,7 @@ namespace Anidow.Pages
             }
         }
 
-
-        private string _orderType = "DESC";
-        private string _orderColumn = "Added";
         private string _filter;
-
-        public void Sort(object sender, RoutedEventArgs e)
-        {
-            if (e.OriginalSource is not GridViewColumnHeader header)
-            {
-                return;
-            }
-
-            var columnName = header.Column.Header.ToString();
-
-            if (columnName != _orderColumn)
-            {
-                _orderType = "DESC";
-            }
-
-            var orderedItems = columnName switch
-            {
-                "Added" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i => i.Released).ToList(),
-                    "ASC" => Items.OrderByDescending(i => i.Released).ToList(),
-                    _ => Items.OrderByDescending(i => i.Released).ToList()
-                },
-                "Name" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i => i.Name).ToList(),
-                    "ASC" => Items.OrderByDescending(i => i.Name).ToList(),
-                    _ => Items.OrderByDescending(i => i.Name).ToList()
-                },
-                "Resolution" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i => i.Resolution).ToList(),
-                    "ASC" => Items.OrderByDescending(i => i.Resolution).ToList(),
-                    _ => Items.OrderByDescending(i => i.Resolution).ToList()
-                },
-                "Episode" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Episode) ? "0" : i.Episode)).ToList(),
-                    "ASC" => Items.OrderByDescending(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Episode) ? "0" : i.Episode)).ToList(),
-                    _ => Items.OrderByDescending(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.Episode) ? "0" : i.Episode)).ToList(),
-                },
-                _ => Items.ToList(),
-            };
-
-            _orderColumn = columnName;
-            _orderType = _orderType switch
-            {
-                "DESC" => "ASC",
-                "ASC" => "DESC",
-                _ => "DESC"
-            };
-
-            Items.Clear();
-            Items.AddRange(orderedItems);
-            _scrollViewer?.ScrollToTop();
-            e.Handled = true;
-        }
 
         public void ListLoaded(object sender, RoutedEventArgs e)
         {
@@ -293,7 +229,7 @@ namespace Anidow.Pages
             {
                 return;
             }
-
+            
             _scrollViewer ??= scrollView;
         }
     }

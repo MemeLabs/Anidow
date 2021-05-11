@@ -21,7 +21,7 @@ namespace Anidow.Extensions
             {
                 return parts[episodeIndex - 1];
             }
-            catch (Exception )
+            catch (Exception)
             {
                 return string.Empty;
             }
@@ -35,6 +35,25 @@ namespace Anidow.Extensions
             var episodeIndex = parts.FindIndex(p => p.StartsWith("Episode "));
             return episodeIndex == -1 ? string.Empty : parts[episodeIndex][8..].PadLeft(2, '0');
         }
+
+        public static int GetEpisodeInt(this AnimeBytesTorrentItem item)
+        {
+            var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)
+                .Select(p => p.Trim())
+                .ToList();
+
+            var episodeIndex = parts.FindIndex(p => p.StartsWith("Episode "));
+            try
+            {
+                var success = int.TryParse(parts[episodeIndex][8..], out var i);
+                return success ? i : 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
         public static string GetResolution(this AnimeBytesTorrentItem item)
         {
             var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)

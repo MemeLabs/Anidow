@@ -74,8 +74,8 @@
 
         <ListView
             Grid.Row="1"
+            extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
-            GridViewColumnHeader.Click="{s:Action Sort}"
             IsTextSearchCaseSensitive="False"
             IsTextSearchEnabled="True"
             ItemsSource="{Binding Items}"
@@ -94,6 +94,7 @@
             <ListView.View>
                 <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
+                        extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
@@ -110,18 +111,21 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Width="100"
+                        extensions:GridViewSortExtension.PropertyName="Resolution"
                         listViewLayout:FixedColumn.Width="100"
                         DisplayMemberBinding="{Binding Resolution}"
                         Header="Resolution"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
                     <GridViewColumn
-                        Width="80"
-                        listViewLayout:FixedColumn.Width="80"
+                        Width="85"
+                        extensions:GridViewSortExtension.PropertyName="EpisodeInt"
+                        listViewLayout:FixedColumn.Width="85"
                         DisplayMemberBinding="{Binding Episode}"
                         Header="Episode"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
                     <GridViewColumn
                         Width="120"
+                        extensions:GridViewSortExtension.PropertyName="ReleasedLocal"
                         listViewLayout:FixedColumn.Width="120"
                         Header="Added"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">

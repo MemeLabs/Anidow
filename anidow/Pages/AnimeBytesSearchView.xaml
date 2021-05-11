@@ -68,8 +68,9 @@
         </Grid>
         <ListView
             Grid.Row="1"
+            extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
-            GridViewColumnHeader.Click="{s:Action Sort}"
+            IsSynchronizedWithCurrentItem="True"
             ItemsSource="{Binding Items}"
             Loaded="{s:Action ListLoaded}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -77,6 +78,14 @@
             <ListView.View>
                 <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
+                        Width="50"
+                        extensions:GridViewSortExtension.PropertyName="Row"
+                        listViewLayout:FixedColumn.Width="50"
+                        DisplayMemberBinding="{Binding Row}"
+                        Header="#"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
+                    <GridViewColumn
+                        extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
@@ -104,8 +113,9 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
-                        Width="80"
-                        listViewLayout:FixedColumn.Width="80"
+                        Width="85"
+                        extensions:GridViewSortExtension.PropertyName="Torrents.Length"
+                        listViewLayout:FixedColumn.Width="85"
                         DisplayMemberBinding="{Binding Torrents.Length}"
                         Header="Torrents"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
@@ -267,7 +277,7 @@
                                 </ComboBox.ItemsPanel>
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text="{Binding Name}" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
@@ -347,9 +357,7 @@
                                 Margin="0,0,8,0"
                                 FontWeight="Bold"
                                 Text="Links:" />
-                            <ItemsControl
-                                Grid.Column="1"
-                                ItemsSource="{Binding ActiveItem.LinksDict}">
+                            <ItemsControl Grid.Column="1" ItemsSource="{Binding ActiveItem.LinksDict}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
@@ -367,9 +375,9 @@
                                             ToolTipService.Placement="Top">
                                             <Button.ToolTip>
                                                 <TextBlock>
-                                                    <Run Text="Open"/>
-                                                    <Run Text="{Binding Key, Mode=OneWay}"/>
-                                                    <Run Text="in browser"></Run>
+                                                    <Run Text="Open" />
+                                                    <Run Text="{Binding Key, Mode=OneWay}" />
+                                                    <Run Text="in browser" />
                                                 </TextBlock>
                                             </Button.ToolTip>
                                         </Button>

@@ -29,7 +29,7 @@ namespace Anidow.Services
             var minSeeders = _settingsService.GetSettings().NyaaSettings.HideTorrentsBelowSeeders;
             if (minSeeders > -1)
             {
-                return items.Where(i => int.TryParse(i.Seeders, out var s) && s >= minSeeders).ToList();
+                return items.Where(i => i.Seeders >= minSeeders).ToList();
             }
 
             return items;
@@ -45,10 +45,10 @@ namespace Anidow.Services
                 DownloadLink = item.Links[0].Uri.AbsoluteUri,
                 Link = item.Id,
                 Folder = Settings.AnimeFolder,
-                Seeders = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "seeders")
-                    ?.GetObject<XElement>().Value,
-                Leechers = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "leechers")
-                    ?.GetObject<XElement>().Value,
+                Seeders = int.Parse(item.ElementExtensions.FirstOrDefault(e => e.OuterName == "seeders")
+                    ?.GetObject<XElement>().Value ?? "0"),
+                Leechers = int.Parse(item.ElementExtensions.FirstOrDefault(e => e.OuterName == "leechers")
+                    ?.GetObject<XElement>().Value ?? "0"),
                 Size = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "size")
                     ?.GetObject<XElement>().Value,
                 Downloads = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "downloads")

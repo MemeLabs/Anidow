@@ -70,13 +70,14 @@ namespace Anidow.Pages
         public string NextCheckIn { get; set; }
         public Timer NextCheckTimer { get; set; }
         public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
-        
+
         private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
             if (!AnimeBytesService.TrackerIsRunning)
             {
                 return;
             }
+
             var lastCheck = AnimeBytesService.LastCheck;
             var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.GetSettings().RefreshTime);
             NextCheckIn = $"next check in {nextCheck - DateTime.Now:mm\\:ss} min";
@@ -143,7 +144,7 @@ namespace Anidow.Pages
             {
                 _taskbarIcon.ShowBalloonTip("Added", item.Name, BalloonIcon.None);
             }
-            
+
             await db.AddAsync(item);
             await db.SaveChangesAsync();
             Items.Add(item);
@@ -172,7 +173,7 @@ namespace Anidow.Pages
 
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode) ActiveItem;
+            episode ??= (Episode)ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -259,7 +260,7 @@ namespace Anidow.Pages
 
         public async Task DeleteWithFile()
         {
-            var anime = (Episode) ActiveItem;
+            var anime = (Episode)ActiveItem;
             var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{anime.Name}", "Delete",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Cancel)
@@ -296,11 +297,8 @@ namespace Anidow.Pages
 
         protected override void OnInitialActivate()
         {
-            _getTorrentsStatusTimer = new Timer {Interval = 5000};
-            _getTorrentsStatusTimer.Elapsed += async (_, _) =>
-            {
-                await UpdateTorrents();
-            };
+            _getTorrentsStatusTimer = new Timer { Interval = 5000 };
+            _getTorrentsStatusTimer.Elapsed += async (_, _) => { await UpdateTorrents(); };
             _getTorrentsStatusTimer.Start();
 
             NextCheckTimer = new Timer(100);
@@ -325,6 +323,7 @@ namespace Anidow.Pages
                 {
                     episode.CoverData ??= coverData;
                 }
+
                 rows += await db.SaveChangesAsync();
             }
 
@@ -345,8 +344,7 @@ namespace Anidow.Pages
             var episodes = await db.Episodes.Where(e => !e.Hide)
                 .Include(e => e.CoverData)
                 .ToListAsync();
-            
-            _orderType = "DESC";
+
             Items.Clear();
             Items.AddRange(episodes.OrderBy(e => e.Released));
             ActiveItem = null;
@@ -438,71 +436,11 @@ namespace Anidow.Pages
             });
             AnimesToday.Add(new FutureEpisode
             {
-                Name = "Test1",
+                Name =
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ac.",
                 Date = DateTime.Now.Humanize()
             });
 #endif
-        }
-        
-
-        private string _orderType = "DESC";
-        private string _orderColumn = "Added";
-
-        public void Sort(object sender, RoutedEventArgs e)
-        {
-            if (e.OriginalSource is not GridViewColumnHeader header)
-            {
-                return;
-            }
-
-            var columnName = header.Column.Header.ToString();
-
-            if (columnName == "Added")
-            {
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(columnName))
-            {
-                return;
-            }
-
-            if (columnName != _orderColumn)
-            {
-                _orderType = "DESC";
-            }
-
-            var orderedItems = columnName switch
-            {
-                "Name" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i => i.Name).ToList(),
-                    "ASC" => Items.OrderByDescending(i => i.Name).ToList(),
-                    _ => Items.OrderByDescending(i => i.Name).ToList()
-                },
-                "Episode" => _orderType switch
-                {
-                    "DESC" => Items.OrderBy(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.EpisodeNum) ? "0" : i.EpisodeNum)).ToList(),
-                    "ASC" => Items.OrderByDescending(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.EpisodeNum) ? "0" : i.EpisodeNum)).ToList(),
-                    _ => Items.OrderByDescending(i =>
-                        int.Parse(string.IsNullOrWhiteSpace(i.EpisodeNum) ? "0" : i.EpisodeNum)).ToList(),
-                },
-                _ => Items.ToList(),
-            };
-
-            _orderColumn = columnName;
-            _orderType = _orderType switch
-            {
-                "DESC" => "ASC",
-                "ASC" => "DESC",
-                _ => "DESC"
-            };
-
-            Items.Clear();
-            Items.AddRange(orderedItems);
-            e.Handled = true;
         }
     }
 

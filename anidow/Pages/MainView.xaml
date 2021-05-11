@@ -42,9 +42,10 @@
         </TextBlock>
 
         <ListView
+            x:Name="ListView"
             Grid.Row="0"
             listViewLayout:ListViewLayoutManager.Enabled="true"
-            GridViewColumnHeader.Click="{s:Action Sort}"
+            extensions:GridViewSortExtension.AutoSort="True"
             ItemsSource="{Binding Items}"
             SelectedItem="{Binding ActiveItem}">
             <ListView.ItemContainerStyle>
@@ -67,6 +68,7 @@
                     <GridViewColumn
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
+                        extensions:GridViewSortExtension.PropertyName="Name"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
@@ -112,9 +114,10 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
-                        Width="80"
-                        listViewLayout:FixedColumn.Width="80"
+                        Width="85"
+                        listViewLayout:FixedColumn.Width="85"
                         Header="Episode"
+                        extensions:GridViewSortExtension.PropertyName="EpisodeNum"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
@@ -130,6 +133,7 @@
                     <GridViewColumn
                         Width="120"
                         listViewLayout:FixedColumn.Width="120"
+                        extensions:GridViewSortExtension.PropertyName="Released"
                         DisplayMemberBinding="{Binding ReleasedString}"
                         Header="Added"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
@@ -165,8 +169,8 @@
                 Command="{s:Action GetAiringEpisodesForToday}"
                 Content="{Binding AnimesToday.Count}" />
             <Popup
+                Width="{Binding ElementName=ListView, Path=ActualWidth}"
                 AllowsTransparency="True"
-                HorizontalOffset="-4"
                 IsOpen="{Binding ElementName=PredictedToggleButton, Path=IsChecked}"
                 Placement="Bottom"
                 PlacementTarget="{Binding ElementName=PredictedToggleButton}"
@@ -192,11 +196,26 @@
                             ItemsSource="{Binding AnimesToday}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock MinWidth="150" Text="{Binding Date}" />
-                                        <TextBlock Margin="16,0" Text="|" />
-                                        <TextBlock Text="{Binding Name}" />
-                                    </StackPanel>
+                                    <Border>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Top" Text="{Binding Date}" />
+                                            <Separator
+                                                Grid.Column="1"
+                                                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                                                Margin="8,0"
+                                                VerticalAlignment="Stretch"/>
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                VerticalAlignment="Top"
+                                                Text="{Binding Name}"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

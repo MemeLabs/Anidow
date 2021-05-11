@@ -252,8 +252,10 @@ namespace Anidow.Services
 
                 var minSeeders = _settingsService.GetSettings().NyaaSettings.HideTorrentsBelowSeeders;
 
-                foreach (var a in anime.Groups)
+                for (var index = 0; index < anime.Groups.Length; index++)
                 {
+                    var a = anime.Groups[index];
+                    a.Row = index;
                     DecodeProperties(a.GetType(), a);
                     a.SelectedTorrent = a.Torrents.FirstOrDefault();
                     foreach (var aTorrent in a.Torrents)
@@ -268,7 +270,7 @@ namespace Anidow.Services
                         a.Torrents = a.Torrents.Where(i => i.Seeders >= minSeeders).ToArray();
                     }
 
-                    var je = (JsonElement)a.Synonymns;
+                    var je = (JsonElement) a.Synonymns;
                     var json = je.GetRawText();
 
                     a.SynonymnsList = json switch
@@ -280,7 +282,7 @@ namespace Anidow.Services
                         _ => new List<string>()
                     };
 
-                    je = (JsonElement)a.Links;
+                    je = (JsonElement) a.Links;
                     json = je.GetRawText();
 
                     a.LinksDict = json switch
@@ -290,6 +292,7 @@ namespace Anidow.Services
                         _ => new Dictionary<string, string>()
                     };
                 }
+
                 return anime;
 
             }
