@@ -101,6 +101,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="model:AnimeBytesTorrentItem">
                                 <TextBlock
+                                    HorizontalAlignment="Stretch"
                                     Text="{Binding GroupTitle}"
                                     TextTrimming="CharacterEllipsis"
                                     TextWrapping="NoWrap"

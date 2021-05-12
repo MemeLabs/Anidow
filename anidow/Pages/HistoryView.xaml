@@ -108,10 +108,10 @@
 
         <ListView
             Grid.Row="1"
+            extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemsSource="{Binding Items}"
             Loaded="{s:Action ListLoaded}"
-            extensions:GridViewSortExtension.AutoSort="True"
             ScrollViewer.CanContentScroll="True"
             SelectedItem="{Binding ActiveItem}"
             VirtualizingPanel.IsVirtualizing="True"
@@ -135,9 +135,9 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn
+                        extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
-                        extensions:GridViewSortExtension.PropertyName="Name"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
@@ -165,12 +165,14 @@
                                     <TextBlock
                                         x:Name="Name"
                                         Grid.Column="1"
-                                        Margin="8,0"
+                                        Margin="8,0,0,0"
+                                        HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center"
                                         Text="{Binding Name}"
                                         TextTrimming="CharacterEllipsis"
                                         TextWrapping="NoWrap"
-                                        ToolTip="{Binding Name}" />
+                                        ToolTip="{Binding Name}"
+                                        ToolTipService.Placement="Bottom" />
                                 </Grid>
 
                                 <DataTemplate.Triggers>
@@ -183,9 +185,9 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Width="85"
+                        extensions:GridViewSortExtension.PropertyName="EpisodeNum"
                         listViewLayout:FixedColumn.Width="85"
                         Header="Episode"
-                        extensions:GridViewSortExtension.PropertyName="EpisodeNum"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">

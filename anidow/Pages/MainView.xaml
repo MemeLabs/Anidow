@@ -44,8 +44,8 @@
         <ListView
             x:Name="ListView"
             Grid.Row="0"
-            listViewLayout:ListViewLayoutManager.Enabled="true"
             extensions:GridViewSortExtension.AutoSort="True"
+            listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemsSource="{Binding Items}"
             SelectedItem="{Binding ActiveItem}">
             <ListView.ItemContainerStyle>
@@ -66,9 +66,9 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn
+                        extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
-                        extensions:GridViewSortExtension.PropertyName="Name"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
@@ -83,7 +83,6 @@
                                         Margin="-14,-4,0,-4"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
-                                        VerticalContentAlignment="Center"
                                         extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
                                         extensions:RippleExtension.BackgroundBrush="#EF5350"
                                         Command="{s:Action DeleteItem,
@@ -97,12 +96,14 @@
                                     <TextBlock
                                         x:Name="Name"
                                         Grid.Column="1"
-                                        Margin="8,0"
+                                        Margin="8,0,0,0"
+                                        HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center"
                                         Text="{Binding Name}"
                                         TextTrimming="CharacterEllipsis"
                                         TextWrapping="NoWrap"
-                                        ToolTip="{Binding Name}" />
+                                        ToolTip="{Binding Name}"
+                                        ToolTipService.Placement="Bottom" />
                                 </Grid>
 
                                 <DataTemplate.Triggers>
@@ -115,9 +116,9 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Width="85"
+                        extensions:GridViewSortExtension.PropertyName="EpisodeNum"
                         listViewLayout:FixedColumn.Width="85"
                         Header="Episode"
-                        extensions:GridViewSortExtension.PropertyName="EpisodeNum"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
@@ -132,8 +133,8 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Width="120"
-                        listViewLayout:FixedColumn.Width="120"
                         extensions:GridViewSortExtension.PropertyName="Released"
+                        listViewLayout:FixedColumn.Width="120"
                         DisplayMemberBinding="{Binding ReleasedString}"
                         Header="Added"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
@@ -206,9 +207,9 @@
                                             <TextBlock VerticalAlignment="Top" Text="{Binding Date}" />
                                             <Separator
                                                 Grid.Column="1"
-                                                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
                                                 Margin="8,0"
-                                                VerticalAlignment="Stretch"/>
+                                                VerticalAlignment="Stretch"
+                                                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                                             <TextBlock
                                                 Grid.Column="2"
                                                 VerticalAlignment="Top"

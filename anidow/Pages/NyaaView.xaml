@@ -72,6 +72,7 @@
                             <DataTemplate DataType="model:NyaaTorrentItem">
                                 <TextBlock
                                     x:Name="Name"
+                                    HorizontalAlignment="Stretch"
                                     Text="{Binding Name}"
                                     TextTrimming="CharacterEllipsis"
                                     TextWrapping="NoWrap"

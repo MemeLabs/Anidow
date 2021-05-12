@@ -22,9 +22,9 @@
 
             <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type Window}" />
 
-            <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="{x:Type ScrollViewer}">
-                <Setter Property="extensions:ScrollBarExtension.ExpansionMode" Value="ExpandOnHover" />
+            <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer">
                 <Setter Property="extensions:ScrollViewerExtension.VerticalScrollBarPlacement" Value="Overlay" />
+                <Setter Property="extensions:ScrollViewerExtension.HorizontalScrollBarPlacement" Value="Overlay" />
                 <Setter Property="extensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver" Value="True" />
             </Style>
 
@@ -71,9 +71,9 @@
                                 Width="{TemplateBinding Width}"
                                 Height="{TemplateBinding Height}"
                                 Padding="4"
-                                Background="{DynamicResource {x:Static adonisUi:Brushes.Layer4BackgroundBrush}}"
-                                BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionBorderBrush}}"
-                                BorderThickness="2">
+                                Background="{DynamicResource {x:Static adonisUi:Brushes.Layer3BackgroundBrush}}"
+                                BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer3BorderBrush}}"
+                                BorderThickness="1">
                                 <ContentPresenter
                                     Margin="4"
                                     HorizontalAlignment="Left"
