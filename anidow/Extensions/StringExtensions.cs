@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Anidow.Database.Models;
 using Serilog;
@@ -12,7 +10,8 @@ namespace Anidow.Extensions
 {
     public static class StringExtensions
     {
-        public static async Task<Cover> GetCoverData(this string cover, Anime anime, HttpClient httpClient, ILogger logger)
+        public static async Task<Cover> GetCoverData(this string cover, Anime anime, HttpClient httpClient,
+            ILogger logger)
         {
             try
             {
@@ -27,6 +26,7 @@ namespace Anidow.Extensions
                 {
                     return null;
                 }
+
                 var data = await response.Content.ReadAsByteArrayAsync();
                 if (data.Length <= 0)
                 {
@@ -41,7 +41,7 @@ namespace Anidow.Extensions
                 }
 
                 var extension = mediaType.Split('/').Last();
-                
+
                 var filePath = Path.Combine("covers", $"{anime.GroupId}.{extension}");
                 await File.WriteAllBytesAsync(filePath, data);
 

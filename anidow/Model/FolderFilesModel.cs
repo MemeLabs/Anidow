@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace Anidow.Model
 {
-    public class FolderFilesModel: ObservableObject
+    public class FolderFilesModel : ObservableObject
     {
         public FileInfo File { get; set; }
         public bool Highlight { get; set; }

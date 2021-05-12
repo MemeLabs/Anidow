@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using Anidow.Events;
 using Anidow.Extensions;
@@ -17,7 +14,6 @@ using Anidow.Utils;
 using Serilog;
 using Stylet;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using ListBox = System.Windows.Forms.ListBox;
 using ListView = System.Windows.Controls.ListView;
 
 namespace Anidow.Pages
@@ -44,7 +40,7 @@ namespace Anidow.Pages
         public string SearchText { get; set; } = string.Empty;
         public string LastSearch { get; set; }
 
-        public List<string> Filters => new List<string>
+        public List<string> Filters => new()
         {
             "No filter",
             "No remakes",
@@ -67,7 +63,7 @@ namespace Anidow.Pages
             {
                 return;
             }
-            
+
             Items.Clear();
             Items.AddRange(items);
 
@@ -130,7 +126,7 @@ namespace Anidow.Pages
                 ActiveItem.Folder = dialog.SelectedPath;
             }
         }
-        
+
         public void ListLoaded(object sender, RoutedEventArgs e)
         {
             if (sender is not ListView listView || _scrollViewer != null)

@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:extensions="clr-namespace:Anidow.Extensions"
     xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:io="clr-namespace:System.IO;assembly=System.IO.FileSystem"
@@ -121,14 +120,16 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Highlight}" Value="true">
                             <Setter Property="BorderThickness" Value="0,2" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBorderBrush}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBorderBrush}}" />
                             <Setter Property="Height" Value="28" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.View>
-                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True"
+                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"

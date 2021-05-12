@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Anidow.Annotations;
 
 namespace Anidow.Model
 {

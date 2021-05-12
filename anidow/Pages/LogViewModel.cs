@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 
 namespace Anidow.Pages
 {
-    public class LogViewModel: Screen, ILogEventSink
+    public class LogViewModel : Screen, ILogEventSink
     {
-        public ObservableCollection<LogEvent> Items { get; }
         public LogViewModel()
         {
             Items = new ObservableCollection<LogEvent>();
         }
+
+        public ObservableCollection<LogEvent> Items { get; }
 
         public void Emit(LogEvent logEvent)
         {

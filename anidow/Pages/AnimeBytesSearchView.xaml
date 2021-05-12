@@ -12,7 +12,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Anidow.Model"
     xmlns:s="https://github.com/canton7/Stylet"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance local:AnimeBytesSearchViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -24,7 +23,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox extensions:LayerExtension.IncreaseLayer="True" Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+        <GroupBox extensions:LayerExtension.IncreaseLayer="True"
+                  Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -76,7 +76,8 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             SelectedItem="{Binding ActiveItem}">
             <ListView.View>
-                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True"
+                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         Width="50"
                         extensions:GridViewSortExtension.PropertyName="Row"
@@ -321,7 +322,9 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding ActiveItem.SelectedTorrent.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
+                            <TextBox
+                                Text="{Binding ActiveItem.SelectedTorrent.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
                             <Button
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
@@ -387,7 +390,6 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </Grid>
-
 
 
                         <Grid Grid.Row="5" Margin="0,4,0,0">

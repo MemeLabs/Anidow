@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
@@ -39,8 +38,10 @@ namespace Anidow.Pages
             {
                 return;
             }
+
             Settings.AnimeFolder = folder;
         }
+
         public void SetAbDefaultAnimeFolder()
         {
             var folder = OpenFolderBrowserDialog();
@@ -51,7 +52,7 @@ namespace Anidow.Pages
 
             Settings.AnimeBytesSettings.DefaultDownloadFolder = folder;
         }
-        
+
         private string OpenFolderBrowserDialog()
         {
             using var dialog = new FolderBrowserDialog
@@ -75,6 +76,7 @@ namespace Anidow.Pages
                 textBox.Text = "1";
             }
         }
+
         public void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try

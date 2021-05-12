@@ -27,6 +27,7 @@ namespace Anidow.Extensions
                 return string.Empty;
             }
         }
+
         public static string GetEpisode(this AnimeBytesTorrentItem item)
         {
             var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)
@@ -64,6 +65,7 @@ namespace Anidow.Extensions
             var resolutionIndex = parts.FindIndex(p => Regex.IsMatch(p, @"\d+p"));
             return resolutionIndex == -1 ? string.Empty : parts[resolutionIndex];
         }
+
         public static string GetEpisode(this string s)
         {
             var parts = s.Split('|', StringSplitOptions.RemoveEmptyEntries)

@@ -2,14 +2,11 @@
     x:Class="Anidow.Pages.Components.Tracked.TrackedAnimeEditContentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enums="clr-namespace:Anidow.Enums"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-    xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:Anidow.Pages.Components.Tracked"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
@@ -145,7 +142,6 @@
                     MinWidth="150"
                     VerticalAlignment="Center"
                     Text="{Binding Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
 
 
                 <TextBlock

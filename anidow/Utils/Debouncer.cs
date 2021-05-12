@@ -19,7 +19,7 @@ namespace Anidow.Utils
     public static class Debouncer
     {
         private static readonly ConcurrentDictionary<object, DebounceRegistration> _activeDebouncers =
-            new ConcurrentDictionary<object, DebounceRegistration>();
+            new();
 
         /// <summary>
         ///     Debounce abstract key-ed object
@@ -268,7 +268,7 @@ namespace Anidow.Utils
             /// <summary>
             ///     Does not have to be thread-safe, because it's already thread-safe due to DebounceRegistration
             /// </summary>
-            public List<T> Queue { get; } = new List<T>();
+            public List<T> Queue { get; } = new();
 
             protected override void InvokeOnTimeout()
             {

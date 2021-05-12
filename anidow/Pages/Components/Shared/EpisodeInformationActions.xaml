@@ -8,7 +8,6 @@
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:Anidow.Pages.Components.Shared"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
     d:DesignHeight="450"

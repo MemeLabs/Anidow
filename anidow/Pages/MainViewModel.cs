@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
+using AdonisUI.Controls;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
@@ -26,11 +22,6 @@ using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
-using MessageBox = AdonisUI.Controls.MessageBox;
-using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
-using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
-using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
-using Timer = System.Timers.Timer;
 
 namespace Anidow.Pages
 {
@@ -39,12 +30,12 @@ namespace Anidow.Pages
         IHandle<RefreshHomeEvent>
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
-        private readonly IWindowManager _windowManager;
         private readonly SettingsService _settingsService;
         private readonly TaskbarIcon _taskbarIcon;
-        private readonly HttpClient _httpClient;
         private readonly TorrentService _torrentService;
+        private readonly IWindowManager _windowManager;
         private Timer _getTorrentsStatusTimer;
 
 
@@ -70,27 +61,6 @@ namespace Anidow.Pages
         public string NextCheckIn { get; set; }
         public Timer NextCheckTimer { get; set; }
         public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
-
-        private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            if (!AnimeBytesService.TrackerIsRunning)
-            {
-                return;
-            }
-
-            var lastCheck = AnimeBytesService.LastCheck;
-            var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.GetSettings().RefreshTime);
-            NextCheckIn = $"next check in {nextCheck - DateTime.Now:mm\\:ss} min";
-        }
-
-        public async Task ForceCheck()
-        {
-            CanForceCheck = false;
-            _logger.Verbose("Test");
-            await AnimeBytesService.CheckForNewEpisodes();
-            await GetAiringEpisodesForToday();
-            CanForceCheck = true;
-        }
 
         public async void Handle(DownloadEvent message)
         {
@@ -151,6 +121,33 @@ namespace Anidow.Pages
             await GetAiringEpisodesForToday();
         }
 
+        public async void Handle(RefreshHomeEvent _)
+        {
+            await LoadEpisodes();
+            await GetAiringEpisodesForToday();
+        }
+
+        private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (!AnimeBytesService.TrackerIsRunning)
+            {
+                return;
+            }
+
+            var lastCheck = AnimeBytesService.LastCheck;
+            var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.GetSettings().RefreshTime);
+            NextCheckIn = $"next check in {nextCheck - DateTime.Now:mm\\:ss} min";
+        }
+
+        public async Task ForceCheck()
+        {
+            CanForceCheck = false;
+            _logger.Verbose("Test");
+            await AnimeBytesService.CheckForNewEpisodes();
+            await GetAiringEpisodesForToday();
+            CanForceCheck = true;
+        }
+
         private string CreatePropertyEpisode(AnimeBytesScrapeAnime ab)
         {
             try
@@ -165,15 +162,9 @@ namespace Anidow.Pages
             }
         }
 
-        public async void Handle(RefreshHomeEvent _)
-        {
-            await LoadEpisodes();
-            await GetAiringEpisodesForToday();
-        }
-
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -260,7 +251,7 @@ namespace Anidow.Pages
 
         public async Task DeleteWithFile()
         {
-            var anime = (Episode)ActiveItem;
+            var anime = (Episode) ActiveItem;
             var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{anime.Name}", "Delete",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Cancel)
@@ -297,7 +288,7 @@ namespace Anidow.Pages
 
         protected override void OnInitialActivate()
         {
-            _getTorrentsStatusTimer = new Timer { Interval = 5000 };
+            _getTorrentsStatusTimer = new Timer {Interval = 5000};
             _getTorrentsStatusTimer.Elapsed += async (_, _) => { await UpdateTorrents(); };
             _getTorrentsStatusTimer.Start();
 
@@ -319,10 +310,7 @@ namespace Anidow.Pages
                 var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);
                 anime.CoverData ??= coverData;
                 var episodes = db.Episodes.Where(e => e.AnimeId == anime.GroupId);
-                foreach (var episode in episodes)
-                {
-                    episode.CoverData ??= coverData;
-                }
+                foreach (var episode in episodes) episode.CoverData ??= coverData;
 
                 rows += await db.SaveChangesAsync();
             }
@@ -353,7 +341,7 @@ namespace Anidow.Pages
             {
                 Name = "test :: Episode 1",
                 Released = DateTime.Today,
-                Folder = Directory.GetCurrentDirectory(),
+                Folder = Directory.GetCurrentDirectory()
             });
 #endif
         }
@@ -416,7 +404,6 @@ namespace Anidow.Pages
                 var potentialNextRelease = lastEpisode.Released + TimeSpan.FromDays(7);
                 if (potentialNextRelease.Date == DateTime.Today)
                 {
-
                     animesToday.Add(new FutureEpisode
                     {
                         Name = anime.Name,
@@ -427,7 +414,10 @@ namespace Anidow.Pages
 
 
             AnimesToday.Clear();
-            if (animesToday.Any()) AnimesToday.AddRange(animesToday);
+            if (animesToday.Any())
+            {
+                AnimesToday.AddRange(animesToday);
+            }
 #if DEBUG
             AnimesToday.Add(new FutureEpisode
             {

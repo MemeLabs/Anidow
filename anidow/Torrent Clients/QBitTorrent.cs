@@ -7,7 +7,6 @@ using Anidow.Database.Models;
 using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Services;
-using Castle.Core.Internal;
 using Serilog;
 
 namespace Anidow.Torrent_Clients
@@ -16,8 +15,8 @@ namespace Anidow.Torrent_Clients
     public class QBitTorrent : IBaseTorrentClient
     {
         private readonly HttpClient _httpClient;
-        private readonly SettingsService _settingsService;
         private readonly ILogger _logger;
+        private readonly SettingsService _settingsService;
 
         public QBitTorrent(ILogger logger, HttpClient httpClient, SettingsService settingsService)
         {
@@ -29,24 +28,6 @@ namespace Anidow.Torrent_Clients
         private SettingsModel Settings => _settingsService.GetSettings();
         private string ApiUrl => $"{Settings.QBitTorrent.Host}:{Settings.QBitTorrent.Port}";
         private bool LoggedIn { get; set; }
-
-        private async Task Login()
-        {
-            if (LoggedIn || !Settings.QBitTorrent.WithLogin)
-            {
-                return;
-            }
-            var data = new Dictionary<string, string>
-            {
-                {"username", Settings.QBitTorrent.Username},
-                {"password", Settings.QBitTorrent.Password},
-            };
-            var oldReferer = _httpClient.DefaultRequestHeaders.Referrer;
-            _httpClient.DefaultRequestHeaders.Referrer = new Uri(ApiUrl);
-            var login = await _httpClient.PostAsync($"{ApiUrl}/api/v2/auth/login", new FormUrlEncodedContent(data));
-            LoggedIn = login.IsSuccessStatusCode;
-            _httpClient.DefaultRequestHeaders.Referrer = oldReferer;
-        }
 
 
         public async Task<bool> Add(ITorrentItem item)
@@ -97,6 +78,25 @@ namespace Anidow.Torrent_Clients
                 _logger.Error(e, "failed deleting file from qbittorrent");
                 return false;
             }
+        }
+
+        private async Task Login()
+        {
+            if (LoggedIn || !Settings.QBitTorrent.WithLogin)
+            {
+                return;
+            }
+
+            var data = new Dictionary<string, string>
+            {
+                {"username", Settings.QBitTorrent.Username},
+                {"password", Settings.QBitTorrent.Password}
+            };
+            var oldReferer = _httpClient.DefaultRequestHeaders.Referrer;
+            _httpClient.DefaultRequestHeaders.Referrer = new Uri(ApiUrl);
+            var login = await _httpClient.PostAsync($"{ApiUrl}/api/v2/auth/login", new FormUrlEncodedContent(data));
+            LoggedIn = login.IsSuccessStatusCode;
+            _httpClient.DefaultRequestHeaders.Referrer = oldReferer;
         }
 
         public async Task<List<T>> GetTorrentList<T>()

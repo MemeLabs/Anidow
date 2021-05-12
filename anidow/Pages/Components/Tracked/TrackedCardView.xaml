@@ -7,9 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:extensions1="clr-namespace:Anidow.Extensions"
-    xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:Anidow.Pages.Components"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:pages="clr-namespace:Anidow.Pages"
@@ -53,7 +51,8 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="BorderThickness" Value="2" />
-                                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                                        <Setter Property="BorderBrush"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                                         <Setter Property="Cursor" Value="Hand" />
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
@@ -62,7 +61,8 @@
                                     </Trigger>
                                     <DataTrigger Binding="{Binding TrackedViewSelected}" Value="True">
                                         <Setter Property="BorderThickness" Value="2" />
-                                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                                        <Setter Property="BorderBrush"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -89,7 +89,8 @@
                                 VerticalAlignment="Center"
                                 Visibility="{Binding CoverData.File, Converter={x:Static converters:IsNotNullToVisibilityConverter.Instance}}">
                                 <TextBox x:Name="CoverUrl" extensions:WatermarkExtension.Watermark="Url ..." />
-                                <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}" Content="Download Cover">
+                                <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}"
+                                        Content="Download Cover">
                                     <Button.CommandParameter>
                                         <MultiBinding Converter="{x:Static converters:DownloadCoverConverter.Instance}">
                                             <Binding ElementName="CoverUrl" Path="Text" />
@@ -123,7 +124,7 @@
                                 Grid.Row="0"
                                 Points="0,0 20,0, 0,20"
                                 ToolTip="{Binding Status, Mode=OneWay}"
-                                Fill="{Binding Status, Converter={x:Static converters:AnimeStatusToColorConverter.Instance}}"/>
+                                Fill="{Binding Status, Converter={x:Static converters:AnimeStatusToColorConverter.Instance}}" />
                         </Grid>
                     </Border>
                 </DataTemplate>

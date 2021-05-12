@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Anidow.Events
+﻿namespace Anidow.Events
 {
     public class RefreshHomeEvent
     {

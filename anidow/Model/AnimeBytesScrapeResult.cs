@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using System.Web;
 using Anidow.Interfaces;
-using Newtonsoft.Json.Linq;
 
 // ReSharper disable InconsistentNaming
 
@@ -14,7 +8,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Anidow.Model
 {
-
     public class AnimeBytesScrapeResult
     {
         public int Matches { get; set; }
@@ -36,13 +29,15 @@ namespace Anidow.Model
         public string Year { get; set; }
         public string Image { get; set; }
         public object Synonymns { get; set; }
-        [JsonIgnore]
-        public List<string> SynonymnsList { get; set; }
+
+        [JsonIgnore] public List<string> SynonymnsList { get; set; }
+
         public int Snatched { get; set; }
         public int Comments { get; set; }
         public object Links { get; set; }
-        [JsonIgnore]
-        public Dictionary<string, string> LinksDict { get; set; }
+
+        [JsonIgnore] public Dictionary<string, string> LinksDict { get; set; }
+
         public int Votes { get; set; }
         public float AvgVote { get; set; }
         public object Associations { get; set; }
@@ -66,8 +61,6 @@ namespace Anidow.Model
         public AnimeBytesScrapeEditionData EditionData { get; set; }
         public float RawDownMultiplier { get; set; }
         public float RawUpMultiplier { get; set; }
-
-        [JsonPropertyName("Link")] public string DownloadLink { get; set; }
         public string Property { get; set; }
         public int Snatched { get; set; }
         public int Seeders { get; set; }
@@ -75,8 +68,6 @@ namespace Anidow.Model
         public long Size { get; set; }
         public int FileCount { get; set; }
         public string UploadTime { get; set; }
-
-        [JsonIgnore] public string Folder { get; set; }
 
         [JsonIgnore]
         public string Name
@@ -92,6 +83,10 @@ namespace Anidow.Model
                 return name;
             }
         }
+
+        [JsonPropertyName("Link")] public string DownloadLink { get; set; }
+
+        [JsonIgnore] public string Folder { get; set; }
 
         public class AnimeBytesScrapeEditionData
         {

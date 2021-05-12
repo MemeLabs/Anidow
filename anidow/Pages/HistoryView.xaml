@@ -9,11 +9,9 @@
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:interfaces="clr-namespace:Anidow.Interfaces"
     xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="clr-namespace:Anidow.Model"
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
@@ -344,7 +342,8 @@
                         Content="Delete"
                         Foreground="White">
                         <controls:SplitButton.SplitMenu>
-                            <ContextMenu MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                            <ContextMenu
+                                MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
                                 <MenuItem
                                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                                     extensions:RippleExtension.BackgroundBrush="#EF5350"

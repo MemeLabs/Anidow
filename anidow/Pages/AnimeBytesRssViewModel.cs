@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +18,6 @@ using Anidow.Utils;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
-using Application = System.Windows.Application;
 using ListView = System.Windows.Controls.ListView;
 
 namespace Anidow.Pages
@@ -35,6 +31,8 @@ namespace Anidow.Pages
         private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
         private readonly TorrentService _torrentService;
+
+        private string _filter;
         private ScrollViewer _scrollViewer;
 
         public AnimeBytesRssViewModel(ILogger logger, IEventAggregator eventAggregator, HttpClient httpClient,
@@ -48,6 +46,7 @@ namespace Anidow.Pages
             _settingsService = settingsService;
             DisplayName = "Rss feed";
         }
+
         public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.GetSettings().AnimeBytesSettings.PassKey);
         public string LastSearch { get; set; }
 
@@ -61,14 +60,6 @@ namespace Anidow.Pages
             }
         }
 
-        private void HighlightFoundItems(string value)
-        {
-            foreach (var item in Items)
-            {
-                item.ShowInList = item.Name.Contains(value, StringComparison.CurrentCultureIgnoreCase);
-            }
-        }
-
         public IReadOnlyList<string> Filters => new List<string>
         {
             "Anime torrents",
@@ -78,6 +69,12 @@ namespace Anidow.Pages
         public int SelectedFilterIndex { get; set; }
 
         public bool CanGetItems { get; set; } = true;
+
+        private void HighlightFoundItems(string value)
+        {
+            foreach (var item in Items)
+                item.ShowInList = item.Name.Contains(value, StringComparison.CurrentCultureIgnoreCase);
+        }
 
         //public bool CanDownload => ActiveItem != null && !string.IsNullOrWhiteSpace(ActiveItem.Folder);
 
@@ -115,6 +112,7 @@ namespace Anidow.Pages
                 {
                     animeBytesFeedItem.CanTrack = !tracked.Contains(animeBytesFeedItem.GroupId);
                 }
+
                 await Execute.OnUIThreadAsync(() => Items.Add(animeBytesFeedItem));
             }
 
@@ -192,7 +190,7 @@ namespace Anidow.Pages
                 Released = item.Released,
                 Resolution = resolution,
                 Group = item.GetReleaseGroup(),
-                Status = AnimeStatus.Watching,
+                Status = AnimeStatus.Watching
             };
             anime.CoverData = await anime.Cover.GetCoverData(anime, _httpClient, _logger);
 
@@ -215,8 +213,6 @@ namespace Anidow.Pages
             }
         }
 
-        private string _filter;
-
         public void ListLoaded(object sender, RoutedEventArgs e)
         {
             if (sender is not ListView listView || _scrollViewer != null)
@@ -229,7 +225,7 @@ namespace Anidow.Pages
             {
                 return;
             }
-            
+
             _scrollViewer ??= scrollView;
         }
     }

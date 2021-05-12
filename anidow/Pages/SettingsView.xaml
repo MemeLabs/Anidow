@@ -78,7 +78,8 @@
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
+                                     Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -137,7 +138,8 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Text="Torrent client:" />
-                            <ComboBox Grid.Column="2" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
+                            <ComboBox Grid.Column="2"
+                                      SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
                                 <ComboBoxItem Content="QBitTorrent" />
                                 <ComboBoxItem Content="Deluge" IsEnabled="False" />
                             </ComboBox>
@@ -272,7 +274,8 @@
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBlock>Passkey</TextBlock>
                             <TextBlock Margin="8,0">
-                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account" RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account"
+                                           RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
                                     (click here)
                                 </Hyperlink>
                             </TextBlock>
@@ -290,7 +293,8 @@
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
+                                     Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -354,7 +358,9 @@
                     <Expander.Style>
                         <Style BasedOn="{StaticResource ExpanderCustom}" TargetType="Expander">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}" Value="1">
+                                <DataTrigger
+                                    Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}"
+                                    Value="1">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>

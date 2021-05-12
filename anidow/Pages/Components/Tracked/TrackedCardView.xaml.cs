@@ -3,7 +3,7 @@
 namespace Anidow.Pages.Components.Tracked
 {
     /// <summary>
-    /// Interaktionslogik für TrackedCardView.xaml
+    ///     Interaktionslogik für TrackedCardView.xaml
     /// </summary>
     public partial class TrackedCardView : UserControl
     {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
@@ -20,10 +18,7 @@ namespace Anidow.Extensions
                         yield return dependencyObject;
                     }
 
-                    foreach (var childOfChild in FindVisualChildren<T>(child))
-                    {
-                        yield return childOfChild;
-                    }
+                    foreach (var childOfChild in FindVisualChildren<T>(child)) yield return childOfChild;
                 }
             }
         }
@@ -39,7 +34,10 @@ namespace Anidow.Extensions
             var parentObject = VisualTreeHelper.GetParent(depObj);
 
             //we've reached the end of the tree
-            if (parentObject == null) return null;
+            if (parentObject == null)
+            {
+                return null;
+            }
 
             //check if the parent matches the type we're looking for
             var parent = parentObject as T;

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Anidow.Database.Models;
-using Anidow.Model;
 
 namespace Anidow.Interfaces
 {

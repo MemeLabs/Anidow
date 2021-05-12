@@ -18,7 +18,6 @@ namespace Anidow.Services
         private readonly StoreService _storeService;
         private SettingsModel _settings;
         private SettingsModel _settingsOriginal;
-        public event EventHandler SettingsSaved; // event
 
         public SettingsService(StoreService storeService, SettingsValidation settingsValidation, ILogger logger)
         {
@@ -28,6 +27,7 @@ namespace Anidow.Services
         }
 
         public bool CanSave { get; set; }
+        public event EventHandler SettingsSaved; // event
 
         public async Task Init()
         {

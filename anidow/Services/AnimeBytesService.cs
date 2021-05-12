@@ -4,12 +4,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.ServiceModel.Syndication;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Web;
@@ -21,9 +17,7 @@ using Anidow.Extensions;
 using Anidow.Model;
 using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;
-using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using Stylet;
 
@@ -32,14 +26,14 @@ namespace Anidow.Services
     // ReSharper disable once ClassNeverInstantiated.Global
     public class AnimeBytesService : RssFeedService, INotifyPropertyChanged
     {
-        private readonly ILogger _logger;
         private readonly IEventAggregator _eventAggregator;
         private readonly HttpClient _httpClient;
+        private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
-        private readonly TorrentService _torrentService;
         private readonly TaskbarIcon _taskbarIcon;
-        private Timer _tracker;
+        private readonly TorrentService _torrentService;
         private int _initialRefreshTime;
+        private Timer _tracker;
 
         public AnimeBytesService(ILogger logger, IEventAggregator eventAggregator, HttpClient httpClient,
             SettingsService settingsService, TorrentService torrentService, TaskbarIcon taskbarIcon)
@@ -55,14 +49,20 @@ namespace Anidow.Services
 
         private SettingsModel Settings => _settingsService.GetSettings();
 
-        private string AllAnimeUrl => $"https://animebytes.tv/feed/rss_torrents_anime/{Settings.AnimeBytesSettings.PassKey}";
-        private string AiringAnimeUrl => $"https://animebytes.tv/feed/rss_torrents_airing_anime/{Settings.AnimeBytesSettings.PassKey}";
+        private string AllAnimeUrl =>
+            $"https://animebytes.tv/feed/rss_torrents_anime/{Settings.AnimeBytesSettings.PassKey}";
+
+        private string AiringAnimeUrl =>
+            $"https://animebytes.tv/feed/rss_torrents_airing_anime/{Settings.AnimeBytesSettings.PassKey}";
 
         public bool TrackerIsRunning { get; set; }
         public DateTime LastCheck { get; private set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void InitTracker()
         {
-            _tracker = new Timer { Interval = 1000 * 60 * _settingsService.GetSettings().RefreshTime };
+            _tracker = new Timer {Interval = 1000 * 60 * _settingsService.GetSettings().RefreshTime};
             _tracker.Elapsed += TrackerOnElapsed;
             StartTracker();
             _initialRefreshTime = _settingsService.GetSettings().RefreshTime;
@@ -117,7 +117,6 @@ namespace Anidow.Services
             feedItems.Reverse();
             foreach (var a in anime)
             {
-
                 var episodes = await db.Episodes
                     .Where(e => e.AnimeId == a.GroupId)
                     .ToListAsync();
@@ -197,10 +196,12 @@ namespace Anidow.Services
                 _logger.Information("animebytes passkey is empty");
                 return default;
             }
+
             return filter switch
             {
                 AnimeBytesFilter.All => await GetFeedItems(AllAnimeUrl, ToDomain) ?? new List<AnimeBytesTorrentItem>(),
-                AnimeBytesFilter.Airing => await GetFeedItems(AiringAnimeUrl, ToDomain) ?? new List<AnimeBytesTorrentItem>(),
+                AnimeBytesFilter.Airing => await GetFeedItems(AiringAnimeUrl, ToDomain) ??
+                                           new List<AnimeBytesTorrentItem>(),
                 _ => throw new ArgumentOutOfRangeException(nameof(filter), filter, null)
             };
         }
@@ -239,7 +240,9 @@ namespace Anidow.Services
             {
                 return default;
             }
-            var url = $"https://animebytes.tv/scrape.php?torrent_pass={passkey}&username={username}&type=anime&searchstr={search}";
+
+            var url =
+                $"https://animebytes.tv/scrape.php?torrent_pass={passkey}&username={username}&type=anime&searchstr={search}";
             try
             {
                 var response = await _httpClient.GetStringAsync(url);
@@ -294,7 +297,6 @@ namespace Anidow.Services
                 }
 
                 return anime;
-
             }
             catch (Exception e)
             {
@@ -309,15 +311,11 @@ namespace Anidow.Services
             var propertiesInfo = type.GetProperties();
 
             foreach (var p in propertiesInfo)
-            {
                 if (p.PropertyType.FullName == "System.String" && p.CanWrite)
                 {
                     var value = p.GetValue(obj, null);
                     p.SetValue(obj, HttpUtility.HtmlDecode(value as string), null);
                 }
-            }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

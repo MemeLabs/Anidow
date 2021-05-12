@@ -9,14 +9,10 @@ namespace Anidow.Converters
     {
         public static readonly IsNullToVisibilityConverter Instance = new();
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value == null ? Visibility.Collapsed : Visibility.Visible;
-        }
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            value == null ? Visibility.Collapsed : Visibility.Visible;
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
             throw new NotImplementedException();
-        }
     }
 }

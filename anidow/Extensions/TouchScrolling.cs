@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,46 +8,47 @@ using System.Windows.Input;
 namespace Anidow.Extensions
 {
     /// <summary>
-    /// http://matthamilton.net/touchscrolling-for-scrollviewer
-    /// Edited by Davut C.
+    ///     http://matthamilton.net/touchscrolling-for-scrollviewer
+    ///     Edited by Davut C.
     /// </summary>
     public class TouchScrolling : DependencyObject
     {
-        public static bool GetIsEnabled(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(IsEnabledProperty);
-        }
-
-        public static void SetIsEnabled(DependencyObject obj, bool value)
-        {
-            obj.SetValue(IsEnabledProperty, value);
-        }
-
-        public bool IsEnabled
-        {
-            get => (bool)GetValue(IsEnabledProperty);
-            set => SetValue(IsEnabledProperty, value);
-        }
-
         public static readonly DependencyProperty IsEnabledProperty =
             DependencyProperty.RegisterAttached("IsEnabled",
                 typeof(bool),
                 typeof(TouchScrolling),
                 new PropertyMetadata(false, IsEnabledChanged));
 
-        private static readonly Dictionary<object, MouseCapture> Captures = new Dictionary<object, MouseCapture>();
+        private static readonly Dictionary<object, MouseCapture> Captures = new();
+
+        public bool IsEnabled
+        {
+            get => (bool) GetValue(IsEnabledProperty);
+            set => SetValue(IsEnabledProperty, value);
+        }
+
+        public static bool GetIsEnabled(DependencyObject obj) => (bool) obj.GetValue(IsEnabledProperty);
+
+        public static void SetIsEnabled(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsEnabledProperty, value);
+        }
 
         private static void IsEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not ScrollViewer target) return;
+            if (d is not ScrollViewer target)
+            {
+                return;
+            }
 
-            if ((bool)e.NewValue)
+            if ((bool) e.NewValue)
             {
                 if (target.IsLoaded)
                 {
                     Target_Loaded(target, null);
                     return;
                 }
+
                 target.Loaded += Target_Loaded;
             }
             else
@@ -57,9 +59,12 @@ namespace Anidow.Extensions
 
         private static void Target_Unloaded(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Target Unloaded");
+            Debug.WriteLine("Target Unloaded");
 
-            if (sender is not ScrollViewer target) return;
+            if (sender is not ScrollViewer target)
+            {
+                return;
+            }
 
             Captures.Remove(sender);
 
@@ -73,29 +78,35 @@ namespace Anidow.Extensions
         private static void Target_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.OriginalSource is Border
-                && e.Source is ScrollViewer 
-                || e.Source is TextBox 
+                && e.Source is ScrollViewer
+                || e.Source is TextBox
                 || e.Source is PasswordBox
                 || e.OriginalSource.ToString() == "System.Windows.Controls.TextBoxView")
             {
                 return;
             }
 
-            if (sender is not ScrollViewer target) return;
+            if (sender is not ScrollViewer target)
+            {
+                return;
+            }
 
             Captures[sender] = new MouseCapture
             {
                 VerticalOffset = target.VerticalOffset,
                 HorizontalOffset = target.HorizontalOffset,
-                Point = e.GetPosition(target),
+                Point = e.GetPosition(target)
             };
         }
 
         private static void Target_Loaded(object sender, RoutedEventArgs e)
         {
-            if (sender is not ScrollViewer target) return;
+            if (sender is not ScrollViewer target)
+            {
+                return;
+            }
 
-            System.Diagnostics.Debug.WriteLine("Target Loaded");
+            Debug.WriteLine("Target Loaded");
 
             target.Unloaded += Target_Unloaded;
             target.PreviewMouseLeftButtonDown += Target_PreviewMouseLeftButtonDown;
@@ -105,7 +116,10 @@ namespace Anidow.Extensions
 
         private static void Target_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.OriginalSource is Border && e.Source is ScrollViewer) return;
+            if (e.OriginalSource is Border && e.Source is ScrollViewer)
+            {
+                return;
+            }
 
             var target = sender as ScrollViewer;
 
@@ -119,7 +133,10 @@ namespace Anidow.Extensions
 
         private static void Target_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if (!Captures.ContainsKey(sender)) return;
+            if (!Captures.ContainsKey(sender))
+            {
+                return;
+            }
 
             if (e.LeftButton != MouseButtonState.Pressed)
             {
@@ -127,7 +144,10 @@ namespace Anidow.Extensions
                 return;
             }
 
-            if (sender is not ScrollViewer target) return;
+            if (sender is not ScrollViewer target)
+            {
+                return;
+            }
 
             var capture = Captures[sender];
 

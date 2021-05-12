@@ -1,19 +1,17 @@
-﻿using Humanizer;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
+using Humanizer;
 
 namespace Anidow.Converters
 {
-    class DateTimeToStringConverter : IValueConverter
+    internal class DateTimeToStringConverter : IValueConverter
     {
         public static readonly DateTimeToStringConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var s = ((DateTime)value!).Humanize();
+            var s = ((DateTime) value!).Humanize();
             return s;
         }
 

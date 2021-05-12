@@ -1,13 +1,4 @@
-﻿using Anidow.Database;
-using Anidow.Database.Models;
-using Anidow.Enums;
-using Anidow.Extensions;
-using Anidow.Services;
-using Anidow.Utils;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
-using Stylet;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,13 +6,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Anidow.Pages.Components.Tracked;
+using Anidow.Database;
+using Anidow.Database.Models;
+using Anidow.Enums;
+using Anidow.Extensions;
+using Anidow.Services;
+using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;
-using Application = System.Windows.Application;
-using MessageBox = AdonisUI.Controls.MessageBox;
-using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
-using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
-using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Stylet;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Anidow.Pages
@@ -29,29 +23,14 @@ namespace Anidow.Pages
     // ReSharper disable once ClassNeverInstantiated.Global
     public class TrackedViewModel : Conductor<Anime>.Collection.OneActive
     {
-        private readonly SettingsService _settingsService;
-        private readonly HttpClient _httpClient;
-        private readonly TaskbarIcon _taskbarIcon;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IWindowManager _windowManager;
+        private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
-        private string _search;
+        private readonly SettingsService _settingsService;
+        private readonly TaskbarIcon _taskbarIcon;
+        private readonly IWindowManager _windowManager;
         private ScrollViewer[] _scrollViewers;
-
-        public AnimeStatus FilterStatus { get; set; } = AnimeStatus.Watching;
-
-        public string Search
-        {
-            get => _search;
-            set
-            {
-                SetAndNotify(ref _search, value);
-                Debouncer.DebounceAction("load_tracked", async _ =>
-                {
-                    await Load();
-                });
-            }
-        }
+        private string _search;
 
         public TrackedViewModel(SettingsService settingsService, HttpClient httpClient, TaskbarIcon taskbarIcon,
             IEventAggregator eventAggregator, IWindowManager windowManager, ILogger logger)
@@ -66,20 +45,34 @@ namespace Anidow.Pages
             DisplayName = "Tracked";
         }
 
+        public AnimeStatus FilterStatus { get; set; } = AnimeStatus.Watching;
+
+        public string Search
+        {
+            get => _search;
+            set
+            {
+                SetAndNotify(ref _search, value);
+                Debouncer.DebounceAction("load_tracked", async _ => { await Load(); });
+            }
+        }
+
         public bool ViewToggle { get; set; }
+
+
+        public bool CanLoad { get; set; }
 
         protected override async void OnInitialActivate()
         {
             ViewToggle = _settingsService.GetSettings().TrackedIsCardView;
             await Load();
         }
+
         private void OnSettingsSaved(object sender, EventArgs e)
         {
             ViewToggle = _settingsService.GetSettings().TrackedIsCardView;
         }
 
-
-        public bool CanLoad { get; set; }
         public async Task Load()
         {
             CanLoad = false;
@@ -91,7 +84,8 @@ namespace Anidow.Pages
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
-                anime = anime.Where(a => a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                anime = anime.Where(a => a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
+                    .ToList();
             }
 
             anime = FilterStatus switch
@@ -125,7 +119,10 @@ namespace Anidow.Pages
 
         public async Task Delete(Anime anime)
         {
-            if(await anime.DeleteInDatabase()) Items.Remove(anime);
+            if (await anime.DeleteInDatabase())
+            {
+                Items.Remove(anime);
+            }
         }
 
         public async Task SetToFinished(Anime anime)
@@ -134,6 +131,7 @@ namespace Anidow.Pages
             {
                 return;
             }
+
             anime.Status = AnimeStatus.Finished;
             await anime.UpdateInDatabase();
         }
@@ -144,6 +142,7 @@ namespace Anidow.Pages
             {
                 return;
             }
+
             anime.Status = AnimeStatus.Watching;
             await anime.UpdateInDatabase();
         }
@@ -156,10 +155,9 @@ namespace Anidow.Pages
             {
                 _taskbarIcon.ShowBalloonTip("Saved", anime.Name, BalloonIcon.Info);
             }
-            Debouncer.DebounceAction($"save-anime-{anime.GroupId}", async _ =>
-            {
-                await Task.Delay(2500).ContinueWith(_ => anime.Notification = string.Empty);
-            });
+
+            Debouncer.DebounceAction($"save-anime-{anime.GroupId}",
+                async _ => { await Task.Delay(2500).ContinueWith(_ => anime.Notification = string.Empty); });
         }
 
 
@@ -185,7 +183,7 @@ namespace Anidow.Pages
 
         public void EditAnime(object sender, MouseButtonEventArgs _)
         {
-            var anime = (Anime)((Border)sender).DataContext;
+            var anime = (Anime) ((Border) sender).DataContext;
             anime.TrackedViewSelected = true;
             ChangeActiveItem(anime, false);
         }
@@ -196,6 +194,7 @@ namespace Anidow.Pages
             {
                 return;
             }
+
             ActiveItem.TrackedViewSelected = false;
             ActivateItem(null);
         }
@@ -221,8 +220,8 @@ namespace Anidow.Pages
         {
             try
             {
-                var anime = (Anime)data.anime;
-                var url = (string)data.url;
+                var anime = (Anime) data.anime;
+                var url = (string) data.url;
                 Uri.TryCreate(url, UriKind.Absolute, out var uri);
                 if (uri == null)
                 {
@@ -232,7 +231,6 @@ namespace Anidow.Pages
                 anime.Cover = url;
                 anime.CoverData = await url.GetCoverData(anime, _httpClient, _logger);
                 await SaveAnime(anime);
-
             }
             catch (Exception e)
             {

@@ -8,11 +8,13 @@ namespace Anidow.Utils
 {
     public static class ProcessUtil
     {
-        private static List<string> _mediaExtensions = new List<string> {
+        private static readonly List<string> _mediaExtensions = new()
+        {
             ".MPG", ".MP2", ".MPEG", ".MPE", ".MPV", ".WEBM", ".MKV", ".OGG",
             ".MP4", ".M4P", ".M4V",
             ".AVI", ".FLV", ".WMV"
         };
+
         public static void OpenFile(string path)
         {
             var file = new FileInfo(path);
@@ -20,16 +22,14 @@ namespace Anidow.Utils
             {
                 throw new ArgumentException("File extension not allowed");
             }
-            else
+
+            new Process
             {
-                new Process
+                StartInfo = new ProcessStartInfo(path)
                 {
-                    StartInfo = new ProcessStartInfo(path)
-                    {
-                        UseShellExecute = true
-                    }
-                }.Start();
-            }
+                    UseShellExecute = true
+                }
+            }.Start();
         }
 
         public static void OpenFolder(string path)

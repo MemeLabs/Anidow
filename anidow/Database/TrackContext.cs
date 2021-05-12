@@ -1,5 +1,4 @@
 ﻿using Anidow.Database.Models;
-using Anidow.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Anidow.Database
@@ -19,7 +18,6 @@ namespace Anidow.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
         }
     }
 }

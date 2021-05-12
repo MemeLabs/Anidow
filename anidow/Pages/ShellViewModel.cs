@@ -5,7 +5,6 @@ using System.Timers;
 using System.Windows;
 using Anidow.Services;
 using Anidow.Utils;
-using Humanizer;
 using Serilog;
 using Stylet;
 
@@ -15,11 +14,10 @@ namespace Anidow.Pages
     public class ShellViewModel : Conductor<Screen>.Collection.OneActive
     {
         private readonly AnimeBytesService _animeBytesService;
-        private readonly LogViewModel _logViewModel;
-        private readonly IWindowManager _windowManager;
         private readonly ILogger _logger;
+        private readonly LogViewModel _logViewModel;
         private readonly SettingsService _settingsService;
-        public string WindowTitle => $"Anidow v{Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)}";
+        private readonly IWindowManager _windowManager;
 
         public ShellViewModel(
             MainViewModel mainViewModel,
@@ -46,8 +44,9 @@ namespace Anidow.Pages
             _windowManager = windowManager;
             _logger = logger;
             ActiveItem = mainViewModel;
-
         }
+
+        public string WindowTitle => $"Anidow v{Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)}";
 
         public bool CanForceCheck { get; set; } = true;
         public string NextCheckIn { get; set; }
@@ -66,7 +65,7 @@ namespace Anidow.Pages
         {
             var lastCheck = _animeBytesService.LastCheck;
             var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.GetSettings().RefreshTime);
-            NextCheckIn = $"next check in {(nextCheck - DateTime.Now):mm\\:ss} min";
+            NextCheckIn = $"next check in {nextCheck - DateTime.Now:mm\\:ss} min";
         }
 
         public async Task ForceCheck()

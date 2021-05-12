@@ -1,5 +1,4 @@
-﻿using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Serilog;
 
 namespace Anidow.Services
 {
@@ -36,14 +36,13 @@ namespace Anidow.Services
                 return default;
             }
 
-            var feed = await Task.Run(()=> ParseRssFeed(content));
+            var feed = await Task.Run(() => ParseRssFeed(content));
 
             return feed?.Items.Select(func).ToList();
         }
 
         private async Task<string> GetRssFeedStringAsync(string url)
         {
-
             _logger.Information($"getting rss feed items from {url}");
             try
             {
@@ -53,6 +52,7 @@ namespace Anidow.Services
                     _logger.Information($"getting {url} returned null");
                     return default;
                 }
+
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.Information($"getting {url} returned unsuccessful status code {response.StatusCode}");
@@ -77,7 +77,6 @@ namespace Anidow.Services
                 _logger.Error($"wrong content-type, expected 'application/xml' got '{mediaType}'");
 
                 return default;
-
             }
             catch (Exception e)
             {

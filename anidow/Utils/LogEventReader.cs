@@ -8,7 +8,8 @@ namespace Anidow.Utils
 {
     public class LogEventRender : IValueConverter
     {
-        public static readonly LogEventRender Instance = new LogEventRender();
+        public static readonly LogEventRender Instance = new();
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is LogEvent @event)

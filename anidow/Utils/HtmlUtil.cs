@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using HtmlAgilityPack;
 
 namespace Anidow.Utils
 {
     /// <summary>
-    /// Source: https://github.com/ceee/ReadSharp/blob/master/ReadSharp/HtmlUtilities.cs
+    ///     Source: https://github.com/ceee/ReadSharp/blob/master/ReadSharp/HtmlUtilities.cs
     /// </summary>
-
     public static class HtmlUtil
     {
         /// <summary>
-        /// Converts HTML to plain text / strips tags.
+        ///     Converts HTML to plain text / strips tags.
         /// </summary>
         /// <param name="html">The HTML.</param>
         /// <returns></returns>
@@ -30,15 +26,13 @@ namespace Anidow.Utils
 
 
         /// <summary>
-        /// Count the words.
-        /// The content has to be converted to plain text before (using ConvertToPlainText).
+        ///     Count the words.
+        ///     The content has to be converted to plain text before (using ConvertToPlainText).
         /// </summary>
         /// <param name="plainText">The plain text.</param>
         /// <returns></returns>
-        public static int CountWords(string plainText)
-        {
-            return !string.IsNullOrEmpty(plainText) ? plainText.Split(' ', '\n').Length : 0;
-        }
+        public static int CountWords(string plainText) =>
+            !string.IsNullOrEmpty(plainText) ? plainText.Split(' ', '\n').Length : 0;
 
 
         public static string Cut(string text, int length)
@@ -47,16 +41,14 @@ namespace Anidow.Utils
             {
                 text = text.Substring(0, length - 4) + " ...";
             }
+
             return text;
         }
 
 
         private static void ConvertContentTo(HtmlNode node, TextWriter outText)
         {
-            foreach (var subnode in node.ChildNodes)
-            {
-                ConvertTo(subnode, outText);
-            }
+            foreach (var subnode in node.ChildNodes) ConvertTo(subnode, outText);
         }
 
 
@@ -75,21 +67,26 @@ namespace Anidow.Utils
                 case HtmlNodeType.Text:
                     // script and style must not be output
                     var parentName = node.ParentNode.Name;
-                    if ((parentName == "script") || (parentName == "style"))
+                    if (parentName == "script" || parentName == "style")
+                    {
                         break;
+                    }
 
                     // get text
-                    var html = ((HtmlTextNode)node).Text;
+                    var html = ((HtmlTextNode) node).Text;
 
                     // is it in fact a special closing node output as text?
                     if (HtmlNode.IsOverlappedClosingElement(html))
+                    {
                         break;
+                    }
 
                     // check the text is meaningful and not a bunch of whitespaces
                     if (html.Trim().Length > 0)
                     {
                         outText.Write(HtmlEntity.DeEntitize(html));
                     }
+
                     break;
 
                 case HtmlNodeType.Element:
@@ -108,6 +105,7 @@ namespace Anidow.Utils
                     {
                         ConvertContentTo(node, outText);
                     }
+
                     break;
             }
         }

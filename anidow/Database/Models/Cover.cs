@@ -10,7 +10,7 @@ namespace Anidow.Database.Models
         public int Id { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;
         public string File { get; set; }
-        [NotMapped]
-        public string FilePath => Path.Combine(Directory.GetCurrentDirectory(), File);
+
+        [NotMapped] public string FilePath => Path.Combine(Directory.GetCurrentDirectory(), File);
     }
 }

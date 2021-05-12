@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,8 +42,9 @@ namespace Anidow.Pages
         public DateTime LastSearch { get; set; }
         public string Search { get; set; }
 
-        public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.GetSettings().AnimeBytesSettings.Username) 
-                                 && !string.IsNullOrWhiteSpace(_settingsService.GetSettings().AnimeBytesSettings.PassKey);
+        public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.GetSettings().AnimeBytesSettings.Username)
+                                 && !string.IsNullOrWhiteSpace(
+                                     _settingsService.GetSettings().AnimeBytesSettings.PassKey);
 
         public bool CanGetItems { get; set; } = true;
 
@@ -68,7 +66,7 @@ namespace Anidow.Pages
                 CanGetItems = true;
                 return;
             }
-            
+
             Items.Clear();
             Items.AddRange(response.Groups);
 
@@ -82,7 +80,7 @@ namespace Anidow.Pages
         {
             ChangeActiveItem(null, false);
         }
-        
+
         public async Task Download(AnimeBytesScrapeAnime anime)
         {
             var torrent = anime?.SelectedTorrent;
@@ -116,10 +114,7 @@ namespace Anidow.Pages
                 return;
             }
 
-            foreach (var torrent in ActiveItem.Torrents)
-            {
-                torrent.Folder = dialog.SelectedPath;
-            }
+            foreach (var torrent in ActiveItem.Torrents) torrent.Folder = dialog.SelectedPath;
         }
 
         public void OpenExternalLink(AnimeBytesScrapeAnime item)
@@ -128,6 +123,7 @@ namespace Anidow.Pages
             {
                 return;
             }
+
             LinkUtil.Open($"https://animebytes.tv/series.php?id={item.SeriesID}");
         }
 
@@ -163,5 +159,4 @@ namespace Anidow.Pages
             _scrollViewer ??= scrollView;
         }
     }
-
 }

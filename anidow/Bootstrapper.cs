@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows;
-using System.Windows.Threading;
 using Anidow.Database;
 using Anidow.Factories;
 using Anidow.Pages;
@@ -14,18 +13,20 @@ using Hardcodet.Wpf.TaskbarNotification;
 using Jot;
 using Jot.Storage;
 using Microsoft.EntityFrameworkCore;
-using Onova;
-using Onova.Services;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
+
 #if RELEASE
+using System.Windows.Threading;
+using Onova;
+using Onova.Services;
+
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
-
 #endif
 
 namespace Anidow
@@ -86,7 +87,7 @@ namespace Anidow
                 AutomaticDecompression = DecompressionMethods.All,
                 UseCookies = true
             };
-            var httpClient = new HttpClient(clientHandler) { Timeout = TimeSpan.FromSeconds(10) };
+            var httpClient = new HttpClient(clientHandler) {Timeout = TimeSpan.FromSeconds(10)};
             httpClient.DefaultRequestHeaders.UserAgent.Clear();
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36");
@@ -103,7 +104,7 @@ namespace Anidow
             var tracker = new Tracker(new JsonFileStore(Environment.SpecialFolder.CommonApplicationData));
             tracker.Configure<ShellView>()
                 .Id(_ => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
-                .Properties(w => new { w.Height, w.Width, w.Left, w.Top, w.WindowState })
+                .Properties(w => new {w.Height, w.Width, w.Left, w.Top, w.WindowState})
                 .PersistOn(nameof(ShellView.Closing))
                 .StopTrackingOn(nameof(ShellView.Closing));
             return tracker;

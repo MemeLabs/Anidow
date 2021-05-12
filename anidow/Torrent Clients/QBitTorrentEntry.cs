@@ -1,4 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
+
 #pragma warning disable IDE1006 // Naming Styles
 namespace Anidow.Torrent_Clients
 {

@@ -5,7 +5,7 @@ using Anidow.Enums;
 
 namespace Anidow.Converters
 {
-    public class EnumToStringConverter: IValueConverter
+    public class EnumToStringConverter : IValueConverter
     {
         public static readonly EnumToStringConverter Instance = new();
 

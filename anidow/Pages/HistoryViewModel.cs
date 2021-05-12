@@ -1,4 +1,11 @@
-﻿using Anidow.Database;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Extensions;
 using Anidow.Interfaces;
@@ -8,17 +15,6 @@ using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using Anidow.Enums;
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
@@ -32,36 +28,18 @@ namespace Anidow.Pages
         public const string Watched = "Watched";
         public const string NotWatched = "Not watched";
     }
+
     public class HistoryViewModel : Conductor<IEpisode>.Collection.OneActive
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
-        private readonly IWindowManager _windowManager;
+        private readonly int _maxFilesInView = 50;
         private readonly TorrentService _torrentService;
-        private string _search;
+        private readonly IWindowManager _windowManager;
 
         private List<Episode> _episodes;
-        private readonly int _maxFilesInView = 50;
         private ScrollViewer _scrollViewer;
-
-        public string[] HistoryFilters => new[]
-            {HistoryFilterType.All, HistoryFilterType.Watched, HistoryFilterType.NotWatched};
-        public string FilterStatus { get; set; } = HistoryFilterType.All;
-
-        public string Search
-        {
-            get => _search;
-            set
-            {
-                SetAndNotify(ref this._search, value);
-                Debouncer.DebounceAction("load_history", async config =>
-                {
-                    await LoadEpisodes();
-                });
-            }
-        }
-
-        public string EpisodesLoaded { get; set; }
+        private string _search;
 
         public HistoryViewModel(IEventAggregator eventAggregator, ILogger logger,
             IWindowManager windowManager, TorrentService torrentService)
@@ -72,6 +50,25 @@ namespace Anidow.Pages
             _torrentService = torrentService;
             DisplayName = "History";
         }
+
+        public string[] HistoryFilters => new[]
+            {HistoryFilterType.All, HistoryFilterType.Watched, HistoryFilterType.NotWatched};
+
+        public string FilterStatus { get; set; } = HistoryFilterType.All;
+
+        public string Search
+        {
+            get => _search;
+            set
+            {
+                SetAndNotify(ref _search, value);
+                Debouncer.DebounceAction("load_history", async config => { await LoadEpisodes(); });
+            }
+        }
+
+        public string EpisodesLoaded { get; set; }
+
+        public bool CanLoadMore { get; set; } = true;
 
         protected override async void OnInitialActivate()
         {
@@ -89,10 +86,11 @@ namespace Anidow.Pages
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
-                episodes = episodes.Where(a => a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                episodes = episodes.Where(a => a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
+                    .ToList();
             }
 
-            
+
             episodes = FilterStatus switch
             {
                 HistoryFilterType.Watched => episodes.Where(a => a.Watched).ToList(),
@@ -109,6 +107,7 @@ namespace Anidow.Pages
             {
                 Items.Clear();
             }
+
             _scrollViewer?.ScrollToTop();
             LoadMore();
             ActiveItem = null;
@@ -117,12 +116,11 @@ namespace Anidow.Pages
             {
                 Name = "test :: Episode 1",
                 Released = DateTime.Today,
-                Folder = Directory.GetCurrentDirectory(),
+                Folder = Directory.GetCurrentDirectory()
             });
 #endif
         }
 
-        public bool CanLoadMore { get; set; } = true;
         public void LoadMore()
         {
             Items.AddRange(_episodes.Skip(Items.Count).Take(_maxFilesInView));
@@ -164,9 +162,10 @@ namespace Anidow.Pages
                 _logger.Error(e, "failed opening file to watch");
             }
         }
+
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -192,7 +191,7 @@ namespace Anidow.Pages
 
         public async Task DeleteWithFile(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{episode.Name}", "Delete",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Cancel)
@@ -229,7 +228,7 @@ namespace Anidow.Pages
 
         public async Task UnWatchItem(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
