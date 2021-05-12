@@ -16,12 +16,13 @@
     xmlns:model="clr-namespace:Anidow.Model"
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance local:MainViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid x:Name="BaseGrid">
+    <Grid>
         <Grid.Resources>
             <helpers:BindingProxy x:Key="Proxy" Data="{Binding}" />
         </Grid.Resources>
@@ -243,7 +244,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
@@ -263,6 +263,7 @@
                         VerticalAlignment="Center"
                         FontWeight="Bold"
                         Text="Information" />
+
                     <!--<TextBlock Grid.Column="2"
                                Margin="8,0"
                                VerticalAlignment="Center"
@@ -270,7 +271,7 @@
                                Text="{Binding ActiveItem.Id, StringFormat=(id: {0})}"
                                Visibility="{Binding ActiveItem.Id, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />-->
                     <Button
-                        Grid.Column="4"
+                        Grid.Column="3"
                         Command="{s:Action DeselectItem}"
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
@@ -314,59 +315,7 @@
                         Content="{iconPacks:FontAwesome FolderOpenSolid}" />
                 </Grid>
                 <Grid Grid.Row="2" Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="8" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="8" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <controls:SplitButton
-                        HorizontalContentAlignment="Center"
-                        extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                        extensions:RippleExtension.BackgroundBrush="#EF5350"
-                        s:View.ActionTarget="{Binding Data, Source={StaticResource Proxy}}"
-                        Background="#F44336"
-                        Command="{s:Action DeleteItem,
-                                           ActionNotFound=Disable}"
-                        CommandParameter="{Binding ActiveItem}"
-                        Content="Delete"
-                        Foreground="White">
-                        <controls:SplitButton.SplitMenu>
-                            <ContextMenu MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
-                                <MenuItem
-                                    extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                                    extensions:RippleExtension.BackgroundBrush="#EF5350"
-                                    s:View.ActionTarget="{Binding Data, Source={StaticResource Proxy}}"
-                                    Background="#F44336"
-                                    Command="{s:Action DeleteWithFile,
-                                                       NullTarget=Disable}"
-                                    Foreground="White"
-                                    Header="with file"
-                                    Icon="{iconPacks:FontAwesome FileVideoSolid}" />
-                            </ContextMenu>
-                        </controls:SplitButton.SplitMenu>
-                    </controls:SplitButton>
-
-                    <!--<Button Grid.Column="0"
-                            extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                            Background="#F44336"
-                            Command="{s:Action DeleteItem}"
-                            CommandParameter="{Binding ActiveItem}"
-                            Content="Delete" />-->
-                    <Button
-                        Grid.Column="2"
-                        Command="{s:Action ToggleWatch}"
-                        CommandParameter="{Binding ActiveItem}"
-                        Content="Toggle Watched"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
-                    <Button
-                        Grid.Column="4"
-                        Command="{s:Action Watch}"
-                        CommandParameter="{Binding ActiveItem}"
-                        Content="Watch"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
+                    <shared:EpisodeInformationActions DataContext="{Binding}" />
                 </Grid>
             </Grid>
         </Expander>

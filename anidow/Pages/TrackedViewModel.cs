@@ -15,7 +15,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Anidow.Pages.Components.Tracked;
 using Hardcodet.Wpf.TaskbarNotification;
+using Application = System.Windows.Application;
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
@@ -123,18 +125,7 @@ namespace Anidow.Pages
 
         public async Task Delete(Anime anime)
         {
-            var result = MessageBox.Show($"delete?\n\n{anime.Name}", "Delete",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Cancel)
-            {
-                return;
-            }
-
-            await using var db = new TrackContext();
-            db.Attach(anime);
-            db.Remove(anime);
-            await db.SaveChangesAsync();
-            Items.Remove(anime);
+            if(await anime.DeleteInDatabase()) Items.Remove(anime);
         }
 
         public async Task SetToFinished(Anime anime)
@@ -195,9 +186,8 @@ namespace Anidow.Pages
         public void EditAnime(object sender, MouseButtonEventArgs _)
         {
             var anime = (Anime)((Border)sender).DataContext;
-            DeselectItem();
             anime.TrackedViewSelected = true;
-            ActivateItem(anime);
+            ChangeActiveItem(anime, false);
         }
 
         public void DeselectItem()

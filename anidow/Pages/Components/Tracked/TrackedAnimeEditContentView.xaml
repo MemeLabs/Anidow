@@ -13,9 +13,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:models="clr-namespace:Anidow.Database.Models"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance models:Anime}">
 
     <Grid Margin="8">
         <Grid.ColumnDefinitions>
@@ -170,7 +172,8 @@
                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                     extensions:RippleExtension.BackgroundBrush="#EF5350"
                     Background="#F44336"
-                    Command="{s:Action Delete}"
+                    Command="{s:Action Delete,
+                                       ActionNotFound=Disable}"
                     CommandParameter="{Binding}"
                     Content="Delete"
                     Foreground="White" />

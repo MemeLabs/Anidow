@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AdonisUI.Controls;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Model;
@@ -80,6 +81,23 @@ namespace Anidow.Extensions
             db.Anime.Attach(anime);
             db.Anime.Update(anime);
             await db.SaveChangesAsync();
+        }
+
+
+        public static async Task<bool> DeleteInDatabase(this Anime anime)
+        {
+            var result = MessageBox.Show($"delete?\n\n{anime.Name}", "Delete",
+                MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Cancel)
+            {
+                return false;
+            }
+
+            await using var db = new TrackContext();
+            db.Attach(anime);
+            db.Remove(anime);
+            var rows = await db.SaveChangesAsync();
+            return rows >= 1;
         }
     }
 }
