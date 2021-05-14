@@ -142,7 +142,7 @@
                             <DataTemplate DataType="models:Episode">
                                 <Button
                                     Width="66"
-                                    Command="{s:Action Watch}"
+                                    Command="{s:Action Watch, ActionNotFound=Disable}"
                                     CommandParameter="{Binding}"
                                     Content="Watch"
                                     Style="{StaticResource ColumnButton}" />
@@ -163,7 +163,7 @@
                 extensions:CornerRadiusExtension.CornerRadius="4"
                 Background="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}"
                 BorderThickness="0"
-                Command="{s:Action GetAiringEpisodesForToday}"
+                Command="{s:Action GetAiringEpisodesForToday, ActionNotFound=Disable}"
                 Content="{Binding AnimesToday.Count}" />
             <Popup
                 Width="{Binding ElementName=ListView, Path=ActualWidth}"

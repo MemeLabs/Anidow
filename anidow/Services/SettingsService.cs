@@ -14,15 +14,13 @@ namespace Anidow.Services
     public class SettingsService : PropertyChangedBase
     {
         private readonly ILogger _logger;
-        private readonly SettingsValidation _settingsValidation;
         private readonly StoreService _storeService;
         private SettingsModel _settings;
         private SettingsModel _settingsOriginal;
 
-        public SettingsService(StoreService storeService, SettingsValidation settingsValidation, ILogger logger)
+        public SettingsService(StoreService storeService, ILogger logger)
         {
             _storeService = storeService;
-            _settingsValidation = settingsValidation;
             _logger = logger;
         }
 

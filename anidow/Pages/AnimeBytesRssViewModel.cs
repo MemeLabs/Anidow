@@ -80,7 +80,6 @@ namespace Anidow.Pages
 
         protected override async void OnInitialActivate()
         {
-            base.OnActivate();
             if (CanSearch)
             {
                 await GetItems();

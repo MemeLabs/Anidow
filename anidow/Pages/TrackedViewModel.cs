@@ -53,7 +53,10 @@ namespace Anidow.Pages
             set
             {
                 SetAndNotify(ref _search, value);
-                Debouncer.DebounceAction("load_tracked", async _ => { await Load(); });
+                Debouncer.DebounceAction("load_tracked", async _ =>
+                {
+                    await Execute.OnUIThreadAsync(async () => await Load());
+                });
             }
         }
 
@@ -84,7 +87,8 @@ namespace Anidow.Pages
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
-                anime = anime.Where(a => a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
+                anime = anime.Where(a => 
+                        a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
                     .ToList();
             }
 
