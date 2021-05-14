@@ -156,7 +156,8 @@ namespace Anidow.Pages
             }
 
             var resolution = string.Empty;
-            var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim())
+            var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)
+                .Select(p => p.Trim())
                 .ToList();
             if (parts.Contains("1080p"))
             {

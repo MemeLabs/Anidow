@@ -70,8 +70,7 @@ namespace Anidow.Pages
 
         public void RefreshTimeTextChanged(object sender, TextChangedEventArgs e)
         {
-            var textBox = (TextBox) sender;
-            if (string.IsNullOrWhiteSpace(textBox.Text))
+            if (sender is TextBox textBox && string.IsNullOrWhiteSpace(textBox.Text))
             {
                 textBox.Text = "1";
             }

@@ -14,7 +14,7 @@
 		<ApplicationIcon>anidown_28v_icon.ico</ApplicationIcon>
 		<LangVersion>9</LangVersion>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-		<Version>1.1.2</Version>
+		<Version>1.1.3</Version>
 		<Authors>Tensei</Authors>
 		<Company>MemeLabs</Company>
 		<PackageProjectUrl>https://github.com/MemeLabs/Anidow</PackageProjectUrl>
