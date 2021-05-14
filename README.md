@@ -1,4 +1,5 @@
 # anidow
+[![.NET](https://github.com/MemeLabs/Anidow/actions/workflows/build.yml/badge.svg)](https://github.com/MemeLabs/Anidow/actions/workflows/build.yml)
 
 ![anidow_2021-04-21_13-56-36](https://user-images.githubusercontent.com/6447030/115550200-db754300-a2a9-11eb-8063-952c57542a33.png)
 ![anidow_2021-04-21_13-56-45](https://user-images.githubusercontent.com/6447030/115550211-df08ca00-a2a9-11eb-9d03-24c0ee2c67e5.png)
