@@ -78,8 +78,7 @@
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
-                                     Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -118,6 +117,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Light" />
                             <ToggleButton
@@ -126,6 +126,13 @@
                                 IsChecked="{Binding Settings.IsDark}"
                                 Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                             <TextBlock Grid.Column="2" Text="Dark" />
+                            <TextBlock
+                                Grid.Column="3"
+                                Margin="8,0"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Opacity=".7"
+                                Text="Light is buggy, use Dark for now." />
                         </Grid>
 
                         <Grid Grid.Row="4" Margin="0,4">
@@ -138,8 +145,7 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Text="Torrent client:" />
-                            <ComboBox Grid.Column="2"
-                                      SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
+                            <ComboBox Grid.Column="2" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
                                 <ComboBoxItem Content="QBitTorrent" />
                                 <ComboBoxItem Content="Deluge" IsEnabled="False" />
                             </ComboBox>
@@ -274,8 +280,7 @@
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBlock>Passkey</TextBlock>
                             <TextBlock Margin="8,0">
-                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account"
-                                           RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account" RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
                                     (click here)
                                 </Hyperlink>
                             </TextBlock>
@@ -293,8 +298,7 @@
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
-                                     Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -358,9 +362,7 @@
                     <Expander.Style>
                         <Style BasedOn="{StaticResource ExpanderCustom}" TargetType="Expander">
                             <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}"
-                                    Value="1">
+                                <DataTrigger Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}" Value="1">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>

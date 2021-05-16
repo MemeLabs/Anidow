@@ -87,7 +87,7 @@ namespace Anidow.Pages
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
-                anime = anime.Where(a => 
+                anime = anime.Where(a =>
                         a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
                     .ToList();
             }
@@ -187,7 +187,8 @@ namespace Anidow.Pages
 
         public void EditAnime(object sender, MouseButtonEventArgs _)
         {
-            var anime = (Anime) ((Border) sender).DataContext;
+            var anime = (Anime)((Border)sender).DataContext;
+            if (ActiveItem != null) ActiveItem.TrackedViewSelected = false;
             anime.TrackedViewSelected = true;
             ChangeActiveItem(anime, false);
         }
@@ -224,8 +225,8 @@ namespace Anidow.Pages
         {
             try
             {
-                var anime = (Anime) data.anime;
-                var url = (string) data.url;
+                var anime = (Anime)data.anime;
+                var url = (string)data.url;
                 Uri.TryCreate(url, UriKind.Absolute, out var uri);
                 if (uri == null)
                 {

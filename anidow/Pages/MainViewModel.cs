@@ -26,7 +26,7 @@ using Stylet;
 namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class MainViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<DownloadEvent>,
+    public class MainViewModel : Conductor<Episode>.Collection.OneActive, IHandle<DownloadEvent>,
         IHandle<RefreshHomeEvent>
     {
         private readonly IEventAggregator _eventAggregator;
@@ -340,7 +340,7 @@ namespace Anidow.Pages
             Items.Add(new Episode
             {
                 Name = "test :: Episode 1",
-                Released = DateTime.Today,
+                Released = DateTime.UtcNow,
                 Folder = Directory.GetCurrentDirectory()
             });
 #endif

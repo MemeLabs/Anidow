@@ -41,16 +41,12 @@
                                     Opacity="0.2">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 0">
-                                            <GradientStop Offset="0"
-                                                          Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
-                                            <GradientStop Offset="0.5"
-                                                          Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
+                                            <GradientStop Offset="0" Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
+                                            <GradientStop Offset="0.5" Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
                                             <GradientStop Offset="0.5" Color="#d0000000" />
                                             <GradientStop Offset="0.55" Color="#80000000" />
-                                            <GradientStop Offset="0.65"
-                                                          Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
-                                            <GradientStop Offset="1"
-                                                          Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
+                                            <GradientStop Offset="0.65" Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
+                                            <GradientStop Offset="1" Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
                                             <LinearGradientBrush.Transform>
                                                 <RotateTransform Angle="20" />
                                             </LinearGradientBrush.Transform>
@@ -64,34 +60,9 @@
             </Style>
 
             <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="{x:Type ToolTip}">
-                <Setter Property="OverridesDefaultStyle" Value="true" />
-                <Setter Property="HasDropShadow" Value="True" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToolTip">
-                            <Border
-                                Name="Border"
-                                Width="{TemplateBinding Width}"
-                                Height="{TemplateBinding Height}"
-                                Padding="4"
-                                Background="{DynamicResource {x:Static adonisUi:Brushes.Layer3BackgroundBrush}}"
-                                BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer3BorderBrush}}"
-                                BorderThickness="1">
-                                <ContentPresenter
-                                    Margin="4"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="HasDropShadow" Value="true">
-                                    <Setter TargetName="Border" Property="CornerRadius" Value="4" />
-                                    <Setter TargetName="Border" Property="SnapsToDevicePixels" Value="true" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
             </Style>
 
             <Style
@@ -147,8 +118,7 @@
                                     CanContentScroll="True"
                                     Focusable="False"
                                     VerticalScrollBarVisibility="Auto">
-                                    <ItemsPresenter
-                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </ScrollViewer>
                             </Border>
                         </ControlTemplate>
@@ -160,13 +130,14 @@
                 x:Key="DeleteButton"
                 BasedOn="{StaticResource {x:Type Button}}"
                 TargetType="{x:Type Button}">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="Padding" Value="8" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
+                        <Setter Property="Foreground" Value="White" />
                     </Trigger>
                 </Style.Triggers>
             </Style>

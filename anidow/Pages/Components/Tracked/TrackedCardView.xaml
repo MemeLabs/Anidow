@@ -43,31 +43,27 @@
                         Height="190"
                         Margin="2.5,8,2.5,0"
                         Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+                        BorderThickness="2"
+                        CornerRadius="4"
                         MouseDown="{s:Action EditAnime}"
                         SnapsToDevicePixels="True">
                         <Border.Style>
                             <Style TargetType="Border">
-                                <Setter Property="ClipToBounds" Value="True" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="BorderThickness" Value="2" />
-                                        <Setter Property="BorderBrush"
-                                                Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                                         <Setter Property="Cursor" Value="Hand" />
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="BorderThickness" Value="2" />
                                         <Setter Property="BorderBrush" Value="Transparent" />
                                     </Trigger>
                                     <DataTrigger Binding="{Binding TrackedViewSelected}" Value="True">
-                                        <Setter Property="BorderThickness" Value="2" />
-                                        <Setter Property="BorderBrush"
-                                                Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <Grid ClipToBounds="True">
+                        <Grid extensions:CornerRadiusExtension.CornerRadius="4" ClipToBounds="True">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
@@ -87,10 +83,11 @@
                                 Margin="8"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                ClipToBounds="True"
+                                SnapsToDevicePixels="True"
                                 Visibility="{Binding CoverData.File, Converter={x:Static converters:IsNotNullToVisibilityConverter.Instance}}">
                                 <TextBox x:Name="CoverUrl" extensions:WatermarkExtension.Watermark="Url ..." />
-                                <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}"
-                                        Content="Download Cover">
+                                <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}" Content="Download Cover">
                                     <Button.CommandParameter>
                                         <MultiBinding Converter="{x:Static converters:DownloadCoverConverter.Instance}">
                                             <Binding ElementName="CoverUrl" Path="Text" />
@@ -103,11 +100,15 @@
                             <Grid
                                 Grid.Row="1"
                                 Background="Black"
-                                Opacity=".4" />
+                                ClipToBounds="True"
+                                Opacity=".4"
+                                SnapsToDevicePixels="True" />
                             <Grid
                                 Grid.Row="1"
                                 Height="45"
-                                HorizontalAlignment="Stretch">
+                                HorizontalAlignment="Stretch"
+                                ClipToBounds="True"
+                                SnapsToDevicePixels="True">
                                 <TextBlock
                                     Margin="4"
                                     HorizontalAlignment="Center"
@@ -122,9 +123,11 @@
                             </Grid>
                             <Polygon
                                 Grid.Row="0"
+                                ClipToBounds="True"
+                                Fill="{Binding Status, Converter={x:Static converters:AnimeStatusToColorConverter.Instance}}"
                                 Points="0,0 20,0, 0,20"
-                                ToolTip="{Binding Status, Mode=OneWay}"
-                                Fill="{Binding Status, Converter={x:Static converters:AnimeStatusToColorConverter.Instance}}" />
+                                SnapsToDevicePixels="True"
+                                ToolTip="{Binding Status, Mode=OneWay}" />
                         </Grid>
                     </Border>
                 </DataTemplate>

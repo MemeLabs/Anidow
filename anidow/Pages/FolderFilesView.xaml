@@ -119,17 +119,13 @@
                     </Setter>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Highlight}" Value="true">
-                            <Setter Property="BorderThickness" Value="0,2" />
-                            <Setter Property="BorderBrush"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBorderBrush}}" />
-                            <Setter Property="Height" Value="28" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
@@ -142,11 +138,11 @@
                                     TextTrimming="CharacterEllipsis"
                                     TextWrapping="NoWrap"
                                     ToolTip="{Binding File.Name}" />
-                                <DataTemplate.Triggers>
+                                <!--<DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Highlight, Mode=OneWay}" Value="False">
                                         <Setter TargetName="Name" Property="Opacity" Value=".6" />
                                     </DataTrigger>
-                                </DataTemplate.Triggers>
+                                </DataTemplate.Triggers>-->
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -184,5 +180,22 @@
             Visibility="{Binding CanLoadMore, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             load more...
         </Button>
+        <Grid
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Background="Black"
+            Opacity=".3"
+            Visibility="{Binding CanGetFilesFromFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+        <ContentControl
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="35"
+            Height="35"
+            Focusable="False"
+            Visibility="{Binding CanGetFilesFromFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
+            ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingCircle}}"
+            Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
     </Grid>
 </controls:AdonisWindow>

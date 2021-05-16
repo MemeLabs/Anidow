@@ -27,6 +27,7 @@ namespace Anidow.Database.Models
 
         [NotMapped] public string ReleasedString => Released.Humanize();
         [NotMapped] public string WatchedString => WatchedDate == default ? string.Empty : WatchedDate.Humanize();
+        [NotMapped] public string WatchedHeaderString => Watched ? "Not watched" : "Watched";
         [NotMapped] public string EpisodeNum => Name.GetEpisode();
 
         public string AnimeId { get; set; }

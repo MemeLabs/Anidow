@@ -201,11 +201,12 @@
                         Text="{Binding ActiveItem.Resolution, StringFormat=Resolution: {0}, Mode=OneWay}" />
                     <Button
                         Grid.Column="7"
+                        Margin="0,-4"
                         Command="{s:Action DeselectItem}"
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.ToolbarButton}}" />
+                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
                 </Grid>
             </Expander.Header>
 

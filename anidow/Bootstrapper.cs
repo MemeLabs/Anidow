@@ -9,6 +9,7 @@ using Anidow.Pages;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
 using Anidow.Validators;
+using FluentValidation;
 using Hardcodet.Wpf.TaskbarNotification;
 using Jot;
 using Jot.Storage;
@@ -37,6 +38,7 @@ namespace Anidow
     {
         private HttpClient _httpClient;
         private ILogger _logger;
+        private TaskbarIcon _taskBarIcon;
 
         // Configure the IoC container in here
         protected override void ConfigureIoC(IStyletIoCBuilder builder)
@@ -56,14 +58,18 @@ namespace Anidow
             builder.Bind<StoreService>().ToSelf();
             builder.Bind<TorrentService>().ToSelf().InSingletonScope();
             builder.Bind<SettingsService>().ToSelf().InSingletonScope();
-            builder.Bind<SettingsValidation>().ToSelf();
 
             builder.Bind<QBitTorrent>().ToSelf();
             builder.Bind<TorrentClientFactory>().ToSelf().InSingletonScope();
 
+            // Validator IDK how to do validation stuff
+            builder.Bind(typeof(IModelValidator<>)).To(typeof(FluentValidationAdapter<>));
+            builder.Bind(typeof(IValidator<>)).ToAllImplementations();
+
             _httpClient = InitHttpClient();
             builder.Bind<HttpClient>().ToInstance(_httpClient);
             var shell = new ShellView(tracker);
+            _taskBarIcon = shell.TaskbarIcon;
             builder.Bind<TaskbarIcon>().ToInstance(shell.TaskbarIcon);
             builder.Bind<ShellView>().ToInstance(shell);
 
@@ -123,6 +129,11 @@ namespace Anidow
                     "./logs/log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7);
 
             _logger = logConfiguration.CreateLogger();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _taskBarIcon?.Dispose();
         }
 
         protected override async void Configure()

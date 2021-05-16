@@ -23,7 +23,7 @@ namespace Anidow.Pages
         private readonly int _maxFilesInView = 25;
 
         private List<FolderFilesModel> _files;
-        public string _name;
+        private readonly string _name;
 
         public FolderFilesViewModel(ref Episode episode, IEventAggregator eventAggregator, ILogger logger)
         {
@@ -57,10 +57,10 @@ namespace Anidow.Pages
 
         protected override void OnActivate()
         {
-            GetFilesFromFolder();
+            _ = GetFilesFromFolder();
         }
 
-        public void GetFilesFromFolder(bool clear = false)
+        public async Task GetFilesFromFolder(bool clear = false)
         {
             if (!Directory.Exists(Folder))
             {
@@ -68,17 +68,19 @@ namespace Anidow.Pages
             }
 
             CanGetFilesFromFolder = false;
-            var files = Directory.GetFiles(Folder)
+            var files = await Task.Run(() => Directory.GetFiles(Folder)
                 .Select(f => new FileInfo(f))
-                .OrderByDescending(f => f.CreationTime);
+                .OrderByDescending(f => f.CreationTime));
 
             _files = new List<FolderFilesModel>();
             foreach (var file in files)
             {
-                var item = new FolderFilesModel {File = file};
+                var item = new FolderFilesModel { File = file };
                 if (_episode != null)
                 {
-                    var nameSplit = file.Name.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(f => f.Trim());
+                    var nameSplit = file.Name
+                        .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(f => f.Trim());
                     if (!string.IsNullOrEmpty(_episode.EpisodeNum) && nameSplit.Contains(_episode.EpisodeNum))
                     {
                         item.Highlight = true;
@@ -93,7 +95,7 @@ namespace Anidow.Pages
                 FileInfos.Clear();
             }
 
-            LoadMore();
+            await LoadMore();
 #if DEBUG
             if (FileInfos.Count >= 4)
             {
@@ -103,9 +105,9 @@ namespace Anidow.Pages
             CanGetFilesFromFolder = true;
         }
 
-        public void LoadMore()
+        public async Task LoadMore()
         {
-            FileInfos.AddRange(_files.Skip(FileInfos.Count).Take(_maxFilesInView));
+            await Execute.OnUIThreadAsync(() => FileInfos.AddRange(_files.Skip(FileInfos.Count).Take(_maxFilesInView)));
             CanLoadMore = FileInfos.Count < _files.Count;
             DisplayName = $"Files ({FileInfos.Count}/{_files.Count}) - {_name}";
         }
@@ -160,14 +162,14 @@ namespace Anidow.Pages
             }
         }
 
-        public void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        public async void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
             {
                 return;
             }
 
-            GetFilesFromFolder();
+            await GetFilesFromFolder();
             e.Handled = true;
         }
 

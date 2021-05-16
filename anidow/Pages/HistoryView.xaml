@@ -256,13 +256,13 @@
                     </Grid.ColumnDefinitions>
                     <Button
                         Grid.Column="0"
-                        Margin="0,0,8,0"
+                        Margin="0,-4,8,-4"
                         Command="{s:Action Download}"
                         CommandParameter="{Binding ActiveItem}"
                         Content="{iconPacks:FontAwesome DownloadSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.ToolbarButton}}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
                         ToolTip="Re-add torrent to the torrent client" />
 
                     <TextBlock
@@ -278,12 +278,13 @@
                                Visibility="{Binding ActiveItem.Id, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />-->
                     <Button
                         Grid.Column="4"
+                        Margin="0,-4"
                         Command="{s:Action DeselectItem,
                                            ActionNotFound=Disable}"
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.ToolbarButton}}" />
+                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"/>
                 </Grid>
             </Expander.Header>
 
