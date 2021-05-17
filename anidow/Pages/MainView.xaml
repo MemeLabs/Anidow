@@ -61,19 +61,18 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <Button
-                                        Width="27"
-                                        Height="27"
                                         Margin="-14,-4,0,-4"
                                         HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
                                         VerticalAlignment="Stretch"
+                                        Padding="4,5,4,4"
+                                        Width="27"
                                         extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
                                         extensions:RippleExtension.BackgroundBrush="#EF5350"
                                         Command="{s:Action DeleteItem,
                                                            ActionNotFound=Disable}"
                                         CommandParameter="{Binding}"
-                                        Content="{iconPacks:FontAwesome TimesSolid,
-                                                                        Height=10,
-                                                                        Width=10}"
+                                        Content="{iconPacks:FontAwesome TimesSolid, Width=10, Height=10}"
                                         Style="{StaticResource DeleteButton}" />
 
                                     <TextBlock
