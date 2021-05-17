@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/Expander.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/TabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/ListViewItem.xaml" />
             </s:ApplicationLoader.MergedDictionaries>
 
             <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type Window}" />
@@ -27,6 +28,7 @@
                 <Setter Property="extensions:ScrollViewerExtension.HorizontalScrollBarPlacement" Value="Overlay" />
                 <Setter Property="extensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver" Value="True" />
             </Style>
+
 
             <Style x:Key="BreadcrumbSeparatorStyle" TargetType="ContentControl">
                 <Setter Property="Margin" Value="{adonisUi:Space 1, 0, 0, 0}" />

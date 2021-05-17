@@ -108,6 +108,7 @@
             Grid.Row="1"
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
+            ItemContainerStyle="{StaticResource ListViewItemHome}"
             ItemsSource="{Binding Items}"
             Loaded="{s:Action ListLoaded}"
             ScrollViewer.CanContentScroll="True"
@@ -115,21 +116,6 @@
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.IsVirtualizingWhenGrouping="True"
             VirtualizingPanel.VirtualizationMode="Recycling">
-            <ListView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                    <Setter Property="Padding" Value="8,4" />
-                    <!--<Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                    -->
-                    <!--<Setter Property="BorderThickness" Value="5"/>-->
-                    <!--
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1HighlightBorderBrush}}"/>
-                        </Trigger>
-                    </Style.Triggers>-->
-                </Style>
-            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
                     <GridViewColumn
@@ -284,7 +270,7 @@
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"/>
+                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
                 </Grid>
             </Expander.Header>
 
@@ -343,8 +329,7 @@
                         Content="Delete"
                         Foreground="White">
                         <controls:SplitButton.SplitMenu>
-                            <ContextMenu
-                                MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                            <ContextMenu MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
                                 <MenuItem
                                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                                     extensions:RippleExtension.BackgroundBrush="#EF5350"

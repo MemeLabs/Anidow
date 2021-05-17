@@ -79,19 +79,11 @@
             listViewLayout:ListViewLayoutManager.Enabled="true"
             IsTextSearchCaseSensitive="False"
             IsTextSearchEnabled="True"
+            ItemContainerStyle="{StaticResource ListViewItemAnimebytesRss}"
             ItemsSource="{Binding Items}"
             Loaded="{s:Action ListLoaded}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             SelectedItem="{Binding ActiveItem}">
-            <ListView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowInList}" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView AllowsColumnReorder="True"
                           ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">

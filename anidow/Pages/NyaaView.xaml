@@ -55,13 +55,13 @@
             Grid.Row="1"
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
+            ItemContainerStyle="{StaticResource ListViewItemBase}"
             ItemsSource="{Binding Items, NotifyOnSourceUpdated=True}"
             Loaded="{s:Action ListLoaded}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             SelectedItem="{Binding ActiveItem}">
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
 
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="Name"
@@ -123,52 +123,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <!--<ListBox Grid.Row="1"
-                 ItemsSource="{Binding Items}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 Selected="{s:Action ItemSelected}"
-                 SelectedItem="{Binding ActiveItem}">
-            <ListBox.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="model:NyaaTorrentItem">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="100" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="Name"
-                                   Grid.Column="0"
-                                   Margin="8,0"
-                                   VerticalAlignment="Center"
-                                   Text="{Binding Name}"
-                                   TextTrimming="CharacterEllipsis"
-                                   TextWrapping="NoWrap"
-                                   ToolTip="{Binding Name}"
-                                   ToolTipService.Placement="Bottom" />
-
-                        <TextBlock Grid.Column="1"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Text="{Binding Added}"
-                                   ToolTip="{Binding Released}" />
-                    </Grid>
-
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Quality}" Value="Trusted">
-                            <Setter TargetName="Name" Property="Foreground" Value="#FF98D9A8" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Quality}" Value="Remake">
-                            <Setter TargetName="Name" Property="Foreground" Value="#FFF0B080" />
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>-->
         <Expander
             Grid.Row="2"
             extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"

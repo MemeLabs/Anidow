@@ -44,36 +44,8 @@
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemsSource="{Binding Items}"
-            SelectedItem="{Binding ActiveItem}">
-            <ListView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                    <Setter Property="Padding" Value="8,4" />
-                    <!--<Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                    -->
-                    <!--<Setter Property="BorderThickness" Value="5"/>-->
-                    <!--
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1HighlightBorderBrush}}"/>
-                        </Trigger>
-                    </Style.Triggers>-->
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu>
-                                <MenuItem
-                                    s:View.ActionTarget="{Binding Data, Source={StaticResource Proxy}}"
-                                    Command="{s:Action ToggleWatch,
-                                                       NullTarget=Disable}"
-                                    CommandParameter="{Binding}"
-                                    Icon="{iconPacks:FontAwesome EyeSolid}"
-                                    Header="{Binding WatchedHeaderString, Mode=OneWay}">
-                                </MenuItem>
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
+            SelectedItem="{Binding ActiveItem}"
+            ItemContainerStyle="{StaticResource ListViewItemHome}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn
@@ -157,7 +129,8 @@
                             <DataTemplate DataType="models:Episode">
                                 <Button
                                     Width="66"
-                                    Command="{s:Action Watch, ActionNotFound=Disable}"
+                                    Command="{s:Action Watch,
+                                                       ActionNotFound=Disable}"
                                     CommandParameter="{Binding}"
                                     Content="Watch"
                                     Style="{StaticResource ColumnButton}" />
@@ -178,16 +151,17 @@
                 extensions:CornerRadiusExtension.CornerRadius="4"
                 Background="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}"
                 BorderThickness="0"
-                Command="{s:Action GetAiringEpisodesForToday, ActionNotFound=Disable}"
+                Command="{s:Action GetAiringEpisodesForToday,
+                                   ActionNotFound=Disable}"
                 Content="{Binding AnimesToday.Count}" />
             <Popup
                 Width="{Binding ElementName=ListView, Path=ActualWidth}"
                 AllowsTransparency="True"
+                HorizontalOffset="-2"
                 IsOpen="{Binding ElementName=PredictedToggleButton, Path=IsChecked}"
                 Placement="Bottom"
                 PlacementTarget="{Binding ElementName=PredictedToggleButton}"
                 StaysOpen="False"
-                HorizontalOffset="-2"
                 VerticalOffset="4">
                 <Border
                     Padding="8"
@@ -288,7 +262,7 @@
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"/>
+                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
                 </Grid>
             </Expander.Header>
 

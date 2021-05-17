@@ -23,8 +23,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox extensions:LayerExtension.IncreaseLayer="True"
-                  Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+        <GroupBox extensions:LayerExtension.IncreaseLayer="True" Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -71,13 +70,13 @@
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             IsSynchronizedWithCurrentItem="True"
+            ItemContainerStyle="{StaticResource ListViewItemBase}"
             ItemsSource="{Binding Items}"
             Loaded="{s:Action ListLoaded}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             SelectedItem="{Binding ActiveItem}">
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         Width="50"
                         extensions:GridViewSortExtension.PropertyName="Row"
@@ -323,9 +322,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox
-                                Text="{Binding ActiveItem.SelectedTorrent.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                TextWrapping="Wrap" />
+                            <TextBox Text="{Binding ActiveItem.SelectedTorrent.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
                             <Button
                                 Grid.Column="1"
                                 Margin="8,0,0,0"

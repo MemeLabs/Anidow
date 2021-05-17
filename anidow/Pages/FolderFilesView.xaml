@@ -64,6 +64,7 @@
         <ListView
             Grid.Row="1"
             listViewLayout:ListViewLayoutManager.Enabled="true"
+            ItemContainerStyle="{StaticResource ListViewItemFolderView}"
             ItemsSource="{Binding FileInfos}"
             ScrollViewer.CanContentScroll="True"
             VirtualizingPanel.IsVirtualizing="True"
@@ -101,29 +102,6 @@
                     </GroupStyle.ContainerStyle>
                 </GroupStyle>
             </ListView.GroupStyle>-->
-            <ListView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu>
-                                <MenuItem
-                                    s:View.ActionTarget="{Binding Data, Source={StaticResource Proxy}}"
-                                    Command="{s:Action DeleteFile,
-                                                       NullTarget=Disable}"
-                                    CommandParameter="{Binding}"
-                                    Header="Delete"
-                                    Icon="{iconPacks:FontAwesome TrashSolid}" />
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Highlight}" Value="true">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
@@ -189,13 +167,13 @@
         <ContentControl
             Grid.Row="1"
             Grid.RowSpan="2"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
             Width="35"
             Height="35"
-            Focusable="False"
-            Visibility="{Binding CanGetFilesFromFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingCircle}}"
-            Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
+            Focusable="False"
+            Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
+            Visibility="{Binding CanGetFilesFromFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
     </Grid>
 </controls:AdonisWindow>

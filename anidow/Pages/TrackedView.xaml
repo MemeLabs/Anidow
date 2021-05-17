@@ -2,6 +2,7 @@
     x:Class="Anidow.Pages.TrackedView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enums="clr-namespace:Anidow.Enums"
@@ -45,11 +46,14 @@
 
                 <TextBlock
                     Grid.Column="1"
-                    Margin="8,0"
+                    Margin="{adonisUi:Space 1,
+                                            0}"
                     VerticalAlignment="Center"
                     Text="Status:" />
 
-                <ComboBox Grid.Column="2" SelectedItem="{Binding FilterStatus}">
+                <ComboBox
+                    Grid.Column="2"
+                    SelectedItem="{Binding FilterStatus}">
                     <enums:AnimeStatus>All</enums:AnimeStatus>
                     <enums:AnimeStatus>Watching</enums:AnimeStatus>
                     <enums:AnimeStatus>Finished</enums:AnimeStatus>
