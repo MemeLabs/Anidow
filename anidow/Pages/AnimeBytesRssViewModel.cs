@@ -47,7 +47,7 @@ namespace Anidow.Pages
             DisplayName = "Rss feed";
         }
 
-        public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.GetSettings().AnimeBytesSettings.PassKey);
+        public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.PassKey);
         public string LastSearch { get; set; }
 
         public string Filter
@@ -98,7 +98,7 @@ namespace Anidow.Pages
                 1 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.Airing),
                 _ => throw new NotImplementedException()
             });
-            if (items is not {Count: > 0})
+            if (items is not { Count: > 0 })
             {
                 CanGetItems = true;
                 return;

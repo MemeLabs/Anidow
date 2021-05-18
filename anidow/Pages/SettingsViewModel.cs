@@ -29,7 +29,7 @@ namespace Anidow.Pages
         }
 
         public SettingsService SettingsService { get; }
-        public SettingsModel Settings => SettingsService.GetSettingsForSettingsView();
+        public SettingsModel Settings => SettingsService.TempSettings;
 
         public void SetAnimeFolder()
         {

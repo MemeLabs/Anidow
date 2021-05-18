@@ -38,7 +38,6 @@ namespace Anidow.Pages
             _settingsService = settingsService;
             _httpClient = httpClient;
             _taskbarIcon = taskbarIcon;
-            _settingsService.SettingsSaved += OnSettingsSaved;
             _eventAggregator = eventAggregator;
             _windowManager = windowManager;
             _logger = logger;
@@ -60,20 +59,14 @@ namespace Anidow.Pages
             }
         }
 
-        public bool ViewToggle { get; set; }
+        public bool ViewToggle => _settingsService.Settings.TrackedIsCardView;
 
 
         public bool CanLoad { get; set; }
 
         protected override async void OnInitialActivate()
         {
-            ViewToggle = _settingsService.GetSettings().TrackedIsCardView;
             await Load();
-        }
-
-        private void OnSettingsSaved(object sender, EventArgs e)
-        {
-            ViewToggle = _settingsService.GetSettings().TrackedIsCardView;
         }
 
         public async Task Load()
@@ -155,7 +148,7 @@ namespace Anidow.Pages
         {
             await anime.UpdateInDatabase();
             anime.Notification = "Saved!";
-            if (_settingsService.GetSettings().Notifications)
+            if (_settingsService.Settings.Notifications)
             {
                 _taskbarIcon.ShowBalloonTip("Saved", anime.Name, BalloonIcon.Info);
             }

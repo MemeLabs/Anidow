@@ -64,7 +64,7 @@ namespace Anidow.Pages
         private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
             var lastCheck = _animeBytesService.LastCheck;
-            var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.GetSettings().RefreshTime);
+            var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.Settings.RefreshTime);
             NextCheckIn = $"next check in {nextCheck - DateTime.Now:mm\\:ss} min";
         }
 

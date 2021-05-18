@@ -110,7 +110,7 @@ namespace Anidow.Pages
                 }
             }
 
-            if (_settingsService.GetSettings().Notifications)
+            if (_settingsService.Settings.Notifications)
             {
                 _taskbarIcon.ShowBalloonTip("Added", item.Name, BalloonIcon.None);
             }
@@ -135,7 +135,7 @@ namespace Anidow.Pages
             }
 
             var lastCheck = AnimeBytesService.LastCheck;
-            var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.GetSettings().RefreshTime);
+            var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.Settings.RefreshTime);
             NextCheckIn = $"next check in {nextCheck - DateTime.Now:mm\\:ss} min";
         }
 
@@ -164,7 +164,7 @@ namespace Anidow.Pages
 
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode) ActiveItem;
+            episode ??= (Episode)ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -251,7 +251,7 @@ namespace Anidow.Pages
 
         public async Task DeleteWithFile()
         {
-            var anime = (Episode) ActiveItem;
+            var anime = (Episode)ActiveItem;
             var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{anime.Name}", "Delete",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Cancel)
@@ -288,7 +288,7 @@ namespace Anidow.Pages
 
         protected override void OnInitialActivate()
         {
-            _getTorrentsStatusTimer = new Timer {Interval = 5000};
+            _getTorrentsStatusTimer = new Timer { Interval = 5000 };
             _getTorrentsStatusTimer.Elapsed += async (_, _) => { await UpdateTorrents(); };
             _getTorrentsStatusTimer.Start();
 
@@ -366,7 +366,7 @@ namespace Anidow.Pages
                 try
                 {
                     var anime1 = anime;
-                    anime.TorrentId = _settingsService.GetSettings().TorrentClient switch
+                    anime.TorrentId = _settingsService.Settings.TorrentClient switch
                     {
                         TorrentClient.QBitTorrent => list.Select(j => j.ToObject<QBitTorrentEntry>())
                             .FirstOrDefault(i => i.name == anime1.Name)
@@ -407,7 +407,7 @@ namespace Anidow.Pages
                     animesToday.Add(new FutureEpisode
                     {
                         Name = anime.Name,
-                        Date = potentialNextRelease.Humanize()
+                        Date = potentialNextRelease,
                     });
                 }
             }
@@ -422,13 +422,13 @@ namespace Anidow.Pages
             AnimesToday.Add(new FutureEpisode
             {
                 Name = "Test0",
-                Date = DateTime.Now.Humanize()
+                Date = DateTime.UtcNow,
             });
             AnimesToday.Add(new FutureEpisode
             {
                 Name =
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ac.",
-                Date = DateTime.Now.Humanize()
+                Date = DateTime.UtcNow,
             });
 #endif
         }
@@ -437,6 +437,8 @@ namespace Anidow.Pages
     public class FutureEpisode
     {
         public string Name { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
+        public DateTime DateLocal => Date.ToLocalTime();
+        public string DateString => Date.Humanize();
     }
 }

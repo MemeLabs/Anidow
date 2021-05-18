@@ -42,9 +42,9 @@ namespace Anidow.Pages
         public DateTime LastSearch { get; set; }
         public string Search { get; set; }
 
-        public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.GetSettings().AnimeBytesSettings.Username)
+        public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.Username)
                                  && !string.IsNullOrWhiteSpace(
-                                     _settingsService.GetSettings().AnimeBytesSettings.PassKey);
+                                     _settingsService.Settings.AnimeBytesSettings.PassKey);
 
         public bool CanGetItems { get; set; } = true;
 

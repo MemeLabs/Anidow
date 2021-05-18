@@ -47,7 +47,7 @@ namespace Anidow.Services
             _taskbarIcon = taskbarIcon;
         }
 
-        private SettingsModel Settings => _settingsService.GetSettings();
+        private SettingsModel Settings => _settingsService.Settings;
 
         private string AllAnimeUrl =>
             $"https://animebytes.tv/feed/rss_torrents_anime/{Settings.AnimeBytesSettings.PassKey}";
@@ -62,11 +62,14 @@ namespace Anidow.Services
 
         public void InitTracker()
         {
-            _tracker = new Timer {Interval = 1000 * 60 * _settingsService.GetSettings().RefreshTime};
+            _tracker = new Timer { Interval = 1000 * 60 * _settingsService.Settings.RefreshTime };
             _tracker.Elapsed += TrackerOnElapsed;
-            StartTracker();
-            _initialRefreshTime = _settingsService.GetSettings().RefreshTime;
-            _settingsService.SettingsSaved += SettingsServiceOnSettingsSaved;
+            _initialRefreshTime = _settingsService.Settings.RefreshTime;
+            _settingsService.SettingsSavedEvent += OnSettingsSavedEvent;
+            if (!string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.PassKey))
+            {
+                StartTracker();
+            }
         }
 
         public void StartTracker()
@@ -82,15 +85,23 @@ namespace Anidow.Services
             TrackerIsRunning = false;
         }
 
-        private void SettingsServiceOnSettingsSaved(object sender, EventArgs e)
+        private void OnSettingsSavedEvent(object sender, EventArgs e)
         {
-            if (_settingsService.GetSettings().RefreshTime == _initialRefreshTime)
+            if (_settingsService.Settings.RefreshTime == _initialRefreshTime)
             {
                 return;
             }
 
-            _tracker.Stop();
-            _tracker.Interval = 1000 * 60 * _settingsService.GetSettings().RefreshTime;
+            StopTracker();
+
+            _initialRefreshTime = _settingsService.Settings.RefreshTime;
+            _tracker.Interval = 1000 * 60 * _initialRefreshTime;
+
+            if (string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.PassKey))
+            {
+                return;
+            }
+
             StartTracker();
         }
 
@@ -102,7 +113,7 @@ namespace Anidow.Services
         public async Task CheckForNewEpisodes()
         {
             LastCheck = DateTime.Now;
-            var animeBytesPassKey = _settingsService.GetSettings().AnimeBytesSettings.PassKey;
+            var animeBytesPassKey = _settingsService.Settings.AnimeBytesSettings.PassKey;
             if (string.IsNullOrWhiteSpace(animeBytesPassKey))
             {
                 return;
@@ -113,6 +124,7 @@ namespace Anidow.Services
                 .Where(a => a.Site == Site.AnimeBytes
                             && a.Status == AnimeStatus.Watching)
                 .ToListAsync();
+
             var feedItems = await GetFeedItems(AnimeBytesFilter.Airing);
             feedItems.Reverse();
             foreach (var a in anime)
@@ -178,7 +190,7 @@ namespace Anidow.Services
 
                         _eventAggregator.PublishOnUIThread(new RefreshHomeEvent());
 
-                        if (_settingsService.GetSettings().Notifications)
+                        if (_settingsService.Settings.Notifications)
                         {
                             _taskbarIcon.ShowBalloonTip("Added", item.Name, BalloonIcon.None);
                         }
@@ -234,8 +246,8 @@ namespace Anidow.Services
 
         public async Task<AnimeBytesScrapeResult> SearchAnime(string search)
         {
-            var username = _settingsService.GetSettings().AnimeBytesSettings.Username;
-            var passkey = _settingsService.GetSettings().AnimeBytesSettings.PassKey;
+            var username = _settingsService.Settings.AnimeBytesSettings.Username;
+            var passkey = _settingsService.Settings.AnimeBytesSettings.PassKey;
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(passkey))
             {
                 return default;
@@ -253,7 +265,7 @@ namespace Anidow.Services
                     return default;
                 }
 
-                var minSeeders = _settingsService.GetSettings().NyaaSettings.HideTorrentsBelowSeeders;
+                var minSeeders = _settingsService.Settings.NyaaSettings.HideTorrentsBelowSeeders;
 
                 for (var index = 0; index < anime.Groups.Length; index++)
                 {
@@ -265,7 +277,7 @@ namespace Anidow.Services
                     {
                         DecodeProperties(aTorrent.GetType(), aTorrent);
                         DecodeProperties(aTorrent.EditionData.GetType(), aTorrent.EditionData);
-                        aTorrent.Folder = _settingsService?.GetSettings().AnimeBytesSettings.DefaultDownloadFolder;
+                        aTorrent.Folder = _settingsService.Settings.AnimeBytesSettings.DefaultDownloadFolder;
                     }
 
                     if (minSeeders > -1)
@@ -273,7 +285,7 @@ namespace Anidow.Services
                         a.Torrents = a.Torrents.Where(i => i.Seeders >= minSeeders).ToArray();
                     }
 
-                    var je = (JsonElement) a.Synonymns;
+                    var je = (JsonElement)a.Synonymns;
                     var json = je.GetRawText();
 
                     a.SynonymnsList = json switch
@@ -285,7 +297,7 @@ namespace Anidow.Services
                         _ => new List<string>()
                     };
 
-                    je = (JsonElement) a.Links;
+                    je = (JsonElement)a.Links;
                     json = je.GetRawText();
 
                     a.LinksDict = json switch

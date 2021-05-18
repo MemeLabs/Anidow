@@ -201,7 +201,11 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock VerticalAlignment="Top" Text="{Binding Date}" />
+                                            <TextBlock VerticalAlignment="Top" Text="{Binding DateString}">
+                                                <TextBlock.ToolTip>
+                                                    <ToolTip Content="{Binding DateLocal}" ContentStringFormat="{}{0:g}" />
+                                                </TextBlock.ToolTip>
+                                            </TextBlock>
                                             <Separator
                                                 Grid.Column="1"
                                                 Margin="8,0"
@@ -327,7 +331,7 @@
                                            ActionNotFound=Disable}"
                         Content="{iconPacks:FontAwesome PlaySolid,
                                                         Height=10}"
-                        Style="{StaticResource ActionButton}"
+                        Style="{DynamicResource ActionButton}"
                         ToolTip="Start"
                         ToolTipService.Placement="Top"
                         Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />

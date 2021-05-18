@@ -21,12 +21,12 @@ namespace Anidow.Services
             _settingsService = settingsService;
         }
 
-        private SettingsModel Settings => _settingsService.GetSettings();
+        private SettingsModel Settings => _settingsService.Settings;
 
         public async Task<List<NyaaTorrentItem>> GetFeedItems(string url)
         {
             var items = await GetFeedItems(url, ToDomain) ?? new List<NyaaTorrentItem>();
-            var minSeeders = _settingsService.GetSettings().NyaaSettings.HideTorrentsBelowSeeders;
+            var minSeeders = _settingsService.Settings.NyaaSettings.HideTorrentsBelowSeeders;
             if (minSeeders > -1)
             {
                 return items.Where(i => i.Seeders >= minSeeders).ToList();

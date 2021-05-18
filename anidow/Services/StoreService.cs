@@ -17,18 +17,18 @@ namespace Anidow.Services
             _logger = logger;
         }
 
-        public async Task Save<T>(T settings, string path)
+        public async Task Save<T>(T value, string path)
         {
-            if (settings == null)
+            if (value == null)
             {
                 return;
             }
 
-            var data = JsonSerializer.Serialize(settings, new JsonSerializerOptions
+            var data = JsonSerializer.Serialize(value, new JsonSerializerOptions
             {
                 IgnoreNullValues = true,
                 WriteIndented = true,
-                IgnoreReadOnlyProperties = true
+                IgnoreReadOnlyProperties = true,
             });
             await File.WriteAllTextAsync(path, data, Encoding.UTF8);
         }
@@ -37,6 +37,7 @@ namespace Anidow.Services
         {
             if (!File.Exists(path))
             {
+                _logger.Warning("file '{0}' doesn't exist", path);
                 return default;
             }
 

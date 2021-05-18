@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Anidow.Enums;
 
 namespace Anidow.Model
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    [Serializable]
     public class SettingsModel : ObservableObject
     {
         public string AnimeFolder { get; set; } = Directory.GetCurrentDirectory();

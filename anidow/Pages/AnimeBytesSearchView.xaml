@@ -74,7 +74,8 @@
             ItemsSource="{Binding Items}"
             Loaded="{s:Action ListLoaded}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            SelectedItem="{Binding ActiveItem}">
+            SelectedItem="{Binding ActiveItem}"
+            Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <ListView.View>
                 <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn

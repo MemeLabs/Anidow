@@ -21,7 +21,7 @@ namespace Anidow.Services
 
         private async Task GetAllEpisodes()
         {
-            var folder = _settingsService.GetSettings().AnimeFolder;
+            var folder = _settingsService.Settings.AnimeFolder;
             if (!Directory.Exists(folder))
             {
                 return;

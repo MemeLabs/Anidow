@@ -15,8 +15,6 @@ namespace Anidow.Services
     {
         private readonly ILogger _logger;
         private readonly StoreService _storeService;
-        private SettingsModel _settings;
-        private SettingsModel _settingsOriginal;
 
         public SettingsService(StoreService storeService, ILogger logger)
         {
@@ -25,43 +23,48 @@ namespace Anidow.Services
         }
 
         public bool CanSave { get; set; }
-        public event EventHandler SettingsSaved; // event
+        public event EventHandler SettingsSavedEvent; // event
 
         public async Task Init()
         {
-            if (_settings != null)
+            if (TempSettings != null)
             {
+                _logger.Warning("settings already initialized");
                 return;
             }
 
-            _settings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
-            _settingsOriginal = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
+            TempSettings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
+            Settings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
 
-            _settings.PropertyChanged += SettingsOnPropertyChanged;
-            _settings.QBitTorrent.PropertyChanged += SettingsOnPropertyChanged;
-            _settings.NyaaSettings.PropertyChanged += SettingsOnPropertyChanged;
-            _settings.AnimeBytesSettings.PropertyChanged += SettingsOnPropertyChanged;
+            TempSettings.PropertyChanged += SettingsOnPropertyChanged;
+            TempSettings.QBitTorrent.PropertyChanged += SettingsOnPropertyChanged;
+            TempSettings.NyaaSettings.PropertyChanged += SettingsOnPropertyChanged;
+            TempSettings.AnimeBytesSettings.PropertyChanged += SettingsOnPropertyChanged;
 
             ResourceLocator.SetColorScheme(Application.Current.Resources,
-                _settings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
+                TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
         }
 
-        public SettingsModel GetSettings() => _settingsOriginal;
+        public SettingsModel Settings { get; private set; }
 
-        public SettingsModel GetSettingsForSettingsView() => _settings;
+        /// <summary>
+        /// this is used for the SettingsView as a temporary setting
+        /// after the user saves it it will become the main setting everything uses
+        /// </summary>
+        public SettingsModel TempSettings { get; private set; }
 
         public async Task Save()
         {
-            await _storeService.Save(_settings, "settings.json");
-            _settingsOriginal = await _storeService.Load<SettingsModel>("settings.json");
+            await _storeService.Save(TempSettings, "settings.json");
+            Settings = await _storeService.Load<SettingsModel>("settings.json");
 
             _logger.Information("saved setting's");
 
             ResourceLocator.SetColorScheme(Application.Current.Resources,
-                _settings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
+                TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
 
             CanSave = false;
-            SettingsSaved?.Invoke(this, EventArgs.Empty);
+            SettingsSavedEvent?.Invoke(this, EventArgs.Empty);
         }
 
         private void SettingsOnPropertyChanged(object sender, PropertyChangedEventArgs e)

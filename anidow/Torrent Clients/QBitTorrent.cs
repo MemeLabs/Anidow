@@ -25,7 +25,7 @@ namespace Anidow.Torrent_Clients
             _settingsService = settingsService;
         }
 
-        private SettingsModel Settings => _settingsService.GetSettings();
+        private SettingsModel Settings => _settingsService.Settings;
         private string ApiUrl => $"{Settings.QBitTorrent.Host}:{Settings.QBitTorrent.Port}";
         private bool LoggedIn { get; set; }
 
