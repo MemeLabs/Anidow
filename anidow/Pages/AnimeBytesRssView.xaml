@@ -22,8 +22,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox extensions:LayerExtension.IncreaseLayer="True"
-                  Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+        <GroupBox extensions:LayerExtension.IncreaseLayer="True" Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -85,8 +84,7 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             SelectedItem="{Binding ActiveItem}">
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
@@ -126,10 +124,11 @@
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="model:AnimeBytesTorrentItem">
-                                <TextBlock
-                                    Text="{Binding Added}"
-                                    ToolTip="{Binding ReleasedLocal}"
-                                    ToolTipService.Placement="Bottom" />
+                                <TextBlock Text="{Binding Added}" ToolTipService.Placement="Bottom">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Content="{Binding ReleasedLocal}" ContentStringFormat="{}{0:g}" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -257,9 +256,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox
-                                Text="{Binding ActiveItem.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                TextWrapping="Wrap" />
+                            <TextBox Text="{Binding ActiveItem.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
                             <Button
                                 Grid.Column="1"
                                 Margin="8,0,0,0"

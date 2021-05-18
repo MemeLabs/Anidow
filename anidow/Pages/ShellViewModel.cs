@@ -82,7 +82,7 @@ namespace Anidow.Pages
 
         public void Close()
         {
-            Application.Current.Shutdown(0);
+            Environment.Exit(0);
         }
 
         public void OpenGithub()

@@ -26,6 +26,8 @@ namespace Anidow.Database.Models
         public string Link { get; set; }
 
         [NotMapped] public string ReleasedString => Released.Humanize();
+        [NotMapped] public DateTime ReleasedLocal => Released.ToLocalTime();
+        [NotMapped] public DateTime WatchedDateLocal => WatchedDate.ToLocalTime();
         [NotMapped] public string WatchedString => WatchedDate == default ? string.Empty : WatchedDate.Humanize();
         [NotMapped] public string WatchedHeaderString => Watched ? "Not watched" : "Watched";
         [NotMapped] public string EpisodeNum => Name.GetEpisode();

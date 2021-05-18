@@ -112,11 +112,12 @@
                         Header="Added"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
-                            <DataTemplate DataType="model:AnimeBytesTorrentItem">
-                                <TextBlock
-                                    Text="{Binding Added}"
-                                    ToolTip="{Binding ReleasedLocal}"
-                                    ToolTipService.Placement="Bottom" />
+                            <DataTemplate DataType="model:NyaaTorrentItem">
+                                <TextBlock Text="{Binding Added}" ToolTipService.Placement="Bottom">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Content="{Binding ReleasedLocal}" ContentStringFormat="{}{0:g}" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

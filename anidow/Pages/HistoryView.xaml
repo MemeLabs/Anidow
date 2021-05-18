@@ -188,16 +188,34 @@
                         Width="120"
                         extensions:GridViewSortExtension.PropertyName="WatchedDate"
                         listViewLayout:FixedColumn.Width="120"
-                        DisplayMemberBinding="{Binding WatchedString}"
                         Header="Watched"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="models:Episode">
+                                <TextBlock Text="{Binding WatchedString}" ToolTipService.Placement="Bottom">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Content="{Binding WatchedDateLocal}" ContentStringFormat="{}{0:g}" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn
                         Width="120"
                         extensions:GridViewSortExtension.PropertyName="Released"
                         listViewLayout:FixedColumn.Width="120"
-                        DisplayMemberBinding="{Binding ReleasedString}"
                         Header="Added"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="models:Episode">
+                                <TextBlock Text="{Binding ReleasedString}" ToolTipService.Placement="Bottom">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Content="{Binding ReleasedLocal}" ContentStringFormat="{}{0:g}" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"

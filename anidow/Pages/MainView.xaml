@@ -43,9 +43,9 @@
             Grid.Row="0"
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
+            ItemContainerStyle="{StaticResource ListViewItemHome}"
             ItemsSource="{Binding Items}"
-            SelectedItem="{Binding ActiveItem}"
-            ItemContainerStyle="{StaticResource ListViewItemHome}">
+            SelectedItem="{Binding ActiveItem}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn
@@ -61,18 +61,20 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <Button
-                                        Margin="-14,-4,0,-4"
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalAlignment="Stretch"
-                                        Padding="4,5,4,4"
                                         Width="27"
+                                        Margin="-14,-4,0,-4"
+                                        Padding="4,5,4,4"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
                                         extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
                                         extensions:RippleExtension.BackgroundBrush="#EF5350"
                                         Command="{s:Action DeleteItem,
                                                            ActionNotFound=Disable}"
                                         CommandParameter="{Binding}"
-                                        Content="{iconPacks:FontAwesome TimesSolid, Width=10, Height=10}"
+                                        Content="{iconPacks:FontAwesome TimesSolid,
+                                                                        Width=10,
+                                                                        Height=10}"
                                         Style="{StaticResource DeleteButton}" />
 
                                     <TextBlock
@@ -117,9 +119,18 @@
                         Width="120"
                         extensions:GridViewSortExtension.PropertyName="Released"
                         listViewLayout:FixedColumn.Width="120"
-                        DisplayMemberBinding="{Binding ReleasedString}"
                         Header="Added"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="models:Episode">
+                                <TextBlock Text="{Binding ReleasedString}" ToolTipService.Placement="Bottom">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Content="{Binding ReleasedLocal}" ContentStringFormat="{}{0:g}" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"
@@ -148,6 +159,7 @@
             <ToggleButton
                 x:Name="PredictedToggleButton"
                 extensions:CornerRadiusExtension.CornerRadius="4"
+                extensions:CursorSpotlightExtension.BackgroundBrush="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}"
                 Background="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}"
                 BorderThickness="0"
                 Command="{s:Action GetAiringEpisodesForToday,

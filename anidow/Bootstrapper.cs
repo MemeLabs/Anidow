@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows;
+using System.Windows.Markup;
 using Anidow.Database;
 using Anidow.Factories;
 using Anidow.Pages;
@@ -142,6 +144,11 @@ namespace Anidow
             {
                 await using var db = new TrackContext();
                 await db.Database.MigrateAsync();
+            }
+            if (Application.Current.MainWindow != null)
+            {
+                Application.Current.MainWindow.Language =
+                    XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             }
 
             var selfContained = false;
