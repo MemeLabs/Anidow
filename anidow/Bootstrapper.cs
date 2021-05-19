@@ -166,11 +166,13 @@ namespace Anidow
                 Application.Current.MainWindow.Language =
                     XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             }
+            
 
             var selfContained = false;
 #if SELF_CONTAINED && RELEASE
             selfContained = true;
 #endif
+            _logger.Information($"Anidow v{Assembly.GetExecutingAssembly().GetName().Version} selfcontained: {selfContained}");
 
 #if RELEASE
             try
