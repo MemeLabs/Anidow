@@ -15,7 +15,10 @@ using FluentValidation;
 using Hardcodet.Wpf.TaskbarNotification;
 using Jot;
 using Jot.Storage;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -140,11 +143,23 @@ namespace Anidow
 
         protected override async void Configure()
         {
+            var secret = Properties.Resources.AppCenter_Secret;
+            if (!AppCenter.Configured && !string.IsNullOrWhiteSpace(secret))
+            {
+                AppCenter.Start(secret, typeof(Crashes));
+            }
+
+            if (string.IsNullOrWhiteSpace(secret))
+            {
+                _logger.Warning("AppCenter not configured, secret is empty");
+            }
+
             // Perform any other configuration before the application starts
             {
                 await using var db = new TrackContext();
                 await db.Database.MigrateAsync();
             }
+
             if (Application.Current.MainWindow != null)
             {
                 Application.Current.MainWindow.Language =

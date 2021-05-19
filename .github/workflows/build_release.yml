@@ -19,6 +19,12 @@ jobs:
       - name: Restore
         run: dotnet restore
 
+      - name: Set secret
+        run: |
+          [xml]$xmlDoc = Get-Content ./anidow/Properties/Resources.resx
+          $xmlDoc.SelectSingleNode("//root/data[@name='AppCenter_Secret']").Value = "${{ secrets.APPCENTER_SECRET }}"
+          $xmlDoc.Save('./anidow/Properties/Resources.resx')
+
       - name: Publish self-contained
         run: dotnet publish --no-restore --configuration Release --self-contained true --runtime win-x64 --output windows/self-contained
 
