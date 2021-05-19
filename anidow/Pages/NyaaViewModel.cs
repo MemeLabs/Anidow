@@ -44,7 +44,7 @@ namespace Anidow.Pages
         {
             "No filter",
             "No remakes",
-            "Trusted only"
+            "Trusted only",
         };
 
         public int SelectedFilterIndex { get; set; }
@@ -94,7 +94,7 @@ namespace Anidow.Pages
 
             _eventAggregator.PublishOnUIThread(new DownloadEvent
             {
-                Item = item
+                Item = item,
             });
         }
 
@@ -118,7 +118,7 @@ namespace Anidow.Pages
         {
             using var dialog = new FolderBrowserDialog
             {
-                SelectedPath = ActiveItem.Folder
+                SelectedPath = ActiveItem.Folder,
             };
             var result = dialog.ShowDialog();
             if (result == DialogResult.OK)

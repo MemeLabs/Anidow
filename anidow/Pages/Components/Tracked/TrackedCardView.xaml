@@ -51,14 +51,16 @@
                             <Style TargetType="Border">
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                                        <Setter Property="BorderBrush"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                                         <Setter Property="Cursor" Value="Hand" />
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="False">
                                         <Setter Property="BorderBrush" Value="Transparent" />
                                     </Trigger>
                                     <DataTrigger Binding="{Binding TrackedViewSelected}" Value="True">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                                        <Setter Property="BorderBrush"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -87,7 +89,8 @@
                                 SnapsToDevicePixels="True"
                                 Visibility="{Binding CoverData.File, Converter={x:Static converters:IsNotNullToVisibilityConverter.Instance}}">
                                 <TextBox x:Name="CoverUrl" extensions:WatermarkExtension.Watermark="Url ..." />
-                                <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}" Content="Download Cover">
+                                <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}"
+                                        Content="Download Cover">
                                     <Button.CommandParameter>
                                         <MultiBinding Converter="{x:Static converters:DownloadCoverConverter.Instance}">
                                             <Binding ElementName="CoverUrl" Path="Text" />

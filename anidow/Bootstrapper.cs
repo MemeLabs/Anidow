@@ -95,9 +95,9 @@ namespace Anidow
             {
                 AllowAutoRedirect = true,
                 AutomaticDecompression = DecompressionMethods.All,
-                UseCookies = true
+                UseCookies = true,
             };
-            var httpClient = new HttpClient(clientHandler) { Timeout = TimeSpan.FromSeconds(10) };
+            var httpClient = new HttpClient(clientHandler) {Timeout = TimeSpan.FromSeconds(10)};
             httpClient.DefaultRequestHeaders.UserAgent.Clear();
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36");
@@ -114,7 +114,7 @@ namespace Anidow
             var tracker = new Tracker(new JsonFileStore(Environment.SpecialFolder.CommonApplicationData));
             tracker.Configure<ShellView>()
                 .Id(_ => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
-                .Properties(w => new { w.Height, w.Width, w.Left, w.Top, w.WindowState })
+                .Properties(w => new {w.Height, w.Width, w.Left, w.Top, w.WindowState})
                 .PersistOn(nameof(ShellView.Closing))
                 .StopTrackingOn(nameof(ShellView.Closing));
             return tracker;

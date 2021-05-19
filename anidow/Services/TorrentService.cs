@@ -41,7 +41,7 @@ namespace Anidow.Services
             {
                 TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.Remove(anime, withFile),
                 TorrentClient.Deluge => throw new NotImplementedException(),
-                _ => false
+                _ => false,
             };
         }
 
@@ -51,7 +51,7 @@ namespace Anidow.Services
             {
                 TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.GetTorrentList<T>(),
                 TorrentClient.Deluge => throw new NotImplementedException(),
-                _ => default
+                _ => default,
             };
         }
     }

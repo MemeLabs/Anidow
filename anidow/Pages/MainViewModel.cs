@@ -12,7 +12,6 @@ using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Extensions;
-using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
@@ -74,7 +73,7 @@ namespace Anidow.Pages
                     File = Path.Join(nyaa.Folder, nyaa.Name),
                     Folder = nyaa.Folder,
                     Link = nyaa.Link,
-                    DownloadLink = nyaa.DownloadLink
+                    DownloadLink = nyaa.DownloadLink,
                 },
                 AnimeBytesTorrentItem ab => new Episode
                 {
@@ -84,7 +83,7 @@ namespace Anidow.Pages
                     Folder = ab.Folder,
                     Link = ab.GroupUrl,
                     DownloadLink = ab.DownloadLink,
-                    Cover = ab.Cover
+                    Cover = ab.Cover,
                 },
                 AnimeBytesScrapeAnime ab => new Episode
                 {
@@ -94,9 +93,9 @@ namespace Anidow.Pages
                     Folder = ab.SelectedTorrent.Folder,
                     Link = $"https://animebytes.tv/torrent/{ab.SelectedTorrent.ID}/group",
                     DownloadLink = ab.SelectedTorrent.DownloadLink,
-                    Cover = ab.Image
+                    Cover = ab.Image,
                 },
-                _ => throw new NotSupportedException(nameof(message.Item))
+                _ => throw new NotSupportedException(nameof(message.Item)),
             };
 
             await using var db = new TrackContext();
@@ -142,7 +141,6 @@ namespace Anidow.Pages
         public async Task ForceCheck()
         {
             CanForceCheck = false;
-            _logger.Verbose("Test");
             await AnimeBytesService.CheckForNewEpisodes();
             await GetAiringEpisodesForToday();
             CanForceCheck = true;
@@ -164,7 +162,7 @@ namespace Anidow.Pages
 
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -192,51 +190,43 @@ namespace Anidow.Pages
             ChangeActiveItem(null, false);
         }
 
-        public void OpenExternalLink(Episode anime)
+        public void OpenExternalLink(Episode episode)
         {
-            LinkUtil.Open(anime.Link);
+            LinkUtil.Open(episode.Link);
         }
 
-        public void OpenFolder(Episode anime)
+        public void OpenFolder(Episode episode)
         {
-            _windowManager.ShowWindow(new FolderFilesViewModel(ref anime, _eventAggregator, _logger));
-            //try
-            //{
-            //    ProcessUtil.OpenFolder(anime.Folder);
-            //}
-            //catch (Exception e)
-            //{
-            //    _logger.Error(e, "failed opening folder");
-            //}
+            _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _eventAggregator, _logger));
         }
 
-        public async Task ToggleWatch(Episode anime)
+        public async Task ToggleWatch(Episode episode)
         {
-            if (anime == null)
+            if (episode == null)
             {
                 return;
             }
 
-            anime.Watched = !anime.Watched;
-            anime.WatchedDate = anime.Watched ? DateTime.UtcNow : default;
-            await anime.UpdateInDatabase();
+            episode.Watched = !episode.Watched;
+            episode.WatchedDate = episode.Watched ? DateTime.UtcNow : default;
+            await episode.UpdateInDatabase();
         }
 
-        public async Task Watch(Episode anime)
+        public async Task Watch(Episode episode)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(anime.File))
+                if (string.IsNullOrWhiteSpace(episode.File))
                 {
-                    _windowManager.ShowWindow(new FolderFilesViewModel(ref anime, _eventAggregator, _logger));
+                    _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _eventAggregator, _logger));
                     return;
                 }
 
-                ProcessUtil.OpenFile(anime.File);
+                ProcessUtil.OpenFile(episode.File);
 
-                anime.Watched = true;
-                anime.WatchedDate = DateTime.UtcNow;
-                await anime.UpdateInDatabase();
+                episode.Watched = true;
+                episode.WatchedDate = DateTime.UtcNow;
+                await episode.UpdateInDatabase();
             }
             catch (Exception e)
             {
@@ -244,51 +234,51 @@ namespace Anidow.Pages
             }
         }
 
-        public async Task Download(Episode anime)
+        public async Task Download(Episode episode)
         {
-            await _torrentService.Download(anime);
+            await _torrentService.Download(episode);
         }
 
         public async Task DeleteWithFile()
         {
-            var anime = (Episode)ActiveItem;
-            var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{anime.Name}", "Delete",
+            var episode = ActiveItem;
+            var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{episode.Name}", "Delete",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Cancel)
             {
                 return;
             }
 
-            Items.Remove(anime);
+            Items.Remove(episode);
 
             await using var db = new TrackContext();
-            db.Attach(anime);
-            db.Remove(anime);
+            db.Attach(episode);
+            db.Remove(episode);
             await db.SaveChangesAsync();
 
-            var success = await _torrentService.Remove(anime, true);
+            var success = await _torrentService.Remove(episode, true);
 
             // wait 1 second for the torrent client to delete the file
             await Task.Delay(1.Seconds());
 
-            if (success && !File.Exists(anime.File))
+            if (success && !File.Exists(episode.File))
             {
                 return;
             }
 
             try
             {
-                File.Delete(anime.File);
+                File.Delete(episode.File);
             }
             catch (Exception e)
             {
-                _logger.Error(e, $"failed deleting file {anime.File}");
+                _logger.Error(e, $"failed deleting file {episode.File}");
             }
         }
 
         protected override void OnInitialActivate()
         {
-            _getTorrentsStatusTimer = new Timer { Interval = 5000 };
+            _getTorrentsStatusTimer = new Timer {Interval = 5000};
             _getTorrentsStatusTimer.Elapsed += async (_, _) => { await UpdateTorrents(); };
             _getTorrentsStatusTimer.Start();
 
@@ -341,7 +331,7 @@ namespace Anidow.Pages
             {
                 Name = "test :: Episode 1",
                 Released = DateTime.UtcNow,
-                Folder = Directory.GetCurrentDirectory()
+                Folder = Directory.GetCurrentDirectory(),
             });
 #endif
         }
@@ -371,7 +361,7 @@ namespace Anidow.Pages
                         TorrentClient.QBitTorrent => list.Select(j => j.ToObject<QBitTorrentEntry>())
                             .FirstOrDefault(i => i.name == anime1.Name)
                             ?.hash,
-                        _ => anime.TorrentId
+                        _ => anime.TorrentId,
                     };
                 }
                 catch (Exception)

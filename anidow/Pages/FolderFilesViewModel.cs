@@ -21,9 +21,9 @@ namespace Anidow.Pages
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
         private readonly int _maxFilesInView = 25;
+        private readonly string _name;
 
         private List<FolderFilesModel> _files;
-        private readonly string _name;
 
         public FolderFilesViewModel(ref Episode episode, IEventAggregator eventAggregator, ILogger logger)
         {
@@ -75,7 +75,7 @@ namespace Anidow.Pages
             _files = new List<FolderFilesModel>();
             foreach (var file in files)
             {
-                var item = new FolderFilesModel { File = file };
+                var item = new FolderFilesModel {File = file};
                 if (_episode != null)
                 {
                     var nameSplit = file.Name

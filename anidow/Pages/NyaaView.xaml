@@ -61,7 +61,8 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             SelectedItem="{Binding ActiveItem}">
             <ListView.View>
-                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True"
+                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
 
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="Name"

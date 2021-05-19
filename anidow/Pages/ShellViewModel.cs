@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Windows;
 using Anidow.Services;
 using Anidow.Utils;
 using Serilog;

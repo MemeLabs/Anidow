@@ -30,7 +30,7 @@ namespace Anidow.Helpers
                 new FrameworkPropertyMetadata(Guid.NewGuid().ToString(), HandleBoundPasswordChanged)
                 {
                     BindsTwoWayByDefault = true,
-                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged // Match the default on Binding
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged, // Match the default on Binding
                 });
 
         // Using a DependencyProperty as the backing store for SecurePasswordInitialized.  This enables animation, styling, binding, etc...
@@ -49,7 +49,7 @@ namespace Anidow.Helpers
                 new FrameworkPropertyMetadata(new SecureString(), HandleBoundSecurePasswordChanged)
                 {
                     BindsTwoWayByDefault = true,
-                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 });
 
         private static bool GetPasswordInitialized(DependencyObject obj) =>

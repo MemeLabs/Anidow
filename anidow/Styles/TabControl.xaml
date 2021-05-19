@@ -129,10 +129,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                            <Setter TargetName="Border" Property="Background"
+                                    Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                            <Setter TargetName="Border" Property="Background"
+                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                             <Setter TargetName="Border" Property="TextElement.Foreground" Value="White" />
                         </Trigger>
                     </ControlTemplate.Triggers>

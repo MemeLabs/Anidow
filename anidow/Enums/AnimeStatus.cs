@@ -7,6 +7,6 @@ namespace Anidow.Enums
         [Description("Watching")] Watching = 1,
         Finished = 2,
         Dropped = 4,
-        All = Watching | Finished | Dropped
+        All = Watching | Finished | Dropped,
     }
 }

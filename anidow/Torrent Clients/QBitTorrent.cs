@@ -37,7 +37,7 @@ namespace Anidow.Torrent_Clients
             {
                 {new StringContent(item.DownloadLink), "urls"},
                 {new StringContent(item.Folder), "savepath"},
-                {new StringContent(Settings.QBitTorrent.Category), "category"}
+                {new StringContent(Settings.QBitTorrent.Category), "category"},
             };
             var response = await _httpClient.PostAsync($"{ApiUrl}/api/v2/torrents/add", m);
             if (response != null && response.IsSuccessStatusCode)
@@ -90,7 +90,7 @@ namespace Anidow.Torrent_Clients
             var data = new Dictionary<string, string>
             {
                 {"username", Settings.QBitTorrent.Username},
-                {"password", Settings.QBitTorrent.Password}
+                {"password", Settings.QBitTorrent.Password},
             };
             var oldReferer = _httpClient.DefaultRequestHeaders.Referrer;
             _httpClient.DefaultRequestHeaders.Referrer = new Uri(ApiUrl);

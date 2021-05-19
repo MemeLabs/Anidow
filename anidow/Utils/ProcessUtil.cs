@@ -12,7 +12,7 @@ namespace Anidow.Utils
         {
             ".MPG", ".MP2", ".MPEG", ".MPE", ".MPV", ".WEBM", ".MKV", ".OGG",
             ".MP4", ".M4P", ".M4V",
-            ".AVI", ".FLV", ".WMV"
+            ".AVI", ".FLV", ".WMV",
         };
 
         public static void OpenFile(string path)
@@ -27,8 +27,8 @@ namespace Anidow.Utils
             {
                 StartInfo = new ProcessStartInfo(path)
                 {
-                    UseShellExecute = true
-                }
+                    UseShellExecute = true,
+                },
             }.Start();
         }
 

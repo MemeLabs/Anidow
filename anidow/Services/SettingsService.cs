@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using AdonisUI;
 using Anidow.Model;
-using Anidow.Validators;
 using Serilog;
 using Stylet;
 
@@ -23,6 +22,15 @@ namespace Anidow.Services
         }
 
         public bool CanSave { get; set; }
+
+        public SettingsModel Settings { get; private set; }
+
+        /// <summary>
+        ///     this is used for the SettingsView as a temporary setting
+        ///     after the user saves it it will become the main setting everything uses
+        /// </summary>
+        public SettingsModel TempSettings { get; private set; }
+
         public event EventHandler SettingsSavedEvent; // event
 
         public async Task Init()
@@ -44,14 +52,6 @@ namespace Anidow.Services
             ResourceLocator.SetColorScheme(Application.Current.Resources,
                 TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
         }
-
-        public SettingsModel Settings { get; private set; }
-
-        /// <summary>
-        /// this is used for the SettingsView as a temporary setting
-        /// after the user saves it it will become the main setting everything uses
-        /// </summary>
-        public SettingsModel TempSettings { get; private set; }
 
         public async Task Save()
         {

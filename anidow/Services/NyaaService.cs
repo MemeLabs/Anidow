@@ -52,7 +52,7 @@ namespace Anidow.Services
                 Size = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "size")
                     ?.GetObject<XElement>().Value,
                 Downloads = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "downloads")
-                    ?.GetObject<XElement>().Value
+                    ?.GetObject<XElement>().Value,
             };
 
 

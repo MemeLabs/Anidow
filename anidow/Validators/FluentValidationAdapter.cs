@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -21,7 +19,7 @@ namespace Anidow.Validators
 
         public void Initialize(object subject)
         {
-            _subject = (T)subject;
+            _subject = (T) subject;
         }
 
         public async Task<IEnumerable<string>> ValidatePropertyAsync(string propertyName)
@@ -36,10 +34,9 @@ namespace Anidow.Validators
         {
             // If someone's calling us synchronously, and ValidationAsync does not complete synchronously,
             // we'll deadlock unless we continue on another thread.
-            return (await this._validator.ValidateAsync(_subject).ConfigureAwait(false))
+            return (await _validator.ValidateAsync(_subject).ConfigureAwait(false))
                 .Errors.GroupBy(x => x.PropertyName)
                 .ToDictionary(x => x.Key, x => x.Select(failure => failure.ErrorMessage));
         }
     }
-
 }

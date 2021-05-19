@@ -95,7 +95,7 @@ namespace Anidow.Extensions
             {
                 VerticalOffset = target.VerticalOffset,
                 HorizontalOffset = target.HorizontalOffset,
-                Point = e.GetPosition(target)
+                Point = e.GetPosition(target),
             };
         }
 

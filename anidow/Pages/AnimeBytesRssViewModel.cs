@@ -48,7 +48,7 @@ namespace Anidow.Pages
         }
 
         public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.PassKey);
-        public string LastSearch { get; set; }
+        public string LastSearch { get; private set; }
 
         public string Filter
         {
@@ -63,7 +63,7 @@ namespace Anidow.Pages
         public IReadOnlyList<string> Filters => new List<string>
         {
             "Anime torrents",
-            "Airing anime torrents"
+            "Airing anime torrents",
         };
 
         public int SelectedFilterIndex { get; set; }
@@ -96,9 +96,9 @@ namespace Anidow.Pages
             {
                 0 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.All),
                 1 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.Airing),
-                _ => throw new NotImplementedException()
+                _ => throw new NotImplementedException(),
             });
-            if (items is not { Count: > 0 })
+            if (items is not {Count: > 0})
             {
                 CanGetItems = true;
                 return;
@@ -142,7 +142,7 @@ namespace Anidow.Pages
 
             _eventAggregator.PublishOnUIThread(new DownloadEvent
             {
-                Item = item
+                Item = item,
             });
         }
 
@@ -190,7 +190,7 @@ namespace Anidow.Pages
                 Released = item.Released,
                 Resolution = resolution,
                 Group = item.GetReleaseGroup(),
-                Status = AnimeStatus.Watching
+                Status = AnimeStatus.Watching,
             };
             anime.CoverData = await anime.Cover.GetCoverData(anime, _httpClient, _logger);
 
@@ -204,7 +204,7 @@ namespace Anidow.Pages
         {
             using var dialog = new FolderBrowserDialog
             {
-                SelectedPath = ActiveItem.Folder
+                SelectedPath = ActiveItem.Folder,
             };
             var result = dialog.ShowDialog();
             if (result == DialogResult.OK)

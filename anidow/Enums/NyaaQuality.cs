@@ -4,6 +4,6 @@
     {
         Normal,
         Remake,
-        Trusted
+        Trusted,
     }
 }

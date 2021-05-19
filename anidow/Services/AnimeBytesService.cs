@@ -62,7 +62,7 @@ namespace Anidow.Services
 
         public void InitTracker()
         {
-            _tracker = new Timer { Interval = 1000 * 60 * _settingsService.Settings.RefreshTime };
+            _tracker = new Timer {Interval = 1000 * 60 * _settingsService.Settings.RefreshTime};
             _tracker.Elapsed += TrackerOnElapsed;
             _initialRefreshTime = _settingsService.Settings.RefreshTime;
             _settingsService.SettingsSavedEvent += OnSettingsSavedEvent;
@@ -182,7 +182,7 @@ namespace Anidow.Services
                             Released = item.Released,
                             DownloadLink = item.DownloadLink,
                             Link = item.GroupUrl,
-                            Site = Site.AnimeBytes
+                            Site = Site.AnimeBytes,
                         };
 
                         await db.AddAsync(newEpisode);
@@ -214,7 +214,7 @@ namespace Anidow.Services
                 AnimeBytesFilter.All => await GetFeedItems(AllAnimeUrl, ToDomain) ?? new List<AnimeBytesTorrentItem>(),
                 AnimeBytesFilter.Airing => await GetFeedItems(AiringAnimeUrl, ToDomain) ??
                                            new List<AnimeBytesTorrentItem>(),
-                _ => throw new ArgumentOutOfRangeException(nameof(filter), filter, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(filter), filter, null),
             };
         }
 
@@ -238,7 +238,7 @@ namespace Anidow.Services
                 GroupTitle = GetElementExtensionValue(item, "groupTitle"),
                 GroupUrl = GetElementExtensionValue(item, "groupUrl"),
                 Cover = GetElementExtensionValue(item, "cover"),
-                TorrentProperty = GetElementExtensionValue(item, "torrentProperty")
+                TorrentProperty = GetElementExtensionValue(item, "torrentProperty"),
             };
 
             return feedItem;
@@ -285,7 +285,7 @@ namespace Anidow.Services
                         a.Torrents = a.Torrents.Where(i => i.Seeders >= minSeeders).ToArray();
                     }
 
-                    var je = (JsonElement)a.Synonymns;
+                    var je = (JsonElement) a.Synonymns;
                     var json = je.GetRawText();
 
                     a.SynonymnsList = json switch
@@ -294,17 +294,17 @@ namespace Anidow.Services
                             JsonSerializer.Deserialize<List<string>>(json),
                         { } j when j.StartsWith("{") =>
                             JsonSerializer.Deserialize<Dictionary<string, string>>(json)?.Values.ToList(),
-                        _ => new List<string>()
+                        _ => new List<string>(),
                     };
 
-                    je = (JsonElement)a.Links;
+                    je = (JsonElement) a.Links;
                     json = je.GetRawText();
 
                     a.LinksDict = json switch
                     {
                         { } j when j.StartsWith("{") =>
                             JsonSerializer.Deserialize<Dictionary<string, string>>(json),
-                        _ => new Dictionary<string, string>()
+                        _ => new Dictionary<string, string>(),
                     };
                 }
 

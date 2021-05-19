@@ -57,7 +57,7 @@ namespace Anidow.Pages
         {
             using var dialog = new FolderBrowserDialog
             {
-                SelectedPath = Directory.GetCurrentDirectory()
+                SelectedPath = Directory.GetCurrentDirectory(),
             };
             var result = dialog.ShowDialog();
             return result == DialogResult.OK ? dialog.SelectedPath : default;

@@ -47,7 +47,7 @@ namespace Anidow.Extensions
 
                 return new Cover
                 {
-                    File = filePath
+                    File = filePath,
                 };
             }
             catch (Exception ex)

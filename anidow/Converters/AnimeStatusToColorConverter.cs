@@ -11,14 +11,14 @@ namespace Anidow.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var status = (AnimeStatus) value;
+            var status = (AnimeStatus) value!;
 
             var color = status switch
             {
                 AnimeStatus.Watching => "#43A047",
                 AnimeStatus.Finished => "#039BE5",
                 AnimeStatus.Dropped => "#E53935",
-                _ => "Transparent"
+                _ => "Transparent",
             };
             return color;
         }

@@ -28,7 +28,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.Resources>
-            <helpers:BindingProxy x:Key="Proxy" Data="{Binding}" />
         </Grid.Resources>
 
         <GroupBox>
@@ -103,7 +102,8 @@
                 </GroupStyle>
             </ListView.GroupStyle>-->
             <ListView.View>
-                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True"
+                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"

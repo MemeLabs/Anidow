@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Anidow.Enums;
 using Anidow.Model;
-using Anidow.Pages;
 using FluentValidation;
 
 namespace Anidow.Validators
@@ -10,7 +9,6 @@ namespace Anidow.Validators
     {
         public SettingsViewModelValidator()
         {
-
             RuleFor(settings => settings.AnimeFolder).Must(Directory.Exists);
             RuleFor(settings => settings.RefreshTime).GreaterThanOrEqualTo(1);
             RuleFor(settings => settings.QBitTorrent.Host).NotEmpty()

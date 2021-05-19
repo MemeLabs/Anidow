@@ -62,10 +62,8 @@ namespace Anidow.Pages
             set
             {
                 SetAndNotify(ref _search, value);
-                Debouncer.DebounceAction("load_history", async _ =>
-                {
-                    await Execute.OnUIThreadAsync(async () => await LoadEpisodes(true));
-                });
+                Debouncer.DebounceAction("load_history",
+                    async _ => { await Execute.OnUIThreadAsync(async () => await LoadEpisodes(true)); });
             }
         }
 
@@ -97,7 +95,7 @@ namespace Anidow.Pages
             {
                 HistoryFilterType.Watched => episodes.Where(a => a.Watched).ToList(),
                 HistoryFilterType.NotWatched => episodes.Where(a => !a.Watched).ToList(),
-                _ => episodes
+                _ => episodes,
             };
 
             _episodes = episodes
@@ -118,7 +116,7 @@ namespace Anidow.Pages
             {
                 Name = "test :: Episode 1",
                 Released = DateTime.Today,
-                Folder = Directory.GetCurrentDirectory()
+                Folder = Directory.GetCurrentDirectory(),
             });
 #endif
         }
@@ -167,7 +165,7 @@ namespace Anidow.Pages
 
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -193,7 +191,7 @@ namespace Anidow.Pages
 
         public async Task DeleteWithFile(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{episode.Name}", "Delete",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Cancel)
@@ -230,7 +228,7 @@ namespace Anidow.Pages
 
         public async Task UnWatchItem(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {

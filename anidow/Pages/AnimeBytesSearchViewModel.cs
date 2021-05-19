@@ -42,7 +42,8 @@ namespace Anidow.Pages
         public DateTime LastSearch { get; set; }
         public string Search { get; set; }
 
-        public bool CanSearch => !string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.Username)
+        public bool CanSearch => !string.IsNullOrWhiteSpace(
+                                     _settingsService.Settings.AnimeBytesSettings.Username)
                                  && !string.IsNullOrWhiteSpace(
                                      _settingsService.Settings.AnimeBytesSettings.PassKey);
 
@@ -98,7 +99,7 @@ namespace Anidow.Pages
 
             _eventAggregator.PublishOnUIThread(new DownloadEvent
             {
-                Item = anime
+                Item = anime,
             });
         }
 
@@ -106,7 +107,7 @@ namespace Anidow.Pages
         {
             using var dialog = new FolderBrowserDialog
             {
-                SelectedPath = anime?.SelectedTorrent?.Folder ?? Directory.GetCurrentDirectory()
+                SelectedPath = anime?.SelectedTorrent?.Folder ?? Directory.GetCurrentDirectory(),
             };
             var result = dialog.ShowDialog();
             if (result != DialogResult.OK)

@@ -52,10 +52,8 @@ namespace Anidow.Pages
             set
             {
                 SetAndNotify(ref _search, value);
-                Debouncer.DebounceAction("load_tracked", async _ =>
-                {
-                    await Execute.OnUIThreadAsync(async () => await Load());
-                });
+                Debouncer.DebounceAction("load_tracked",
+                    async _ => { await Execute.OnUIThreadAsync(async () => await Load()); });
             }
         }
 
@@ -90,7 +88,7 @@ namespace Anidow.Pages
                 AnimeStatus.Watching => anime.Where(a => a.Status == AnimeStatus.Watching).ToList(),
                 AnimeStatus.Finished => anime.Where(a => a.Status == AnimeStatus.Finished).ToList(),
                 AnimeStatus.Dropped => anime.Where(a => a.Status == AnimeStatus.Dropped).ToList(),
-                _ => anime
+                _ => anime,
             };
 
             ScrollToTop();
@@ -162,7 +160,7 @@ namespace Anidow.Pages
         {
             using var dialog = new FolderBrowserDialog
             {
-                SelectedPath = anime.Folder
+                SelectedPath = anime.Folder,
             };
             var result = dialog.ShowDialog();
             if (result != DialogResult.OK)
@@ -180,8 +178,12 @@ namespace Anidow.Pages
 
         public void EditAnime(object sender, MouseButtonEventArgs _)
         {
-            var anime = (Anime)((Border)sender).DataContext;
-            if (ActiveItem != null) ActiveItem.TrackedViewSelected = false;
+            var anime = (Anime) ((Border) sender).DataContext;
+            if (ActiveItem != null)
+            {
+                ActiveItem.TrackedViewSelected = false;
+            }
+
             anime.TrackedViewSelected = true;
             ChangeActiveItem(anime, false);
         }
@@ -218,8 +220,8 @@ namespace Anidow.Pages
         {
             try
             {
-                var anime = (Anime)data.anime;
-                var url = (string)data.url;
+                var anime = (Anime) data.anime;
+                var url = (string) data.url;
                 Uri.TryCreate(url, UriKind.Absolute, out var uri);
                 if (uri == null)
                 {

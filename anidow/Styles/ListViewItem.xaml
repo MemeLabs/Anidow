@@ -53,7 +53,8 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Highlight}" Value="true">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

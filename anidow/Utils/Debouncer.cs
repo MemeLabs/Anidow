@@ -41,7 +41,7 @@ namespace Anidow.Utils
                 var res = new DebounceRegistration
                 {
                     Key = key,
-                    Config = config
+                    Config = config,
                 };
                 configDebounce(config);
                 return res;

@@ -3,6 +3,6 @@
     public enum AnimeBytesFilter
     {
         All,
-        Airing
+        Airing,
     }
 }
