@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Anidow.Services;
 using Anidow.Utils;
+using Microsoft.AppCenter.Crashes;
 using Serilog;
 using Stylet;
 
@@ -50,6 +51,7 @@ namespace Anidow.Pages
         public bool CanForceCheck { get; set; } = true;
         public string NextCheckIn { get; set; }
         public Timer NextCheckTimer { get; set; }
+        public bool CanTestCrash { get; set; }
 
         protected override async void OnInitialActivate()
         {
@@ -58,6 +60,14 @@ namespace Anidow.Pages
             NextCheckTimer = new Timer(1000);
             NextCheckTimer.Elapsed += NextCheckTimerOnElapsed;
             NextCheckTimer.Start();
+#if DEBUG
+            CanTestCrash = true;
+#endif
+        }
+
+        public void TestCrash()
+        {
+            Crashes.GenerateTestCrash();
         }
 
         private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)

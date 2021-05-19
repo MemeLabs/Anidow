@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Markup;
+using AdonisUI.Controls;
 using Anidow.Database;
 using Anidow.Factories;
 using Anidow.Pages;
@@ -24,7 +25,7 @@ using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
-
+using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 #if RELEASE
 using System.Reflection;
 using System.Windows.Threading;
@@ -209,7 +210,23 @@ namespace Anidow
         protected override void OnUnhandledException(DispatcherUnhandledExceptionEventArgs e)
         {
             _logger.Fatal(e.Exception, e.Exception.Message);
-            MessageBox.Show($"{e.Exception.Message}", string.Empty, MessageBoxButton.OK, MessageBoxImage.Error);
+            var messageBox = new MessageBoxModel
+            {
+                Text = $"Would you like to report this crash?\n\nCrash message: '{e.Exception.Message}'",
+                Caption = "Anidow crashed!",
+                Icon = MessageBoxImage.Error,
+                Buttons = new[]
+                {
+                    MessageBoxButtons.Yes("Yes!"),
+                    MessageBoxButtons.No("No!"),
+                },
+                IsSoundEnabled = true,
+            };
+            var result = MessageBox.Show(messageBox);
+            if (result == MessageBoxResult.Yes)
+            {
+                Crashes.TrackError(e.Exception);
+            }
         }
 #endif
     }
