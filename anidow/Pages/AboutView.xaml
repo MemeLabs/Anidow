@@ -66,7 +66,20 @@
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 CanUserReorderColumns="False"
-                ItemsSource="{Binding Packages, Mode=OneWay}" />
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Packages, Mode=OneWay}">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Package Name" Binding="{Binding PackageName}" />
+                    <DataGridTextColumn Header="Version" Binding="{Binding PackageVersion}" />
+                    <DataGridTextColumn Header="Url" Binding="{Binding PackageUrl}" />
+                    <DataGridTextColumn Header="Copyright" Binding="{Binding Copyright}" />
+                    <DataGridTextColumn Header="Authors" Binding="{Binding AuthorsString}" />
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+                    <DataGridTextColumn Header="License Url" Binding="{Binding LicenseUrl}" />
+                    <DataGridTextColumn Header="License Type" Binding="{Binding LicenseType}" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Grid>
 </controls:AdonisWindow>
