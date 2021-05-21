@@ -25,6 +25,10 @@ jobs:
           $xmlDoc.SelectSingleNode("//root/data[@name='AppCenter_Secret']").Value = "${{ secrets.APPCENTER_SECRET }}"
           $xmlDoc.Save('./anidow/Properties/Resources.resx')
 
+      - name: Generate licenses.json
+        run: |
+          ./GenerateLicenseFile.ps1
+
       - name: Publish self-contained
         run: dotnet publish --no-restore --configuration Release --self-contained true --runtime win-x64 --output windows/self-contained
 

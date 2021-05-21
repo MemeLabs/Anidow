@@ -19,8 +19,6 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
-        <Grid.Resources>
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -202,8 +200,7 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock VerticalAlignment="Top" Text="{Binding DateString}">
                                                 <TextBlock.ToolTip>
-                                                    <ToolTip Content="{Binding DateLocal}"
-                                                             ContentStringFormat="{}{0:g}" />
+                                                    <ToolTip Content="{Binding DateLocal}" ContentStringFormat="{}{0:g}" />
                                                 </TextBlock.ToolTip>
                                             </TextBlock>
                                             <Separator
@@ -320,45 +317,42 @@
                 </Grid>
             </Grid>
         </Expander>
-        <StatusBar Grid.Row="2">
-            <StatusBarItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <StackPanel Orientation="Horizontal">
-                    <Button
-                        Margin="-4,-3,0,-3"
-                        extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
-                        s:View.ActionTarget="{Binding AnimeBytesService}"
-                        Command="{s:Action StartTracker,
-                                           ActionNotFound=Disable}"
-                        Content="{iconPacks:FontAwesome PlaySolid,
-                                                        Height=10}"
-                        Style="{DynamicResource ActionButton}"
-                        ToolTip="Start"
-                        ToolTipService.Placement="Top"
-                        Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
-                    <Button
-                        Margin="-4,-3,0,-3"
-                        extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
-                        s:View.ActionTarget="{Binding AnimeBytesService}"
-                        Command="{s:Action StopTracker,
-                                           ActionNotFound=Disable}"
-                        Content="{iconPacks:FontAwesome PauseSolid,
-                                                        Height=10}"
-                        Style="{StaticResource ActionButton}"
-                        ToolTip="Pause"
-                        ToolTipService.Placement="Top"
-                        Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
-                    <TextBlock
-                        Margin="4,0,0,0"
-                        VerticalAlignment="Center"
-                        Text="{Binding NextCheckIn}" />
-                </StackPanel>
-            </StatusBarItem>
-            <StatusBarItem>
-                <Button
-                    Margin="0,-3"
-                    Command="{s:Action ForceCheck}"
-                    Content="Check now" />
-            </StatusBarItem>
-        </StatusBar>
+        <Border
+            Grid.Row="2"
+            Padding="2"
+            extensions:LayerExtension.IncreaseLayer="True"
+            extensions:LayerExtension.Layer="1"
+            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
+            <TextBlock
+                Margin="4,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="{Binding NextCheckIn}"
+                ToolTip="next Check for new episodes/anime"
+                ToolTipService.Placement="Top">
+                <TextBlock.ContextMenu>
+                    <ContextMenu Placement="Top">
+                        <MenuItem
+                            s:View.ActionTarget="{Binding AnimeBytesService}"
+                            Command="{s:Action StartTracker,
+                                               ActionNotFound=Disable}"
+                            Header="Start"
+                            Icon="{iconPacks:FontAwesome PlaySolid}"
+                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+                        <MenuItem
+                            s:View.ActionTarget="{Binding AnimeBytesService}"
+                            Command="{s:Action StopTracker,
+                                               ActionNotFound=Disable}"
+                            Header="Pause"
+                            Icon="{iconPacks:FontAwesome PauseSolid}"
+                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                        <MenuItem
+                            Command="{s:Action ForceCheck}"
+                            Header="Check now"
+                            Icon="{iconPacks:FontAwesome RedoSolid}" />
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+        </Border>
     </Grid>
 </UserControl>

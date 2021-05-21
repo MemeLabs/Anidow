@@ -57,7 +57,7 @@ namespace Anidow.Pages
 
         public AnimeBytesService AnimeBytesService { get; set; }
         public bool CanForceCheck { get; set; } = true;
-        public string NextCheckIn { get; set; }
+        public string NextCheckIn { get; private set; } = "00:00";
         public Timer NextCheckTimer { get; set; }
         public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
 
@@ -135,7 +135,7 @@ namespace Anidow.Pages
 
             var lastCheck = AnimeBytesService.LastCheck;
             var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.Settings.RefreshTime);
-            NextCheckIn = $"next check in {nextCheck - DateTime.Now:mm\\:ss} min";
+            NextCheckIn = $"{nextCheck - DateTime.Now:mm\\:ss}";
         }
 
         public async Task ForceCheck()

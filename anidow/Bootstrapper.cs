@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 using AdonisUI.Controls;
@@ -49,6 +52,7 @@ namespace Anidow
         // Configure the IoC container in here
         protected override void ConfigureIoC(IStyletIoCBuilder builder)
         {
+            builder.Bind<Assembly>().ToInstance(Assembly.GetExecutingAssembly());
             var tracker = InitTracker();
             builder.Bind<Tracker>().ToInstance(tracker);
 
@@ -166,7 +170,7 @@ namespace Anidow
                 Application.Current.MainWindow.Language =
                     XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             }
-            
+
 
             var selfContained = false;
 #if SELF_CONTAINED && RELEASE

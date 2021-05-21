@@ -28,6 +28,12 @@
 
 	<ItemGroup>
 		<None Remove="anidown_28v_icon.ico" />
+		<None Remove="licenses.json" />
+		<None Remove="Properties\licenses.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Properties\licenses.json" />
 	</ItemGroup>
 
 	<ItemGroup>

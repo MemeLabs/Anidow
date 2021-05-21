@@ -30,6 +30,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="1"
@@ -69,6 +70,13 @@
                 Content="{iconPacks:FontAwesome GithubBrands}"
                 Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
                 ToolTip="Open on Github" />
+            <Button
+                Grid.Column="4"
+                Command="{s:Action OpenAbout,
+                                   ActionNotFound=Disable}"
+                Content="{iconPacks:FontAwesome InfoSolid}"
+                Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
+                ToolTip="About" />
         </Grid>
     </controls:AdonisWindow.TitleBarContent>
     <Grid>

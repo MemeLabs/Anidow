@@ -16,6 +16,7 @@ namespace Anidow.Pages
         private readonly AnimeBytesService _animeBytesService;
         private readonly ILogger _logger;
         private readonly LogViewModel _logViewModel;
+        private readonly AboutViewModel _aboutViewModel;
         private readonly SettingsService _settingsService;
         private readonly IWindowManager _windowManager;
 
@@ -29,6 +30,7 @@ namespace Anidow.Pages
             AnimeBytesService animeBytesService,
             LogViewModel logViewModel,
             HistoryViewModel historyViewModel,
+            AboutViewModel aboutViewModel,
             IWindowManager windowManager,
             ILogger logger)
         {
@@ -41,6 +43,7 @@ namespace Anidow.Pages
             _settingsService = settingsService;
             _animeBytesService = animeBytesService;
             _logViewModel = logViewModel;
+            _aboutViewModel = aboutViewModel;
             _windowManager = windowManager;
             _logger = logger;
             ActiveItem = mainViewModel;
@@ -97,6 +100,11 @@ namespace Anidow.Pages
         public void OpenGithub()
         {
             LinkUtil.Open("https://github.com/MemeLabs/Anidow");
+        }
+
+        public void OpenAbout()
+        {
+            _windowManager.ShowDialog(_aboutViewModel);
         }
     }
 }
