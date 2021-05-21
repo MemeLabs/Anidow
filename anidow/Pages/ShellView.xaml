@@ -5,6 +5,7 @@
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:Anidow.Pages"
@@ -36,8 +37,8 @@
                 Grid.Column="1"
                 Command="{s:Action TestCrash}"
                 FontFamily="Segoe UI"
-                Visibility="{Binding CanTestCrash, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
-                FontSize="14">
+                FontSize="14"
+                Visibility="{Binding CanTestCrash, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
                 <Button.Style>
                     <Style BasedOn="{StaticResource {x:Static adonisUi:Styles.WindowButton}}" TargetType="Button">
                         <Style.Triggers>
@@ -70,16 +71,27 @@
                 Content="{iconPacks:FontAwesome GithubBrands}"
                 Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
                 ToolTip="Open on Github" />
-            <Button
-                Grid.Column="4"
-                Command="{s:Action OpenAbout,
-                                   ActionNotFound=Disable}"
-                Content="{iconPacks:FontAwesome InfoSolid}"
-                Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
-                ToolTip="About" />
         </Grid>
     </controls:AdonisWindow.TitleBarContent>
     <Grid>
+
+        <Button
+            Height="27"
+            Margin="0,2,3,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            extensions:CornerRadiusExtension.CornerRadius="4"
+            extensions:CursorSpotlightExtension.BackgroundBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+            Background="Transparent"
+            BorderThickness="0"
+            Command="{s:Action OpenAbout,
+                               ActionNotFound=Disable}"
+            Content="{iconPacks:FontAwesome InfoSolid,
+                                            Height=15,
+                                            Width=15}"
+            Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
+            ToolTip="About"
+            ToolTipService.Placement="Left" />
         <TabControl
             DisplayMemberPath="DisplayName"
             ItemsSource="{Binding Items}"
