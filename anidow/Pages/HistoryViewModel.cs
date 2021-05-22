@@ -141,31 +141,34 @@ namespace Anidow.Pages
         }
 
 
-        public async Task Watch(Episode anime)
+        public async Task Watch(Episode episode)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(anime.File))
+                if (string.IsNullOrWhiteSpace(episode.File))
                 {
-                    _windowManager.ShowWindow(new FolderFilesViewModel(ref anime, _eventAggregator, _logger));
+                    _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _eventAggregator, _logger));
                     return;
                 }
 
-                ProcessUtil.OpenFile(anime.File);
+                ProcessUtil.OpenFile(episode.File);
 
-                anime.Watched = true;
-                anime.WatchedDate = DateTime.UtcNow;
-                await anime.UpdateInDatabase();
+                episode.Watched = true;
+                episode.WatchedDate = DateTime.UtcNow;
+                await episode.UpdateInDatabase();
             }
             catch (Exception e)
             {
-                _logger.Error(e, "failed opening file to watch");
+                _logger.Error(e, "failed opening file");
+                MessageBox.Show($"Failed opening file\nerror: {e.Message}",
+                    icon: MessageBoxImage.Error);
+                OpenFolder(episode);
             }
         }
 
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode) ActiveItem;
+            episode ??= (Episode)ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -191,7 +194,7 @@ namespace Anidow.Pages
 
         public async Task DeleteWithFile(Episode episode)
         {
-            episode ??= (Episode) ActiveItem;
+            episode ??= (Episode)ActiveItem;
             var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{episode.Name}", "Delete",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Cancel)
@@ -228,7 +231,7 @@ namespace Anidow.Pages
 
         public async Task UnWatchItem(Episode episode)
         {
-            episode ??= (Episode) ActiveItem;
+            episode ??= (Episode)ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -250,9 +253,9 @@ namespace Anidow.Pages
             Items.Remove(episode);
         }
 
-        public void OpenExternalLink(Episode anime)
+        public void OpenExternalLink(Episode episode)
         {
-            LinkUtil.Open(anime.Link);
+            LinkUtil.Open(episode.Link);
         }
 
         public void OpenFolder(Episode anime)

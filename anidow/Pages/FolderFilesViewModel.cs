@@ -9,6 +9,7 @@ using Anidow.Database.Models;
 using Anidow.Extensions;
 using Anidow.Model;
 using Anidow.Utils;
+using Microsoft.VisualBasic;
 using Serilog;
 using Stylet;
 
@@ -20,7 +21,7 @@ namespace Anidow.Pages
         private readonly Episode _episode;
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
-        private readonly int _maxFilesInView = 25;
+        private readonly int _maxFilesInView = 100;
         private readonly string _name;
 
         private List<FolderFilesModel> _files;
@@ -46,18 +47,22 @@ namespace Anidow.Pages
             FileInfos = new BindableCollection<FolderFilesModel>();
             DisplayName = $"Files - {anime.Name}";
         }
-
-        public string Folder { get; set; }
-
         public BindableCollection<FolderFilesModel> FileInfos { get; }
 
-        public bool CanGetFilesFromFolder { get; set; } = true;
+        public string Folder { get; set; }
+        public bool HasParentFolder { get; set; }
+        private string ParentFolder { get; set; }
 
         public bool CanLoadMore { get; set; }
 
         protected override void OnActivate()
         {
-            _ = GetFilesFromFolder();
+            _ = OpenFolder(Folder);
+        }
+
+        public async Task GoUpFolder()
+        {
+            await OpenFolder(ParentFolder);
         }
 
         public async Task GetFilesFromFolder(bool clear = false)
@@ -67,10 +72,10 @@ namespace Anidow.Pages
                 return;
             }
 
-            CanGetFilesFromFolder = false;
-            var files = await Task.Run(() => Directory.GetFiles(Folder)
-                .Select(f => new FileInfo(f))
-                .OrderByDescending(f => f.CreationTime));
+            var files = await Task.Run(() => Directory.GetFileSystemEntries(Folder)
+                                                      .Select(f => new FileInfo(f))
+                                                      .OrderByDescending(f => f.Attributes.HasFlag(FileAttributes.Directory))
+                                                      .ThenByDescending(f => f.LastWriteTime));
 
             _files = new List<FolderFilesModel>();
             foreach (var file in files)
@@ -79,8 +84,8 @@ namespace Anidow.Pages
                 if (_episode != null)
                 {
                     var nameSplit = file.Name
-                        .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                        .Select(f => f.Trim());
+                                        .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(f => f.Trim());
                     if (!string.IsNullOrEmpty(_episode.EpisodeNum) && nameSplit.Contains(_episode.EpisodeNum))
                     {
                         item.Highlight = true;
@@ -102,7 +107,6 @@ namespace Anidow.Pages
                 FileInfos[3].Highlight = true;
             }
 #endif
-            CanGetFilesFromFolder = true;
         }
 
         public async Task LoadMore()
@@ -116,7 +120,7 @@ namespace Anidow.Pages
         {
             if (_episode != null)
             {
-                _episode.File = fileInfo.FullName;
+                if (string.IsNullOrWhiteSpace(_episode.File)) _episode.File = fileInfo.FullName;
                 _episode.Watched = true;
                 _episode.WatchedDate = DateTime.UtcNow;
                 try
@@ -137,12 +141,32 @@ namespace Anidow.Pages
             catch (Exception e)
             {
                 _logger.Error(e, "failed opening file");
+                MessageBox.Show($"Failed opening file\nerror: {e.Message}",
+                    icon: MessageBoxImage.Error);
+                return;
             }
-            finally
-            {
-                Close();
-            }
+
+            Close();
         }
+
+        public bool CanOpenFolder { get; set; }
+        public async Task OpenFolder(string path)
+        {
+            CanOpenFolder = false;
+            try
+            {
+                Folder = path;
+                ParentFolder = Directory.GetParent(Folder)?.FullName;
+                HasParentFolder = !string.IsNullOrWhiteSpace(ParentFolder);
+                await GetFilesFromFolder(true);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "error opening folder");
+            }
+            CanOpenFolder = true;
+        }
+
 
         public void Close()
         {

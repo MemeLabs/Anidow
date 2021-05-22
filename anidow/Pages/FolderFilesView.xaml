@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:io="clr-namespace:System.IO;assembly=System.IO.FileSystem"
@@ -27,12 +28,10 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.Resources>
-        </Grid.Resources>
-
         <GroupBox>
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -42,26 +41,32 @@
                                        ActionNotFound=Disable}"
                     Content="{iconPacks:FontAwesome FolderOpenSolid}"
                     ToolTip="Open folder in Explorer" />
-                <TextBox
+                <Button
                     Grid.Column="1"
+                    Margin="8,0,0,0"
+                    Command="{s:Action GoUpFolder,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome ArrowUpSolid}"
+                    IsEnabled="{Binding HasParentFolder, Mode=OneWay}"
+                    ToolTip="Go Up a Folder" />
+                <TextBox
+                    Grid.Column="2"
                     Margin="8,0"
                     PreviewKeyDown="{s:Action OnPreviewKeyDown}"
                     Text="{Binding Folder, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
-                    Grid.Column="2"
-                    Command="{s:Action GetFilesFromFolder,
+                    Grid.Column="3"
+                    Command="{s:Action OpenFolder,
                                        ActionNotFound=Disable}"
-                    Content="Go">
-                    <Button.CommandParameter>
-                        <system:Boolean>true</system:Boolean>
-                    </Button.CommandParameter>
-                </Button>
+                    CommandParameter="{Binding Folder}"
+                    Content="Go" />
             </Grid>
 
         </GroupBox>
 
         <ListView
             Grid.Row="1"
+            extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemContainerStyle="{StaticResource ListViewItemFolderView}"
             ItemsSource="{Binding FileInfos}"
@@ -102,9 +107,9 @@
                 </GroupStyle>
             </ListView.GroupStyle>-->
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
+                        extensions:GridViewSortExtension.PropertyName="File.Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
@@ -126,23 +131,53 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Width="120"
+                        extensions:GridViewSortExtension.PropertyName="File.LastWriteTime"
                         listViewLayout:FixedColumn.Width="120"
-                        DisplayMemberBinding="{Binding File.CreationTime, Converter={x:Static converters:DateTimeToStringConverter.Instance}}"
-                        Header="Created"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
+                        Header="Modified"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="models:FolderFilesModel">
+                                <TextBlock
+                                    Text="{Binding File.LastWriteTime, Converter={x:Static converters:DateTimeToStringConverter.Instance}}"
+                                    ToolTip="{Binding ModifiedLocalString}"
+                                    ToolTipService.Placement="Bottom" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
+                        Width="120"
+                        extensions:GridViewSortExtension.PropertyName="File.Length"
+                        listViewLayout:FixedColumn.Width="120"
+                        Header="Size"
+                        DisplayMemberBinding="{Binding SizeString}"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                    </GridViewColumn>
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                         <GridViewColumn.CellTemplate>
-                            <DataTemplate DataType="io:FileInfo">
-                                <Button
-                                    Width="66"
-                                    VerticalAlignment="Center"
-                                    Command="{s:Action Watch}"
-                                    CommandParameter="{Binding File}"
-                                    Content="Open"
-                                    Style="{StaticResource ColumnButton}" />
+                            <DataTemplate DataType="models:FolderFilesModel">
+                                <Grid>
+                                    <Button
+                                        Width="66"
+                                        VerticalAlignment="Center"
+                                        Command="{s:Action Watch}"
+                                        CommandParameter="{Binding File}"
+                                        Content="Watch"
+                                        Style="{StaticResource ColumnButton}"
+                                        ToolTip="Watch"
+                                        Visibility="{Binding CanOpenFile, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                                    <Button
+                                        Width="66"
+                                        VerticalAlignment="Center"
+                                        Command="{s:Action OpenFolder}"
+                                        CommandParameter="{Binding File.FullName}"
+                                        Content="{iconPacks:FontAwesome FolderOpenSolid}"
+                                        Style="{StaticResource ColumnButton}"
+                                        ToolTip="Open Folder"
+                                        Visibility="{Binding IsDirectory, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                                </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -163,7 +198,7 @@
             Grid.RowSpan="2"
             Background="Black"
             Opacity=".3"
-            Visibility="{Binding CanGetFilesFromFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+            Visibility="{Binding CanOpenFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
         <ContentControl
             Grid.Row="1"
             Grid.RowSpan="2"
@@ -174,6 +209,6 @@
             ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingCircle}}"
             Focusable="False"
             Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
-            Visibility="{Binding CanGetFilesFromFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+            Visibility="{Binding CanOpenFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
     </Grid>
 </controls:AdonisWindow>

@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet">
 
 
@@ -30,6 +31,11 @@
                         CommandParameter="{Binding}"
                         Header="{Binding WatchedHeaderString, Mode=OneWay}"
                         Icon="{iconPacks:FontAwesome EyeSolid}" />
+                    <MenuItem
+                        Command="{s:Action OpenFolder}"
+                        CommandParameter="{Binding}"
+                        Header="Open Folder"
+                        Icon="{iconPacks:FontAwesome FolderOpenSolid}" />
                 </ContextMenu>
             </Setter.Value>
         </Setter>
@@ -53,8 +59,7 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Highlight}" Value="true">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -70,5 +75,37 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+
+    <Style
+        x:Key="ColumnButton"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="-12,-4" />
+        <Setter Property="Height" Value="27" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <DataTemplate x:Key="WatchOpen" DataType="models:Episode">
+        <Grid>
+            <Button
+                Width="66"
+                Command="{s:Action Watch,
+                                   ActionNotFound=Disable}"
+                CommandParameter="{Binding}"
+                Content="Watch"
+                Style="{StaticResource ColumnButton}"
+                Visibility="{Binding HasFile, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+            <Button
+                Width="66"
+                Command="{s:Action OpenFolder,
+                                   ActionNotFound=Disable}"
+                CommandParameter="{Binding}"
+                Content="{iconPacks:FontAwesome FolderOpenSolid}"
+                Style="{StaticResource ColumnButton}"
+                ToolTip="Open Folder"
+                Visibility="{Binding HasFile, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+        </Grid>
+    </DataTemplate>
 
 </ResourceDictionary>

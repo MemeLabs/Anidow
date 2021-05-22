@@ -49,6 +49,7 @@
 	<ItemGroup>
 		<PackageReference Include="AdonisUI" Version="1.17.0" />
 		<PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.0" />
+		<PackageReference Include="BencodeNET" Version="4.0.0" />
 		<PackageReference Include="FluentValidation" Version="10.1.0" />
 		<PackageReference Include="Fody" Version="6.5.1">
 			<PrivateAssets>all</PrivateAssets>

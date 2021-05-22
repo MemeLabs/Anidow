@@ -16,6 +16,7 @@ using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Model;
 using Anidow.Utils;
+using BencodeNET.Torrents;
 using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -62,7 +63,7 @@ namespace Anidow.Services
 
         public void InitTracker()
         {
-            _tracker = new Timer {Interval = 1000 * 60 * _settingsService.Settings.RefreshTime};
+            _tracker = new Timer { Interval = 1000 * 60 * _settingsService.Settings.RefreshTime };
             _tracker.Elapsed += TrackerOnElapsed;
             _initialRefreshTime = _settingsService.Settings.RefreshTime;
             _settingsService.SettingsSavedEvent += OnSettingsSavedEvent;
@@ -169,7 +170,7 @@ namespace Anidow.Services
                     }
 
                     item.Folder = a.Folder;
-                    var success = await _torrentService.Download(item);
+                    var (success, torrent) = await _torrentService.Download(item);
                     if (success)
                     {
                         var newEpisode = new Episode
@@ -183,6 +184,8 @@ namespace Anidow.Services
                             DownloadLink = item.DownloadLink,
                             Link = item.GroupUrl,
                             Site = Site.AnimeBytes,
+                            File = torrent?.FileMode == TorrentFileMode.Single ?
+                                Path.Join(a.Folder, torrent.File.FileName) : null,
                         };
 
                         await db.AddAsync(newEpisode);
@@ -285,7 +288,7 @@ namespace Anidow.Services
                         a.Torrents = a.Torrents.Where(i => i.Seeders >= minSeeders).ToArray();
                     }
 
-                    var je = (JsonElement) a.Synonymns;
+                    var je = (JsonElement)a.Synonymns;
                     var json = je.GetRawText();
 
                     a.SynonymnsList = json switch
@@ -297,7 +300,7 @@ namespace Anidow.Services
                         _ => new List<string>(),
                     };
 
-                    je = (JsonElement) a.Links;
+                    je = (JsonElement)a.Links;
                     json = je.GetRawText();
 
                     a.LinksDict = json switch

@@ -30,7 +30,6 @@ using Stylet;
 using StyletIoC;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 #if RELEASE
-using System.Reflection;
 using System.Windows.Threading;
 using Onova;
 using Onova.Models;

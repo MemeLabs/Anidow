@@ -31,6 +31,7 @@ namespace Anidow.Database.Models
         [NotMapped] public string ReleasedString => Released.Humanize();
         [NotMapped] public string WatchedString => WatchedDate == default ? string.Empty : WatchedDate.Humanize();
         [NotMapped] public string EpisodeNum => Name.GetEpisode();
+        [NotMapped] public bool HasFile => !string.IsNullOrWhiteSpace(File);
 
         public string AnimeId { get; set; }
         public string Folder { get; set; }

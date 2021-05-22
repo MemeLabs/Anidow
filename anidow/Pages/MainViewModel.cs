@@ -16,6 +16,7 @@ using Anidow.Model;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
 using Anidow.Utils;
+using BencodeNET.Torrents;
 using Hardcodet.Wpf.TaskbarNotification;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,7 @@ namespace Anidow.Pages
 
         public async void Handle(DownloadEvent message)
         {
+            var torrent = message.Torrent;
             var item = message.Item switch
             {
                 NyaaTorrentItem nyaa => new Episode
@@ -70,7 +72,8 @@ namespace Anidow.Pages
                     Name = nyaa.Name,
                     Site = Site.Nyaa,
                     Released = nyaa.Released,
-                    File = Path.Join(nyaa.Folder, nyaa.Name),
+                    File = torrent?.FileMode == TorrentFileMode.Single ?
+                        Path.Join(nyaa.Folder, torrent.File.FileName) : null,
                     Folder = nyaa.Folder,
                     Link = nyaa.Link,
                     DownloadLink = nyaa.DownloadLink,
@@ -84,6 +87,8 @@ namespace Anidow.Pages
                     Link = ab.GroupUrl,
                     DownloadLink = ab.DownloadLink,
                     Cover = ab.Cover,
+                    File = torrent?.FileMode == TorrentFileMode.Single ?
+                        Path.Join(ab.Folder, torrent.File.FileName) : null,
                 },
                 AnimeBytesScrapeAnime ab => new Episode
                 {
@@ -94,6 +99,8 @@ namespace Anidow.Pages
                     Link = $"https://animebytes.tv/torrent/{ab.SelectedTorrent.ID}/group",
                     DownloadLink = ab.SelectedTorrent.DownloadLink,
                     Cover = ab.Image,
+                    File = torrent?.FileMode == TorrentFileMode.Single ?
+                        Path.Join(ab.SelectedTorrent.Folder, torrent.File.FileName) : null,
                 },
                 _ => throw new NotSupportedException(nameof(message.Item)),
             };
@@ -231,12 +238,21 @@ namespace Anidow.Pages
             catch (Exception e)
             {
                 _logger.Error(e, "failed opening file to watch");
+                MessageBox.Show($"Failed opening file\nerror: {e.Message}",
+                    icon: MessageBoxImage.Error);
+                OpenFolder(episode);
             }
         }
 
         public async Task Download(Episode episode)
         {
-            await _torrentService.Download(episode);
+            var (_, torrent) = await _torrentService.Download(episode);
+            if (torrent is not null && string.IsNullOrWhiteSpace(episode.File))
+            {
+                episode.File ??= torrent.FileMode == TorrentFileMode.Single
+                    ? Path.Join(episode.Folder, torrent.File.FileName)
+                    : null;
+            }
         }
 
         public async Task DeleteWithFile()

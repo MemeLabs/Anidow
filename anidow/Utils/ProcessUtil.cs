@@ -17,10 +17,15 @@ namespace Anidow.Utils
 
         public static void OpenFile(string path)
         {
+            if (!File.Exists(path))
+            {
+                throw new ArgumentException($@"file doesn't exist: {path}", nameof(path));
+            }
+
             var file = new FileInfo(path);
             if (!MediaExtensions.Contains(file.Extension, StringComparer.OrdinalIgnoreCase))
             {
-                throw new ArgumentException("File extension not allowed");
+                throw new ArgumentException($@"File extension not allowed: {file.Extension}");
             }
 
             new Process
@@ -30,6 +35,26 @@ namespace Anidow.Utils
                     UseShellExecute = true,
                 },
             }.Start();
+        }
+        public static bool IsAllowedFile(string path)
+        {
+            if (!File.Exists(path))
+            {
+               return false;
+            }
+
+            var file = new FileInfo(path);
+            return IsAllowedFile(file);
+        }
+
+        public static bool IsAllowedFile(FileInfo file)
+        {
+            if (!MediaExtensions.Contains(file.Extension, StringComparer.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public static void OpenFolder(string path)

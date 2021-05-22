@@ -131,19 +131,8 @@
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate DataType="models:Episode">
-                                <Button
-                                    Width="66"
-                                    Command="{s:Action Watch,
-                                                       ActionNotFound=Disable}"
-                                    CommandParameter="{Binding}"
-                                    Content="Watch"
-                                    Style="{StaticResource ColumnButton}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}"
+                        CellTemplate="{DynamicResource WatchOpen}"/>
                 </GridView>
             </ListView.View>
         </ListView>

@@ -220,18 +220,8 @@
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate DataType="models:Episode">
-                                <Button
-                                    Width="66"
-                                    Command="{s:Action Watch}"
-                                    CommandParameter="{Binding}"
-                                    Content="Watch"
-                                    Style="{StaticResource ColumnButton}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        CellTemplate="{DynamicResource WatchOpen}"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
                 </GridView>
             </ListView.View>
         </ListView>
@@ -348,8 +338,7 @@
                         Content="Delete"
                         Foreground="White">
                         <controls:SplitButton.SplitMenu>
-                            <ContextMenu
-                                MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                            <ContextMenu MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
                                 <MenuItem
                                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                                     extensions:RippleExtension.BackgroundBrush="#EF5350"

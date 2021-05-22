@@ -134,7 +134,7 @@ namespace Anidow.Pages
         public async Task Download(AnimeBytesTorrentItem item)
         {
             _logger.Information($"downloading {item.Name}");
-            var success = await _torrentService.Download(item);
+            var (success, torrent) = await _torrentService.Download(item);
             if (!success)
             {
                 return;
@@ -143,6 +143,7 @@ namespace Anidow.Pages
             _eventAggregator.PublishOnUIThread(new DownloadEvent
             {
                 Item = item,
+                Torrent = torrent,
             });
         }
 

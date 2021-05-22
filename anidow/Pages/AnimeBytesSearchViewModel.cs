@@ -84,14 +84,14 @@ namespace Anidow.Pages
 
         public async Task Download(AnimeBytesScrapeAnime anime)
         {
-            var torrent = anime?.SelectedTorrent;
+            var selectedTorrent = anime?.SelectedTorrent;
 
-            if (string.IsNullOrWhiteSpace(torrent?.Folder))
+            if (string.IsNullOrWhiteSpace(selectedTorrent?.Folder))
             {
                 return;
             }
 
-            var success = await _torrentService.Download(torrent);
+            var (success, torrent) = await _torrentService.Download(selectedTorrent);
             if (!success)
             {
                 return;
@@ -100,6 +100,7 @@ namespace Anidow.Pages
             _eventAggregator.PublishOnUIThread(new DownloadEvent
             {
                 Item = anime,
+                Torrent = torrent,
             });
         }
 
