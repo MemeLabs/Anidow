@@ -35,12 +35,12 @@ namespace Anidow.Pages
         public TrackedViewModel(SettingsService settingsService, HttpClient httpClient, TaskbarIcon taskbarIcon,
             IEventAggregator eventAggregator, IWindowManager windowManager, ILogger logger)
         {
-            _settingsService = settingsService;
-            _httpClient = httpClient;
-            _taskbarIcon = taskbarIcon;
-            _eventAggregator = eventAggregator;
-            _windowManager = windowManager;
-            _logger = logger;
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             DisplayName = "Tracked";
         }
 

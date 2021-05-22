@@ -27,22 +27,22 @@ namespace Anidow.Pages
 
         public FolderFilesViewModel(ref Episode episode, IEventAggregator eventAggregator, ILogger logger)
         {
-            _episode = episode;
+            _episode = episode ?? throw new ArgumentNullException(nameof(episode));
             _name = episode.Name;
             Folder = episode.Folder;
-            _eventAggregator = eventAggregator;
-            _logger = logger;
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             FileInfos = new BindableCollection<FolderFilesModel>();
             DisplayName = $"Files - {episode.Name}";
         }
 
         public FolderFilesViewModel(ref Anime anime, IEventAggregator eventAggregator, ILogger logger)
         {
-            _anime = anime;
+            _anime = anime ?? throw new ArgumentNullException(nameof(anime));
             _name = anime.Name;
             Folder = anime.Folder;
-            _eventAggregator = eventAggregator;
-            _logger = logger;
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             FileInfos = new BindableCollection<FolderFilesModel>();
             DisplayName = $"Files - {anime.Name}";
         }
@@ -75,7 +75,7 @@ namespace Anidow.Pages
             _files = new List<FolderFilesModel>();
             foreach (var file in files)
             {
-                var item = new FolderFilesModel {File = file};
+                var item = new FolderFilesModel { File = file };
                 if (_episode != null)
                 {
                     var nameSplit = file.Name

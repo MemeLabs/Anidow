@@ -7,7 +7,7 @@ namespace Anidow.Utils
 {
     public static class ImageUtil
     {
-        public static Bitmap UriToBitmap(string link)
+        private static Bitmap UriToBitmap(string link)
         {
             var bitmapImage = new BitmapImage(new Uri(link));
 

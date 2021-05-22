@@ -14,6 +14,7 @@ namespace Anidow.Pages
     {
         public AboutViewModel(Assembly assembly)
         {
+            DisplayName = "About";
             var licenses = assembly.GetManifestResourceNames().Single(p => p.EndsWith("licenses.json"));
             using var stream = assembly.GetManifestResourceStream(licenses);
             using var reader = new StreamReader(stream!);
@@ -32,5 +33,6 @@ namespace Anidow.Pages
         {
             LinkUtil.Open(ProjectUrl);
         }
+
     }
 }

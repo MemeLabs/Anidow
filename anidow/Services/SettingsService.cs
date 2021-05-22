@@ -17,8 +17,8 @@ namespace Anidow.Services
 
         public SettingsService(StoreService storeService, ILogger logger)
         {
-            _storeService = storeService;
-            _logger = logger;
+            _storeService = storeService ?? throw new ArgumentNullException(nameof(storeService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public bool CanSave { get; set; }

@@ -17,8 +17,8 @@ namespace Anidow.Services
 
         public TorrentService(SettingsModel settings, TorrentClientFactory clientFactory)
         {
-            _settings = settings;
-            _clientFactory = clientFactory;
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _clientFactory = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
         }
 
         public async Task<bool> Download(ITorrentItem item)

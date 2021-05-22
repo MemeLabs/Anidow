@@ -43,14 +43,14 @@ namespace Anidow.Pages
             TorrentService torrentService, SettingsService settingsService,
             TaskbarIcon taskbarIcon, HttpClient httpClient)
         {
-            _eventAggregator = eventAggregator;
-            _logger = logger;
-            _windowManager = windowManager;
-            AnimeBytesService = animeBytesService;
-            _torrentService = torrentService;
-            _settingsService = settingsService;
-            _taskbarIcon = taskbarIcon;
-            _httpClient = httpClient;
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+            AnimeBytesService = animeBytesService ?? throw new ArgumentNullException(nameof(animeBytesService));
+            _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             DisplayName = "Home";
             eventAggregator.Subscribe(this);
         }
@@ -278,7 +278,7 @@ namespace Anidow.Pages
 
         protected override void OnInitialActivate()
         {
-            _getTorrentsStatusTimer = new Timer {Interval = 5000};
+            _getTorrentsStatusTimer = new Timer { Interval = 5000 };
             _getTorrentsStatusTimer.Elapsed += async (_, _) => { await UpdateTorrents(); };
             _getTorrentsStatusTimer.Start();
 
@@ -293,8 +293,22 @@ namespace Anidow.Pages
         private async Task DownloadMissingCovers()
         {
             await using var db = new TrackContext();
-            var animes = await db.Anime.ToListAsync();
+
             var rows = 0;
+            // remove cover if files don't exist
+            foreach (var cover in db.Covers)
+            {
+                if (File.Exists(cover.FilePath))
+                {
+                    continue;
+                }
+
+                db.Remove(cover);
+                rows += await db.SaveChangesAsync();
+                _logger.Information("removed cover id: {0}, file: {1}", cover.Id, cover.FilePath);
+            }
+
+            var animes = await db.Anime.ToListAsync();
             foreach (var anime in animes)
             {
                 var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);

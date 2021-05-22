@@ -39,12 +39,12 @@ namespace Anidow.Services
             SettingsService settingsService, TorrentService torrentService, TaskbarIcon taskbarIcon)
             : base(logger, httpClient)
         {
-            _logger = logger;
-            _eventAggregator = eventAggregator;
-            _httpClient = httpClient;
-            _settingsService = settingsService;
-            _torrentService = torrentService;
-            _taskbarIcon = taskbarIcon;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
+            _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
         }
 
         private SettingsModel Settings => _settingsService.Settings;

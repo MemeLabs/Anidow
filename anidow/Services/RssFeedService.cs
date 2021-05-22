@@ -18,8 +18,8 @@ namespace Anidow.Services
 
         protected RssFeedService(ILogger logger, HttpClient httpClient)
         {
-            _logger = logger;
-            _httpClient = httpClient;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         protected async Task<List<T>> GetFeedItems<T>(string url, Func<SyndicationItem, T> func)

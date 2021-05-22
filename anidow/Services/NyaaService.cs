@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.ServiceModel.Syndication;
@@ -18,7 +19,7 @@ namespace Anidow.Services
         public NyaaService(ILogger logger, HttpClient httpClient, SettingsService settingsService)
             : base(logger, httpClient)
         {
-            _settingsService = settingsService;
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
         }
 
         private SettingsModel Settings => _settingsService.Settings;

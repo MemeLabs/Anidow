@@ -39,7 +39,7 @@ namespace Anidow.Utils
         {
             if (!string.IsNullOrEmpty(text) && text.Length > length)
             {
-                text = text.Substring(0, length - 4) + " ...";
+                text = text[..(length - 4)] + " ...";
             }
 
             return text;
@@ -67,7 +67,7 @@ namespace Anidow.Utils
                 case HtmlNodeType.Text:
                     // script and style must not be output
                     var parentName = node.ParentNode.Name;
-                    if (parentName == "script" || parentName == "style")
+                    if (parentName is "script" or "style")
                     {
                         break;
                     }

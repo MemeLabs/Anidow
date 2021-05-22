@@ -1,4 +1,5 @@
-﻿using Stylet;
+﻿using System;
+using Stylet;
 
 namespace Anidow.Pages
 {
@@ -8,8 +9,8 @@ namespace Anidow.Pages
         public AnimeBytesViewModel(AnimeBytesRssViewModel rssViewModel, AnimeBytesSearchViewModel searchViewModel)
         {
             DisplayName = "AnimeBytes";
-            Items.Add(searchViewModel);
-            Items.Add(rssViewModel);
+            Items.Add(searchViewModel ?? throw new ArgumentNullException(nameof(searchViewModel)));
+            Items.Add(rssViewModel ?? throw new ArgumentNullException(nameof(rssViewModel)));
         }
     }
 }

@@ -31,11 +31,11 @@ namespace Anidow.Pages
         public AnimeBytesSearchViewModel(ILogger logger, IEventAggregator eventAggregator,
             AnimeBytesService animeBytesService, TorrentService torrentService, SettingsService settingsService)
         {
-            _logger = logger;
-            _eventAggregator = eventAggregator;
-            _animeBytesService = animeBytesService;
-            _torrentService = torrentService;
-            _settingsService = settingsService;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _animeBytesService = animeBytesService ?? throw new ArgumentNullException(nameof(animeBytesService));
+            _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             DisplayName = "Search";
         }
 

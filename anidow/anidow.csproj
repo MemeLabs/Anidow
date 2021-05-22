@@ -18,8 +18,10 @@
 		<Authors>Tensei C.</Authors>
 		<Company>MemeLabs</Company>
 		<PackageProjectUrl>https://github.com/MemeLabs/Anidow</PackageProjectUrl>
-		<Copyright>MemeLabs 2021 ©</Copyright>
+		<Copyright>© 2020-2021 MemeLabs</Copyright>
 		<RepositoryUrl>https://github.com/MemeLabs/Anidow</RepositoryUrl>
+		<PackageLicenseFile></PackageLicenseFile>
+		<PackageTags>anime, nyaa, manga, animebytes, wpf, automation, torrent</PackageTags>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(SelfContained)'=='true'">

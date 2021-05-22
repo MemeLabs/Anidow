@@ -38,12 +38,12 @@ namespace Anidow.Pages
         public AnimeBytesRssViewModel(ILogger logger, IEventAggregator eventAggregator, HttpClient httpClient,
             AnimeBytesService animeBytesService, TorrentService torrentService, SettingsService settingsService)
         {
-            _logger = logger;
-            _eventAggregator = eventAggregator;
-            _httpClient = httpClient;
-            _animeBytesService = animeBytesService;
-            _torrentService = torrentService;
-            _settingsService = settingsService;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _animeBytesService = animeBytesService ?? throw new ArgumentNullException(nameof(animeBytesService));
+            _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             DisplayName = "Rss feed";
         }
 
@@ -98,7 +98,7 @@ namespace Anidow.Pages
                 1 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.Airing),
                 _ => throw new NotImplementedException(),
             });
-            if (items is not {Count: > 0})
+            if (items is not { Count: > 0 })
             {
                 CanGetItems = true;
                 return;

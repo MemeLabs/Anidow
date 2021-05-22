@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Serilog;
@@ -13,8 +14,8 @@ namespace Anidow.Services
 
         public AnimeFolderService(ILogger logger, SettingsService settingsService)
         {
-            _logger = logger;
-            _settingsService = settingsService;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
         }
 
         public List<string> AllFiles() => _allFiles ?? new List<string>();

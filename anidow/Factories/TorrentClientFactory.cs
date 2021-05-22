@@ -1,4 +1,5 @@
-﻿using Anidow.Torrent_Clients;
+﻿using System;
+using Anidow.Torrent_Clients;
 
 namespace Anidow.Factories
 {
@@ -6,7 +7,7 @@ namespace Anidow.Factories
     {
         public TorrentClientFactory(QBitTorrent qBitTorrent)
         {
-            GetQBitTorrent = qBitTorrent;
+            GetQBitTorrent = qBitTorrent ?? throw new ArgumentNullException(nameof(qBitTorrent));
         }
 
         public QBitTorrent GetQBitTorrent { get; }

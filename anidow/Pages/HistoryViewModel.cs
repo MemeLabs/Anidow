@@ -44,10 +44,10 @@ namespace Anidow.Pages
         public HistoryViewModel(IEventAggregator eventAggregator, ILogger logger,
             IWindowManager windowManager, TorrentService torrentService)
         {
-            _eventAggregator = eventAggregator;
-            _logger = logger;
-            _windowManager = windowManager;
-            _torrentService = torrentService;
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+            _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
             DisplayName = "History";
         }
 

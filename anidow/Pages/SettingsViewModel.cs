@@ -23,8 +23,8 @@ namespace Anidow.Pages
 
         public SettingsViewModel(ILogger logger, SettingsService settingsService)
         {
-            SettingsService = settingsService;
-            _logger = logger;
+            SettingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             DisplayName = "Settings";
         }
 

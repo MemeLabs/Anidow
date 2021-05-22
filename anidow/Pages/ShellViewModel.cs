@@ -34,18 +34,18 @@ namespace Anidow.Pages
             IWindowManager windowManager,
             ILogger logger)
         {
-            Items.Add(mainViewModel);
-            Items.Add(trackedViewModel);
-            Items.Add(animeBytesViewModel);
-            Items.Add(nyaaViewModel);
-            Items.Add(historyViewModel);
-            Items.Add(settingsViewModel);
-            _settingsService = settingsService;
-            _animeBytesService = animeBytesService;
-            _logViewModel = logViewModel;
-            _aboutViewModel = aboutViewModel;
-            _windowManager = windowManager;
-            _logger = logger;
+            Items.Add(mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel)));
+            Items.Add(trackedViewModel ?? throw new ArgumentNullException(nameof(trackedViewModel)));
+            Items.Add(animeBytesViewModel ?? throw new ArgumentNullException(nameof(animeBytesViewModel)));
+            Items.Add(nyaaViewModel ?? throw new ArgumentNullException(nameof(nyaaViewModel)));
+            Items.Add(historyViewModel ?? throw new ArgumentNullException(nameof(historyViewModel)));
+            Items.Add(settingsViewModel ?? throw new ArgumentNullException(nameof(settingsService)));
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _animeBytesService = animeBytesService ?? throw new ArgumentNullException(nameof(animeBytesService));
+            _logViewModel = logViewModel ?? throw new ArgumentNullException(nameof(logViewModel));
+            _aboutViewModel = aboutViewModel ?? throw new ArgumentNullException(nameof(aboutViewModel));
+            _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             ActiveItem = mainViewModel;
         }
 

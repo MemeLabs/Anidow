@@ -8,7 +8,7 @@ namespace Anidow.Utils
 {
     public static class ProcessUtil
     {
-        private static readonly List<string> _mediaExtensions = new()
+        private static readonly List<string> MediaExtensions = new()
         {
             ".MPG", ".MP2", ".MPEG", ".MPE", ".MPV", ".WEBM", ".MKV", ".OGG",
             ".MP4", ".M4P", ".M4V",
@@ -18,7 +18,7 @@ namespace Anidow.Utils
         public static void OpenFile(string path)
         {
             var file = new FileInfo(path);
-            if (!_mediaExtensions.Contains(file.Extension, StringComparer.OrdinalIgnoreCase))
+            if (!MediaExtensions.Contains(file.Extension, StringComparer.OrdinalIgnoreCase))
             {
                 throw new ArgumentException("File extension not allowed");
             }

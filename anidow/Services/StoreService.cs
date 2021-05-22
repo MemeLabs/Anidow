@@ -14,7 +14,7 @@ namespace Anidow.Services
 
         public StoreService(ILogger logger)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task Save<T>(T value, string path)

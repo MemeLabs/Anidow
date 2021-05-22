@@ -30,10 +30,10 @@ namespace Anidow.Pages
         public NyaaViewModel(ILogger logger, IEventAggregator eventAggregator, NyaaService nyaaService,
             TorrentService torrentService)
         {
-            _logger = logger;
-            _eventAggregator = eventAggregator;
-            _nyaaService = nyaaService;
-            _torrentService = torrentService;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _nyaaService = nyaaService ?? throw new ArgumentNullException(nameof(nyaaService));
+            _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
             DisplayName = "Nyaa";
         }
 
