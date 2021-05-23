@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 using Anidow.Database.Models;
 using Anidow.Interfaces;
 using Anidow.Model;
@@ -99,16 +100,17 @@ namespace Anidow.Torrent_Clients
             _httpClient.DefaultRequestHeaders.Referrer = oldReferer;
         }
 
-        public async Task<List<T>> GetTorrentList<T>()
+        public async Task<T> GetTorrentList<T>()
         {
             await Login();
-            // /api/v2/torrents/info?filter=all&category=Anime&sort=added%20on
+            // /api/v2/torrents/info?category=sample%20category&sort=ratio
+            var encodedCategory = HttpUtility.UrlEncode(Settings.QBitTorrent.Category);
+            var url = $"{ApiUrl}/api/v2/torrents/info?filter=all&category={encodedCategory}&sort=added_on";
             try
             {
-                var response =
-                    await _httpClient.GetStringAsync(
-                        $"{ApiUrl}/api/v2/torrents/info?filter=all&category={Settings.QBitTorrent.Category.ToLower()}&sort=added%20on");
-                var list = JsonSerializer.Deserialize<List<T>>(response);
+                var response = 
+                    await _httpClient.GetStringAsync(url);
+                var list = JsonSerializer.Deserialize<T>(response);
                 return list;
             }
             catch (Exception e)

@@ -186,6 +186,7 @@ namespace Anidow.Services
                             Site = Site.AnimeBytes,
                             File = torrent?.FileMode == TorrentFileMode.Single ?
                                 Path.Join(a.Folder, torrent.File.FileName) : null,
+                            TorrentId = torrent?.GetInfoHash(),
                         };
 
                         await db.AddAsync(newEpisode);

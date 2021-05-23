@@ -77,6 +77,7 @@ namespace Anidow.Pages
                     Folder = nyaa.Folder,
                     Link = nyaa.Link,
                     DownloadLink = nyaa.DownloadLink,
+                    TorrentId = torrent?.GetInfoHash(),
                 },
                 AnimeBytesTorrentItem ab => new Episode
                 {
@@ -89,6 +90,7 @@ namespace Anidow.Pages
                     Cover = ab.Cover,
                     File = torrent?.FileMode == TorrentFileMode.Single ?
                         Path.Join(ab.Folder, torrent.File.FileName) : null,
+                    TorrentId = torrent?.GetInfoHash(),
                 },
                 AnimeBytesScrapeAnime ab => new Episode
                 {
@@ -101,6 +103,7 @@ namespace Anidow.Pages
                     Cover = ab.Image,
                     File = torrent?.FileMode == TorrentFileMode.Single ?
                         Path.Join(ab.SelectedTorrent.Folder, torrent.File.FileName) : null,
+                    TorrentId = torrent?.GetInfoHash(),
                 },
                 _ => throw new NotSupportedException(nameof(message.Item)),
             };
@@ -252,6 +255,8 @@ namespace Anidow.Pages
                 episode.File ??= torrent.FileMode == TorrentFileMode.Single
                     ? Path.Join(episode.Folder, torrent.File.FileName)
                     : null;
+                episode.TorrentId ??= torrent?.GetInfoHash();
+                await episode.UpdateInDatabase();
             }
         }
 
@@ -380,24 +385,28 @@ namespace Anidow.Pages
                 return;
             }
 
-            var list = await _torrentService.GetTorrents<JsonElement>();
+            var torrents = await _torrentService.GetTorrents<QBitTorrentEntry[]>();
+            if (torrents is null)
+            {
+                return;
+            }
 
             foreach (var anime in Items)
-                try
+            {
+                if (string.IsNullOrWhiteSpace(anime.TorrentId))
                 {
-                    var anime1 = anime;
-                    anime.TorrentId = _settingsService.Settings.TorrentClient switch
-                    {
-                        TorrentClient.QBitTorrent => list.Select(j => j.ToObject<QBitTorrentEntry>())
-                            .FirstOrDefault(i => i.name == anime1.Name)
-                            ?.hash,
-                        _ => anime.TorrentId,
-                    };
+                    continue;
                 }
-                catch (Exception)
+
+                var torrent = torrents.SingleOrDefault(t =>
+                    t.hash.Equals(anime.TorrentId, StringComparison.InvariantCultureIgnoreCase));
+                if (torrent is null)
                 {
-                    // hmmm
+                    continue;
                 }
+
+                anime.TorrentProgress = torrent.progress;
+            }
         }
 
         public async Task GetAiringEpisodesForToday()
@@ -436,7 +445,7 @@ namespace Anidow.Pages
             AnimesToday.Clear();
             if (animesToday.Any())
             {
-                AnimesToday.AddRange(animesToday);
+                AnimesToday.AddRange(animesToday.OrderByDescending(a => a.Date));
             }
 #if DEBUG
             AnimesToday.Add(new FutureEpisode
@@ -456,8 +465,8 @@ namespace Anidow.Pages
 
     public class FutureEpisode
     {
-        public string Name { get; set; }
-        public DateTime Date { get; set; }
+        public string Name { get; init; }
+        public DateTime Date { get; init; }
         public DateTime DateLocal => Date.ToLocalTime();
         public string DateString => Date.Humanize();
     }

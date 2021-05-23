@@ -32,6 +32,9 @@ namespace Anidow.Database.Models
         [NotMapped] public string WatchedString => WatchedDate == default ? string.Empty : WatchedDate.Humanize();
         [NotMapped] public string EpisodeNum => Name.GetEpisode();
         [NotMapped] public bool HasFile => !string.IsNullOrWhiteSpace(File);
+        [NotMapped] public float TorrentProgress { get; set; }
+        [NotMapped] public string TorrentProgressContent => $"{TorrentProgress / 1f * 100:0.#}%";
+        [NotMapped] public bool TorrentShowProgress => TorrentProgress is > 0f and < 1f;
 
         public string AnimeId { get; set; }
         public string Folder { get; set; }

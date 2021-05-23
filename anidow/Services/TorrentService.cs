@@ -72,7 +72,7 @@ namespace Anidow.Services
             };
         }
 
-        public async Task<List<T>> GetTorrents<T>()
+        public async Task<T> GetTorrents<T>()
         {
             return _settings.TorrentClient switch
             {
