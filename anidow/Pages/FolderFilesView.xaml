@@ -15,6 +15,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Model"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Width="800"
     Height="450"
@@ -148,10 +149,9 @@
                         Width="120"
                         extensions:GridViewSortExtension.PropertyName="File.Length"
                         listViewLayout:FixedColumn.Width="120"
-                        Header="Size"
                         DisplayMemberBinding="{Binding SizeString}"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
-                    </GridViewColumn>
+                        Header="Size"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"
@@ -193,22 +193,9 @@
             Visibility="{Binding CanLoadMore, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             load more...
         </Button>
-        <Grid
+        <shared:LoadingOverlay
             Grid.Row="1"
             Grid.RowSpan="2"
-            Background="Black"
-            Opacity=".3"
-            Visibility="{Binding CanOpenFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
-        <ContentControl
-            Grid.Row="1"
-            Grid.RowSpan="2"
-            Width="35"
-            Height="35"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingCircle}}"
-            Focusable="False"
-            Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
-            Visibility="{Binding CanOpenFolder, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+            DataContext="{Binding CanOpenFolder}" />
     </Grid>
 </controls:AdonisWindow>

@@ -7,7 +7,7 @@ namespace Anidow.Model
 {
     public class FolderFilesModel : ObservableObject
     {
-        public FileInfo File { get; set; }
+        public FileInfo File { get; init; }
         public bool Highlight { get; set; }
         public string SizeString
         {

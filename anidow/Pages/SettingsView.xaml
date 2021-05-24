@@ -26,7 +26,7 @@
             extensions1:TouchScrolling.IsEnabled="True"
             extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
             VerticalScrollBarVisibility="Auto">
-            <Grid Margin="8">
+            <Grid Margin="8,0,8,8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="8" />
@@ -61,7 +61,7 @@
                                 Text="General" />
                         </Grid>
                     </Expander.Header>
-                    <Grid Margin="8">
+                    <Grid Margin="{adonisUi:Space 1}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -71,15 +71,14 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock>Anime folder path</TextBlock>
-                        <Grid Grid.Row="1" Margin="0,4">
+                        <TextBlock Margin="0,0,0,4">Anime folder path</TextBlock>
+                        <Grid Grid.Row="1" Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
-                                     Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -120,10 +119,10 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Light" />
+                            <TextBlock Text="Theme: Light" />
                             <ToggleButton
                                 Grid.Column="1"
-                                Margin="8,0"
+                                Margin="8,0,4,0"
                                 IsChecked="{Binding Settings.IsDark}"
                                 Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                             <TextBlock Grid.Column="2" Text="Dark" />
@@ -146,8 +145,7 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Text="Torrent client:" />
-                            <ComboBox Grid.Column="2"
-                                      SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
+                            <ComboBox Grid.Column="2" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
                                 <ComboBoxItem Content="QBitTorrent" />
                                 <ComboBoxItem Content="Deluge" IsEnabled="False" />
                             </ComboBox>
@@ -176,16 +174,16 @@
                                 Opacity=".7"
                                 Text="Downloads etc." />
                         </Grid>
-                        <Grid Grid.Row="6" Margin="0,4">
+                        <Grid Grid.Row="6" Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Tracked view List" />
+                            <TextBlock Text="Tracked view: List" />
                             <ToggleButton
                                 Grid.Column="1"
-                                Margin="8,0"
+                                Margin="8,0,4,0"
                                 IsChecked="{Binding Settings.TrackedIsCardView}"
                                 Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
                             <TextBlock Grid.Column="2" Text="Card" />
@@ -212,17 +210,17 @@
                                 Text="Nyaa" />
                         </Grid>
                     </Expander.Header>
-                    <Grid Margin="8">
+                    <Grid Margin="{adonisUi:Space 1}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Margin="0,4">
+                        <Grid>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="Hide torrents with &lt;" />
                                 <ComboBox
                                     MinWidth="50"
-                                    Margin="4,0"
+                                    Margin="8,0" 
                                     SelectedItem="{Binding Settings.NyaaSettings.HideTorrentsBelowSeeders}">
                                     <system:Int32>-1</system:Int32>
                                     <system:Int32>1</system:Int32>
@@ -233,7 +231,7 @@
                                 </ComboBox>
                                 <TextBlock VerticalAlignment="Center" Text="seeders." />
                                 <TextBlock
-                                    Margin="4,0"
+                                    Margin="8,0"
                                     VerticalAlignment="Center"
                                     Opacity=".7"
                                     Text="(-1 to disable)" />
@@ -261,8 +259,9 @@
                                 Text="AnimeBytes" />
                         </Grid>
                     </Expander.Header>
-                    <Grid Margin="8">
+                    <Grid Margin="{adonisUi:Space 1}">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -272,37 +271,38 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center">Username:</TextBlock>
-                            <TextBox
-                                MinWidth="200"
-                                Margin="8,0"
-                                Text="{Binding Settings.AnimeBytesSettings.Username, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock VerticalAlignment="Center">Username</TextBlock>
                         </StackPanel>
+                        <TextBox
+                            Grid.Row="1"
+                            Margin="0,0,0,4"
+                            Text="{Binding Settings.AnimeBytesSettings.Username, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <StackPanel
+                            Grid.Row="2"
+                            Margin="0,4"
+                            Orientation="Horizontal">
                             <TextBlock>Passkey</TextBlock>
                             <TextBlock Margin="8,0">
-                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account"
-                                           RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account" RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
                                     (click here)
                                 </Hyperlink>
                             </TextBlock>
                         </StackPanel>
                         <PasswordBox
-                            Grid.Row="2"
-                            Margin="0,4"
+                            Grid.Row="3"
+                            Margin="0,0,0,4"
                             helpers:Secure.Password="{Binding Settings.AnimeBytesSettings.PassKey, UpdateSourceTrigger=PropertyChanged}" />
 
 
-                        <TextBlock Grid.Row="3">Default download folder</TextBlock>
-                        <Grid Grid.Row="4" Margin="0,4">
+                        <TextBlock Grid.Row="4" Margin="0,4">Default download folder</TextBlock>
+                        <Grid Grid.Row="5" Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
-                                     Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -310,7 +310,7 @@
                                                    ActionNotFound=Disable}"
                                 Content="{iconPacks:FontAwesome FolderOpenSolid}" />
                         </Grid>
-                        <Grid Grid.Row="5" Margin="0,4">
+                        <Grid Grid.Row="6" Margin="0,4">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="Hide torrents with &lt;" />
                                 <ComboBox
@@ -366,22 +366,20 @@
                     <Expander.Style>
                         <Style BasedOn="{StaticResource ExpanderCustom}" TargetType="Expander">
                             <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}"
-                                    Value="1">
+                                <DataTrigger Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}" Value="1">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Expander.Style>
-                    <Grid Margin="8" extensions:LayerExtension.Layer="1">
+                    <Grid Margin="8">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Grid>
+                        <Grid Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8" />
@@ -392,39 +390,43 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock>Host</TextBlock>
+                            <TextBlock Margin="0,0,0,4">Host</TextBlock>
                             <TextBox
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Margin="0,4"
                                 extensions:WatermarkExtension.Watermark="http://localhost"
                                 Text="{Binding Settings.QBitTorrent.Host, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBlock Grid.Row="0" Grid.Column="2">Port</TextBlock>
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Margin="0,0,0,4">
+                                Port
+                            </TextBlock>
                             <TextBox
                                 Grid.Row="1"
                                 Grid.Column="2"
                                 Width="50"
-                                Margin="0,4"
                                 extensions:WatermarkExtension.Watermark="1584"
                                 PreviewTextInput="{s:Action NumberValidationTextBox}"
                                 Text="{Binding Settings.QBitTorrent.Port, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                         <Grid Grid.Row="1" Margin="0,4">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
                             <TextBlock
-                                Grid.Column="0"
+                                Grid.Row="0"
+                                Margin="0,0,0,4"
                                 VerticalAlignment="Center"
-                                Text="Category:" />
+                                Text="Category" />
                             <TextBox
-                                Grid.Column="2"
+                                Grid.Row="1"
+                                Margin="0,0,0,4"
                                 extensions:WatermarkExtension.Watermark="Anime"
                                 Text="{Binding Settings.QBitTorrent.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
-                        <Grid Grid.Row="2" Margin="0,4">
+                        <Grid Grid.Row="2" Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="8" />

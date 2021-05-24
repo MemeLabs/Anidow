@@ -119,7 +119,8 @@
                     <Border
                         Name="Border"
                         Background="Transparent"
-                        CornerRadius="2">
+                        CornerRadius="4"
+                        Margin="0,0,4,0">
                         <ContentPresenter
                             x:Name="ContentSite"
                             Margin="10,4"

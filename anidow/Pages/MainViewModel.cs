@@ -425,6 +425,7 @@ namespace Anidow.Pages
                     .Where(e => e.AnimeId == anime.GroupId)
                     .OrderBy(e => e.Released)
                     .LastOrDefaultAsync();
+
                 if (lastEpisode == default)
                 {
                     continue;
@@ -445,19 +446,19 @@ namespace Anidow.Pages
             AnimesToday.Clear();
             if (animesToday.Any())
             {
-                AnimesToday.AddRange(animesToday.OrderByDescending(a => a.Date));
+                AnimesToday.AddRange(animesToday.OrderBy(a => a.Date));
             }
+
 #if DEBUG
             AnimesToday.Add(new FutureEpisode
             {
-                Name = "Test0",
-                Date = DateTime.UtcNow,
+                Name = "Test",
+                Date = DateTime.UtcNow - TimeSpan.FromHours(2),
             });
             AnimesToday.Add(new FutureEpisode
             {
-                Name =
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ac.",
-                Date = DateTime.UtcNow,
+                Name = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ac.",
+                Date = DateTime.UtcNow - TimeSpan.FromMinutes(5),
             });
 #endif
         }

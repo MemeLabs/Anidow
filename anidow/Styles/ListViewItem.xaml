@@ -81,8 +81,9 @@
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="-12,-4" />
-        <Setter Property="Height" Value="27" />
+        <Setter Property="Height" Value="25" />
         <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
 
