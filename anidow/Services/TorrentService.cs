@@ -16,16 +16,16 @@ namespace Anidow.Services
     // ReSharper disable once ClassNeverInstantiated.Global
     public class TorrentService
     {
+        private readonly SettingsService _settingsService;
         private readonly TorrentClientFactory _clientFactory;
         private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
-        private readonly SettingsModel _settings;
         private readonly BencodeParser _bencodeParser = new();
 
-        public TorrentService(SettingsModel settings, TorrentClientFactory clientFactory,
+        public TorrentService(SettingsService settingsService, TorrentClientFactory clientFactory,
             HttpClient httpClient, ILogger logger)
         {
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _settingsService = settingsService ?? throw new  ArgumentNullException(nameof(settingsService));
             _clientFactory = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -64,7 +64,7 @@ namespace Anidow.Services
 
         public async Task<bool> Remove(Episode anime, bool withFile = false)
         {
-            return _settings.TorrentClient switch
+            return _settingsService.Settings.TorrentClient switch
             {
                 TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.Remove(anime, withFile),
                 TorrentClient.Deluge => throw new NotImplementedException(),
@@ -74,7 +74,7 @@ namespace Anidow.Services
 
         public async Task<T> GetTorrents<T>()
         {
-            return _settings.TorrentClient switch
+            return _settingsService.Settings.TorrentClient switch
             {
                 TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.GetTorrentList<T>(),
                 TorrentClient.Deluge => throw new NotImplementedException(),
