@@ -147,6 +147,15 @@ namespace Anidow
 
         protected override async void Configure()
         {
+#if RELEASE
+            if (Process.GetProcessesByName(
+                           Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly()?.Location))
+                       .Length > 1)
+            {
+                Environment.Exit(0);
+            }
+#endif
+
             var secret = Properties.Resources.AppCenter_Secret;
             if (!AppCenter.Configured && !string.IsNullOrWhiteSpace(secret))
             {

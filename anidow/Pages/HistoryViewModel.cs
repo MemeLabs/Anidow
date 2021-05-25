@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Extensions;
@@ -70,15 +71,17 @@ namespace Anidow.Pages
         public string EpisodesLoaded { get; set; }
 
         public bool CanLoadMore { get; set; } = true;
+        public bool CanLoadEpisodes { get; set; }
 
         protected override async void OnInitialActivate()
         {
             await LoadEpisodes();
         }
-
+        
 
         public async Task LoadEpisodes(bool clear = false)
         {
+            CanLoadEpisodes = false;
             await using var db = new TrackContext();
             var episodes = await db.Episodes.Where(e => e.Hide)
                 .ToListAsync();
@@ -109,7 +112,7 @@ namespace Anidow.Pages
             }
 
             _scrollViewer?.ScrollToTop();
-            LoadMore();
+            await LoadMore();
             ActiveItem = null;
 #if DEBUG
             Items.Add(new Episode
@@ -119,11 +122,21 @@ namespace Anidow.Pages
                 Folder = Directory.GetCurrentDirectory(),
             });
 #endif
+
+            CanLoadEpisodes = true;
         }
 
-        public void LoadMore()
+        private async Task Dispatch(Action action)
         {
-            Items.AddRange(_episodes.Skip(Items.Count).Take(_maxFilesInView));
+            await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
+        }
+
+        public async Task LoadMore()
+        {
+            foreach (var episode in _episodes.Skip(Items.Count).Take(_maxFilesInView))
+            {
+                await Dispatch(() => Items.Add(episode));
+            }
             CanLoadMore = Items.Count < _episodes.Count;
             EpisodesLoaded = $"{Items.Count}/{_episodes.Count}";
         }

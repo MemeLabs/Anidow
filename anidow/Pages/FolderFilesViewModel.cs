@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using AdonisUI.Controls;
+using System.Windows.Threading;
 using Anidow.Database.Models;
 using Anidow.Extensions;
 using Anidow.Model;
@@ -12,6 +13,9 @@ using Anidow.Utils;
 using Microsoft.VisualBasic;
 using Serilog;
 using Stylet;
+using MessageBox = AdonisUI.Controls.MessageBox;
+using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
+using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 
 namespace Anidow.Pages
 {
@@ -23,7 +27,6 @@ namespace Anidow.Pages
         private readonly ILogger _logger;
         private readonly int _maxFilesInView = 100;
         private readonly string _name;
-
         private List<FolderFilesModel> _files;
 
         public FolderFilesViewModel(ref Episode episode, IEventAggregator eventAggregator, ILogger logger)
@@ -108,10 +111,17 @@ namespace Anidow.Pages
             }
 #endif
         }
+        private async Task Dispatch(Action action)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
+        }
 
         public async Task LoadMore()
         {
-            await Execute.OnUIThreadAsync(() => FileInfos.AddRange(_files.Skip(FileInfos.Count).Take(_maxFilesInView)));
+            foreach (var filesModel in _files.Skip(FileInfos.Count).Take(_maxFilesInView))
+            {
+                await Dispatch(() => FileInfos.Add(filesModel));
+            }
             CanLoadMore = FileInfos.Count < _files.Count;
             DisplayName = $"Files ({FileInfos.Count}/{_files.Count}) - {_name}";
         }

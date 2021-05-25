@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
@@ -16,6 +17,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
+using Application = System.Windows.Application;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Anidow.Pages
@@ -53,7 +55,7 @@ namespace Anidow.Pages
             {
                 SetAndNotify(ref _search, value);
                 Debouncer.DebounceAction("load_tracked",
-                    async _ => { await Execute.OnUIThreadAsync(async () => await Load()); });
+                    async _ => { await Dispatch(async () => await Load()); });
             }
         }
 
@@ -96,10 +98,15 @@ namespace Anidow.Pages
             foreach (var a in anime)
             {
                 a.Episodes = await db.Episodes.CountAsync(e => e.AnimeId == a.GroupId);
-                await Execute.OnUIThreadAsync(() => Items.Add(a));
+                await Dispatch(() => Items.Add(a));
             }
 
             CanLoad = true;
+        }
+
+        private async Task Dispatch(Action action)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
         }
 
         private void ScrollToTop()
