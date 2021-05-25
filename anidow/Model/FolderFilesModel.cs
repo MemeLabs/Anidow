@@ -9,6 +9,7 @@ namespace Anidow.Model
     {
         public FileInfo File { get; init; }
         public bool Highlight { get; set; }
+
         public string SizeString
         {
             get
@@ -23,7 +24,7 @@ namespace Anidow.Model
                 }
             }
         }
-        
+
         public string ModifiedLocalString => File.LastWriteTime.ToString("g");
         public bool IsDirectory => File.Attributes.HasFlag(FileAttributes.Directory);
         public bool CanOpenFile => !IsDirectory && ProcessUtil.IsAllowedFile(File);

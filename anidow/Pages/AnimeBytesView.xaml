@@ -45,10 +45,12 @@
                                 <ControlTemplate.Triggers>
 
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                                        <Setter TargetName="Border" Property="Background"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" />
+                                        <Setter TargetName="Border" Property="Background"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

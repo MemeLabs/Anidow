@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,6 +11,7 @@ using AdonisUI.Controls;
 using Anidow.Database;
 using Anidow.Factories;
 using Anidow.Pages;
+using Anidow.Properties;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
 using Anidow.Validators;
@@ -23,22 +23,21 @@ using Jot.Storage;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
-using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 #if RELEASE
+using System.IO;
 using System.Windows.Threading;
 using Onova;
 using Onova.Models;
 using Onova.Services;
 
 using MessageBox = AdonisUI.Controls.MessageBox;
-using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
+using MessageBoxResult= AdonisUI.Controls.MessageBoxResult;
 #endif
 
 namespace Anidow
@@ -121,10 +120,11 @@ namespace Anidow
         {
             var tracker = new Tracker(new JsonFileStore(Environment.SpecialFolder.CommonApplicationData));
             tracker.Configure<ShellView>()
-                .Id(_ => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
-                .Properties(w => new {w.Height, w.Width, w.Left, w.Top, w.WindowState})
-                .PersistOn(nameof(ShellView.Closing))
-                .StopTrackingOn(nameof(ShellView.Closing));
+                   .Id(_ =>
+                       $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
+                   .Properties(w => new {w.Height, w.Width, w.Left, w.Top, w.WindowState})
+                   .PersistOn(nameof(ShellView.Closing))
+                   .StopTrackingOn(nameof(ShellView.Closing));
             return tracker;
         }
 
@@ -136,12 +136,13 @@ namespace Anidow
 #endif
 
             var logConfiguration = new LoggerConfiguration()
-                .MinimumLevel.Is(logLevel)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.Sink(logViewModel, logLevel)
-                .WriteTo.File(
-                    "./logs/log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7);
+                                   .MinimumLevel.Is(logLevel)
+                                   .Enrich.FromLogContext()
+                                   .WriteTo.Console()
+                                   .WriteTo.Sink(logViewModel, logLevel)
+                                   .WriteTo.File(
+                                       "./logs/log-.txt", rollingInterval: RollingInterval.Day,
+                                       retainedFileCountLimit: 7);
 
             _logger = logConfiguration.CreateLogger();
         }
@@ -163,7 +164,7 @@ namespace Anidow
             }
 #endif
 
-            var secret = Properties.Resources.AppCenter_Secret;
+            var secret = Resources.AppCenter_Secret;
             if (!AppCenter.Configured && !string.IsNullOrWhiteSpace(secret))
             {
                 AppCenter.Start(secret, typeof(Crashes));
@@ -188,15 +189,16 @@ namespace Anidow
 
             // Initialize FluentScheduler
             JobManager.Initialize();
-            JobManager.JobException += info => _logger.Error(info.Exception, "An error just happened with a scheduled job");
-
+            JobManager.JobException += info =>
+                _logger.Error(info.Exception, "An error just happened with a scheduled job");
 
 
             var selfContained = false;
 #if SELF_CONTAINED && RELEASE
             selfContained = true;
 #endif
-            _logger.Information($"Anidow v{Assembly.GetExecutingAssembly().GetName().Version} selfcontained: {selfContained}");
+            _logger.Information(
+                $"Anidow v{Assembly.GetExecutingAssembly().GetName().Version} selfcontained: {selfContained}");
 
 #if RELEASE
             try

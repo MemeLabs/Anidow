@@ -36,11 +36,12 @@ namespace Anidow.Utils
                 },
             }.Start();
         }
+
         public static bool IsAllowedFile(string path)
         {
             if (!File.Exists(path))
             {
-               return false;
+                return false;
             }
 
             var file = new FileInfo(path);

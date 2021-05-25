@@ -14,10 +14,10 @@ namespace Anidow.Pages
     // ReSharper disable once ClassNeverInstantiated.Global
     public class ShellViewModel : Conductor<Screen>.Collection.OneActive
     {
+        private readonly AboutViewModel _aboutViewModel;
         private readonly AnimeBytesService _animeBytesService;
         private readonly ILogger _logger;
         private readonly LogViewModel _logViewModel;
-        private readonly AboutViewModel _aboutViewModel;
         private readonly SettingsService _settingsService;
         private readonly IWindowManager _windowManager;
 

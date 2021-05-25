@@ -49,12 +49,16 @@
                                     Opacity="0.2">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 0">
-                                            <GradientStop Offset="0" Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
-                                            <GradientStop Offset="0.5" Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
+                                            <GradientStop Offset="0"
+                                                          Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
+                                            <GradientStop Offset="0.5"
+                                                          Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
                                             <GradientStop Offset="0.5" Color="#d0000000" />
                                             <GradientStop Offset="0.55" Color="#80000000" />
-                                            <GradientStop Offset="0.65" Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
-                                            <GradientStop Offset="1" Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
+                                            <GradientStop Offset="0.65"
+                                                          Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
+                                            <GradientStop Offset="1"
+                                                          Color="{DynamicResource {x:Static adonisUi:Colors.AccentColor}}" />
                                             <LinearGradientBrush.Transform>
                                                 <RotateTransform Angle="20" />
                                             </LinearGradientBrush.Transform>
@@ -68,7 +72,8 @@
             </Style>
 
             <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="{x:Type ToolTip}">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
             </Style>
@@ -126,7 +131,8 @@
                                     CanContentScroll="True"
                                     Focusable="False"
                                     VerticalScrollBarVisibility="Auto">
-                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    <ItemsPresenter
+                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </ScrollViewer>
                             </Border>
                         </ControlTemplate>

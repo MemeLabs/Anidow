@@ -47,25 +47,25 @@ namespace Anidow.Services
                 Link = item.Id,
                 Folder = Settings.AnimeFolder,
                 Seeders = int.Parse(item.ElementExtensions.FirstOrDefault(e => e.OuterName == "seeders")
-                    ?.GetObject<XElement>().Value ?? "0"),
+                                        ?.GetObject<XElement>().Value ?? "0"),
                 Leechers = int.Parse(item.ElementExtensions.FirstOrDefault(e => e.OuterName == "leechers")
-                    ?.GetObject<XElement>().Value ?? "0"),
+                                         ?.GetObject<XElement>().Value ?? "0"),
                 Size = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "size")
-                    ?.GetObject<XElement>().Value,
+                           ?.GetObject<XElement>().Value,
                 Downloads = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "downloads")
-                    ?.GetObject<XElement>().Value,
+                                ?.GetObject<XElement>().Value,
             };
 
 
             var remake = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "remake")
-                ?.GetObject<XElement>().Value == "Yes";
+                             ?.GetObject<XElement>().Value == "Yes";
             if (remake)
             {
                 feedItem.Quality = NyaaQuality.Remake;
             }
 
             var trusted = item.ElementExtensions.FirstOrDefault(e => e.OuterName == "trusted")
-                ?.GetObject<XElement>().Value == "Yes";
+                              ?.GetObject<XElement>().Value == "Yes";
             if (trusted)
             {
                 feedItem.Quality = NyaaQuality.Trusted;

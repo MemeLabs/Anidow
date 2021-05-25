@@ -6,7 +6,6 @@
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-    xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
     xmlns:local="clr-namespace:Anidow.Pages"
@@ -201,7 +200,8 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock VerticalAlignment="Top" Text="{Binding DateString}">
                                                 <TextBlock.ToolTip>
-                                                    <ToolTip Content="{Binding DateLocal}" ContentStringFormat="{}{0:g}" />
+                                                    <ToolTip Content="{Binding DateLocal}"
+                                                             ContentStringFormat="{}{0:g}" />
                                                 </TextBlock.ToolTip>
                                             </TextBlock>
                                             <Separator

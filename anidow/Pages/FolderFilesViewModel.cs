@@ -4,15 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using AdonisUI.Controls;
 using Anidow.Database.Models;
 using Anidow.Extensions;
 using Anidow.Model;
 using Anidow.Utils;
 using Serilog;
 using Stylet;
-using MessageBox = AdonisUI.Controls.MessageBox;
-using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
-using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 
 namespace Anidow.Pages
 {
@@ -47,6 +45,7 @@ namespace Anidow.Pages
             FileInfos = new BindableCollection<FolderFilesModel>();
             DisplayName = $"Files - {anime.Name}";
         }
+
         public BindableCollection<FolderFilesModel> FileInfos { get; }
 
         public string Folder { get; set; }
@@ -54,6 +53,8 @@ namespace Anidow.Pages
         private string ParentFolder { get; set; }
 
         public bool CanLoadMore { get; set; }
+
+        public bool CanOpenFolder { get; set; }
 
         protected override void OnActivate()
         {
@@ -74,13 +75,14 @@ namespace Anidow.Pages
 
             var files = await Task.Run(() => Directory.GetFileSystemEntries(Folder)
                                                       .Select(f => new FileInfo(f))
-                                                      .OrderByDescending(f => f.Attributes.HasFlag(FileAttributes.Directory))
+                                                      .OrderByDescending(f =>
+                                                          f.Attributes.HasFlag(FileAttributes.Directory))
                                                       .ThenByDescending(f => f.LastWriteTime));
 
             _files = new List<FolderFilesModel>();
             foreach (var file in files)
             {
-                var item = new FolderFilesModel { File = file };
+                var item = new FolderFilesModel {File = file};
                 if (_episode != null)
                 {
                     var nameSplit = file.Name
@@ -112,9 +114,7 @@ namespace Anidow.Pages
         public async Task LoadMore()
         {
             foreach (var filesModel in _files.Skip(FileInfos.Count).Take(_maxFilesInView))
-            {
                 await DispatcherUtil.DispatchAsync(() => FileInfos.Add(filesModel));
-            }
             CanLoadMore = FileInfos.Count < _files.Count;
             DisplayName = $"Files ({FileInfos.Count}/{_files.Count}) - {_name}";
         }
@@ -123,7 +123,11 @@ namespace Anidow.Pages
         {
             if (_episode != null)
             {
-                if (string.IsNullOrWhiteSpace(_episode.File)) _episode.File = fileInfo.FullName;
+                if (string.IsNullOrWhiteSpace(_episode.File))
+                {
+                    _episode.File = fileInfo.FullName;
+                }
+
                 _episode.Watched = true;
                 _episode.WatchedDate = DateTime.UtcNow;
                 try
@@ -152,7 +156,6 @@ namespace Anidow.Pages
             Close();
         }
 
-        public bool CanOpenFolder { get; set; }
         public async Task OpenFolder(string path)
         {
             CanOpenFolder = false;
@@ -167,6 +170,7 @@ namespace Anidow.Pages
             {
                 _logger.Error(e, "error opening folder");
             }
+
             CanOpenFolder = true;
         }
 

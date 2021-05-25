@@ -2,21 +2,17 @@
     x:Class="Anidow.Pages.FolderFilesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-    xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:io="clr-namespace:System.IO;assembly=System.IO.FileSystem"
     xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Model"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Width="800"
     Height="450"
     d:DataContext="{d:DesignInstance local:FolderFilesViewModel}"
@@ -108,7 +104,8 @@
                 </GroupStyle>
             </ListView.GroupStyle>-->
             <ListView.View>
-                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True"
+                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="File.Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
@@ -161,7 +158,6 @@
                                 <Grid>
                                     <Button
                                         Width="66"
-                                        VerticalAlignment="Center"
                                         Command="{s:Action Watch}"
                                         CommandParameter="{Binding File}"
                                         Content="Watch"
@@ -170,7 +166,6 @@
                                         Visibility="{Binding CanOpenFile, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
                                     <Button
                                         Width="66"
-                                        VerticalAlignment="Center"
                                         Command="{s:Action OpenFolder}"
                                         CommandParameter="{Binding File.FullName}"
                                         Content="{iconPacks:FontAwesome FolderOpenSolid}"

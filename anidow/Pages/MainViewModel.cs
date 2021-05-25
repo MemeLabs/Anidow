@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using AdonisUI.Controls;
@@ -12,10 +11,8 @@ using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Extensions;
-using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Services;
-using Anidow.Torrent_Clients;
 using Anidow.Utils;
 using BencodeNET.Torrents;
 using FluentScheduler;
@@ -73,8 +70,9 @@ namespace Anidow.Pages
                     Name = nyaa.Name,
                     Site = Site.Nyaa,
                     Released = nyaa.Released,
-                    File = torrent?.FileMode == TorrentFileMode.Single ?
-                        Path.Join(nyaa.Folder, torrent.File.FileName) : null,
+                    File = torrent?.FileMode == TorrentFileMode.Single
+                        ? Path.Join(nyaa.Folder, torrent.File.FileName)
+                        : null,
                     Folder = nyaa.Folder,
                     Link = nyaa.Link,
                     DownloadLink = nyaa.DownloadLink,
@@ -89,8 +87,9 @@ namespace Anidow.Pages
                     Link = ab.GroupUrl,
                     DownloadLink = ab.DownloadLink,
                     Cover = ab.Cover,
-                    File = torrent?.FileMode == TorrentFileMode.Single ?
-                        Path.Join(ab.Folder, torrent.File.FileName) : null,
+                    File = torrent?.FileMode == TorrentFileMode.Single
+                        ? Path.Join(ab.Folder, torrent.File.FileName)
+                        : null,
                     TorrentId = torrent?.GetInfoHash(),
                 },
                 AnimeBytesScrapeAnime ab => new Episode
@@ -102,8 +101,9 @@ namespace Anidow.Pages
                     Link = $"https://animebytes.tv/torrent/{ab.SelectedTorrent.ID}/group",
                     DownloadLink = ab.SelectedTorrent.DownloadLink,
                     Cover = ab.Image,
-                    File = torrent?.FileMode == TorrentFileMode.Single ?
-                        Path.Join(ab.SelectedTorrent.Folder, torrent.File.FileName) : null,
+                    File = torrent?.FileMode == TorrentFileMode.Single
+                        ? Path.Join(ab.SelectedTorrent.Folder, torrent.File.FileName)
+                        : null,
                     TorrentId = torrent?.GetInfoHash(),
                 },
                 _ => throw new NotSupportedException(nameof(message.Item)),
@@ -301,11 +301,7 @@ namespace Anidow.Pages
         protected override void OnInitialActivate()
         {
             JobManager.AddJob(
-                () =>
-                {
-                    UpdateTorrents().Wait();
-
-                },
+                () => { UpdateTorrents().Wait(); },
                 s => s.WithName("Home:UpdateTorrents").NonReentrant().ToRunEvery(1).Seconds()
             );
 
@@ -362,8 +358,8 @@ namespace Anidow.Pages
         {
             await using var db = new TrackContext();
             var episodes = await db.Episodes.Where(e => !e.Hide)
-                .Include(e => e.CoverData)
-                .ToListAsync();
+                                   .Include(e => e.CoverData)
+                                   .ToListAsync();
 
             Items.Clear();
             Items.AddRange(episodes.OrderBy(e => e.Released));
@@ -419,9 +415,9 @@ namespace Anidow.Pages
             foreach (var anime in animes)
             {
                 var lastEpisode = await db.Episodes
-                    .Where(e => e.AnimeId == anime.GroupId)
-                    .OrderBy(e => e.Released)
-                    .LastOrDefaultAsync();
+                                          .Where(e => e.AnimeId == anime.GroupId)
+                                          .OrderBy(e => e.Released)
+                                          .LastOrDefaultAsync();
 
                 if (lastEpisode == default)
                 {

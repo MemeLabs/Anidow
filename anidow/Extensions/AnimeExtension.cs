@@ -14,8 +14,8 @@ namespace Anidow.Extensions
         public static string GetReleaseGroup(this AnimeBytesTorrentItem item)
         {
             var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => p.Trim())
-                .ToList();
+                            .Select(p => p.Trim())
+                            .ToList();
 
             var episodeIndex = parts.FindIndex(p => p.StartsWith("Episode "));
             try
@@ -31,8 +31,8 @@ namespace Anidow.Extensions
         public static string GetEpisode(this AnimeBytesTorrentItem item)
         {
             var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => p.Trim())
-                .ToList();
+                            .Select(p => p.Trim())
+                            .ToList();
 
             var episodeIndex = parts.FindIndex(p => p.StartsWith("Episode "));
             return episodeIndex == -1 ? string.Empty : parts[episodeIndex][8..].PadLeft(2, '0');
@@ -41,8 +41,8 @@ namespace Anidow.Extensions
         public static int GetEpisodeInt(this AnimeBytesTorrentItem item)
         {
             var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => p.Trim())
-                .ToList();
+                            .Select(p => p.Trim())
+                            .ToList();
 
             var episodeIndex = parts.FindIndex(p => p.StartsWith("Episode "));
             try
@@ -59,8 +59,8 @@ namespace Anidow.Extensions
         public static string GetResolution(this AnimeBytesTorrentItem item)
         {
             var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => p.Trim())
-                .ToList();
+                            .Select(p => p.Trim())
+                            .ToList();
 
             var resolutionIndex = parts.FindIndex(p => Regex.IsMatch(p, @"\d+p"));
             return resolutionIndex == -1 ? string.Empty : parts[resolutionIndex];
@@ -69,8 +69,8 @@ namespace Anidow.Extensions
         public static string GetEpisode(this string s)
         {
             var parts = s.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => p.Trim())
-                .ToList();
+                         .Select(p => p.Trim())
+                         .ToList();
 
             var episodeIndex = parts.FindIndex(p => p.StartsWith("Episode "));
             return episodeIndex == -1 ? string.Empty : parts[episodeIndex][8..].PadLeft(2, '0');

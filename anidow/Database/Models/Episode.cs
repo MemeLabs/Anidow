@@ -18,6 +18,14 @@ namespace Anidow.Database.Models
         [NotMapped] public DateTime ReleasedLocal => Released.ToLocalTime();
         [NotMapped] public DateTime WatchedDateLocal => WatchedDate.ToLocalTime();
         [NotMapped] public string WatchedHeaderString => Watched ? "Not watched" : "Watched";
+        [NotMapped] public bool HasFile => !string.IsNullOrWhiteSpace(File);
+        [NotMapped] public float TorrentProgress { get; set; }
+        [NotMapped] public string TorrentProgressContent => $"{TorrentProgress / 1f * 100:0.#}%";
+
+        [NotMapped]
+        public bool TorrentShowProgress => !string.IsNullOrWhiteSpace(TorrentId)
+                                           && TorrentProgress is > 0f and < 1f;
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string File { get; set; }
@@ -31,11 +39,6 @@ namespace Anidow.Database.Models
         [NotMapped] public string ReleasedString => Released.Humanize();
         [NotMapped] public string WatchedString => WatchedDate == default ? string.Empty : WatchedDate.Humanize();
         [NotMapped] public string EpisodeNum => Name.GetEpisode();
-        [NotMapped] public bool HasFile => !string.IsNullOrWhiteSpace(File);
-        [NotMapped] public float TorrentProgress { get; set; }
-        [NotMapped] public string TorrentProgressContent => $"{TorrentProgress / 1f * 100:0.#}%";
-        [NotMapped] public bool TorrentShowProgress => !string.IsNullOrWhiteSpace(TorrentId) 
-                                                       && TorrentProgress is > 0f and < 1f;
 
         public string AnimeId { get; set; }
         public string Folder { get; set; }

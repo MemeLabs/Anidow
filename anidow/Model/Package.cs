@@ -1,14 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-
-namespace Anidow.Model
+﻿namespace Anidow.Model
 {
     public sealed class Package : ObservableObject
     {
         public string PackageName { get; set; }
-        
+
         public string PackageVersion { get; set; }
-        
+
         public string PackageUrl { get; set; }
 
         public string Copyright { get; set; }

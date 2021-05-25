@@ -63,7 +63,7 @@ namespace Anidow.Services
 
         public void InitTracker()
         {
-            _tracker = new Timer { Interval = 1000 * 60 * _settingsService.Settings.RefreshTime };
+            _tracker = new Timer {Interval = 1000 * 60 * _settingsService.Settings.RefreshTime};
             _tracker.Elapsed += TrackerOnElapsed;
             _initialRefreshTime = _settingsService.Settings.RefreshTime;
             _settingsService.SettingsSavedEvent += OnSettingsSavedEvent;
@@ -122,17 +122,17 @@ namespace Anidow.Services
 
             await using var db = new TrackContext();
             var anime = await db.Anime
-                .Where(a => a.Site == Site.AnimeBytes
-                            && a.Status == AnimeStatus.Watching)
-                .ToListAsync();
+                                .Where(a => a.Site == Site.AnimeBytes
+                                            && a.Status == AnimeStatus.Watching)
+                                .ToListAsync();
 
             var feedItems = await GetFeedItems(AnimeBytesFilter.Airing);
             feedItems.Reverse();
             foreach (var a in anime)
             {
                 var episodes = await db.Episodes
-                    .Where(e => e.AnimeId == a.GroupId)
-                    .ToListAsync();
+                                       .Where(e => e.AnimeId == a.GroupId)
+                                       .ToListAsync();
                 foreach (var item in feedItems)
                 {
                     var episode = episodes.FirstOrDefault(ep => ep.Name == item.Name);
@@ -161,8 +161,8 @@ namespace Anidow.Services
                     }
 
                     var parts = item.Name.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                        .Select(p => p.Trim())
-                        .ToList();
+                                    .Select(p => p.Trim())
+                                    .ToList();
 
                     if (!parts.Contains(a.Resolution) && !string.IsNullOrWhiteSpace(a.Resolution))
                     {
@@ -184,8 +184,9 @@ namespace Anidow.Services
                             DownloadLink = item.DownloadLink,
                             Link = item.GroupUrl,
                             Site = Site.AnimeBytes,
-                            File = torrent?.FileMode == TorrentFileMode.Single ?
-                                Path.Join(a.Folder, torrent.File.FileName) : null,
+                            File = torrent?.FileMode == TorrentFileMode.Single
+                                ? Path.Join(a.Folder, torrent.File.FileName)
+                                : null,
                             TorrentId = torrent?.GetInfoHash(),
                         };
 
@@ -289,7 +290,7 @@ namespace Anidow.Services
                         a.Torrents = a.Torrents.Where(i => i.Seeders >= minSeeders).ToArray();
                     }
 
-                    var je = (JsonElement)a.Synonymns;
+                    var je = (JsonElement) a.Synonymns;
                     var json = je.GetRawText();
 
                     a.SynonymnsList = json switch
@@ -301,7 +302,7 @@ namespace Anidow.Services
                         _ => new List<string>(),
                     };
 
-                    je = (JsonElement)a.Links;
+                    je = (JsonElement) a.Links;
                     json = je.GetRawText();
 
                     a.LinksDict = json switch

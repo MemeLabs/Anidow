@@ -98,7 +98,7 @@ namespace Anidow.Pages
                 1 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.Airing),
                 _ => throw new NotImplementedException(),
             });
-            if (items is not { Count: > 0 })
+            if (items is not {Count: > 0})
             {
                 CanGetItems = true;
                 return;
@@ -158,8 +158,8 @@ namespace Anidow.Pages
 
             var resolution = string.Empty;
             var parts = item.TorrentProperty.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => p.Trim())
-                .ToList();
+                            .Select(p => p.Trim())
+                            .ToList();
             if (parts.Contains("1080p"))
             {
                 resolution = "1080p";

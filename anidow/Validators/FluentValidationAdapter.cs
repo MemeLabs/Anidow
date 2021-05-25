@@ -27,7 +27,7 @@ namespace Anidow.Validators
             // If someone's calling us synchronously, and ValidationAsync does not complete synchronously,
             // we'll deadlock unless we continue on another thread.
             return (await _validator.ValidateAsync(_subject, CancellationToken.None).ConfigureAwait(false))
-                .Errors.Select(x => x.ErrorMessage);
+                   .Errors.Select(x => x.ErrorMessage);
         }
 
         public async Task<Dictionary<string, IEnumerable<string>>> ValidateAllPropertiesAsync()
@@ -35,8 +35,8 @@ namespace Anidow.Validators
             // If someone's calling us synchronously, and ValidationAsync does not complete synchronously,
             // we'll deadlock unless we continue on another thread.
             return (await _validator.ValidateAsync(_subject).ConfigureAwait(false))
-                .Errors.GroupBy(x => x.PropertyName)
-                .ToDictionary(x => x.Key, x => x.Select(failure => failure.ErrorMessage));
+                   .Errors.GroupBy(x => x.PropertyName)
+                   .ToDictionary(x => x.Key, x => x.Select(failure => failure.ErrorMessage));
         }
     }
 }

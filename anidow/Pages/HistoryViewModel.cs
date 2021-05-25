@@ -76,20 +76,20 @@ namespace Anidow.Pages
         {
             await LoadEpisodes();
         }
-        
+
 
         public async Task LoadEpisodes(bool clear = false)
         {
             CanLoadEpisodes = false;
             await using var db = new TrackContext();
             var episodes = await db.Episodes.Where(e => e.Hide)
-                .ToListAsync();
+                                   .ToListAsync();
 
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
                 episodes = episodes.Where(a => a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
-                    .ToList();
+                                   .ToList();
             }
 
 
@@ -101,9 +101,9 @@ namespace Anidow.Pages
             };
 
             _episodes = episodes
-                .OrderByDescending(e => e.HideDate)
-                .ThenByDescending(e => e.Released)
-                .ToList();
+                        .OrderByDescending(e => e.HideDate)
+                        .ThenByDescending(e => e.Released)
+                        .ToList();
 
             if (clear)
             {
@@ -124,13 +124,11 @@ namespace Anidow.Pages
 
             CanLoadEpisodes = true;
         }
-        
+
         public async Task LoadMore()
         {
             foreach (var episode in _episodes.Skip(Items.Count).Take(_maxFilesInView))
-            {
                 await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
-            }
             CanLoadMore = Items.Count < _episodes.Count;
             EpisodesLoaded = $"{Items.Count}/{_episodes.Count}";
         }
@@ -175,7 +173,7 @@ namespace Anidow.Pages
 
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -201,7 +199,7 @@ namespace Anidow.Pages
 
         public async Task DeleteWithFile(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{episode.Name}", "Delete",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Cancel)
@@ -238,7 +236,7 @@ namespace Anidow.Pages
 
         public async Task UnWatchItem(Episode episode)
         {
-            episode ??= (Episode)ActiveItem;
+            episode ??= (Episode) ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {

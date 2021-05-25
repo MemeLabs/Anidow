@@ -72,15 +72,15 @@ namespace Anidow.Pages
             CanLoad = false;
             await using var db = new TrackContext();
             var anime = await Task.Run(async () => await db.Anime
-                .Include(a => a.CoverData)
-                .OrderByDescending(a => a.Released)
-                .ToListAsync());
+                                                           .Include(a => a.CoverData)
+                                                           .OrderByDescending(a => a.Released)
+                                                           .ToListAsync());
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
                 anime = anime.Where(a =>
-                        a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
-                    .ToList();
+                                 a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
+                             .ToList();
             }
 
             anime = FilterStatus switch

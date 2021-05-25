@@ -103,7 +103,7 @@ namespace Anidow.Services
         protected string GetElementExtensionValue(SyndicationItem item, string value)
         {
             return item.ElementExtensions.FirstOrDefault(e => e.OuterName == value)
-                ?.GetObject<XElement>().Value;
+                       ?.GetObject<XElement>().Value;
         }
     }
 }
