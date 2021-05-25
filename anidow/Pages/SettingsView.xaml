@@ -23,10 +23,11 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ScrollViewer
+            Margin="2"
             extensions1:TouchScrolling.IsEnabled="True"
             extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
             VerticalScrollBarVisibility="Auto">
-            <Grid Margin="8,0,8,8">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="8" />
@@ -220,7 +221,7 @@
                                 <TextBlock VerticalAlignment="Center" Text="Hide torrents with &lt;" />
                                 <ComboBox
                                     MinWidth="50"
-                                    Margin="8,0" 
+                                    Margin="8,0"
                                     SelectedItem="{Binding Settings.NyaaSettings.HideTorrentsBelowSeeders}">
                                     <system:Int32>-1</system:Int32>
                                     <system:Int32>1</system:Int32>
@@ -456,7 +457,6 @@
         </ScrollViewer>
         <Grid
             Grid.Row="1"
-            Margin="8,0,8,8"
             VerticalAlignment="Bottom"
             Visibility="{Binding SettingsService.CanSave, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Button

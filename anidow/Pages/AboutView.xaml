@@ -63,21 +63,21 @@
             <Separator Grid.Row="1" Margin="0,0,0,8" />
             <DataGrid
                 Grid.Row="2"
+                AutoGenerateColumns="False"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 CanUserReorderColumns="False"
-                AutoGenerateColumns="False"
                 ItemsSource="{Binding Packages, Mode=OneWay}">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Package Name" Binding="{Binding PackageName}" />
-                    <DataGridTextColumn Header="Version" Binding="{Binding PackageVersion}" />
-                    <DataGridTextColumn Header="Url" Binding="{Binding PackageUrl}" />
-                    <DataGridTextColumn Header="Copyright" Binding="{Binding Copyright}" />
-                    <DataGridTextColumn Header="Authors" Binding="{Binding AuthorsString}" />
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
-                    <DataGridTextColumn Header="License Url" Binding="{Binding LicenseUrl}" />
-                    <DataGridTextColumn Header="License Type" Binding="{Binding LicenseType}" />
+                    <DataGridTextColumn Binding="{Binding PackageName}" Header="Package Name" />
+                    <DataGridTextColumn Binding="{Binding PackageVersion}" Header="Version" />
+                    <DataGridTextColumn Binding="{Binding PackageUrl}" Header="Url" />
+                    <DataGridTextColumn Binding="{Binding Copyright}" Header="Copyright" />
+                    <DataGridTextColumn Binding="{Binding AuthorsString}" Header="Authors" />
+                    <DataGridTextColumn Binding="{Binding Description}" Header="Description" />
+                    <DataGridTextColumn Binding="{Binding LicenseUrl}" Header="License Url" />
+                    <DataGridTextColumn Binding="{Binding LicenseType}" Header="License Type" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

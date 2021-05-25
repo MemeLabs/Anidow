@@ -82,6 +82,7 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <ContentControl
+                        Margin="2"
                         HorizontalContentAlignment="Stretch"
                         VerticalContentAlignment="Stretch"
                         s:View.Model="{Binding}"

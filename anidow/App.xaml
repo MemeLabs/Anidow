@@ -22,7 +22,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Styles/Button.xaml" />
             </s:ApplicationLoader.MergedDictionaries>
 
-            <!-- Override colors -->
+            <!--  Override colors  -->
             <Color x:Key="{x:Static adonisUi:Colors.ErrorColor}">#d32f2f</Color>
             <Color x:Key="{x:Static adonisUi:Colors.SuccessColor}">#388e3c</Color>
             <!--<Color x:Key="{x:Static adonisUi:Colors.AlertColor}">#f57c00</Color>-->

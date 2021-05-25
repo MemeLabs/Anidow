@@ -88,9 +88,9 @@
                                         ToolTipService.Placement="Bottom" />
 
                                     <ProgressBar
-                                        Margin="8,0,0,0"
                                         Grid.Column="2"
                                         Width="50"
+                                        Margin="8,0,0,0"
                                         extensions:ProgressBarExtension.Content="{Binding TorrentProgressContent}"
                                         Maximum="1"
                                         Minimum="0"

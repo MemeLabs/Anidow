@@ -61,13 +61,13 @@
                             Opacity="0" />
 
                         <ContentPresenter
-                            Opacity="0"
                             x:Name="ContentPresenter"
                             Margin="{TemplateBinding Padding}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             Content="{TemplateBinding Content}"
                             ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Opacity="0"
                             RenderOptions.ClearTypeHint="Auto"
                             TextOptions.TextFormattingMode="Display"
                             TextOptions.TextRenderingMode="Auto" />

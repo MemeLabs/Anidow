@@ -23,8 +23,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox extensions:LayerExtension.IncreaseLayer="True"
-                  Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+        <GroupBox
+            Margin="2"
+            extensions:LayerExtension.IncreaseLayer="True"
+            Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -66,6 +68,7 @@
             Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}">
             <TextBlock>missing setting please set username and passkey in settings</TextBlock>
         </Grid>
+
         <ListView
             Grid.Row="1"
             extensions:GridViewSortExtension.AutoSort="True"
@@ -78,8 +81,7 @@
             SelectedItem="{Binding ActiveItem}"
             Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         Width="50"
                         extensions:GridViewSortExtension.PropertyName="Row"
@@ -127,51 +129,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <!--  <ListBox Grid.Row="1"  -->
-        <!--  ItemsSource="{Binding Items}"  -->
-        <!--  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  -->
-        <!--  SelectedItem="{Binding ActiveItem}">  -->
-        <!--     <ListBox.ItemContainerStyle> -->
-        <!--         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem"> -->
-        <!--             <Setter Property="HorizontalContentAlignment" Value="Stretch" /> -->
-        <!--             <Setter Property="VerticalContentAlignment" Value="Stretch" /> -->
-        <!--         </Style> -->
-        <!--     </ListBox.ItemContainerStyle> -->
-        <!--     <ListBox.ItemsPanel> -->
-        <!--         <ItemsPanelTemplate> -->
-        <!--  <VirtualizingStackPanel IsItemsHost="False"  -->
-        <!--  IsVirtualizing="True"  -->
-        <!--  ScrollUnit="Pixel"  -->
-        <!--  VirtualizationMode="Recycling" />  -->
-        <!--         </ItemsPanelTemplate> -->
-        <!--     </ListBox.ItemsPanel> -->
-        <!--     <ListBox.ItemTemplate> -->
-        <!--         <DataTemplate DataType="model:AnimeBytesScrapeAnime"> -->
-        <!--             <Grid> -->
-        <!--                 <Grid.ColumnDefinitions> -->
-        <!--                     <ColumnDefinition Width="*" /> -->
-        <!--                     <ColumnDefinition Width="Auto" /> -->
-        <!--                     <ColumnDefinition Width="50" /> -->
-        <!--                 </Grid.ColumnDefinitions> -->
-        <!--  <TextBlock x:Name="Name"  -->
-        <!--  Grid.Column="0"  -->
-        <!--  Margin="8,0,0,0"  -->
-        <!--  VerticalAlignment="Center"  -->
-        <!--  Text="{Binding FullName}"  -->
-        <!--  TextTrimming="CharacterEllipsis"  -->
-        <!--  TextWrapping="NoWrap"  -->
-        <!--  ToolTip="{Binding FullName}"  -->
-        <!--  ToolTipService.Placement="Bottom" />  -->
-        <!--    -->
-        <!--  <TextBlock Grid.Column="2"  -->
-        <!--  HorizontalAlignment="Center"  -->
-        <!--  VerticalAlignment="Center"  -->
-        <!--  Text="{Binding Torrents.Length}"  -->
-        <!--  ToolTip="{Binding Torrents.Length, StringFormat=Torrents {0}}" />  -->
-        <!--             </Grid> -->
-        <!--         </DataTemplate> -->
-        <!--     </ListBox.ItemTemplate> -->
-        <!-- </ListBox> -->
 
         <Expander
             Grid.Row="2"
@@ -326,9 +283,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox
-                                Text="{Binding ActiveItem.SelectedTorrent.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                TextWrapping="Wrap" />
+                            <TextBox Text="{Binding ActiveItem.SelectedTorrent.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
                             <Button
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
