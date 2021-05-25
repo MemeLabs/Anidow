@@ -41,18 +41,16 @@ namespace Anidow.Torrent_Clients
                 {new StringContent(Settings.QBitTorrent.Category), "category"},
             };
             var response = await _httpClient.PostAsync($"{ApiUrl}/api/v2/torrents/add", m);
-            if (response != null && response.IsSuccessStatusCode)
+            string content;
+            if (response is {IsSuccessStatusCode: true})
             {
-                var content = await response.Content.ReadAsStringAsync();
+                content = await response.Content?.ReadAsStringAsync();
                 _logger.Information(content);
                 return true;
             }
-
-            if (response != null)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                _logger.Error(content);
-            }
+            
+            content = await response?.Content?.ReadAsStringAsync();
+            _logger.Error(content);
 
             _logger.Information($"failed adding {item.DownloadLink} to qbittorrent");
             return false;

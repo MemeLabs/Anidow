@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using Anidow.Utils;
 using Serilog.Core;
 using Serilog.Events;
 using Stylet;
@@ -9,14 +9,14 @@ namespace Anidow.Pages
     {
         public LogViewModel()
         {
-            Items = new ObservableCollection<LogEvent>();
+            Items = new BindableCollection<LogEvent>();
         }
 
-        public ObservableCollection<LogEvent> Items { get; }
+        public IObservableCollection<LogEvent> Items { get; }
 
         public void Emit(LogEvent logEvent)
         {
-            Execute.OnUIThreadSync(() => Items.Insert(0, logEvent));
+            DispatcherUtil.DispatchSync(() => Items.Insert(0, logEvent));
         }
     }
 }

@@ -1,0 +1,130 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI">
+
+    <Style
+        x:Key="DeleteButton"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
+                <Setter Property="Foreground" Value="White" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="ActionButton"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="{x:Type Button}">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="8" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="False">
+                <Setter Property="Background" Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="WindowButtonHidden" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonHighlightBrush}}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Width" Value="45" />
+        <Setter Property="Margin" Value="1,0,0,1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="TextElement.FontFamily" Value="Segoe UI" />
+        <Setter Property="TextElement.FontSize" Value="14" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border
+                            x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Opacity="0" />
+
+                        <ContentPresenter
+                            Opacity="0"
+                            x:Name="ContentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            RenderOptions.ClearTypeHint="Auto"
+                            TextOptions.TextFormattingMode="Display"
+                            TextOptions.TextRenderingMode="Auto" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ContentPresenter"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0:0:0.025" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0:0:0.025" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ContentPresenter"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0:0:0.15" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="Border"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
+            </Trigger>
+
+            <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+            </DataTrigger>
+
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

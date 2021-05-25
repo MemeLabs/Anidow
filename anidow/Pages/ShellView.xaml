@@ -35,35 +35,17 @@
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="1"
-                Command="{s:Action TestCrash}"
-                FontFamily="Segoe UI"
-                FontSize="14"
-                Visibility="{Binding CanTestCrash, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
-                <Button.Style>
-                    <Style BasedOn="{StaticResource {x:Static adonisUi:Styles.WindowButton}}" TargetType="Button">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Content" Value="Crash" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+                Command="{s:Action TestCrash,
+                                   ActionNotFound=Disable}"
+                Content="Crash"
+                Style="{DynamicResource WindowButtonHidden}"
+                Visibility="{Binding CanTestCrash, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
             <Button
                 Grid.Column="2"
-                Command="{s:Action ShowLogs}"
-                FontFamily="Segoe UI"
-                FontSize="14">
-                <Button.Style>
-                    <Style BasedOn="{StaticResource {x:Static adonisUi:Styles.WindowButton}}" TargetType="Button">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Content" Value="Logs" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+                Command="{s:Action ShowLogs,
+                                   ActionNotFound=Disable}"
+                Content="Logs"
+                Style="{DynamicResource WindowButtonHidden}" />
             <Button
                 Grid.Column="3"
                 Command="{s:Action OpenGithub,

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Extensions;
@@ -125,17 +124,12 @@ namespace Anidow.Pages
 
             CanLoadEpisodes = true;
         }
-
-        private async Task Dispatch(Action action)
-        {
-            await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
-        }
-
+        
         public async Task LoadMore()
         {
             foreach (var episode in _episodes.Skip(Items.Count).Take(_maxFilesInView))
             {
-                await Dispatch(() => Items.Add(episode));
+                await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
             }
             CanLoadMore = Items.Count < _episodes.Count;
             EpisodesLoaded = $"{Items.Count}/{_episodes.Count}";

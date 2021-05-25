@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
@@ -54,7 +55,7 @@ namespace Anidow.Pages
         public bool CanForceCheck { get; set; } = true;
         public string NextCheckIn { get; set; }
         public Timer NextCheckTimer { get; set; }
-        public bool CanTestCrash { get; set; }
+        public bool CanTestCrash => Debugger.IsAttached;
 
         protected override async void OnInitialActivate()
         {
@@ -63,9 +64,6 @@ namespace Anidow.Pages
             NextCheckTimer = new Timer(1000);
             NextCheckTimer.Elapsed += NextCheckTimerOnElapsed;
             NextCheckTimer.Start();
-#if DEBUG
-            CanTestCrash = true;
-#endif
         }
 
         public void TestCrash()

@@ -15,6 +15,7 @@ using Anidow.Pages;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
 using Anidow.Validators;
+using FluentScheduler;
 using FluentValidation;
 using Hardcodet.Wpf.TaskbarNotification;
 using Jot;
@@ -129,11 +130,16 @@ namespace Anidow
 
         private void InitLogger(ILogEventSink logViewModel)
         {
+            var logLevel = LogEventLevel.Information;
+#if DEBUG
+            logLevel = LogEventLevel.Verbose;
+#endif
+
             var logConfiguration = new LoggerConfiguration()
-                .MinimumLevel.Is(LogEventLevel.Verbose)
+                .MinimumLevel.Is(logLevel)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.Sink(logViewModel, LogEventLevel.Verbose)
+                .WriteTo.Sink(logViewModel, logLevel)
                 .WriteTo.File(
                     "./logs/log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7);
 
@@ -143,6 +149,7 @@ namespace Anidow
         protected override void OnExit(ExitEventArgs e)
         {
             _taskBarIcon?.Dispose();
+            JobManager.StopAndBlock();
         }
 
         protected override async void Configure()
@@ -178,6 +185,11 @@ namespace Anidow
                 Application.Current.MainWindow.Language =
                     XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             }
+
+            // Initialize FluentScheduler
+            JobManager.Initialize();
+            JobManager.JobException += info => _logger.Error(info.Exception, "An error just happened with a scheduled job");
+
 
 
             var selfContained = false;

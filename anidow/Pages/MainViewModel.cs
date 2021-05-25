@@ -12,11 +12,13 @@ using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Extensions;
+using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
 using Anidow.Utils;
 using BencodeNET.Torrents;
+using FluentScheduler;
 using Hardcodet.Wpf.TaskbarNotification;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +38,6 @@ namespace Anidow.Pages
         private readonly TaskbarIcon _taskbarIcon;
         private readonly TorrentService _torrentService;
         private readonly IWindowManager _windowManager;
-        private Timer _getTorrentsStatusTimer;
 
 
         public MainViewModel(IEventAggregator eventAggregator, ILogger logger,
@@ -299,9 +300,15 @@ namespace Anidow.Pages
 
         protected override void OnInitialActivate()
         {
-            _getTorrentsStatusTimer = new Timer { Interval = 5000 };
-            _getTorrentsStatusTimer.Elapsed += async (_, _) => { await UpdateTorrents(); };
-            _getTorrentsStatusTimer.Start();
+            JobManager.AddJob(
+                () =>
+                {
+                    UpdateTorrents().Wait();
+
+                },
+                s => s.WithName("Home:UpdateTorrents").NonReentrant().ToRunEvery(1).Seconds()
+            );
+
 
             NextCheckTimer = new Timer(100);
             NextCheckTimer.Elapsed += NextCheckTimerOnElapsed;
@@ -380,33 +387,23 @@ namespace Anidow.Pages
 
         private async Task UpdateTorrents()
         {
+            _logger.Debug("started job: UpdateTorrents");
             if (Items.Count <= 0)
             {
+                _logger.Debug("finished job: UpdateTorrents");
                 return;
             }
 
-            var torrents = await _torrentService.GetTorrents<QBitTorrentEntry[]>();
-            if (torrents is null)
+            try
             {
-                return;
+                await _torrentService.UpdateTorrentProgress(Items);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed updating torrent progress");
             }
 
-            foreach (var anime in Items)
-            {
-                if (string.IsNullOrWhiteSpace(anime.TorrentId))
-                {
-                    continue;
-                }
-
-                var torrent = torrents.SingleOrDefault(t =>
-                    t.hash.Equals(anime.TorrentId, StringComparison.InvariantCultureIgnoreCase));
-                if (torrent is null)
-                {
-                    continue;
-                }
-
-                anime.TorrentProgress = torrent.progress;
-            }
+            _logger.Debug("finished job: UpdateTorrents");
         }
 
         public async Task GetAiringEpisodesForToday()

@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Styles/Expander.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/TabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/ListViewItem.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/Button.xaml" />
             </s:ApplicationLoader.MergedDictionaries>
 
             <!-- Override colors -->
@@ -133,38 +134,6 @@
                 </Setter>
             </Style>
 
-            <Style
-                x:Key="DeleteButton"
-                BasedOn="{StaticResource {x:Type Button}}"
-                TargetType="{x:Type Button}">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
-                        <Setter Property="Foreground" Value="White" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style
-                x:Key="ActionButton"
-                BasedOn="{StaticResource {x:Type Button}}"
-                TargetType="{x:Type Button}">
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="Padding" Value="8" />
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
-                    </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Background" Value="Transparent" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
         </s:ApplicationLoader>
     </Application.Resources>
 </Application>
