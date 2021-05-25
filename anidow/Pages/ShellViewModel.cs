@@ -61,6 +61,7 @@ namespace Anidow.Pages
         {
             await _settingsService.Init();
             _animeBytesService.InitTracker();
+
             NextCheckTimer = new Timer(1000);
             NextCheckTimer.Elapsed += NextCheckTimerOnElapsed;
             NextCheckTimer.Start();

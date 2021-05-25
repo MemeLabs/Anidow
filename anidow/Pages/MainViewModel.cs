@@ -460,12 +460,4 @@ namespace Anidow.Pages
 #endif
         }
     }
-
-    public class FutureEpisode
-    {
-        public string Name { get; init; }
-        public DateTime Date { get; init; }
-        public DateTime DateLocal => Date.ToLocalTime();
-        public string DateString => Date.Humanize();
-    }
 }
