@@ -20,7 +20,7 @@ namespace Anidow.Database.Models
         [NotMapped] public string WatchedHeaderString => Watched ? "Not watched" : "Watched";
         [NotMapped] public bool HasFile => !string.IsNullOrWhiteSpace(File);
         [NotMapped] public float TorrentProgress { get; set; }
-        [NotMapped] public bool TorrentFinished => (int)TorrentProgress == 1;
+        [NotMapped] public bool TorrentFinished => TorrentProgress >= 1.00f;
         [NotMapped] public string TorrentProgressContent => $"{TorrentProgress / 1f * 100:0.#}%";
 
         [NotMapped]

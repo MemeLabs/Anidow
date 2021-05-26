@@ -23,7 +23,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <GroupBox
-            Margin="2"
+            Margin="2,4,2,2"
             extensions:LayerExtension.IncreaseLayer="True"
             Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Grid>
