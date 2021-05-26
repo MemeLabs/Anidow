@@ -108,8 +108,7 @@
                             </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -119,15 +118,11 @@
         <Style.Triggers>
 
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
             </Trigger>
 
-            <DataTrigger
-                Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                Value="False">
-                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+            <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
             </DataTrigger>
 
         </Style.Triggers>

@@ -59,7 +59,6 @@ namespace Anidow.Pages
         public string NextCheckIn { get; private set; } = "00:00";
         public Timer NextCheckTimer { get; set; }
         public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
-
         public async void Handle(DownloadEvent message)
         {
             var torrent = message.Torrent;
@@ -171,7 +170,7 @@ namespace Anidow.Pages
             }
         }
 
-        public async Task DeleteItem(Episode episode)
+        public async Task HideItem(Episode episode)
         {
             episode ??= ActiveItem;
             var index = Items.IndexOf(episode);
@@ -186,6 +185,36 @@ namespace Anidow.Pages
             try
             {
                 await episode.UpdateInDatabase();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed updating episode in database");
+            }
+
+            Items.Remove(episode);
+            DeselectItem();
+        }
+
+        public async Task DeleteItem(Episode episode)
+        {
+            episode ??= ActiveItem;
+            var index = Items.IndexOf(episode);
+            if (index == -1)
+            {
+                return;
+            }
+
+            if (!DeleteUtil.AskForConfirmation(episode.Name))
+            {
+                return;
+            }
+
+            try
+            {
+                await using var db = new TrackContext();
+                db.Attach(episode);
+                db.Remove(episode);
+                await db.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -264,37 +293,39 @@ namespace Anidow.Pages
         public async Task DeleteWithFile()
         {
             var episode = ActiveItem;
-            var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{episode.Name}", "Delete",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Cancel)
+
+            if (!DeleteUtil.AskForConfirmation(episode.Name))
             {
                 return;
             }
-
-            Items.Remove(episode);
-
-            await using var db = new TrackContext();
-            db.Attach(episode);
-            db.Remove(episode);
-            await db.SaveChangesAsync();
 
             var success = await _torrentService.Remove(episode, true);
 
             // wait 1 second for the torrent client to delete the file
             await Task.Delay(1.Seconds());
 
-            if (success && !File.Exists(episode.File))
+            if (!success)
             {
                 return;
             }
 
-            try
+            await using var db = new TrackContext();
+            db.Attach(episode);
+            db.Remove(episode);
+            await db.SaveChangesAsync();
+
+            Items.Remove(episode);
+
+            if (!string.IsNullOrWhiteSpace(episode.File) && File.Exists(episode.File))
             {
-                File.Delete(episode.File);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, $"failed deleting file {episode.File}");
+                try
+                {
+                    File.Delete(episode.File);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, $"failed deleting file {episode.File}");
+                }
             }
         }
 

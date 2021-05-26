@@ -136,10 +136,11 @@
                                         Padding="4,5,4,4"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
+                                        ToolTip="Back to Home tab"
                                         HorizontalContentAlignment="Center"
                                         extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
                                         extensions:RippleExtension.BackgroundBrush="#EF5350"
-                                        Command="{s:Action UnWatchItem,
+                                        Command="{s:Action UnHideItem,
                                                            ActionNotFound=Disable}"
                                         CommandParameter="{Binding}"
                                         Content="{iconPacks:FontAwesome TimesSolid,

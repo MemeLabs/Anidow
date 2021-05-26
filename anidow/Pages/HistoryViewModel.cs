@@ -29,7 +29,7 @@ namespace Anidow.Pages
         public const string NotWatched = "Not watched";
     }
 
-    public class HistoryViewModel : Conductor<IEpisode>.Collection.OneActive
+    public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
@@ -180,6 +180,11 @@ namespace Anidow.Pages
                 return;
             }
 
+            if (!DeleteUtil.AskForConfirmation(episode.Name))
+            {
+                return;
+            }
+
             try
             {
                 await using var db = new TrackContext();
@@ -199,42 +204,44 @@ namespace Anidow.Pages
 
         public async Task DeleteWithFile(Episode episode)
         {
-            episode ??= (Episode) ActiveItem;
-            var result = MessageBox.Show($"are you sure you want to delete the file?\n\n{episode.Name}", "Delete",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Cancel)
+            episode ??= ActiveItem;
+
+            if (!DeleteUtil.AskForConfirmation(episode.Name))
             {
                 return;
             }
-
-            Items.Remove(episode);
-
-            await using var db = new TrackContext();
-            db.Attach(episode);
-            db.Remove(episode);
-            await db.SaveChangesAsync();
 
             var success = await _torrentService.Remove(episode, true);
 
             // wait 1 second for the torrent client to delete the file
             await Task.Delay(1.Seconds());
 
-            if (success && !File.Exists(episode.File))
+            if (!success)
             {
                 return;
             }
 
-            try
+            await using var db = new TrackContext();
+            db.Attach(episode);
+            db.Remove(episode);
+            await db.SaveChangesAsync();
+
+            Items.Remove(episode);
+
+            if (!string.IsNullOrWhiteSpace(episode.File) && File.Exists(episode.File))
             {
-                File.Delete(episode.File);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, $"failed deleting file {episode.File}");
+                try
+                {
+                    File.Delete(episode.File);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, $"failed deleting file {episode.File}");
+                }
             }
         }
 
-        public async Task UnWatchItem(Episode episode)
+        public async Task UnHideItem(Episode episode)
         {
             episode ??= (Episode) ActiveItem;
             var index = Items.IndexOf(episode);

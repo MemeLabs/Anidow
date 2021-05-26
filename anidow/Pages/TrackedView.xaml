@@ -87,7 +87,6 @@
                     <tracked:TrackedListView DataContext="{Binding}" />
                 </DataTemplate>
             </ContentPresenter.Resources>
-            <!--  Triggers  -->
             <ContentPresenter.Style>
                 <Style TargetType="{x:Type ContentPresenter}">
                     <Style.Triggers>

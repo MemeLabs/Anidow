@@ -66,13 +66,14 @@
                                         HorizontalContentAlignment="Center"
                                         extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
                                         extensions:RippleExtension.BackgroundBrush="#EF5350"
-                                        Command="{s:Action DeleteItem,
+                                        Command="{s:Action HideItem,
                                                            ActionNotFound=Disable}"
                                         CommandParameter="{Binding}"
                                         Content="{iconPacks:FontAwesome TimesSolid,
                                                                         Width=10,
                                                                         Height=10}"
-                                        Style="{StaticResource DeleteButton}" />
+                                        Style="{StaticResource DeleteButton}"
+                                        ToolTip="Hide" />
 
                                     <TextBlock
                                         x:Name="Name"
@@ -96,6 +97,17 @@
                                         ToolTip="Download progress"
                                         Visibility="{Binding TorrentShowProgress, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
                                         Value="{Binding TorrentProgress}" />
+
+                                    <Grid
+                                        Grid.Column="2"
+                                        Background="Transparent"
+                                        ToolTip="Download finished">
+                                        <ContentControl
+                                            Margin="4,0,2,0"
+                                            VerticalAlignment="Center"
+                                            Content="{iconPacks:FontAwesome CheckSolid}"
+                                            Visibility="{Binding TorrentFinished, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                                    </Grid>
                                 </Grid>
 
                                 <DataTemplate.Triggers>
@@ -200,8 +212,7 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock VerticalAlignment="Top" Text="{Binding DateString}">
                                                 <TextBlock.ToolTip>
-                                                    <ToolTip Content="{Binding DateLocal}"
-                                                             ContentStringFormat="{}{0:g}" />
+                                                    <ToolTip Content="{Binding DateLocal}" ContentStringFormat="{}{0:g}" />
                                                 </TextBlock.ToolTip>
                                             </TextBlock>
                                             <Separator
