@@ -187,18 +187,17 @@ namespace Anidow.Pages
 
             try
             {
-                await using var db = new TrackContext();
-                db.Attach(episode);
-                db.Remove(episode);
-                await db.SaveChangesAsync();
+                if (await episode.DeleteInDatabase())
+                {
+                    Items.Remove(episode);
+                    DeselectItem();
+                }
             }
             catch (Exception e)
             {
                 _logger.Error(e, "failed deleting episode in database");
             }
 
-            Items.Remove(episode);
-            DeselectItem();
         }
 
 
@@ -221,12 +220,11 @@ namespace Anidow.Pages
                 return;
             }
 
-            await using var db = new TrackContext();
-            db.Attach(episode);
-            db.Remove(episode);
-            await db.SaveChangesAsync();
-
-            Items.Remove(episode);
+            if (await episode.DeleteInDatabase())
+            {
+                Items.Remove(episode);
+                DeselectItem();
+            }
 
             if (!string.IsNullOrWhiteSpace(episode.File) && File.Exists(episode.File))
             {

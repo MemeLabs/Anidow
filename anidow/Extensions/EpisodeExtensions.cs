@@ -13,5 +13,14 @@ namespace Anidow.Extensions
             db.Episodes.Update(episode);
             await db.SaveChangesAsync();
         }
+
+        public static async Task<bool> DeleteInDatabase(this Episode episode)
+        {
+            await using var db = new TrackContext();
+            db.Attach(episode);
+            db.Remove(episode);
+            var rows = await db.SaveChangesAsync();
+            return rows >= 1;
+        }
     }
 }

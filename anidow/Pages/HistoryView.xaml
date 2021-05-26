@@ -136,7 +136,6 @@
                                         Padding="4,5,4,4"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
-                                        ToolTip="Back to Home tab"
                                         HorizontalContentAlignment="Center"
                                         extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
                                         extensions:RippleExtension.BackgroundBrush="#EF5350"
@@ -146,7 +145,8 @@
                                         Content="{iconPacks:FontAwesome TimesSolid,
                                                                         Width=10,
                                                                         Height=10}"
-                                        Style="{StaticResource DeleteButton}" />
+                                        Style="{StaticResource DeleteButton}"
+                                        ToolTip="Back to Home tab" />
 
                                     <TextBlock
                                         x:Name="Name"
@@ -339,8 +339,7 @@
                         Content="Delete"
                         Foreground="White">
                         <controls:SplitButton.SplitMenu>
-                            <ContextMenu
-                                MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                            <ContextMenu MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
                                 <MenuItem
                                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                                     extensions:RippleExtension.BackgroundBrush="#EF5350"
