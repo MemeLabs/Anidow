@@ -1,4 +1,5 @@
-﻿using Anidow.Utils;
+﻿using System;
+using Anidow.Utils;
 using Serilog.Core;
 using Serilog.Events;
 using Stylet;
@@ -16,7 +17,14 @@ namespace Anidow.Pages
 
         public void Emit(LogEvent logEvent)
         {
-            DispatcherUtil.DispatchSync(() => Items.Insert(0, logEvent));
+            try
+            {
+                DispatcherUtil.DispatchSync(() => Items.Insert(0, logEvent));
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
         }
     }
 }

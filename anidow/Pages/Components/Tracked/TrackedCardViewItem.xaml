@@ -18,21 +18,19 @@
             Margin="2.5,8,2.5,0"
             Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
             BorderThickness="2"
-            MouseDown="{s:Action EditAnime}">
+            MouseDown="{s:Action CardEditAnime}">
             <Border.Style>
                 <Style TargetType="Border">
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                             <Setter Property="Cursor" Value="Hand" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="False">
                             <Setter Property="BorderBrush" Value="Transparent" />
                         </Trigger>
                         <DataTrigger Binding="{Binding TrackedViewSelected}" Value="True">
-                            <Setter Property="BorderBrush"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

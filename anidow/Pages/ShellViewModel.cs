@@ -67,6 +67,11 @@ namespace Anidow.Pages
             NextCheckTimer.Start();
         }
 
+        public static void SetActiveItem()
+        {
+            
+        }
+
         public void TestCrash()
         {
             Crashes.GenerateTestCrash();

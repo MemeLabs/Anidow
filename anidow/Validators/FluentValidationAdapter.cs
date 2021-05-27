@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,8 +27,16 @@ namespace Anidow.Validators
         {
             // If someone's calling us synchronously, and ValidationAsync does not complete synchronously,
             // we'll deadlock unless we continue on another thread.
-            return (await _validator.ValidateAsync(_subject, CancellationToken.None).ConfigureAwait(false))
-                   .Errors.Select(x => x.ErrorMessage);
+            try
+            {
+                return (await _validator.ValidateAsync(_subject, CancellationToken.None).ConfigureAwait(false))
+                       .Errors.Select(x => x.ErrorMessage);
+            }
+            catch (Exception )
+            {
+                // ignore
+                return default;
+            }
         }
 
         public async Task<Dictionary<string, IEnumerable<string>>> ValidateAllPropertiesAsync()

@@ -20,6 +20,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Styles/TabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/ListViewItem.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/ListBox.xaml" />
             </s:ApplicationLoader.MergedDictionaries>
 
             <!--  Override colors  -->

@@ -10,18 +10,12 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
-    xmlns:pages="clr-namespace:Anidow.Pages"
-    xmlns:s="https://github.com/canton7/Stylet"
     xmlns:tracked="clr-namespace:Anidow.Pages.Components.Tracked"
-    d:DataContext="{d:DesignInstance pages:TrackedViewModel}"
+    d:DataContext="{d:DesignInstance tracked:TrackedOverViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
         <ItemsControl ItemsSource="{Binding Items}">
             <ItemsControl.Template>
                 <ControlTemplate TargetType="{x:Type ItemsControl}">
@@ -41,53 +35,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Expander
-            Grid.Row="1"
-            VerticalAlignment="Bottom"
-            extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
-            extensions:LayerExtension.IncreaseLayer="True"
-            IsExpanded="True"
-            Style="{StaticResource ExpanderCustom}"
-            Visibility="{Binding ActiveItem, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
-            <Expander.Header>
-                <Grid>
-                    <Grid.Resources>
-                        <Style TargetType="Grid">
-                            <Style.Setters>
-                                <Setter Property="TextElement.Foreground" Value="White" />
-                            </Style.Setters>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Grid.Column="1"
-                        VerticalAlignment="Center"
-                        FontWeight="Bold"
-                        Text="{Binding ActiveItem.Name}"
-                        TextTrimming="CharacterEllipsis" />
-                    <!--<TextBlock Grid.Column="2"
-                               Margin="8,0"
-                               VerticalAlignment="Center"
-                               Opacity=".7"
-                               Text="{Binding ActiveItem.Id, StringFormat=(id: {0})}"
-                               Visibility="{Binding ActiveItem.Id, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />-->
-                    <Button
-                        Grid.Column="4"
-                        Margin="0,-4"
-                        Command="{s:Action DeselectItem}"
-                        Content="{iconPacks:FontAwesome TimesSolid,
-                                                        Height=15,
-                                                        Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
-                </Grid>
-            </Expander.Header>
-            <tracked:TrackedAnimeEditContentView DataContext="{Binding ActiveItem}" />
-        </Expander>
     </Grid>
 </UserControl>

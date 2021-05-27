@@ -181,15 +181,24 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Tracked view: List" />
-                            <ToggleButton
+                            <TextBlock Text="Tracked view:" VerticalAlignment="Center" />
+
+                            <ListBox
                                 Grid.Column="1"
-                                Margin="8,0,4,0"
-                                IsChecked="{Binding Settings.TrackedIsCardView}"
-                                Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
-                            <TextBlock Grid.Column="2" Text="Card" />
+                                Margin="{adonisUi:Space 1,
+                                            0}"
+                                SelectedIndex="{Binding Settings.TrackedIsCardView}"
+                                Style="{DynamicResource ToggleListBox}">
+                                <ListBoxItem
+                                    VerticalContentAlignment="Center"
+                                    Content="{iconPacks:FontAwesome ThListSolid}"
+                                    ToolTip="List" />
+                                <ListBoxItem
+                                    VerticalContentAlignment="Center"
+                                    Content="{iconPacks:FontAwesome ThLargeSolid}"
+                                    ToolTip="Cards" />
+                            </ListBox>
                         </Grid>
                     </Grid>
                 </Expander>

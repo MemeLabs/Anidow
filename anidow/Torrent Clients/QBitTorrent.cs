@@ -106,8 +106,7 @@ namespace Anidow.Torrent_Clients
             var url = $"{ApiUrl}/api/v2/torrents/info?filter=all&category={encodedCategory}&sort=added_on";
             try
             {
-                var response =
-                    await _httpClient.GetStringAsync(url);
+                var response = await _httpClient.GetStringAsync(url);
                 var list = JsonSerializer.Deserialize<T>(response);
                 return list;
             }

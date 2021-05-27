@@ -35,7 +35,7 @@ namespace Anidow.Pages
             DisplayName = $"Files - {episode.Name}";
         }
 
-        public FolderFilesViewModel(ref Anime anime, IEventAggregator eventAggregator, ILogger logger)
+        public FolderFilesViewModel(Anime anime, IEventAggregator eventAggregator, ILogger logger)
         {
             _anime = anime ?? throw new ArgumentNullException(nameof(anime));
             _name = anime.Name;

@@ -76,7 +76,7 @@
             ToolTipService.Placement="Left" />
         <TabControl
             DisplayMemberPath="DisplayName"
-            ItemsSource="{Binding Items}"
+            ItemsSource="{Binding Items, Mode=OneTime}"
             SelectedItem="{Binding ActiveItem}"
             Style="{StaticResource TabControlCustom}">
             <TabControl.ContentTemplate>

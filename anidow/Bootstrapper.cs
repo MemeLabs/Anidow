@@ -11,6 +11,7 @@ using AdonisUI.Controls;
 using Anidow.Database;
 using Anidow.Factories;
 using Anidow.Pages;
+using Anidow.Pages.Components.Tracked;
 using Anidow.Properties;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
@@ -88,6 +89,7 @@ namespace Anidow
         //private void BindViewModels(IStyletIoCBuilder builder)
         //{
         //    builder.Bind<ShellViewModel>().ToSelf();
+        //    builder.Bind<AnimeBytesViewModel>().ToSelf().InSingletonScope();
         //    builder.Bind<AnimeBytesRssViewModel>().ToSelf().InSingletonScope();
         //    builder.Bind<AnimeBytesSearchViewModel>().ToSelf().InSingletonScope();
         //    builder.Bind<MainViewModel>().ToSelf().InSingletonScope();
@@ -150,7 +152,7 @@ namespace Anidow
         protected override void OnExit(ExitEventArgs e)
         {
             _taskBarIcon?.Dispose();
-            JobManager.StopAndBlock();
+            JobManager.Stop();
         }
 
         protected override async void Configure()

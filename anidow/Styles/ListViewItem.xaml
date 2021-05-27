@@ -108,5 +108,14 @@
                 Visibility="{Binding HasFile, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
         </Grid>
     </DataTemplate>
+    <DataTemplate x:Key="EditCell" DataType="models:Anime">
+        <Button
+            Width="66"
+            Command="{s:Action ListEditAnime,
+                               ActionNotFound=Disable}"
+            CommandParameter="{Binding}"
+            Content="Edit"
+            Style="{StaticResource ColumnButton}" />
+    </DataTemplate>
 
 </ResourceDictionary>
