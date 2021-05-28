@@ -363,10 +363,15 @@ namespace Anidow.Pages
             var animes = await db.Anime.ToListAsync();
             foreach (var anime in animes)
             {
+                anime.Created = anime.Created == default ? anime.Released : anime.Created;
                 var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);
                 anime.CoverData ??= coverData;
                 var episodes = db.Episodes.Where(e => e.AnimeId == anime.GroupId);
-                foreach (var episode in episodes) episode.CoverData ??= coverData;
+                foreach (var episode in episodes)
+                {
+                    episode.CoverData ??= coverData;
+                    episode.Created = episode.Created == default ? episode.Released : episode.Created;
+                };
 
                 rows += await db.SaveChangesAsync();
             }

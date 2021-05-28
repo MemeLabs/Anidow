@@ -28,6 +28,7 @@ namespace Anidow.Database.Models
                                            && TorrentProgress is > 0f and < 1f;
 
         public int Id { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
         public string Name { get; set; }
         public string File { get; set; }
         public string TorrentId { get; set; }

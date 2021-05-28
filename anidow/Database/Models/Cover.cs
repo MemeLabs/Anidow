@@ -8,7 +8,7 @@ namespace Anidow.Database.Models
     public class Cover : ObservableObject
     {
         public int Id { get; set; }
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime Created { get; set; } = DateTime.Now;
         public string File { get; set; }
 
         [NotMapped] public string FilePath => Path.Combine(Directory.GetCurrentDirectory(), File);

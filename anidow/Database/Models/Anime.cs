@@ -14,6 +14,7 @@ namespace Anidow.Database.Models
     public class Anime : ObservableObject
     {
         public int Id { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
         public string Name { get; set; }
         public Site Site { get; set; }
         public string Folder { get; set; }
@@ -24,6 +25,7 @@ namespace Anidow.Database.Models
         public string GroupId { get; set; }
         public string GroupUrl { get; set; }
         [Required] public string Group { get; set; }
+        [NotMapped] public int Score { get; set; }
         public AnimeStatus Status { get; set; }
 
         [NotMapped] public string ReleasedString => Released.Humanize();
