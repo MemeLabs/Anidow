@@ -72,15 +72,14 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Margin="0,0,0,4">Anime folder path</TextBlock>
+                        <TextBlock Margin="0,0,0,4">Anime folder path:</TextBlock>
                         <Grid Grid.Row="1" Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
-                                     Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -121,16 +120,25 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Theme: Light" />
-                            <ToggleButton
+                            <TextBlock VerticalAlignment="Center" Text="Theme:" />
+
+                            <ListBox
                                 Grid.Column="1"
-                                Margin="8,0,4,0"
-                                IsChecked="{Binding Settings.IsDark}"
-                                Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
-                            <TextBlock Grid.Column="2" Text="Dark" />
+                                Margin="{adonisUi:Space 1,
+                                                        0}"
+                                SelectedIndex="{Binding Settings.IsDark}"
+                                Style="{DynamicResource ToggleListBox}">
+                                <ListBoxItem
+                                    VerticalContentAlignment="Center"
+                                    Content="{iconPacks:FontAwesome SunSolid}"
+                                    ToolTip="Light" />
+                                <ListBoxItem
+                                    VerticalContentAlignment="Center"
+                                    Content="{iconPacks:FontAwesome MoonSolid}"
+                                    ToolTip="Dark" />
+                            </ListBox>
                             <TextBlock
-                                Grid.Column="3"
-                                Margin="8,0"
+                                Grid.Column="2"
                                 VerticalAlignment="Center"
                                 FontSize="12"
                                 Opacity=".7"
@@ -147,8 +155,7 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Text="Torrent client:" />
-                            <ComboBox Grid.Column="2"
-                                      SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
+                            <ComboBox Grid.Column="2" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
                                 <ComboBoxItem Content="QBitTorrent" />
                                 <ComboBoxItem Content="Deluge" IsEnabled="False" />
                             </ComboBox>
@@ -182,12 +189,12 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Tracked view:" VerticalAlignment="Center" />
+                            <TextBlock VerticalAlignment="Center" Text="Tracked view:" />
 
                             <ListBox
                                 Grid.Column="1"
                                 Margin="{adonisUi:Space 1,
-                                            0}"
+                                                        0}"
                                 SelectedIndex="{Binding Settings.TrackedIsCardView}"
                                 Style="{DynamicResource ToggleListBox}">
                                 <ListBoxItem
@@ -283,7 +290,7 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center">Username</TextBlock>
+                            <TextBlock VerticalAlignment="Center">Username:</TextBlock>
                         </StackPanel>
                         <TextBox
                             Grid.Row="1"
@@ -294,10 +301,9 @@
                             Grid.Row="2"
                             Margin="0,4"
                             Orientation="Horizontal">
-                            <TextBlock>Passkey</TextBlock>
+                            <TextBlock>Passkey:</TextBlock>
                             <TextBlock Margin="8,0">
-                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account"
-                                           RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account" RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
                                     (click here)
                                 </Hyperlink>
                             </TextBlock>
@@ -308,15 +314,14 @@
                             helpers:Secure.Password="{Binding Settings.AnimeBytesSettings.PassKey, UpdateSourceTrigger=PropertyChanged}" />
 
 
-                        <TextBlock Grid.Row="4" Margin="0,4">Default download folder</TextBlock>
+                        <TextBlock Grid.Row="4" Margin="0,4">Default download folder:</TextBlock>
                         <Grid Grid.Row="5" Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
-                                     Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -380,9 +385,7 @@
                     <Expander.Style>
                         <Style BasedOn="{StaticResource ExpanderCustom}" TargetType="Expander">
                             <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}"
-                                    Value="1">
+                                <DataTrigger Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}" Value="1">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -406,7 +409,7 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock Margin="0,0,0,4">Host</TextBlock>
+                            <TextBlock Margin="0,0,0,4">Host:</TextBlock>
                             <TextBox
                                 Grid.Row="1"
                                 Grid.Column="0"
@@ -416,7 +419,7 @@
                                 Grid.Row="0"
                                 Grid.Column="2"
                                 Margin="0,0,0,4">
-                                Port
+                                Port:
                             </TextBlock>
                             <TextBox
                                 Grid.Row="1"
@@ -435,7 +438,7 @@
                                 Grid.Row="0"
                                 Margin="0,0,0,4"
                                 VerticalAlignment="Center"
-                                Text="Category" />
+                                Text="Category:" />
                             <TextBox
                                 Grid.Row="1"
                                 Margin="0,0,0,4"

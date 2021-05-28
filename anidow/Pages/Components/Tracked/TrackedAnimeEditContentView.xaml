@@ -160,10 +160,8 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Status:" />
-                            <ComboBox
-                                Grid.Row="1"
-                                SelectedItem="{Binding Anime.Status, Mode=TwoWay}">
+                            <TextBlock Margin="0,0,0,4" Text="Status:" />
+                            <ComboBox Grid.Row="1" SelectedItem="{Binding Anime.Status, Mode=TwoWay}">
                                 <enums:AnimeStatus>Watching</enums:AnimeStatus>
                                 <enums:AnimeStatus>Finished</enums:AnimeStatus>
                                 <enums:AnimeStatus>Dropped</enums:AnimeStatus>
@@ -171,16 +169,16 @@
                         </Grid>
 
                         <Grid
-                            IsEnabled="False"
-                            Opacity=".3"
                             Grid.Row="2"
                             Grid.Column="1"
-                            Margin="4">
+                            Margin="4"
+                            IsEnabled="False"
+                            Opacity=".3">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Score:" />
+                            <TextBlock Margin="0,0,0,4" Text="Score:" />
                             <ComboBox
                                 Grid.Row="1"
                                 extensions:LayerExtension.Layer="2"
@@ -207,10 +205,8 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Date added:" />
-                            <DatePicker
-                                Grid.Row="1"
-                                Text="{Binding Anime.Created, Mode=TwoWay}" />
+                            <TextBlock Margin="0,0,0,4" Text="Date added:" />
+                            <DatePicker Grid.Row="1" Text="{Binding Anime.Created, Mode=TwoWay}" />
                         </Grid>
 
                         <Grid
@@ -221,12 +217,8 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock
-                                MinWidth="80"
-                                Text="Resolution:" />
-                            <ComboBox
-                                Grid.Row="1"
-                                SelectedItem="{Binding Anime.Resolution, Mode=TwoWay}">
+                            <TextBlock Margin="0,0,0,4" Text="Resolution:" />
+                            <ComboBox Grid.Row="1" SelectedItem="{Binding Anime.Resolution, Mode=TwoWay}">
                                 <system:String>720p</system:String>
                                 <system:String>1080p</system:String>
                             </ComboBox>
@@ -240,11 +232,8 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock
-                                Text="Group:" />
-                            <TextBox
-                                Grid.Row="1"
-                                Text="{Binding Anime.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Margin="0,0,0,4" Text="Group:" />
+                            <TextBox Grid.Row="1" Text="{Binding Anime.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </Grid>
                 </Border>
