@@ -85,7 +85,12 @@
                             Opacity=".3"
                             Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-                        <TextBlock Grid.Row="0" Margin="0,0,0,4">Anime folder path:</TextBlock>
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="0,0,0,4">
+                            Anime folder path:
+                        </TextBlock>
                         <Grid
                             Grid.Row="1"
                             Grid.Column="0"
@@ -130,6 +135,7 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
+
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="Theme:" />
                                 <TextBlock
@@ -147,11 +153,13 @@
                                 <ListBoxItem
                                     VerticalContentAlignment="Center"
                                     Content="{iconPacks:FontAwesome SunSolid}"
-                                    ToolTip="Light" />
+                                    ToolTip="Light"
+                                    ToolTipService.Placement="Left" />
                                 <ListBoxItem
                                     VerticalContentAlignment="Center"
                                     Content="{iconPacks:FontAwesome MoonSolid}"
-                                    ToolTip="Dark" />
+                                    ToolTip="Dark"
+                                    ToolTipService.Placement="Right" />
                             </ListBox>
                         </Grid>
 
@@ -169,7 +177,7 @@
                                 Text="Torrent client:" />
                             <ComboBox Grid.Column="1" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
                                 <ComboBoxItem Content="QBitTorrent" />
-                                <ComboBoxItem Content="Deluge" IsEnabled="False" />
+                                <ComboBoxItem Content="Deluge (soon tm)" IsEnabled="False" />
                             </ComboBox>
                         </Grid>
 
@@ -190,7 +198,7 @@
                         <Grid
                             Grid.Row="3"
                             Grid.Column="2"
-                            Margin="0,4,0,0">
+                            Margin="0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition />
@@ -204,11 +212,13 @@
                                 <ListBoxItem
                                     VerticalContentAlignment="Center"
                                     Content="{iconPacks:FontAwesome ThListSolid}"
-                                    ToolTip="List" />
+                                    ToolTip="List"
+                                    ToolTipService.Placement="Left" />
                                 <ListBoxItem
                                     VerticalContentAlignment="Center"
                                     Content="{iconPacks:FontAwesome ThLargeSolid}"
-                                    ToolTip="Cards" />
+                                    ToolTip="Cards"
+                                    ToolTipService.Placement="Right" />
                             </ListBox>
                         </Grid>
                     </Grid>
@@ -216,7 +226,7 @@
                 <Expander
                     Grid.Row="2"
                     extensions:LayerExtension.IncreaseLayer="True"
-                    IsExpanded="True"
+                    IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
                         <Grid>
@@ -260,7 +270,7 @@
                 <Expander
                     Grid.Row="4"
                     extensions:LayerExtension.IncreaseLayer="True"
-                    IsExpanded="True"
+                    IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
                         <Grid>
@@ -355,7 +365,7 @@
                 <Expander
                     Grid.Row="6"
                     extensions:LayerExtension.IncreaseLayer="True"
-                    IsExpanded="True">
+                    IsExpanded="False">
                     <Expander.Header>
                         <Grid>
                             <Grid.Resources>
