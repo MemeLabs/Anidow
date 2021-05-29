@@ -78,7 +78,7 @@
                         </Grid.ColumnDefinitions>
                         <Separator
                             Grid.Row="2"
-                            Grid.RowSpan="4"
+                            Grid.RowSpan="5"
                             Grid.Column="1"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Stretch"
@@ -141,9 +141,9 @@
                                 <TextBlock
                                     Margin="8,0"
                                     VerticalAlignment="Center"
-                                    FontSize="12"
+                                    FontSize="10"
                                     Opacity=".7"
-                                    Text="Light is buggy." />
+                                    Text="Light is might be buggy." />
                             </StackPanel>
 
                             <ListBox
@@ -182,20 +182,6 @@
                         </Grid>
 
                         <Grid
-                            Grid.Row="5"
-                            Grid.Column="0"
-                            Margin="0,4">
-                            <CheckBox Content="Notifications for downloads etc." IsChecked="{Binding Settings.Notifications}" />
-
-                        </Grid>
-                        <Grid
-                            Grid.Row="5"
-                            Grid.Column="2"
-                            Margin="0,4">
-                            <CheckBox Content="On close minimize to notification area." IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
-
-                        </Grid>
-                        <Grid
                             Grid.Row="3"
                             Grid.Column="2"
                             Margin="0,4">
@@ -220,6 +206,27 @@
                                     ToolTip="Cards"
                                     ToolTipService.Placement="Right" />
                             </ListBox>
+                        </Grid>
+
+                        <Grid
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Margin="0,4">
+                            <CheckBox Content="Notifications for downloads etc." IsChecked="{Binding Settings.Notifications}" />
+
+                        </Grid>
+                        <Grid
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            Margin="0,4">
+                            <CheckBox Content="On close minimize to notification area." IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
+
+                        </Grid>
+                        <Grid
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            Margin="0,4">
+                            <CheckBox Content="Start anidow on windows startup." IsChecked="{Binding Settings.StartOnWindowsStartUp}" />
                         </Grid>
                     </Grid>
                 </Expander>

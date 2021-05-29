@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using AdonisUI;
+using Anidow.Helpers;
 using Anidow.Model;
 using Serilog;
 using Stylet;
@@ -44,6 +45,8 @@ namespace Anidow.Services
             TempSettings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
             Settings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
 
+            Settings.StartOnWindowsStartUp = WindowsStartUp.IsEnabled();
+
             TempSettings.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.QBitTorrent.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.NyaaSettings.PropertyChanged += SettingsOnPropertyChanged;
@@ -57,6 +60,16 @@ namespace Anidow.Services
         {
             await _storeService.Save(TempSettings, "settings.json");
             Settings = await _storeService.Load<SettingsModel>("settings.json");
+            
+            switch (Settings.StartOnWindowsStartUp)
+            {
+                case true when !WindowsStartUp.IsEnabled():
+                    WindowsStartUp.Enable();
+                    break;
+                case false when WindowsStartUp.IsEnabled():
+                    WindowsStartUp.Disable();
+                    break;
+            }
 
             _logger.Information("saved setting's");
 

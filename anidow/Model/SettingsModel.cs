@@ -10,6 +10,7 @@ namespace Anidow.Model
         public string AnimeFolder { get; set; } = Directory.GetCurrentDirectory();
         public int RefreshTime { get; set; } = 5;
         public bool MinimizeToNotificationArea { get; set; }
+        public bool StartOnWindowsStartUp { get; set; }
         public bool IsDark { get; set; } = true;
         public bool Notifications { get; set; } = true;
         public bool TrackedIsCardView { get; set; }

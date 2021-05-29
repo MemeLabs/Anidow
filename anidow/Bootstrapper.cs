@@ -10,6 +10,7 @@ using System.Windows.Markup;
 using AdonisUI.Controls;
 using Anidow.Database;
 using Anidow.Factories;
+using Anidow.Helpers;
 using Anidow.Pages;
 using Anidow.Properties;
 using Anidow.Services;
@@ -28,6 +29,7 @@ using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
+
 #if RELEASE
 using System.IO;
 using System.Windows.Threading;
@@ -47,6 +49,7 @@ namespace Anidow
         private HttpClient _httpClient;
         private ILogger _logger;
         private TaskbarIcon _taskBarIcon;
+        private ShellView _shell;
 
         // Configure the IoC container in here
         protected override void ConfigureIoC(IStyletIoCBuilder builder)
@@ -77,10 +80,15 @@ namespace Anidow
 
             _httpClient = InitHttpClient();
             builder.Bind<HttpClient>().ToInstance(_httpClient);
-            var shell = new ShellView(tracker);
-            _taskBarIcon = shell.TaskbarIcon;
-            builder.Bind<TaskbarIcon>().ToInstance(shell.TaskbarIcon);
-            builder.Bind<ShellView>().ToInstance(shell);
+            _shell = new ShellView(tracker);
+            if (Args.Length > 0 && Args[0] == "/autostart")
+            {
+                _shell.WindowState = WindowState.Minimized;
+            }
+
+            _taskBarIcon = _shell.TaskbarIcon;
+            builder.Bind<TaskbarIcon>().ToInstance(_shell.TaskbarIcon);
+            builder.Bind<ShellView>().ToInstance(_shell);
 
             //BindViewModels(builder);
         }
@@ -148,10 +156,16 @@ namespace Anidow
             _logger = logConfiguration.CreateLogger();
         }
 
+        public override void Start(string[] args)
+        {
+            base.Start(args);
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
             _taskBarIcon?.Dispose();
             JobManager.Stop();
+            base.OnExit(e);
         }
 
         protected override async void Configure()

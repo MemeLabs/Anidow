@@ -79,6 +79,7 @@
                         VerticalAlignment="Center"
                         FontSize="12"
                         FontWeight="Bold"
+                        Foreground="White"
                         Text="{Binding Name}"
                         TextTrimming="CharacterEllipsis"
                         TextWrapping="Wrap"

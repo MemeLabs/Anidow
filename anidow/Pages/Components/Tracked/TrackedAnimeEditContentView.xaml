@@ -43,6 +43,7 @@
 
                 <Button
                     Width="50"
+                    Foreground="White"
                     HorizontalAlignment="Left"
                     Command="{s:Action Close}"
                     Content="{iconPacks:FontAwesome ArrowLeftSolid}"
@@ -51,6 +52,7 @@
 
                 <TextBlock
                     Grid.Column="1"
+                    Foreground="White"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontWeight="SemiBold">
