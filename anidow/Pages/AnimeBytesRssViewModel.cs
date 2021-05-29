@@ -86,6 +86,14 @@ namespace Anidow.Pages
             }
         }
 
+        protected override async void OnActivate()
+        {
+            if (CanSearch && Items.Count <= 0)
+            {
+                await GetItems();
+            }
+        }
+
         public async Task GetItems()
         {
             CanGetItems = false;
