@@ -32,22 +32,12 @@
 		<None Remove="anidown_28v_icon.ico" />
 		<None Remove="licenses.json" />
 		<None Remove="Properties\licenses.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <COMReference Include="IWshRuntimeLibrary">
-	    <WrapperTool>tlbimp</WrapperTool>
-	    <VersionMinor>0</VersionMinor>
-	    <VersionMajor>1</VersionMajor>
-	    <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
-	    <Lcid>0</Lcid>
-	    <Isolated>false</Isolated>
-	    <EmbedInteropTypes>true</EmbedInteropTypes>
-	  </COMReference>
+		<None Remove="Scripts\create-shortcut.ps1" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <EmbeddedResource Include="Properties\licenses.json" />
+	  <EmbeddedResource Include="Scripts\create-shortcut.ps1" />
 	</ItemGroup>
 
 	<ItemGroup>

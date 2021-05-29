@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using AdonisUI;
@@ -14,12 +15,14 @@ namespace Anidow.Services
     public class SettingsService : PropertyChangedBase
     {
         private readonly ILogger _logger;
+        private readonly Assembly _assembly;
         private readonly StoreService _storeService;
 
-        public SettingsService(StoreService storeService, ILogger logger)
+        public SettingsService(StoreService storeService, ILogger logger, Assembly assembly)
         {
             _storeService = storeService ?? throw new ArgumentNullException(nameof(storeService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _assembly = assembly;
         }
 
         public bool CanSave { get; set; }
@@ -64,7 +67,7 @@ namespace Anidow.Services
             switch (Settings.StartOnWindowsStartUp)
             {
                 case true when !WindowsStartUp.IsEnabled():
-                    WindowsStartUp.Enable();
+                    await WindowsStartUp.Enable(_assembly);
                     break;
                 case false when WindowsStartUp.IsEnabled():
                     WindowsStartUp.Disable();
