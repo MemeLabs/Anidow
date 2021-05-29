@@ -48,7 +48,9 @@ namespace Anidow.Services
             TempSettings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
             Settings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
 
-            Settings.StartOnWindowsStartUp = WindowsStartUp.IsEnabled();
+            var startup = WindowsStartUp.IsEnabled();
+            Settings.StartOnWindowsStartUp = startup;
+            TempSettings.StartOnWindowsStartUp = startup;
 
             TempSettings.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.QBitTorrent.PropertyChanged += SettingsOnPropertyChanged;

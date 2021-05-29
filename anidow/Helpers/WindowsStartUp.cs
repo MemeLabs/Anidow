@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using File = System.IO.File;
 
 namespace Anidow.Helpers
 {
@@ -21,7 +17,6 @@ namespace Anidow.Helpers
 
         public static async Task Enable(Assembly assembly)
         {
-
             var licenses = assembly.GetManifestResourceNames().Single(p => p.EndsWith("create-shortcut.ps1"));
             await using var stream = assembly.GetManifestResourceStream(licenses);
             using var reader = new StreamReader(stream!);
@@ -30,9 +25,9 @@ namespace Anidow.Helpers
             var exeFile = Process.GetCurrentProcess().MainModule.FileName;
             var wd = Path.GetDirectoryName(exeFile);
 
-            json = json.Replace("$args[0]", $"'{exeFile}'");
-            json = json.Replace("$args[1]", $"'{StartUpFile}'");
-            json = json.Replace("$args[2]", $"'{wd}'");
+            json = json.Replace("$args[0]", $"'{exeFile}'")
+                       .Replace("$args[1]", $"'{StartUpFile}'")
+                       .Replace("$args[2]", $"'{wd}'");
 
             var tmpFile = Path.Combine(Path.GetTempPath(), "create-shortcut.ps1");
             await File.WriteAllTextAsync(tmpFile, json);
@@ -40,7 +35,7 @@ namespace Anidow.Helpers
             var processInfo = new ProcessStartInfo
             {
                 FileName = @"powershell.exe",
-                Arguments = @"& {"+tmpFile+"}",
+                Arguments = @"& {" + tmpFile + "}",
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
@@ -49,12 +44,11 @@ namespace Anidow.Helpers
             //execute powershell command
 
             //start powershell process using process start info
-            var process = new Process {StartInfo = processInfo};
+            var process = new Process { StartInfo = processInfo };
             process.Start();
-            await process.WaitForExitAsync();
-
-            File.Delete(tmpFile);
+            _ = process.WaitForExitAsync().ContinueWith(_ => File.Delete(tmpFile));
         }
+
         public static void Disable()
         {
             try
@@ -67,11 +61,7 @@ namespace Anidow.Helpers
                 Debug.WriteLine(e);
             }
         }
-        public static bool IsEnabled()
-        {
-            return File.Exists(StartUpFile);
-        }
 
-
+        public static bool IsEnabled() => File.Exists(StartUpFile);
     }
 }
