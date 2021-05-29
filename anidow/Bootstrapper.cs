@@ -11,7 +11,6 @@ using AdonisUI.Controls;
 using Anidow.Database;
 using Anidow.Factories;
 using Anidow.Pages;
-using Anidow.Pages.Components.Tracked;
 using Anidow.Properties;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
@@ -38,7 +37,7 @@ using Onova.Services;
 
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
-using MessageBoxResult= AdonisUI.Controls.MessageBoxResult;
+using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 #endif
 
 namespace Anidow
@@ -158,10 +157,11 @@ namespace Anidow
         protected override async void Configure()
         {
 #if RELEASE
-            if (Process.GetProcessesByName(
-                           Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly()?.Location))
-                       .Length > 1)
+            var processes = Process.GetProcessesByName(
+                Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly()?.Location));
+            if (processes.Length > 1)
             {
+                MessageBox.Show("Anidow is already running!", "Already running");
                 Environment.Exit(0);
             }
 #endif

@@ -1,8 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows;
+using AdonisUI.Controls;
 using Anidow.Services;
 using Anidow.Utils;
 using Microsoft.AppCenter.Crashes;
@@ -109,6 +113,35 @@ namespace Anidow.Pages
         public void OpenAbout()
         {
             _windowManager.ShowDialog(_aboutViewModel);
+        }
+
+        public void ShowWindow()
+        {
+            if (AdonisWindow == null)
+            {
+                return;
+            }
+
+            AdonisWindow.Show();
+            AdonisWindow.WindowState = WindowState.Normal;
+        }
+
+        private AdonisWindow AdonisWindow { get; set; }
+
+        public void Window_Loaded(object sender, RoutedEventArgs _)
+        {
+            AdonisWindow ??= (AdonisWindow) sender;
+
+        }
+
+        public void Window_Closing(object sender, CancelEventArgs e)
+        {
+            AdonisWindow ??= (AdonisWindow) sender;
+            if (_settingsService.Settings.MinimizeToNotificationArea)
+            {
+                AdonisWindow.Hide();
+                e.Cancel = true;
+            }
         }
     }
 }

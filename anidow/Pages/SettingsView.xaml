@@ -37,7 +37,6 @@
                     <RowDefinition Height="8" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="8" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -72,8 +71,26 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Margin="0,0,0,4">Anime folder path:</TextBlock>
-                        <Grid Grid.Row="1" Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Separator
+                            Grid.Row="2"
+                            Grid.RowSpan="4"
+                            Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Opacity=".3"
+                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                        <TextBlock Grid.Row="0" Margin="0,0,0,4">Anime folder path:</TextBlock>
+                        <Grid
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="0,0,0,4"
+                            ColumnSpan="3">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8" />
@@ -88,44 +105,43 @@
                                 Content="{iconPacks:FontAwesome FolderOpenSolid}" />
                         </Grid>
 
-                        <Grid Grid.Row="2" Margin="0,4">
+                        <Grid
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="0,4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TextBlock
-                                Grid.Column="0"
-                                VerticalAlignment="Center"
-                                Text="Refresh time:" />
+                            <TextBlock VerticalAlignment="Center" Text="Refresh time in minutes:" />
                             <TextBox
-                                Grid.Column="2"
-                                Width="50"
+                                Grid.Column="1"
                                 extensions:WatermarkExtension.Watermark="5"
                                 PreviewTextInput="{s:Action NumberValidationTextBox}"
                                 Text="{Binding Settings.RefreshTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 TextChanged="{s:Action RefreshTimeTextChanged}" />
-                            <TextBlock
-                                Grid.Column="4"
-                                VerticalAlignment="Center"
-                                Text="minutes" />
                         </Grid>
 
-                        <Grid Grid.Row="3" Margin="0,4">
+                        <Grid
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="0,4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TextBlock VerticalAlignment="Center" Text="Theme:" />
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="Theme:" />
+                                <TextBlock
+                                    Margin="8,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Opacity=".7"
+                                    Text="Light is buggy." />
+                            </StackPanel>
 
                             <ListBox
                                 Grid.Column="1"
-                                Margin="{adonisUi:Space 1,
-                                                        0}"
                                 SelectedIndex="{Binding Settings.IsDark}"
                                 Style="{DynamicResource ToggleListBox}">
                                 <ListBoxItem
@@ -137,64 +153,52 @@
                                     Content="{iconPacks:FontAwesome MoonSolid}"
                                     ToolTip="Dark" />
                             </ListBox>
-                            <TextBlock
-                                Grid.Column="2"
-                                VerticalAlignment="Center"
-                                FontSize="12"
-                                Opacity=".7"
-                                Text="Light is buggy, use Dark for now." />
                         </Grid>
 
-                        <Grid Grid.Row="4" Margin="0,4">
+                        <Grid
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="0,4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Text="Torrent client:" />
-                            <ComboBox Grid.Column="2" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
+                            <ComboBox Grid.Column="1" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
                                 <ComboBoxItem Content="QBitTorrent" />
                                 <ComboBoxItem Content="Deluge" IsEnabled="False" />
                             </ComboBox>
                         </Grid>
 
-                        <Grid Grid.Row="5" Margin="0,4">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock
-                                Grid.Column="0"
-                                VerticalAlignment="Center"
-                                Text="Notifications:" />
-                            <ToggleButton
-                                Grid.Column="2"
-                                IsChecked="{Binding Settings.Notifications}"
-                                Style="{DynamicResource {x:Static adonisUi:Styles.ToggleSwitch}}" />
-                            <TextBlock
-                                Grid.Column="4"
-                                VerticalAlignment="Center"
-                                FontSize="12"
-                                Opacity=".7"
-                                Text="Downloads etc." />
+                        <Grid
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Margin="0,4">
+                            <CheckBox Content="Notifications for downloads etc." IsChecked="{Binding Settings.Notifications}" />
+
                         </Grid>
-                        <Grid Grid.Row="6" Margin="0,4,0,0">
+                        <Grid
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            Margin="0,4">
+                            <CheckBox Content="On close minimize to notification area." IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
+
+                        </Grid>
+                        <Grid
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" Text="Tracked view:" />
 
                             <ListBox
                                 Grid.Column="1"
-                                Margin="{adonisUi:Space 1,
-                                                        0}"
                                 SelectedIndex="{Binding Settings.TrackedIsCardView}"
                                 Style="{DynamicResource ToggleListBox}">
                                 <ListBoxItem
@@ -230,32 +234,27 @@
                         </Grid>
                     </Expander.Header>
                     <Grid Margin="{adonisUi:Space 1}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Hide torrents with &lt;" />
-                                <ComboBox
-                                    MinWidth="50"
-                                    Margin="8,0"
-                                    SelectedItem="{Binding Settings.NyaaSettings.HideTorrentsBelowSeeders}">
-                                    <system:Int32>-1</system:Int32>
-                                    <system:Int32>1</system:Int32>
-                                    <system:Int32>2</system:Int32>
-                                    <system:Int32>3</system:Int32>
-                                    <system:Int32>4</system:Int32>
-                                    <system:Int32>5</system:Int32>
-                                </ComboBox>
-                                <TextBlock VerticalAlignment="Center" Text="seeders." />
-                                <TextBlock
-                                    Margin="8,0"
-                                    VerticalAlignment="Center"
-                                    Opacity=".7"
-                                    Text="(-1 to disable)" />
-                            </StackPanel>
-                        </Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="Hide torrents with &lt;" />
+                            <ComboBox
+                                MinWidth="50"
+                                Margin="8,0"
+                                SelectedItem="{Binding Settings.NyaaSettings.HideTorrentsBelowSeeders}">
+                                <system:Int32>-1</system:Int32>
+                                <system:Int32>1</system:Int32>
+                                <system:Int32>2</system:Int32>
+                                <system:Int32>3</system:Int32>
+                                <system:Int32>4</system:Int32>
+                                <system:Int32>5</system:Int32>
+                            </ComboBox>
+                            <TextBlock VerticalAlignment="Center" Text="seeders." />
+                            <TextBlock
+                                Margin="8,0"
+                                VerticalAlignment="Center"
+                                Opacity=".7"
+                                Text="(-1 to disable)" />
+                        </StackPanel>
+
                     </Grid>
                 </Expander>
                 <Expander

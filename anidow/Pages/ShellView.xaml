@@ -16,7 +16,9 @@
     Height="505"
     MinWidth="750"
     MinHeight="505"
+    Loaded="{s:Action Window_Loaded}"
     d:DataContext="{d:DesignInstance pages:ShellViewModel}"
+    Closing="{s:Action Window_Closing}"
     FontFamily="Segoe UI"
     ShrinkTitleBarWhenMaximized="False"
     TextElement.FontSize="14"
@@ -90,7 +92,7 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <tb:TaskbarIcon x:Name="TaskbarIcon" IconSource="../anidown_28v_icon.ico">
+        <tb:TaskbarIcon x:Name="TaskbarIcon" IconSource="../anidown_28v_icon.ico" DoubleClickCommand="{s:Action ShowWindow}">
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="{s:Action ShowLogs, ActionNotFound=Disable}" Header="Logs" />

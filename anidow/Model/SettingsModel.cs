@@ -5,11 +5,11 @@ using Anidow.Enums;
 namespace Anidow.Model
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    [Serializable]
     public class SettingsModel : ObservableObject
     {
         public string AnimeFolder { get; set; } = Directory.GetCurrentDirectory();
         public int RefreshTime { get; set; } = 5;
+        public bool MinimizeToNotificationArea { get; set; }
         public bool IsDark { get; set; } = true;
         public bool Notifications { get; set; } = true;
         public bool TrackedIsCardView { get; set; }
