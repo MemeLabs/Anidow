@@ -148,7 +148,7 @@ namespace Anidow.Pages.Components.Tracked
 
         public void CardEditAnime(object sender, MouseButtonEventArgs _)
         {
-            var anime = (Anime)((Border)sender).DataContext;
+            var anime = (Anime)((Grid)sender).DataContext;
             ChangeActiveItem(anime, false);
             _eventAggregator.Publish(new OpenAnimeEditEvent{Anime = anime});
         }

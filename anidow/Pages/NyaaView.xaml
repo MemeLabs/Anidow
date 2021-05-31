@@ -12,6 +12,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Anidow.Model"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
     d:DataContext="{d:DesignInstance local:NyaaViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -235,5 +236,7 @@
 
             </Grid>
         </Expander>
+
+        <shared:LoadingOverlay Grid.Row="1" Grid.RowSpan="2" DataContext="{Binding CanGetItems}"/>
     </Grid>
 </UserControl>

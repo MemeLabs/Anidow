@@ -23,6 +23,8 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="8" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <controls:SplitButton
@@ -60,12 +62,18 @@
                             Content="Delete" />-->
         <Button
             Grid.Column="2"
+            Command="{s:Action HideItem}"
+            CommandParameter="{Binding ActiveItem}"
+            Content="Hide"
+            Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
+        <Button
+            Grid.Column="4"
             Command="{s:Action ToggleWatch}"
             CommandParameter="{Binding ActiveItem}"
             Content="Toggle Watched"
             Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
         <Button
-            Grid.Column="4"
+            Grid.Column="6"
             Command="{s:Action Watch}"
             CommandParameter="{Binding ActiveItem}"
             Content="Watch"

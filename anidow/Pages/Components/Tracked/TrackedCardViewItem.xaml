@@ -10,28 +10,24 @@
     xmlns:s="https://github.com/canton7/Stylet"
     Width="140"
     Height="190"
+    Margin="2.5,8,2.5,0"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid SnapsToDevicePixels="True">
-        <Border
-            Margin="2.5,8,2.5,0"
-            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
-            BorderThickness="2"
-            MouseDown="{s:Action CardEditAnime}">
+    <Grid Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" MouseLeftButtonDown="{s:Action CardEditAnime}">
+        <Border>
             <Border.Style>
                 <Style TargetType="Border">
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                             <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="BorderThickness" Value="2" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="False">
                             <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="2" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding TrackedViewSelected}" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
-                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Border.Style>
@@ -42,12 +38,11 @@
                 </Grid.RowDefinitions>
                 <Image
                     Grid.RowSpan="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
                     RenderOptions.BitmapScalingMode="HighQuality"
                     Source="{Binding CoverData.FilePath, IsAsync=True}"
                     Stretch="UniformToFill"
                     Visibility="{Binding CoverData.File, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+
                 <StackPanel
                     Grid.Row="0"
                     Margin="8"
@@ -92,6 +87,7 @@
                     Points="0,0 20,0, 0,20"
                     ToolTip="{Binding Status, Mode=OneWay}" />
             </Grid>
+
         </Border>
     </Grid>
 

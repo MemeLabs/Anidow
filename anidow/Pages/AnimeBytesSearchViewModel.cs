@@ -76,7 +76,10 @@ namespace Anidow.Pages
             }
 
             Items.Clear();
-            Items.AddRange(response.Groups);
+            foreach (var anime in response.Groups)
+            {
+                await DispatcherUtil.DispatchAsync(() => Items.Add(anime));
+            }
 
             _scrollViewer?.ScrollToTop();
             ActiveItem = null!;

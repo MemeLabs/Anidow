@@ -14,8 +14,8 @@
             </s:ApplicationLoader.Bootstrapper>
 
             <s:ApplicationLoader.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
+                <ResourceDictionary Source="{x:Static adonisUi:ResourceLocator.DarkColorScheme}" />
+                <ResourceDictionary Source="{x:Static adonisUi:ResourceLocator.ClassicTheme}" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/Expander.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/TabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/ListViewItem.xaml" />

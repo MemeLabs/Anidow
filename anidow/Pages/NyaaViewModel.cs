@@ -59,13 +59,16 @@ namespace Anidow.Pages
             var items = await _nyaaService.GetFeedItems(
                 $"https://nyaa.si/?page=rss&c=1_2&f={SelectedFilterIndex}&q={SearchText}");
 
-            if (items == default || items.Count <= 0)
+            if (items is not {Count: > 0})
             {
                 return;
             }
 
             Items.Clear();
-            Items.AddRange(items);
+            foreach (var item in items)
+            {
+                await DispatcherUtil.DispatchAsync(() => Items.Add(item));
+            }
 
             _scrollViewer?.ScrollToTop();
             ActiveItem = null!;

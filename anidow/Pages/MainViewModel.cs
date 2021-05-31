@@ -109,9 +109,9 @@ namespace Anidow.Pages
             };
 
             await using var db = new TrackContext();
-            if (message.Item is AnimeBytesTorrentItem ab1)
+            if (message.Item is AnimeBytesTorrentItem abti)
             {
-                var anime = await db.Anime.FirstOrDefaultAsync(a => a.GroupId == ab1.GroupId);
+                var anime = await db.Anime.FirstOrDefaultAsync(a => a.GroupId == abti.GroupId);
                 if (anime != null)
                 {
                     item.AnimeId = anime.GroupId;
@@ -395,7 +395,10 @@ namespace Anidow.Pages
                                    .ToListAsync();
 
             Items.Clear();
-            Items.AddRange(episodes.OrderBy(e => e.Released));
+            foreach (var episode in episodes.OrderBy(e => e.Released))
+            {
+                await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
+            }
             ActiveItem = null;
 #if DEBUG
             Items.Add(new Episode

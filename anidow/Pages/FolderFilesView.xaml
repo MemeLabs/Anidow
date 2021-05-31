@@ -104,8 +104,7 @@
                 </GroupStyle>
             </ListView.GroupStyle>-->
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="File.Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
@@ -152,30 +151,8 @@
                     <GridViewColumn
                         Width="70"
                         listViewLayout:FixedColumn.Width="70"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate DataType="models:FolderFilesModel">
-                                <Grid>
-                                    <Button
-                                        Width="66"
-                                        Command="{s:Action Watch}"
-                                        CommandParameter="{Binding File}"
-                                        Content="Watch"
-                                        Style="{StaticResource ColumnButton}"
-                                        ToolTip="Watch"
-                                        Visibility="{Binding CanOpenFile, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
-                                    <Button
-                                        Width="66"
-                                        Command="{s:Action OpenFolder}"
-                                        CommandParameter="{Binding File.FullName}"
-                                        Content="{iconPacks:FontAwesome FolderOpenSolid}"
-                                        Style="{StaticResource ColumnButton}"
-                                        ToolTip="Open Folder"
-                                        Visibility="{Binding IsDirectory, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        CellTemplate="{StaticResource WatchOpenFile}"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
                 </GridView>
             </ListView.View>
         </ListView>

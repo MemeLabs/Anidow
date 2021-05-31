@@ -12,6 +12,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:Anidow.Model"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
     d:DataContext="{d:DesignInstance local:AnimeBytesRssViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -88,8 +89,7 @@
             SelectedItem="{Binding ActiveItem}"
             Visibility="{Binding CanSearch, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
@@ -261,9 +261,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox
-                                Text="{Binding ActiveItem.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                TextWrapping="Wrap" />
+                            <TextBox Text="{Binding ActiveItem.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
                             <Button
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
@@ -316,5 +314,10 @@
                 </StackPanel>
             </Grid>
         </Expander>
+
+        <shared:LoadingOverlay
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            DataContext="{Binding CanGetItems}" />
     </Grid>
 </UserControl>

@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:model="clr-namespace:Anidow.Model"
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet">
 
@@ -16,6 +17,7 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Height" Value="27" />
     </Style>
 
     <Style
@@ -36,6 +38,26 @@
                         CommandParameter="{Binding}"
                         Header="Open Folder"
                         Icon="{iconPacks:FontAwesome FolderOpenSolid}" />
+                    <Separator/>
+                    <MenuItem
+                        CommandParameter="{Binding}"
+                        Icon="{iconPacks:FontAwesome TrashSolid}">
+                        <MenuItem.Header>
+                            <TextBlock Text="Delete" Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"/>
+                        </MenuItem.Header>
+
+                        <MenuItem
+                            Command="{s:Action DeleteItem}"
+                            CommandParameter="{Binding}"
+                            Icon="{iconPacks:FontAwesome TrashSolid}"
+                            Header="Without File"/>
+                        <MenuItem
+                            Command="{s:Action DeleteWithFile}"
+                            CommandParameter="{Binding}"
+                            Icon="{iconPacks:FontAwesome TrashSolid}"
+                            Header="With File"/>
+                    </MenuItem>
+
                 </ContextMenu>
             </Setter.Value>
         </Setter>
@@ -82,6 +104,7 @@
         TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="-12,-4" />
         <Setter Property="Height" Value="25" />
+        <Setter Property="Width" Value="66" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -90,7 +113,6 @@
     <DataTemplate x:Key="WatchOpen" DataType="models:Episode">
         <Grid>
             <Button
-                Width="66"
                 Command="{s:Action Watch,
                                    ActionNotFound=Disable}"
                 CommandParameter="{Binding}"
@@ -98,7 +120,6 @@
                 Style="{StaticResource ColumnButton}"
                 Visibility="{Binding HasFile, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
             <Button
-                Width="66"
                 Command="{s:Action OpenFolder,
                                    ActionNotFound=Disable}"
                 CommandParameter="{Binding}"
@@ -108,9 +129,28 @@
                 Visibility="{Binding HasFile, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
         </Grid>
     </DataTemplate>
+
+    <DataTemplate x:Key="WatchOpenFile" DataType="model:FolderFilesModel">
+        <Grid>
+            <Button
+                Command="{s:Action Watch}"
+                CommandParameter="{Binding File}"
+                Content="Watch"
+                Style="{StaticResource ColumnButton}"
+                ToolTip="Watch"
+                Visibility="{Binding CanOpenFile, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+            <Button
+                Command="{s:Action OpenFolder}"
+                CommandParameter="{Binding File.FullName}"
+                Content="{iconPacks:FontAwesome FolderOpenSolid}"
+                Style="{StaticResource ColumnButton}"
+                ToolTip="Open Folder"
+                Visibility="{Binding IsDirectory, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+        </Grid>
+    </DataTemplate>
+
     <DataTemplate x:Key="EditCell" DataType="models:Anime">
         <Button
-            Width="66"
             Command="{s:Action ListEditAnime,
                                ActionNotFound=Disable}"
             CommandParameter="{Binding}"

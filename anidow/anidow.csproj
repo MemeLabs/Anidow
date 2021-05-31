@@ -22,6 +22,7 @@
 		<RepositoryUrl>https://github.com/MemeLabs/Anidow</RepositoryUrl>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageTags>anime, nyaa, manga, animebytes, wpf, automation, torrent</PackageTags>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(SelfContained)'=='true'">

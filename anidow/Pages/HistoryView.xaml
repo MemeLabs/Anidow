@@ -14,6 +14,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance local:HistoryViewModel}"
     d:DesignHeight="450"
@@ -376,5 +377,10 @@
                 </Grid>
             </Grid>
         </Expander>
+
+        <shared:LoadingOverlay
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            DataContext="{Binding CanLoadEpisodes}" />
     </Grid>
 </UserControl>

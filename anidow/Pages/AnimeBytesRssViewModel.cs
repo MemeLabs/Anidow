@@ -120,7 +120,7 @@ namespace Anidow.Pages
                     animeBytesFeedItem.CanTrack = !tracked.Contains(animeBytesFeedItem.GroupId);
                 }
 
-                await Execute.OnUIThreadAsync(() => Items.Add(animeBytesFeedItem));
+                await DispatcherUtil.DispatchAsync(() => Items.Add(animeBytesFeedItem));
             }
 
             _scrollViewer?.ScrollToTop();

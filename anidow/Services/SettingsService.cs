@@ -16,13 +16,16 @@ namespace Anidow.Services
     {
         private readonly ILogger _logger;
         private readonly Assembly _assembly;
+        private readonly WindowsStartUp _windowsStartUp;
         private readonly StoreService _storeService;
 
-        public SettingsService(StoreService storeService, ILogger logger, Assembly assembly)
+        public SettingsService(StoreService storeService, ILogger logger,
+            Assembly assembly, WindowsStartUp windowsStartUp)
         {
             _storeService = storeService ?? throw new ArgumentNullException(nameof(storeService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _assembly = assembly;
+            _windowsStartUp = windowsStartUp;
         }
 
         public bool CanSave { get; set; }
@@ -48,7 +51,7 @@ namespace Anidow.Services
             TempSettings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
             Settings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
 
-            var startup = WindowsStartUp.IsEnabled();
+            var startup = _windowsStartUp.IsEnabled();
             Settings.StartOnWindowsStartUp = startup;
             TempSettings.StartOnWindowsStartUp = startup;
 
@@ -68,11 +71,11 @@ namespace Anidow.Services
             
             switch (Settings.StartOnWindowsStartUp)
             {
-                case true when !WindowsStartUp.IsEnabled():
-                    await WindowsStartUp.Enable(_assembly);
+                case true when !_windowsStartUp.IsEnabled():
+                    await _windowsStartUp.Enable();
                     break;
-                case false when WindowsStartUp.IsEnabled():
-                    WindowsStartUp.Disable();
+                case false when _windowsStartUp.IsEnabled():
+                    _windowsStartUp.Disable();
                     break;
             }
 

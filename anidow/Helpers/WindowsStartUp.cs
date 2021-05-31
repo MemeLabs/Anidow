@@ -8,17 +8,22 @@ using System.Windows.Forms;
 
 namespace Anidow.Helpers
 {
-    public static class WindowsStartUp
+    public class WindowsStartUp
     {
-        private static readonly string StartUpFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+        private readonly Assembly _assembly;
 
-        private static readonly string StartUpFile = Path.Combine(StartUpFolder, Application.ProductName + ".lnk");
-
-
-        public static async Task Enable(Assembly assembly)
+        public WindowsStartUp(Assembly assembly)
         {
-            var licenses = assembly.GetManifestResourceNames().Single(p => p.EndsWith("create-shortcut.ps1"));
-            await using var stream = assembly.GetManifestResourceStream(licenses);
+            _assembly = assembly;
+        }
+
+        public async Task Enable()
+        {
+            var startUpFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            var startUpFile = Path.Combine(startUpFolder, Application.ProductName + ".lnk");
+
+            var licenses = _assembly.GetManifestResourceNames().Single(p => p.EndsWith("create-shortcut.ps1"));
+            await using var stream = _assembly.GetManifestResourceStream(licenses);
             using var reader = new StreamReader(stream!);
             var json = await reader.ReadToEndAsync();
 
@@ -26,7 +31,7 @@ namespace Anidow.Helpers
             var wd = Path.GetDirectoryName(exeFile);
 
             json = json.Replace("$args[0]", $"'{exeFile}'")
-                       .Replace("$args[1]", $"'{StartUpFile}'")
+                       .Replace("$args[1]", $"'{startUpFile}'")
                        .Replace("$args[2]", $"'{wd}'");
 
             var tmpFile = Path.Combine(Path.GetTempPath(), "create-shortcut.ps1");
@@ -49,11 +54,14 @@ namespace Anidow.Helpers
             _ = process.WaitForExitAsync().ContinueWith(_ => File.Delete(tmpFile));
         }
 
-        public static void Disable()
+        public void Disable()
         {
+
+            var startUpFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            var startUpFile = Path.Combine(startUpFolder, Application.ProductName + ".lnk");
             try
             {
-                File.Delete(StartUpFile);
+                File.Delete(startUpFile);
             }
             catch (Exception e)
             {
@@ -62,6 +70,11 @@ namespace Anidow.Helpers
             }
         }
 
-        public static bool IsEnabled() => File.Exists(StartUpFile);
+        public bool IsEnabled()
+        {
+            var startUpFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            var startUpFile = Path.Combine(startUpFolder, Application.ProductName + ".lnk");
+            return File.Exists(startUpFile);
+        }
     }
 }
