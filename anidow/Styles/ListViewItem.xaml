@@ -38,24 +38,22 @@
                         CommandParameter="{Binding}"
                         Header="Open Folder"
                         Icon="{iconPacks:FontAwesome FolderOpenSolid}" />
-                    <Separator/>
-                    <MenuItem
-                        CommandParameter="{Binding}"
-                        Icon="{iconPacks:FontAwesome TrashSolid}">
+                    <Separator />
+                    <MenuItem CommandParameter="{Binding}" Icon="{iconPacks:FontAwesome TrashSolid}">
                         <MenuItem.Header>
-                            <TextBlock Text="Delete" Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"/>
+                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" Text="Delete" />
                         </MenuItem.Header>
 
                         <MenuItem
                             Command="{s:Action DeleteItem}"
                             CommandParameter="{Binding}"
-                            Icon="{iconPacks:FontAwesome TrashSolid}"
-                            Header="Without File"/>
+                            Header="Without File"
+                            Icon="{iconPacks:FontAwesome TrashSolid}" />
                         <MenuItem
                             Command="{s:Action DeleteWithFile}"
                             CommandParameter="{Binding}"
-                            Icon="{iconPacks:FontAwesome TrashSolid}"
-                            Header="With File"/>
+                            Header="With File"
+                            Icon="{iconPacks:FontAwesome TrashSolid}" />
                     </MenuItem>
 
                 </ContextMenu>

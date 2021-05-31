@@ -48,15 +48,7 @@ namespace Anidow.Pages
                                      _settingsService.Settings.AnimeBytesSettings.PassKey);
 
         public bool CanGetItems { get; set; } = true;
-
-        protected override async void OnInitialActivate()
-        {
-            if (CanSearch)
-            {
-                await GetItems();
-            }
-        }
-
+        
         protected override async void OnActivate()
         {
             if (CanSearch && Items.Count <= 0)

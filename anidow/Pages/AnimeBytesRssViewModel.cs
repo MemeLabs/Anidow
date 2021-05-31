@@ -77,15 +77,7 @@ namespace Anidow.Pages
         }
 
         //public bool CanDownload => ActiveItem != null && !string.IsNullOrWhiteSpace(ActiveItem.Folder);
-
-        protected override async void OnInitialActivate()
-        {
-            if (CanSearch)
-            {
-                await GetItems();
-            }
-        }
-
+        
         protected override async void OnActivate()
         {
             if (CanSearch && Items.Count <= 0)

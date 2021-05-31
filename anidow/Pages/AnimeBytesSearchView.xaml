@@ -50,12 +50,14 @@
                     MinWidth="200"
                     Margin="8,0"
                     extensions:WatermarkExtension.Watermark="Search..."
+                    IsEnabled="{Binding CanGetItems, Mode=OneWay}"
                     PreviewKeyDown="{s:Action OnPreviewKeyDown}"
                     Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Grid.Column="4"
                     Command="{s:Action GetItems}"
-                    Content="Search"
+                    ToolTip="Search"
+                    Content="{iconPacks:FontAwesome SearchSolid}"
                     Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
             </Grid>
         </GroupBox>

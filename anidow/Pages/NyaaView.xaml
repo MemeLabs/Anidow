@@ -43,12 +43,14 @@
                     Margin="{adonisUi:Space 1,
                                             0}"
                     extensions:WatermarkExtension.Watermark="Search ..."
+                    IsEnabled="{Binding CanGetItems, Mode=OneWay}"
                     PreviewKeyDown="{s:Action OnPreviewKeyDown}"
                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Grid.Column="3"
                     Command="{s:Action GetItems}"
-                    Content="Search"
+                    ToolTip="Search"
+                    Content="{iconPacks:FontAwesome SearchSolid}"
                     Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
             </Grid>
         </GroupBox>
@@ -62,8 +64,7 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             SelectedItem="{Binding ActiveItem}">
             <ListView.View>
-                <GridView AllowsColumnReorder="True"
-                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
 
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="Name"
@@ -237,6 +238,9 @@
             </Grid>
         </Expander>
 
-        <shared:LoadingOverlay Grid.Row="1" Grid.RowSpan="2" DataContext="{Binding CanGetItems}"/>
+        <shared:LoadingOverlay
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            DataContext="{Binding CanGetItems}" />
     </Grid>
 </UserControl>
