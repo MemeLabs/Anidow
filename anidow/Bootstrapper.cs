@@ -57,7 +57,6 @@ namespace Anidow
             builder.Bind<Assembly>().ToInstance(Assembly.GetExecutingAssembly());
             var tracker = InitTracker();
             builder.Bind<Tracker>().ToInstance(tracker);
-            builder.Bind<WindowsStartUp>().ToSelf();
 
             var logViewModel = new LogViewModel();
             InitLogger(logViewModel);

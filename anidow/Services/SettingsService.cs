@@ -16,16 +16,14 @@ namespace Anidow.Services
     {
         private readonly ILogger _logger;
         private readonly Assembly _assembly;
-        private readonly WindowsStartUp _windowsStartUp;
         private readonly StoreService _storeService;
 
         public SettingsService(StoreService storeService, ILogger logger,
-            Assembly assembly, WindowsStartUp windowsStartUp)
+            Assembly assembly)
         {
             _storeService = storeService ?? throw new ArgumentNullException(nameof(storeService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _assembly = assembly;
-            _windowsStartUp = windowsStartUp;
         }
 
         public bool CanSave { get; set; }
@@ -50,10 +48,7 @@ namespace Anidow.Services
 
             TempSettings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
             Settings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
-
-            var startup = _windowsStartUp.IsEnabled();
-            Settings.StartOnWindowsStartUp = startup;
-            TempSettings.StartOnWindowsStartUp = startup;
+            
 
             TempSettings.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.QBitTorrent.PropertyChanged += SettingsOnPropertyChanged;
@@ -69,16 +64,6 @@ namespace Anidow.Services
             await _storeService.Save(TempSettings, "settings.json");
             Settings = await _storeService.Load<SettingsModel>("settings.json");
             
-            switch (Settings.StartOnWindowsStartUp)
-            {
-                case true when !_windowsStartUp.IsEnabled():
-                    await _windowsStartUp.Enable();
-                    break;
-                case false when _windowsStartUp.IsEnabled():
-                    _windowsStartUp.Disable();
-                    break;
-            }
-
             _logger.Information("saved setting's");
 
             ResourceLocator.SetColorScheme(Application.Current.Resources,

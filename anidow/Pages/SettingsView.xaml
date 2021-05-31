@@ -222,12 +222,6 @@
                             <CheckBox Content="On close minimize to notification area." IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
 
                         </Grid>
-                        <Grid
-                            Grid.Row="6"
-                            Grid.Column="0"
-                            Margin="0,4">
-                            <CheckBox Content="Start anidow on windows startup." IsChecked="{Binding Settings.StartOnWindowsStartUp}" />
-                        </Grid>
                     </Grid>
                 </Expander>
                 <Expander
