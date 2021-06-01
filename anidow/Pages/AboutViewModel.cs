@@ -11,8 +11,11 @@ namespace Anidow.Pages
 {
     public class AboutViewModel : Screen
     {
+        private readonly Assembly _assembly;
+
         public AboutViewModel(Assembly assembly)
         {
+            _assembly = assembly;
             DisplayName = "About";
             var licenses = assembly.GetManifestResourceNames().Single(p => p.EndsWith("licenses.json"));
             using var stream = assembly.GetManifestResourceStream(licenses);
@@ -25,7 +28,7 @@ namespace Anidow.Pages
 
         public string Copyright => $"© 2020-{DateTime.Now.Year} MemeLabs";
         public string ProjectUrl => "https://github.com/MemeLabs/Anidow";
-        public string AssemblyVersionString => Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
+        public string AssemblyVersionString => $"{_assembly.GetName().Version} {(Environment.Is64BitProcess ? "(x64)" : "(x32)")}";
         public string Product => "Anidow";
 
         public void OpenProjectUrl()
