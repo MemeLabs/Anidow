@@ -19,12 +19,13 @@
     <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid>
             <DockPanel HorizontalAlignment="Center">
                 <TextBlock
-                    Margin="0,0,0,16"
+                    Margin="0,0,0,8"
                     DockPanel.Dock="Bottom"
                     TextAlignment="Center">
                     <Run Text="Author: Tensei C." />
@@ -47,7 +48,34 @@
             </DockPanel>
         </Grid>
 
-        <Grid Grid.Row="1">
+        <Grid
+            Grid.Row="1"
+            Margin="0,0,0,4"
+            HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Margin="0,0,0,4" Text="{Binding UpdateMessage}"/>
+            <Button
+                Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                Command="{s:Action CheckForUpdate,
+                                   ActionNotFound=Disable}"
+                Content="Check for Updates" />
+            <Button
+                HorizontalAlignment="Center"
+                Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
+                Grid.Row="1"
+                Command="{s:Action UpdateNow,
+                                   ActionNotFound=Disable}"
+                Content="Update now" />
+
+        </Grid>
+
+        <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />

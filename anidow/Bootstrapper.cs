@@ -33,9 +33,6 @@ using StyletIoC;
 #if RELEASE
 using System.IO;
 using System.Windows.Threading;
-using Onova;
-using Onova.Models;
-using Onova.Services;
 
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
@@ -50,6 +47,7 @@ namespace Anidow
         private ILogger _logger;
         private TaskbarIcon _taskBarIcon;
         private ShellView _shell;
+        private UpdateManager _updateManager;
 
         // Configure the IoC container in here
         protected override void ConfigureIoC(IStyletIoCBuilder builder)
@@ -57,6 +55,7 @@ namespace Anidow
             builder.Bind<Assembly>().ToInstance(Assembly.GetExecutingAssembly());
             var tracker = InitTracker();
             builder.Bind<Tracker>().ToInstance(tracker);
+            
 
             var logViewModel = new LogViewModel();
             InitLogger(logViewModel);
@@ -80,6 +79,10 @@ namespace Anidow
 
             _httpClient = InitHttpClient();
             builder.Bind<HttpClient>().ToInstance(_httpClient);
+
+            _updateManager = new UpdateManager(_httpClient);
+            builder.Bind<UpdateManager>().ToInstance(_updateManager);
+
             _shell = new ShellView(tracker);
             if (Args.Length > 0 && Args[0] == "/autostart")
             {
@@ -208,7 +211,6 @@ namespace Anidow
             JobManager.JobException += info =>
                 _logger.Error(info.Exception, "An error just happened with a scheduled job");
 
-
             var selfContained = false;
 #if SELF_CONTAINED && RELEASE
             selfContained = true;
@@ -219,34 +221,15 @@ namespace Anidow
 #if RELEASE
             try
             {
-                var manager = new UpdateManager(
-                    AssemblyMetadata.FromAssembly(
-                        Assembly.GetEntryAssembly(),
-                        System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName),
-                    new GithubPackageResolver(
-                        _httpClient,
-                        "MemeLabs",
-                        "Anidow",
-                        selfContained ? "anidow-full.zip" : "anidow.zip"),
-                    new ZipPackageExtractor());
-
-                var check = await manager.CheckForUpdatesAsync();
-                if (!check.CanUpdate || check.LastVersion == null)
+                var (check, hasUpdate) = await _updateManager.HasUpdate();
+                if (hasUpdate && check != null)
                 {
-                    return;
+                    await _updateManager.Update(check);
                 }
-
-                // Prepare the latest update
-                await manager.PrepareUpdateAsync(check.LastVersion);
-
-                // Launch updater and exit
-                manager.LaunchUpdater(check.LastVersion);
-
-                Environment.Exit(0);
             }
             catch (Exception e)
             {
-                _logger.Error(e, "failed updating the app");
+                _logger.Error(e, "failed updating anidow");
             }
 #endif
         }
