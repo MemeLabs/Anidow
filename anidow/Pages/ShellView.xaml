@@ -92,7 +92,11 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <tb:TaskbarIcon x:Name="TaskbarIcon" IconSource="../anidown_28v_icon.ico" DoubleClickCommand="{s:Action ShowWindow}">
+        <tb:TaskbarIcon 
+            x:Name="TaskbarIcon" 
+            IconSource="../anidown_28v_icon.ico" 
+            s:View.ActionTarget="{Binding}"
+            DoubleClickCommand="{s:Action ShowWindow, ActionNotFound=Disable}">
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="{s:Action ShowLogs, ActionNotFound=Disable}" Header="Logs" />
