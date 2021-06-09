@@ -32,15 +32,21 @@
 	<ItemGroup>
 		<None Remove="anidown_28v_icon.ico" />
 		<None Remove="licenses.json" />
+		<None Remove="Pages\Components\Settings\Images\EnableWebUI.png" />
+		<None Remove="Pages\Components\Settings\Images\OpenWebUI.png" />
 		<None Remove="Properties\licenses.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <EmbeddedResource Include="Properties\licenses.json" />
+	  <None Remove="Pages\Components\Settings\Images\OpenqBittorrentSettings.png" />
+	  <Resource Include="Pages\Components\Settings\Images\EnableWebUI.png" />
+	  <Resource Include="Pages\Components\Settings\Images\OpenqBittorrentSettings.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Resource Include="anidown_28v_icon.ico" />
+		<Resource Include="Pages\Components\Settings\Images\OpenWebUI.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -52,7 +58,7 @@
 		<PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.0" />
 		<PackageReference Include="BencodeNET" Version="4.0.0" />
 		<PackageReference Include="FluentScheduler" Version="5.5.1" />
-		<PackageReference Include="FluentValidation" Version="10.1.0" />
+		<PackageReference Include="FluentValidation" Version="10.2.3" />
 		<PackageReference Include="Fody" Version="6.5.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -63,6 +69,7 @@
 		<PackageReference Include="Jot" Version="2.1.8" />
 		<PackageReference Include="MahApps.Metro.IconPacks.FontAwesome" Version="4.8.0" />
 		<PackageReference Include="Microsoft.AppCenter" Version="4.2.0" />
+		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.2.0" />
 		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
@@ -76,6 +83,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Notifications.Wpf.Core" Version="1.3.2" />
 		<PackageReference Include="Onova" Version="2.6.2" />
 		<PackageReference Include="PropertyChanged.Fody" Version="3.3.3" PrivateAssets="All" />
 		<PackageReference Include="Serilog" Version="2.10.0" />

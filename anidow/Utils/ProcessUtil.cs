@@ -62,5 +62,21 @@ namespace Anidow.Utils
         {
             Process.Start("explorer.exe", path);
         }
+
+        public static bool IsRunning(string name)
+        {
+            var processes = Process.GetProcessesByName(
+                Path.GetFileNameWithoutExtension(name));
+            
+            return processes.Length <= 1;
+        }
+
+        public static bool IsRunningMoreThan(string name, int value)
+        {
+            var processes = Process.GetProcessesByName(
+                Path.GetFileNameWithoutExtension(name));
+            
+            return processes.Length < value;
+        }
     }
 }

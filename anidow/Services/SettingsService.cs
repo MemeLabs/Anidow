@@ -6,6 +6,9 @@ using System.Windows;
 using AdonisUI;
 using Anidow.Helpers;
 using Anidow.Model;
+using Anidow.Utils;
+using Hardcodet.Wpf.TaskbarNotification;
+using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;
 
@@ -15,14 +18,16 @@ namespace Anidow.Services
     public class SettingsService : PropertyChangedBase
     {
         private readonly ILogger _logger;
+        private readonly TaskbarIcon _taskbarIcon;
         private readonly Assembly _assembly;
         private readonly StoreService _storeService;
 
         public SettingsService(StoreService storeService, ILogger logger,
-            Assembly assembly)
+            TaskbarIcon taskbarIcon, Assembly assembly)
         {
             _storeService = storeService ?? throw new ArgumentNullException(nameof(storeService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
             _assembly = assembly;
         }
 
@@ -38,7 +43,7 @@ namespace Anidow.Services
 
         public event EventHandler SettingsSavedEvent; // event
 
-        public async Task Init()
+        public async Task Initialize()
         {
             if (TempSettings != null)
             {
@@ -49,7 +54,6 @@ namespace Anidow.Services
             TempSettings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
             Settings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
             
-
             TempSettings.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.QBitTorrent.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.NyaaSettings.PropertyChanged += SettingsOnPropertyChanged;
@@ -57,10 +61,17 @@ namespace Anidow.Services
 
             ResourceLocator.SetColorScheme(Application.Current.Resources,
                 TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
+            
+            if (Settings.FirstStart)
+            {
+                CanSave = true;
+            }
         }
 
         public async Task Save()
         {
+            CanSave = false;
+            
             await _storeService.Save(TempSettings, "settings.json");
             Settings = await _storeService.Load<SettingsModel>("settings.json");
             
@@ -69,8 +80,8 @@ namespace Anidow.Services
             ResourceLocator.SetColorScheme(Application.Current.Resources,
                 TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
 
-            CanSave = false;
             SettingsSavedEvent?.Invoke(this, EventArgs.Empty);
+            await NotificationUtil.ShowAsync("Settings", "Saved!", NotificationType.Success);
         }
 
         private void SettingsOnPropertyChanged(object sender, PropertyChangedEventArgs e)

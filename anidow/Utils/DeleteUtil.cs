@@ -11,9 +11,8 @@ namespace Anidow.Utils
         public static bool AskForConfirmation(string name)
         {
             var result = MessageBox.Show(DeleteText(name), "Delete",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxButton.YesNo, MessageBoxImage.Warning);
             return result == MessageBoxResult.Yes;
         }
-
     }
 }

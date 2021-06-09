@@ -12,6 +12,7 @@ using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Model;
+using Anidow.Pages.Components.Settings;
 using Anidow.Services;
 using Anidow.Utils;
 using BencodeNET.Torrents;
@@ -19,6 +20,7 @@ using FluentScheduler;
 using Hardcodet.Wpf.TaskbarNotification;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
+using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;
 
@@ -26,7 +28,7 @@ namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainViewModel : Conductor<Episode>.Collection.OneActive, IHandle<DownloadEvent>,
-        IHandle<RefreshHomeEvent>
+        IHandle<RefreshHomeEvent>, IHandle<AddToHomeEvent>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly HttpClient _httpClient;
@@ -35,11 +37,13 @@ namespace Anidow.Pages
         private readonly TaskbarIcon _taskbarIcon;
         private readonly TorrentService _torrentService;
         private readonly IWindowManager _windowManager;
+        private readonly SettingsSetupWizardViewModel _settingsSetupWizardViewModel;
 
 
         public MainViewModel(IEventAggregator eventAggregator, ILogger logger,
             IWindowManager windowManager, AnimeBytesService animeBytesService,
             TorrentService torrentService, SettingsService settingsService,
+            SettingsSetupWizardViewModel settingsSetupWizardViewModel,
             TaskbarIcon taskbarIcon, HttpClient httpClient)
         {
             _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
@@ -50,8 +54,8 @@ namespace Anidow.Pages
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _settingsSetupWizardViewModel = settingsSetupWizardViewModel ?? throw  new  ArgumentNullException(nameof(settingsSetupWizardViewModel));
             DisplayName = "Home";
-            eventAggregator.Subscribe(this);
         }
 
         public AnimeBytesService AnimeBytesService { get; set; }
@@ -59,6 +63,7 @@ namespace Anidow.Pages
         public string NextCheckIn { get; private set; } = "00:00";
         public Timer NextCheckTimer { get; set; }
         public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
+        public bool IsEnabled => _settingsService != null && !_settingsService.Settings.FirstStart;
         public async void Handle(DownloadEvent message)
         {
             var torrent = message.Torrent;
@@ -96,7 +101,7 @@ namespace Anidow.Pages
                     Name = CreatePropertyEpisode(ab),
                     Site = Site.AnimeBytes,
                     Released = DateTime.Parse(ab.SelectedTorrent.UploadTime),
-                    Folder = ab.SelectedTorrent.Folder,
+                    Folder = ab.Folder,
                     Link = $"https://animebytes.tv/torrent/{ab.SelectedTorrent.ID}/group",
                     DownloadLink = ab.SelectedTorrent.DownloadLink,
                     Cover = ab.Image,
@@ -123,6 +128,10 @@ namespace Anidow.Pages
             {
                 _taskbarIcon.ShowBalloonTip("Added", item.Name, BalloonIcon.None);
             }
+            else
+            {
+                await NotificationUtil.ShowAsync("Added", item.Name);
+            }
 
             await db.AddAsync(item);
             await db.SaveChangesAsync();
@@ -130,10 +139,13 @@ namespace Anidow.Pages
             await GetAiringEpisodesForToday();
         }
 
-        public async void Handle(RefreshHomeEvent _)
+        public void Handle(RefreshHomeEvent _)
         {
-            await LoadEpisodes();
-            await GetAiringEpisodesForToday();
+            Debouncer.DebounceAction("home_refresh", async _ =>
+            {
+                await LoadEpisodes();
+                await GetAiringEpisodesForToday();
+            });
         }
 
         private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
@@ -193,6 +205,14 @@ namespace Anidow.Pages
 
             Items.Remove(episode);
             DeselectItem();
+
+            await NotificationUtil.ShowUndoAsync(episode.Name, "Moved to History!", async () =>
+            {
+                episode.Hide = false;
+                episode.HideDate = default;
+                await episode.UpdateInDatabase();
+                Items.Add(episode);
+            }, null, TimeSpan.FromSeconds(5));
         }
 
         public async Task DeleteItem(Episode episode)
@@ -235,7 +255,7 @@ namespace Anidow.Pages
 
         public void OpenFolder(Episode episode)
         {
-            _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _eventAggregator, _logger));
+            _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _logger));
         }
 
         public async Task ToggleWatch(Episode episode)
@@ -256,7 +276,7 @@ namespace Anidow.Pages
             {
                 if (string.IsNullOrWhiteSpace(episode.File))
                 {
-                    _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _eventAggregator, _logger));
+                    _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _logger));
                     return;
                 }
 
@@ -328,18 +348,50 @@ namespace Anidow.Pages
 
         protected override void OnInitialActivate()
         {
-            JobManager.AddJob(
-                () => { UpdateTorrents().Wait(); },
-                s => s.WithName("Home:UpdateTorrents").NonReentrant().ToRunEvery(1).Seconds()
-            );
-
-
+            _eventAggregator.Subscribe(this);
+            
             NextCheckTimer = new Timer(100);
             NextCheckTimer.Elapsed += NextCheckTimerOnElapsed;
             NextCheckTimer.Start();
 
-            _ = DownloadMissingCovers();
-            _ = GetAiringEpisodesForToday();
+            Task.Run(async () => await LoadEpisodes());
+            Task.Run(async () => await DownloadMissingCovers());
+            Task.Run(async () => await GetAiringEpisodesForToday());
+
+            // Starting the tracker
+            if (_settingsService.Settings.StartTrackerAnimeBytesOnLaunch)
+            {
+                AnimeBytesService.InitTracker();
+            }
+            
+            JobManager.AddJob(
+                () => { UpdateTorrents().Wait(); },
+                s => s.WithName("Home:UpdateTorrents")
+                      .NonReentrant()
+                      .ToRunEvery(1)
+                      .Seconds()
+            );
+#if DEBUG
+            ShowSetupWizard().ConfigureAwait(false);
+#endif
+        }
+        
+        
+        private async Task ShowSetupWizard()
+        {
+            await using var db = new TrackContext();
+            var appState = await db.AppStates.SingleOrDefaultAsync();
+#if DEBUG
+            if (appState is {FirstStart: false})
+#else
+            if (appState is {FirstStart: true})
+#endif
+            {
+                appState.FirstStart = false;
+                await db.SaveChangesAsync();
+                
+                _windowManager.ShowDialog(_settingsSetupWizardViewModel);
+            }
         }
 
         private async Task DownloadMissingCovers()
@@ -382,20 +434,15 @@ namespace Anidow.Pages
             }
         }
 
-        protected override async void OnActivate()
-        {
-            await LoadEpisodes();
-        }
-
-        private async Task LoadEpisodes()
+        public async Task LoadEpisodes()
         {
             await using var db = new TrackContext();
-            var episodes = await db.Episodes.Where(e => !e.Hide)
+            var episodes = db.Episodes.Where(e => !e.Hide)
                                    .Include(e => e.CoverData)
-                                   .ToListAsync();
+                                   .OrderBy(e => e.Released);
 
             Items.Clear();
-            foreach (var episode in episodes.OrderBy(e => e.Released))
+            foreach (var episode in episodes)
             {
                 await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
             }
@@ -419,10 +466,8 @@ namespace Anidow.Pages
 
         private async Task UpdateTorrents()
         {
-            _logger.Debug("started job: UpdateTorrents");
             if (Items.Count <= 0)
             {
-                _logger.Debug("finished job: UpdateTorrents");
                 return;
             }
 
@@ -434,8 +479,6 @@ namespace Anidow.Pages
             {
                 _logger.Error(e, "failed updating torrent progress");
             }
-
-            _logger.Debug("finished job: UpdateTorrents");
         }
 
         public async Task GetAiringEpisodesForToday()
@@ -490,6 +533,12 @@ namespace Anidow.Pages
                 Date = DateTime.UtcNow - TimeSpan.FromMinutes(5),
             });
 #endif
+        }
+
+        public async void Handle(AddToHomeEvent message)
+        {
+            await DispatcherUtil.DispatchAsync(() => Items.Add(message.Episode));
+            await GetAiringEpisodesForToday();
         }
     }
 }

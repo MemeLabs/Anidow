@@ -116,5 +116,11 @@ namespace Anidow.Torrent_Clients
                 return default;
             }
         }
+
+        //public async Task<string> GetVersion()
+        //{
+        //    var url = $"{ApiUrl}/api/v2/app/Version";
+        //    return await _httpClient.GetStringAsync(url);
+        //}
     }
 }

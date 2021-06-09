@@ -67,10 +67,12 @@ namespace Anidow.Services
             _tracker.Elapsed += TrackerOnElapsed;
             _initialRefreshTime = _settingsService.Settings.RefreshTime;
             _settingsService.SettingsSavedEvent += OnSettingsSavedEvent;
+#if RELEASE
             if (!string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.PassKey))
             {
                 StartTracker();
             }
+#endif
         }
 
         public void StartTracker()
@@ -78,12 +80,14 @@ namespace Anidow.Services
             LastCheck = DateTime.Now;
             _tracker.Start();
             TrackerIsRunning = true;
+            _ = NotificationUtil.ShowAsync("Tracker", "Started!");
         }
 
         public void StopTracker()
         {
             _tracker.Stop();
             TrackerIsRunning = false;
+            _ = NotificationUtil.ShowAsync("Tracker", "Stopped!");
         }
 
         private void OnSettingsSavedEvent(object sender, EventArgs e)
@@ -127,12 +131,11 @@ namespace Anidow.Services
                                 .ToListAsync();
 
             var feedItems = await GetFeedItems(AnimeBytesFilter.Airing);
-            feedItems.Reverse();
+            anime.Reverse();
             foreach (var a in anime)
             {
                 var episodes = await db.Episodes
-                                       .Where(e => e.AnimeId == a.GroupId)
-                                       .ToListAsync();
+                                       .Where(e => e.AnimeId == a.GroupId).ToListAsync();
                 foreach (var item in feedItems)
                 {
                     var episode = episodes.FirstOrDefault(ep => ep.Name == item.Name);
@@ -193,11 +196,15 @@ namespace Anidow.Services
                         await db.AddAsync(newEpisode);
                         await db.SaveChangesAsync();
 
-                        _eventAggregator.PublishOnUIThread(new RefreshHomeEvent());
+                        _eventAggregator.PublishOnUIThread(new AddToHomeEvent {Episode = newEpisode});
 
                         if (_settingsService.Settings.Notifications)
                         {
                             _taskbarIcon.ShowBalloonTip("Added", item.Name, BalloonIcon.None);
+                        }
+                        else
+                        {
+                            await NotificationUtil.ShowAsync("Added", item.Name);
                         }
 
                         break;
@@ -275,14 +282,14 @@ namespace Anidow.Services
                 for (var index = 0; index < anime.Groups.Length; index++)
                 {
                     var a = anime.Groups[index];
-                    a.Row = index;
+                    a.Row = index + 1;
                     DecodeProperties(a.GetType(), a);
                     a.SelectedTorrent = a.Torrents.FirstOrDefault();
                     foreach (var aTorrent in a.Torrents)
                     {
                         DecodeProperties(aTorrent.GetType(), aTorrent);
                         DecodeProperties(aTorrent.EditionData.GetType(), aTorrent.EditionData);
-                        aTorrent.Folder = _settingsService.Settings.AnimeBytesSettings.DefaultDownloadFolder;
+                        aTorrent.Folder = _settingsService.Settings.AnimeFolder;
                     }
 
                     if (minSeeders > -1)

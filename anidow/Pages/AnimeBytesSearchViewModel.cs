@@ -1,16 +1,22 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Anidow.Database;
+using Anidow.Database.Models;
+using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Model;
 using Anidow.Services;
 using Anidow.Utils;
+using Microsoft.EntityFrameworkCore;
+using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -23,16 +29,18 @@ namespace Anidow.Pages
     {
         private readonly AnimeBytesService _animeBytesService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly HttpClient _httpClient;
         private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
         private readonly TorrentService _torrentService;
         private ScrollViewer _scrollViewer;
 
-        public AnimeBytesSearchViewModel(ILogger logger, IEventAggregator eventAggregator,
+        public AnimeBytesSearchViewModel(ILogger logger, IEventAggregator eventAggregator, HttpClient httpClient,
             AnimeBytesService animeBytesService, TorrentService torrentService, SettingsService settingsService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _animeBytesService = animeBytesService ?? throw new ArgumentNullException(nameof(animeBytesService));
             _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
@@ -66,17 +74,85 @@ namespace Anidow.Pages
                 CanGetItems = true;
                 return;
             }
+            
+            await using var db = new TrackContext();
+            var tracked = await db.Anime.Select(a => a.GroupId).ToListAsync();
 
             Items.Clear();
             foreach (var anime in response.Groups)
             {
+                anime.Folder = _settingsService.Settings.AnimeFolder;
+                anime.CanTrack = !tracked.Contains($"{anime.ID}") 
+                                 &&  anime.SubGroups.Count > 0
+                                 && anime.GroupName.Equals("TV Series", StringComparison.InvariantCultureIgnoreCase);
+                
+                foreach (var torrent in anime.Torrents) torrent.Folder = anime.Folder;
                 await DispatcherUtil.DispatchAsync(() => Items.Add(anime));
             }
 
             _scrollViewer?.ScrollToTop();
-            ActiveItem = null!;
+            DeselectItem();
             LastSearch = DateTime.Now;
             CanGetItems = true;
+        }
+        
+        public async Task Track(AnimeBytesScrapeAnime item)
+        {
+            await using var db = new TrackContext();
+            var isTracking = await db.Anime.FirstOrDefaultAsync(a => a.GroupId == $"{item.ID}");
+            if (isTracking != null || string.IsNullOrWhiteSpace(item.SelectedSubGroup))
+            {
+                return;
+            }
+
+            var resolution = string.Empty;
+            var parts = item.SelectedSubGroup.Split('|', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(p => p.Trim())
+                            .ToList();
+            if (parts.Contains("1080p"))
+            {
+                resolution = "1080p";
+            }
+            
+            if (parts.Contains("720p"))
+            {
+                resolution = "720p";
+            }
+
+            var group = parts[0];
+
+            try
+            {
+                if (!Directory.Exists(item.Folder))
+                {
+                    Directory.CreateDirectory(item.Folder);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed creating directory");
+                await NotificationUtil.ShowAsync("Error", $"failed creating directory:\n {item.Folder}", NotificationType.Error);
+                return;
+            }
+
+            var anime = new Anime
+            {
+                Site = Site.AnimeBytes,
+                Cover = item.Image,
+                Folder = item.Folder,
+                GroupId = item.ID.ToString(),
+                Name = item.FullName,
+                GroupUrl = $"https://animebytes.tv/torrents.php?id={item.ID}",
+                Released = default,
+                Resolution = resolution,
+                Group = group,
+                Status = AnimeStatus.Watching,
+            };
+            anime.CoverData = await anime.Cover.GetCoverData(anime, _httpClient, _logger);
+
+            await db.Anime.AddAsync(anime);
+            await db.SaveChangesAsync();
+            item.CanTrack = false;
         }
 
         public void DeselectItem()
@@ -86,9 +162,9 @@ namespace Anidow.Pages
 
         public async Task Download(AnimeBytesScrapeAnime anime)
         {
-            var selectedTorrent = anime?.SelectedTorrent;
-
-            if (string.IsNullOrWhiteSpace(selectedTorrent?.Folder))
+            var selectedTorrent = anime.SelectedTorrent;
+            
+            if (string.IsNullOrWhiteSpace(selectedTorrent.Folder))
             {
                 return;
             }
@@ -99,6 +175,7 @@ namespace Anidow.Pages
                 return;
             }
 
+            
             _eventAggregator.PublishOnUIThread(new DownloadEvent
             {
                 Item = anime,
@@ -110,7 +187,7 @@ namespace Anidow.Pages
         {
             using var dialog = new FolderBrowserDialog
             {
-                SelectedPath = anime?.SelectedTorrent?.Folder ?? Directory.GetCurrentDirectory(),
+                SelectedPath = anime.Folder ?? Directory.GetCurrentDirectory(),
             };
             var result = dialog.ShowDialog();
             if (result != DialogResult.OK)
@@ -118,17 +195,13 @@ namespace Anidow.Pages
                 return;
             }
 
-            foreach (var torrent in ActiveItem.Torrents) torrent.Folder = dialog.SelectedPath;
+            anime.Folder = dialog.SelectedPath;
+            foreach (var torrent in anime.Torrents) torrent.Folder = dialog.SelectedPath;
         }
 
         public void OpenExternalLink(AnimeBytesScrapeAnime item)
         {
-            if (string.IsNullOrWhiteSpace(item.SeriesID))
-            {
-                return;
-            }
-
-            LinkUtil.Open($"https://animebytes.tv/series.php?id={item.SeriesID}");
+            LinkUtil.Open($"https://animebytes.tv/torrents.php?id={item.ID}");
         }
 
         public void OpenLink(string link)

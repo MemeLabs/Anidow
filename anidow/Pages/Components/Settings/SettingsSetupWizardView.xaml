@@ -1,0 +1,86 @@
+<controls:AdonisWindow
+    Height="300"
+    Title="Setup Wizard"
+    Width="600"
+    d:DataContext="{d:DesignInstance local:SettingsSetupWizardViewModel}"
+    mc:Ignorable="d"
+    x:Class="Anidow.Pages.Components.Settings.SettingsSetupWizardView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+    xmlns:local="clr-namespace:Anidow.Pages.Components.Settings"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ContentPresenter
+            Content="{Binding}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+            <ContentPresenter.Resources>
+                <DataTemplate x:Key="StepOne">
+                    <local:SettingsSetupWizardStepOneView />
+                </DataTemplate>
+                <DataTemplate x:Key="StepTwo">
+                    <local:SettingsSetupWizardStepTwoView />
+                </DataTemplate>
+                <DataTemplate x:Key="StepThree">
+                    <local:SettingsSetupWizardStepThreeView />
+                </DataTemplate>
+            </ContentPresenter.Resources>
+            <ContentPresenter.Style>
+                <Style TargetType="{x:Type ContentPresenter}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="1">
+                            <Setter Property="ContentTemplate" Value="{StaticResource StepOne}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="2">
+                            <Setter Property="ContentTemplate" Value="{StaticResource StepTwo}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="3">
+                            <Setter Property="ContentTemplate" Value="{StaticResource StepThree}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentPresenter.Style>
+        </ContentPresenter>
+
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            Margin="16"
+            Orientation="Horizontal">
+            <Button
+                Background="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"
+                Command="{s:Action RequestClose,
+                ActionNotFound=Disable}"
+                Content="Cancel"
+                extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
+                extensions:RippleExtension.BackgroundBrush="#EF5350" />
+            <Button Command="{s:Action Back, ActionNotFound=Disable}" Content="Back"
+                    Margin="8,0,0,0" />
+            <Button
+                Command="{s:Action Next,
+                                   ActionNotFound=Disable}"
+                Content="Next"
+                Margin="8,0"
+                Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
+                Visibility="{Binding IsFinish, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+            <Button
+                Command="{s:Action Finish,
+                                   ActionNotFound=Disable}"
+                Content="Finish"
+                Margin="8,0"
+                Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
+                Visibility="{Binding IsFinish, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+
+        </StackPanel>
+    </Grid>
+</controls:AdonisWindow>

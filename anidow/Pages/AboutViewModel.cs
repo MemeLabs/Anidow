@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using Anidow.Helpers;
 using Anidow.Model;
 using Anidow.Utils;
@@ -11,6 +12,7 @@ using Newtonsoft.Json;
 using Onova.Models;
 using Serilog;
 using Stylet;
+using Screen = Stylet.Screen;
 
 namespace Anidow.Pages
 {
@@ -27,12 +29,8 @@ namespace Anidow.Pages
             _updateManager = updateManager;
             _logger = logger;
             DisplayName = "About";
-            var licenses = assembly.GetManifestResourceNames().Single(p => p.EndsWith("licenses.json"));
-            using var stream = assembly.GetManifestResourceStream(licenses);
-            using var reader = new StreamReader(stream!);
-            var json = reader.ReadToEnd();
-            Packages.AddRange(JsonConvert.DeserializeObject<Package[]>(json));
         }
+        
 
         public IObservableCollection<Package> Packages { get; } = new BindableCollection<Package>();
 
@@ -45,6 +43,12 @@ namespace Anidow.Pages
 
         protected override async void OnInitialActivate()
         {
+            var licenses = _assembly.GetManifestResourceNames().Single(p => p.EndsWith("licenses.json"));
+            await using var stream = _assembly.GetManifestResourceStream(licenses);
+            using var reader = new StreamReader(stream!);
+            var json = await reader.ReadToEndAsync();
+            Packages.AddRange(JsonConvert.DeserializeObject<Package[]>(json));
+            
             await CheckForUpdate();
         }
 
@@ -67,20 +71,28 @@ namespace Anidow.Pages
                 HasUpdate = true;
                 UpdateMessage = $"New version is out (v{check.LastVersion})";
                 _lastCheck = check;
+                CanUpdateNow = true;
             }
 
             CanCheckForUpdate = true;
         }
 
+        public bool CanUpdateNow { get; private set; }
         public async Task UpdateNow()
         {
+            CanUpdateNow = false;
             try
             {
-                await _updateManager.Update(_lastCheck);
+                var shell = (ShellViewModel) Application.Current.MainWindow?.DataContext;
+                await _updateManager.Update(_lastCheck, () => shell?.RequestClose());
             }
             catch (Exception e)
             {
                 _logger.Error(e, "failed updating anidow");
+            }
+            finally
+            {
+                CanUpdateNow = true;
             }
         }
     }

@@ -16,11 +16,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Notifications.Wpf.Core;
 
 namespace Anidow.Pages.Components.Tracked
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive
+    public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHandle<TrackedDeleteAnimeEvent>, IHandle<TrackedRefreshEvent>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly HttpClient _httpClient;
@@ -68,6 +69,7 @@ namespace Anidow.Pages.Components.Tracked
 
         protected override async void OnInitialActivate()
         {
+            _eventAggregator.Subscribe(this);
             ViewToggle = _settingsService.Settings.TrackedIsCardView;
             await Load();
         }
@@ -185,6 +187,47 @@ namespace Anidow.Pages.Components.Tracked
             }
 
             _scrollViewers = scrollView.ToArray();
+        }
+
+        public void Handle(TrackedDeleteAnimeEvent message)
+        {
+            try
+            {
+                Items.Remove(message.Anime);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "couldn't delete anime from items");
+            }
+        }
+
+        public async void Handle(TrackedRefreshEvent message)
+        {
+            await Load();
+        }
+
+        public async Task DownloadCover((object url, object anime) data)
+        {
+            try
+            {
+                var anime = (Anime)data.anime;
+                var url = (string)data.url;
+                Uri.TryCreate(url, UriKind.Absolute, out var uri);
+                if (uri == null)
+                {
+                    await NotificationUtil.ShowAsync("Error", "Cover url is invalid", NotificationType.Error);
+                    return;
+                }
+
+                anime.Cover = url;
+                anime.CoverData = await url.GetCoverData(anime, _httpClient, _logger);
+                await anime.UpdateInDatabase();
+                await NotificationUtil.ShowAsync(anime.Name, "Cover downloaded", NotificationType.Success);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed downloading Cover");
+            }
         }
     }
 }

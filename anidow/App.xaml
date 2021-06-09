@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Styles/ListViewItem.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/Button.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/ListBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/Notification.xaml" />
             </s:ApplicationLoader.MergedDictionaries>
 
             <!--  Override colors  -->
@@ -49,7 +50,27 @@
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Margin" Value="2" />
+                <Setter Property="Margin" Value="2,0,2,2" />
+            </Style>
+
+            <Style
+                x:Key="GridViewFirstCenteredContainerStyle"
+                BasedOn="{StaticResource {x:Type GridViewColumnHeader}}"
+                TargetType="{x:Type GridViewColumnHeader}">
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Margin" Value="0,0,2,2" />
+            </Style>
+
+            <Style
+                x:Key="GridViewLastCenteredContainerStyle"
+                BasedOn="{StaticResource {x:Type GridViewColumnHeader}}"
+                TargetType="{x:Type GridViewColumnHeader}">
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Margin" Value="2,0,0,2" />
             </Style>
 
             <Style
@@ -102,7 +123,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
         </s:ApplicationLoader>
     </Application.Resources>
 </Application>

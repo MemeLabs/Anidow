@@ -49,7 +49,7 @@ namespace Anidow.Services
             }
             catch (Exception e)
             {
-                _logger?.Fatal(e, $"failed parsing {path}");
+                _logger.Fatal(e, $"failed parsing {0}", path);
                 return default;
             }
         }

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
+using Anidow.Extensions;
 using Anidow.Interfaces;
 
 // ReSharper disable InconsistentNaming
@@ -53,6 +56,35 @@ namespace Anidow.Model
         [JsonIgnore] public string TagsString => Tags != null ? string.Join(", ", Tags) : null;
         [JsonIgnore] public int SelectedTorrentIndex { get; set; }
         [JsonIgnore] public AnimeBytesScrapeTorrent SelectedTorrent { get; set; }
+        [JsonIgnore] public string Folder { get; set; }
+        [JsonIgnore] public bool CanTrack { get; set; }
+
+        [JsonIgnore] public string SelectedSubGroup { get; set; }
+        [JsonIgnore]
+        public List<string> SubGroups
+        {
+            get
+            {
+                if (Torrents is null or {Length: 0})
+                {
+                    return null;
+                }
+                var list = new List<string>();
+                foreach (var torrent in Torrents)
+                {
+                    var group = torrent.GetReleaseGroup();
+                    var resolution = torrent.GetResolution();
+                    var s = $"{group} | {resolution}";
+                    if (!string.IsNullOrWhiteSpace(group) && !string.IsNullOrWhiteSpace(resolution) && !list.Contains(s))
+                    {
+                        list.Add(s);
+                    }
+                }
+
+                SelectedSubGroup = list.FirstOrDefault();
+                return list;
+            }
+        }
     }
 
     public class AnimeBytesScrapeTorrent : ObservableObject, ITorrentItem

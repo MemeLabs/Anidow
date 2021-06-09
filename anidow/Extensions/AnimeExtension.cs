@@ -27,6 +27,21 @@ namespace Anidow.Extensions
                 return string.Empty;
             }
         }
+        public static string GetReleaseGroup(this AnimeBytesScrapeTorrent item)
+        {
+            var parts = item.Property.Split('|', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(p => p.Trim())
+                            .ToList();
+
+            try
+            {
+                return parts[^2];
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
 
         public static string GetEpisode(this AnimeBytesTorrentItem item)
         {
@@ -65,6 +80,15 @@ namespace Anidow.Extensions
             var resolutionIndex = parts.FindIndex(p => Regex.IsMatch(p, @"\d+p"));
             return resolutionIndex == -1 ? string.Empty : parts[resolutionIndex];
         }
+        public static string GetResolution(this AnimeBytesScrapeTorrent item)
+        {
+            var parts = item.Property.Split('|', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(p => p.Trim())
+                            .ToList();
+
+            var resolutionIndex = parts.FindIndex(p => Regex.IsMatch(p, @"\d+p"));
+            return resolutionIndex == -1 ? string.Empty : parts[resolutionIndex];
+        }
 
         public static string GetEpisode(this string s)
         {
@@ -84,17 +108,29 @@ namespace Anidow.Extensions
             db.Anime.Update(anime);
             await db.SaveChangesAsync();
         }
+        public static async Task AddToDatabase(this Anime anime, Cover cover = null)
+        {
+            await using var db = new TrackContext();
+            anime.CoverData = null;
+            await db.Anime.AddAsync(anime);
+            await db.SaveChangesAsync();
+            if (cover is not null)
+            {
+                anime.CoverData = cover;
+                await anime.UpdateInDatabase();
+            }
+        }
 
 
         public static async Task<bool> DeleteInDatabase(this Anime anime)
         {
-            var result = MessageBox.Show($"delete?\n\n{anime.Name}", "Delete",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Cancel)
+            var result = MessageBox.Show("Are you sure you want to delete this?", anime.Name,
+                MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.No)
             {
                 return false;
             }
-
+            
             await using var db = new TrackContext();
             db.Attach(anime);
             db.Remove(anime);

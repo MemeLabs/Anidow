@@ -21,8 +21,8 @@ namespace Anidow.Extensions
                     return null;
                 }
 
-                var mediaType = response.Content.Headers.ContentType.MediaType;
-                if (!mediaType.StartsWith("image/"))
+                var mediaType = response.Content.Headers.ContentType?.MediaType;
+                if (mediaType is null || !mediaType.StartsWith("image/"))
                 {
                     return null;
                 }

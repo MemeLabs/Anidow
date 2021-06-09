@@ -1,11 +1,15 @@
 ﻿<UserControl
+    d:DataContext="{d:DesignInstance local:MainViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
     x:Class="Anidow.Pages.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+    xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
     xmlns:local="clr-namespace:Anidow.Pages"
@@ -13,11 +17,11 @@
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
-    d:DataContext="{d:DesignInstance local:MainViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
+        <Grid.Resources>
+            <helpers:BindingProxy Data="{Binding}" x:Key="Proxy" />
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -28,27 +32,37 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
             Opacity=".7"
+            VerticalAlignment="Center"
             Visibility="{Binding Items.Count, Converter={x:Static converters:IsZeroToVisibilityConverter.Instance}}">
             nothing to watch
         </TextBlock>
 
         <ListView
-            x:Name="ListView"
             Grid.Row="0"
-            extensions:GridViewSortExtension.AutoSort="True"
-            listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemContainerStyle="{StaticResource ListViewItemHome}"
             ItemsSource="{Binding Items}"
-            SelectedItem="{Binding ActiveItem}">
+            Margin="2"
+            SelectedItem="{Binding ActiveItem}"
+            extensions:GridViewSortExtension.AutoSort="True"
+            listViewLayout:ListViewLayoutManager.Enabled="true"
+            x:Name="ListView">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{s:Action LoadEpisodes,
+                                           ActionNotFound=Disable}"
+                        Header="Reload"
+                        Icon="{iconPacks:FontAwesome SyncAltSolid}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
                     <GridViewColumn
-                        extensions:GridViewSortExtension.PropertyName="Name"
-                        listViewLayout:RangeColumn.IsFillColumn="true"
                         Header="Name"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}"
+                        extensions:GridViewSortExtension.PropertyName="Name"
+                        listViewLayout:RangeColumn.IsFillColumn="true">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
                                 <Grid>
@@ -59,52 +73,53 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Button
-                                        Width="27"
-                                        Margin="-14,-4,0,-4"
-                                        Padding="4,5,4,4"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
-                                        extensions:RippleExtension.BackgroundBrush="#EF5350"
                                         Command="{s:Action HideItem,
                                                            ActionNotFound=Disable}"
                                         CommandParameter="{Binding}"
                                         Content="{iconPacks:FontAwesome TimesSolid,
                                                                         Width=10,
                                                                         Height=10}"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        Margin="-14,-4,0,-4"
+                                        Padding="4,5,4,4"
                                         Style="{StaticResource DeleteButton}"
-                                        ToolTip="Hide" />
+                                        ToolTip="Hide"
+                                        VerticalAlignment="Stretch"
+                                        Width="27"
+                                        extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
+                                        extensions:RippleExtension.BackgroundBrush="#EF5350" />
 
                                     <TextBlock
-                                        x:Name="Name"
                                         Grid.Column="1"
-                                        Margin="8,0,0,0"
                                         HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Center"
+                                        Margin="8,0,0,0"
                                         Text="{Binding Name}"
                                         TextTrimming="CharacterEllipsis"
                                         TextWrapping="NoWrap"
                                         ToolTip="{Binding Name}"
-                                        ToolTipService.Placement="Bottom" />
+                                        ToolTipService.Placement="Bottom"
+                                        VerticalAlignment="Center"
+                                        x:Name="Name" />
 
                                     <ProgressBar
                                         Grid.Column="2"
-                                        Width="50"
                                         Margin="8,0,0,0"
-                                        extensions:ProgressBarExtension.Content="{Binding TorrentProgressContent}"
                                         Maximum="1"
                                         Minimum="0"
                                         ToolTip="Download progress"
+                                        Value="{Binding TorrentProgress}"
                                         Visibility="{Binding TorrentShowProgress, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
-                                        Value="{Binding TorrentProgress}" />
+                                        Width="50"
+                                        extensions:ProgressBarExtension.Content="{Binding TorrentProgressContent}"
+                                        extensions:ProgressBarExtension.IsProgressAnimationEnabled="False" />
 
                                     <Grid
+                                        Background="Transparent"
                                         Grid.Column="3"
                                         Margin="4,0,2,0"
-                                        VerticalAlignment="Center"
-                                        Background="Transparent"
                                         ToolTip="Download finished"
+                                        VerticalAlignment="Center"
                                         Visibility="{Binding TorrentFinished, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
                                         <ContentControl Content="{iconPacks:FontAwesome CheckSolid}" />
                                     </Grid>
@@ -112,35 +127,35 @@
 
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Watched}" Value="True">
-                                        <Setter TargetName="Name" Property="Opacity" Value="0.3" />
+                                        <Setter Property="Opacity" TargetName="Name" Value="0.3" />
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
+                        Header="Episode"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}"
                         Width="85"
                         extensions:GridViewSortExtension.PropertyName="EpisodeNum"
-                        listViewLayout:FixedColumn.Width="85"
-                        Header="Episode"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        listViewLayout:FixedColumn.Width="85">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
                                 <TextBlock
-                                    Width="78"
-                                    Margin="-12,0"
                                     HorizontalAlignment="Left"
+                                    Margin="-12,0"
                                     Text="{Binding EpisodeNum}"
-                                    TextAlignment="Center" />
+                                    TextAlignment="Center"
+                                    Width="78" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
+                        Header="Added"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}"
                         Width="120"
                         extensions:GridViewSortExtension.PropertyName="Released"
-                        listViewLayout:FixedColumn.Width="120"
-                        Header="Added"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        listViewLayout:FixedColumn.Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate DataType="models:Episode">
                                 <TextBlock Text="{Binding ReleasedString}" ToolTipService.Placement="Bottom">
@@ -152,43 +167,42 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
-                        Width="70"
-                        listViewLayout:FixedColumn.Width="70"
                         CellTemplate="{DynamicResource WatchOpen}"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}" />
+                        HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}"
+                        Width="70"
+                        listViewLayout:FixedColumn.Width="70" />
                 </GridView>
             </ListView.View>
         </ListView>
         <Grid
             Grid.Row="0"
-            Margin="2,-29"
             HorizontalAlignment="Left"
+            Margin="2,-29"
             VerticalAlignment="Top"
             Visibility="{Binding AnimesToday.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
             <ToggleButton
-                x:Name="PredictedToggleButton"
-                extensions:CornerRadiusExtension.CornerRadius="4"
-                extensions:CursorSpotlightExtension.BackgroundBrush="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}"
                 Background="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}"
                 BorderThickness="0"
                 Command="{s:Action GetAiringEpisodesForToday,
                                    ActionNotFound=Disable}"
-                Content="{Binding AnimesToday.Count}" />
+                Content="{Binding AnimesToday.Count}"
+                extensions:CornerRadiusExtension.CornerRadius="4"
+                extensions:CursorSpotlightExtension.BackgroundBrush="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}"
+                x:Name="PredictedToggleButton" />
             <Popup
-                Width="{Binding ElementName=ListView, Path=ActualWidth}"
                 AllowsTransparency="True"
-                HorizontalOffset="-2"
                 IsOpen="{Binding ElementName=PredictedToggleButton, Path=IsChecked}"
                 Placement="Bottom"
                 PlacementTarget="{Binding ElementName=PredictedToggleButton}"
                 StaysOpen="False"
-                VerticalOffset="4">
+                VerticalOffset="4"
+                Width="{Binding ElementName=ListView, Path=ActualWidth}">
                 <Border
-                    Padding="8"
                     Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
                     BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer2BorderBrush}}"
                     BorderThickness="2"
-                    CornerRadius="4">
+                    CornerRadius="4"
+                    Padding="8">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -198,8 +212,8 @@
                         <TextBlock>Predicted new releases today:</TextBlock>
                         <Separator Grid.Row="1" />
                         <ItemsControl
-                            Grid.Row="2"
                             Grid.Column="0"
+                            Grid.Row="2"
                             ItemsSource="{Binding AnimesToday}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -210,7 +224,7 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock VerticalAlignment="Top" Text="{Binding DateString}">
+                                            <TextBlock Text="{Binding DateString}" VerticalAlignment="Top">
                                                 <TextBlock.ToolTip>
                                                     <ToolTip Content="{Binding DateLocal}" ContentStringFormat="{}{0:g}" />
                                                 </TextBlock.ToolTip>
@@ -218,13 +232,13 @@
                                             <Separator
                                                 Grid.Column="1"
                                                 Margin="8,0"
-                                                VerticalAlignment="Stretch"
-                                                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                                                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                                                VerticalAlignment="Stretch" />
                                             <TextBlock
                                                 Grid.Column="2"
-                                                VerticalAlignment="Top"
                                                 Text="{Binding Name}"
-                                                TextWrapping="Wrap" />
+                                                TextWrapping="Wrap"
+                                                VerticalAlignment="Top" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -236,11 +250,11 @@
         </Grid>
         <Expander
             Grid.Row="1"
-            VerticalAlignment="Bottom"
-            extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
-            extensions:LayerExtension.IncreaseLayer="True"
             Style="{StaticResource ExpanderCustom}"
-            Visibility="{Binding ActiveItem, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
+            VerticalAlignment="Bottom"
+            Visibility="{Binding ActiveItem, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}"
+            extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
+            extensions:LayerExtension.IncreaseLayer="True">
             <Expander.Header>
                 <Grid>
                     <Grid.Resources>
@@ -257,21 +271,21 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Button
-                        Grid.Column="0"
-                        Margin="0,-4,8,-4"
                         Command="{s:Action Download}"
                         CommandParameter="{Binding ActiveItem}"
                         Content="{iconPacks:FontAwesome DownloadSolid,
                                                         Height=15,
                                                         Width=15}"
+                        Grid.Column="0"
+                        Margin="0,-4,8,-4"
                         Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
                         ToolTip="Re-add torrent to the torrent client" />
 
                     <TextBlock
-                        Grid.Column="1"
-                        VerticalAlignment="Center"
                         FontWeight="Bold"
-                        Text="Information" />
+                        Grid.Column="1"
+                        Text="Information"
+                        VerticalAlignment="Center" />
 
                     <!--<TextBlock Grid.Column="2"
                                Margin="8,0"
@@ -280,12 +294,12 @@
                                Text="{Binding ActiveItem.Id, StringFormat=(id: {0})}"
                                Visibility="{Binding ActiveItem.Id, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />-->
                     <Button
-                        Grid.Column="3"
-                        Margin="0,-4"
                         Command="{s:Action DeselectItem}"
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
                                                         Width=15}"
+                        Grid.Column="3"
+                        Margin="0,-4"
                         Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
                 </Grid>
             </Expander.Header>
@@ -304,11 +318,11 @@
                     </Grid.ColumnDefinitions>
                     <TextBox IsReadOnly="True" Text="{Binding ActiveItem.Link, Mode=OneWay}" />
                     <Button
-                        Grid.Column="1"
-                        Margin="8,0,0,0"
                         Command="{s:Action OpenExternalLink}"
                         CommandParameter="{Binding ActiveItem}"
-                        Content="{iconPacks:FontAwesome ExternalLinkAltSolid}" />
+                        Content="{iconPacks:FontAwesome ExternalLinkAltSolid}"
+                        Grid.Column="1"
+                        Margin="8,0,0,0" />
                 </Grid>
 
                 <Grid Grid.Row="1" Margin="0,8">
@@ -318,11 +332,11 @@
                     </Grid.ColumnDefinitions>
                     <TextBox IsReadOnly="True" Text="{Binding ActiveItem.Folder}" />
                     <Button
-                        Grid.Column="1"
-                        Margin="8,0,0,0"
                         Command="{s:Action OpenFolder}"
                         CommandParameter="{Binding ActiveItem}"
-                        Content="{iconPacks:FontAwesome FolderOpenSolid}" />
+                        Content="{iconPacks:FontAwesome FolderOpenSolid}"
+                        Grid.Column="1"
+                        Margin="8,0,0,0" />
                 </Grid>
                 <Grid Grid.Row="2" Margin="0">
                     <shared:EpisodeInformationActions DataContext="{Binding}" />
@@ -330,38 +344,38 @@
             </Grid>
         </Expander>
         <Border
+            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
             Grid.Row="2"
             Padding="2"
             extensions:LayerExtension.IncreaseLayer="True"
-            extensions:LayerExtension.Layer="1"
-            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
+            extensions:LayerExtension.Layer="1">
             <TextBlock
-                Margin="4,0,0,0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
+                Margin="4,0,0,0"
                 Text="{Binding NextCheckIn}"
                 ToolTip="next Check for new episodes/anime"
-                ToolTipService.Placement="Top">
+                ToolTipService.Placement="Top"
+                VerticalAlignment="Center">
                 <TextBlock.ContextMenu>
                     <ContextMenu Placement="Top">
                         <MenuItem
-                            s:View.ActionTarget="{Binding AnimeBytesService}"
                             Command="{s:Action StartTracker,
                                                ActionNotFound=Disable}"
                             Header="Start"
                             Icon="{iconPacks:FontAwesome PlaySolid}"
-                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
+                            s:View.ActionTarget="{Binding AnimeBytesService}" />
                         <MenuItem
-                            s:View.ActionTarget="{Binding AnimeBytesService}"
                             Command="{s:Action StopTracker,
                                                ActionNotFound=Disable}"
                             Header="Pause"
                             Icon="{iconPacks:FontAwesome PauseSolid}"
-                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
+                            s:View.ActionTarget="{Binding AnimeBytesService}" />
                         <MenuItem
                             Command="{s:Action ForceCheck}"
                             Header="Check now"
-                            Icon="{iconPacks:FontAwesome RedoSolid}" />
+                            Icon="{iconPacks:FontAwesome SyncAltSolid}" />
                     </ContextMenu>
                 </TextBlock.ContextMenu>
             </TextBlock>

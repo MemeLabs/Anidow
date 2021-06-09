@@ -66,6 +66,25 @@ namespace Anidow.Migrations
                     b.ToTable("Anime");
                 });
 
+            modelBuilder.Entity("Anidow.Database.Models.AppState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(DateTime.UtcNow);
+
+                    b.Property<bool>("FirstStart")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppStates");
+                });
+
             modelBuilder.Entity("Anidow.Database.Models.Cover", b =>
                 {
                     b.Property<int>("Id")

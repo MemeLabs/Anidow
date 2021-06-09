@@ -21,8 +21,8 @@ namespace Anidow.Pages
         private readonly IEventAggregator _eventAggregator;
 
         public TrackedViewModel(TrackedOverViewModel trackedOverViewModel,
-        TrackedAnimeEditContentViewModel trackedAnimeEditContentViewModel,
-        IEventAggregator eventAggregator)
+            TrackedAnimeEditContentViewModel trackedAnimeEditContentViewModel,
+            IEventAggregator eventAggregator)
         {
             DisplayName = "Tracked";
             _trackedOverViewModel = trackedOverViewModel;

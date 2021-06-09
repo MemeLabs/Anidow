@@ -105,14 +105,13 @@ namespace Anidow.Pages
             }
 
             Items.Clear();
-            foreach (var animeBytesFeedItem in items)
+            foreach (var item in items)
             {
-                if (SelectedFilterIndex == 1)
-                {
-                    animeBytesFeedItem.CanTrack = !tracked.Contains(animeBytesFeedItem.GroupId);
-                }
+                item.CanTrack = !tracked.Contains(item.GroupId)
+                                              && !string.IsNullOrWhiteSpace(item.Resolution)
+                                              && !string.IsNullOrWhiteSpace(item.GetReleaseGroup());
 
-                await DispatcherUtil.DispatchAsync(() => Items.Add(animeBytesFeedItem));
+                await DispatcherUtil.DispatchAsync(() => Items.Add(item));
             }
 
             _scrollViewer?.ScrollToTop();

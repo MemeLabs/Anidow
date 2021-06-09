@@ -18,29 +18,26 @@ namespace Anidow.Pages
     {
         private readonly Anime _anime;
         private readonly Episode _episode;
-        private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
         private readonly int _maxFilesInView = 100;
         private readonly string _name;
         private List<FolderFilesModel> _files;
 
-        public FolderFilesViewModel(ref Episode episode, IEventAggregator eventAggregator, ILogger logger)
+        public FolderFilesViewModel(ref Episode episode, ILogger logger)
         {
             _episode = episode ?? throw new ArgumentNullException(nameof(episode));
             _name = episode.Name;
             Folder = episode.Folder;
-            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             FileInfos = new BindableCollection<FolderFilesModel>();
             DisplayName = $"Files - {episode.Name}";
         }
 
-        public FolderFilesViewModel(Anime anime, IEventAggregator eventAggregator, ILogger logger)
+        public FolderFilesViewModel(Anime anime, ILogger logger)
         {
             _anime = anime ?? throw new ArgumentNullException(nameof(anime));
             _name = anime.Name;
             Folder = anime.Folder;
-            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             FileInfos = new BindableCollection<FolderFilesModel>();
             DisplayName = $"Files - {anime.Name}";

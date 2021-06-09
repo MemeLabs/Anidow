@@ -107,7 +107,7 @@ namespace Anidow.Pages
             await GetItems();
         }
 
-        public async void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        public async void OnPreviewKeyDown(object _, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
             {

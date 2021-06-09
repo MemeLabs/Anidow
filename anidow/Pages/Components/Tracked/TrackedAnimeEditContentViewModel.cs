@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AdonisUI.Controls;
 using Anidow.Database.Models;
+using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Services;
 using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;
+using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;
 using MessageBox = AdonisUI.Controls.MessageBox;
@@ -47,7 +49,17 @@ namespace Anidow.Pages.Components.Tracked
             if (await Anime.DeleteInDatabase())
             {
                 Close();
+                _eventAggregator.PublishOnUIThread(new TrackedDeleteAnimeEvent
+                {
+                    Anime = Anime,
+                });
+                await NotificationUtil.ShowUndoAsync(Anime.Name, "Deleted", async () =>
+                {
+                    await Anime.AddToDatabase(Anime.CoverData);
+                    _eventAggregator.PublishOnUIThread(new TrackedRefreshEvent());
+                }, null, TimeSpan.FromSeconds(10));
             }
+
         }
 
         public bool CanSaveAnime { get; set; } = true;
@@ -55,21 +67,21 @@ namespace Anidow.Pages.Components.Tracked
         {
             if (string.IsNullOrWhiteSpace(Anime.Group))
             {
-                Anime.Notification = "Group can not be empty!";
-                Debouncer.DebounceAction($"save-anime-{Anime.GroupId}-failed",
-                    async _ => { await Task.Delay(2500).ContinueWith(_ => Anime.Notification = string.Empty); });
+
+                await NotificationUtil.ShowAsync("Warning", "Group can not be empty!", NotificationType.Warning);
                 return;
             }
 
             await Anime.UpdateInDatabase();
-            Anime.Notification = "Saved!";
             if (_settingsService.Settings.Notifications)
             {
                 _taskbarIcon.ShowBalloonTip("Saved", Anime.Name, BalloonIcon.Info);
             }
+            else
+            {
+                await NotificationUtil.ShowAsync(Anime.Name, "Saved!", NotificationType.Success);
+            }
 
-            Debouncer.DebounceAction($"save-anime-{Anime.GroupId}",
-                async _ => { await Task.Delay(2500).ContinueWith(_ => Anime.Notification = string.Empty); });
         }
 
 
@@ -90,7 +102,7 @@ namespace Anidow.Pages.Components.Tracked
 
         public void OpenFolderFilesWindow()
         {
-            _windowManager.ShowWindow(new FolderFilesViewModel(Anime, _eventAggregator, _logger));
+            _windowManager.ShowWindow(new FolderFilesViewModel(Anime, _logger));
         }
 
 
@@ -149,7 +161,7 @@ namespace Anidow.Pages.Components.Tracked
 
         public void OpenFolder(Episode episode)
         {
-            _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _eventAggregator, _logger));
+            _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _logger));
         }
     }
 }

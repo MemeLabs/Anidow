@@ -9,16 +9,40 @@
     x:Name="UserControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    Visibility="{Binding DataContext, ElementName=UserControl, Mode=OneWay, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
+    Visibility="{Binding DataContext, ElementName=UserControl, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
     mc:Ignorable="d">
-    <Grid>
-        <Border Background="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" Opacity="0.5" />
-        <ContentControl
-            Width="{adonisUi:Space 5}"
-            Height="{adonisUi:Space 5}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingCircle}}"
-            Focusable="False" />
-    </Grid>
+    <ContentPresenter
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Content="{Binding}">
+        <ContentPresenter.Resources>
+            <DataTemplate x:Key="Loading">
+                <Grid>
+                    <Border Background="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" Opacity="0.5" />
+                    <ContentControl
+                        Width="{adonisUi:Space 5}"
+                        Height="{adonisUi:Space 5}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingCircle}}"
+                        Focusable="False" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="Nothing">
+                <Grid Visibility="Collapsed" />
+            </DataTemplate>
+        </ContentPresenter.Resources>
+        <ContentPresenter.Style>
+            <Style TargetType="{x:Type ContentPresenter}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding DataContext, ElementName=UserControl, Mode=OneWay}" Value="True">
+                        <Setter Property="ContentTemplate" Value="{StaticResource Nothing}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding DataContext, ElementName=UserControl, Mode=OneWay}" Value="False">
+                        <Setter Property="ContentTemplate" Value="{StaticResource Loading}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ContentPresenter.Style>
+    </ContentPresenter>
 </UserControl>

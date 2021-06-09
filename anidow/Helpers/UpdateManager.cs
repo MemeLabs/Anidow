@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Onova;
 using Onova.Models;
 using Onova.Services;
+
+#nullable enable
 
 namespace Anidow.Helpers
 {
@@ -23,8 +23,8 @@ namespace Anidow.Helpers
 #endif
             _updateManager = new Onova.UpdateManager(
                 AssemblyMetadata.FromAssembly(
-                    Assembly.GetEntryAssembly(),
-                    System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName),
+                    Assembly.GetEntryAssembly()!,
+                    Process.GetCurrentProcess().MainModule?.FileName!),
                 new GithubPackageResolver(
                     httpClient,
                     "MemeLabs",
@@ -34,7 +34,7 @@ namespace Anidow.Helpers
 
         }
 
-        public async Task<(CheckForUpdatesResult, bool)> HasUpdate()
+        public async Task<(CheckForUpdatesResult?, bool)> HasUpdate()
         {
             var check = await _updateManager.CheckForUpdatesAsync();
             if (!check.CanUpdate || check.LastVersion == null)
@@ -45,16 +45,27 @@ namespace Anidow.Helpers
             return (check, true);
         }
 
-        public async Task Update(CheckForUpdatesResult check)
+        public async Task Update(CheckForUpdatesResult? check, Action? closeApp = null, IProgress<double>? progress = null)
         {
+            if (check?.LastVersion is null)
+            {
+                return;
+            }
 
             // Prepare the latest update
-            await _updateManager.PrepareUpdateAsync(check.LastVersion);
+            await _updateManager.PrepareUpdateAsync(check.LastVersion, progress);
 
             // Launch updater and exit
             _updateManager.LaunchUpdater(check.LastVersion);
 
-            Environment.Exit(0);
+            if (closeApp is not null)
+            {
+                closeApp.Invoke();
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
         }
     }
 }

@@ -4,11 +4,11 @@ using System.Threading;
 using System.Windows.Data;
 using Serilog.Events;
 
-namespace Anidow.Utils
+namespace Anidow.Converters
 {
-    public class LogEventRender : IValueConverter
+    public class LogEventRenderConverter : IValueConverter
     {
-        public static readonly LogEventRender Instance = new();
+        public static readonly LogEventRenderConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

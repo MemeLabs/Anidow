@@ -70,6 +70,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -222,6 +223,12 @@
                             <CheckBox Content="On close minimize to notification area." IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
 
                         </Grid>
+                        <Grid
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            Margin="0,4">
+                            <CheckBox Content="Start AnimeBytes tracker on launch" IsChecked="{Binding Settings.StartTrackerAnimeBytesOnLaunch}" />
+                        </Grid>
                     </Grid>
                 </Expander>
                 <Expander
@@ -324,22 +331,7 @@
                             helpers:Secure.Password="{Binding Settings.AnimeBytesSettings.PassKey, UpdateSourceTrigger=PropertyChanged}" />
 
 
-                        <TextBlock Grid.Row="4" Margin="0,4">Default download folder:</TextBlock>
-                        <Grid Grid.Row="5" Margin="0,0,0,4">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeBytesSettings.DefaultDownloadFolder, UpdateSourceTrigger=PropertyChanged}" />
-                            <Button
-                                Grid.Row="0"
-                                Grid.Column="2"
-                                Command="{s:Action SetAbDefaultAnimeFolder,
-                                                   ActionNotFound=Disable}"
-                                Content="{iconPacks:FontAwesome FolderOpenSolid}" />
-                        </Grid>
-                        <Grid Grid.Row="6" Margin="0,4">
+                        <Grid Grid.Row="4" Margin="0,4">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="Hide torrents with &lt;" />
                                 <ComboBox
@@ -419,7 +411,7 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock Margin="0,0,0,4">Host:</TextBlock>
+                            <TextBlock Margin="0,0,0,4">IP address:</TextBlock>
                             <TextBox
                                 Grid.Row="1"
                                 Grid.Column="0"
@@ -440,22 +432,6 @@
                                 Text="{Binding Settings.QBitTorrent.Port, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                         <Grid Grid.Row="1" Margin="0,4">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock
-                                Grid.Row="0"
-                                Margin="0,0,0,4"
-                                VerticalAlignment="Center"
-                                Text="Category:" />
-                            <TextBox
-                                Grid.Row="1"
-                                Margin="0,0,0,4"
-                                extensions:WatermarkExtension.Watermark="Anime"
-                                Text="{Binding Settings.QBitTorrent.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>
-                        <Grid Grid.Row="2" Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="8" />
@@ -478,6 +454,22 @@
                                 IsEnabled="{Binding Settings.QBitTorrent.WithLogin}" />
 
                         </Grid>
+                        <Grid Grid.Row="2" Margin="0,4,0,4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Margin="0,0,0,4"
+                                VerticalAlignment="Center"
+                                Text="Category:" />
+                            <TextBox
+                                Grid.Row="1"
+                                Margin="0,0,0,4"
+                                extensions:WatermarkExtension.Watermark="Anime"
+                                Text="{Binding Settings.QBitTorrent.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
                     </Grid>
                 </Expander>
 
@@ -485,6 +477,7 @@
         </ScrollViewer>
         <Grid
             Grid.Row="1"
+            Margin="2"
             VerticalAlignment="Bottom"
             Visibility="{Binding SettingsService.CanSave, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Button

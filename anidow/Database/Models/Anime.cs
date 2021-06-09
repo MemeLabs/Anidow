@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Windows.Documents;
 using Anidow.Enums;
 using Anidow.Model;
 using Humanizer;
-using Newtonsoft.Json;
 
 namespace Anidow.Database.Models
 {

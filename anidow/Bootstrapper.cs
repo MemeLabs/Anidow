@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
-using AdonisUI.Controls;
 using Anidow.Database;
+using Anidow.Database.Models;
 using Anidow.Factories;
 using Anidow.Helpers;
 using Anidow.Pages;
@@ -22,6 +22,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using Jot;
 using Jot.Storage;
 using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -29,12 +30,16 @@ using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
+using ILogger = Serilog.ILogger;
 
 #if RELEASE
+using AdonisUI.Controls;
 using System.IO;
 using System.Windows.Threading;
+using System.Diagnostics;
 
 using MessageBox = AdonisUI.Controls.MessageBox;
+using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 #endif
@@ -52,11 +57,11 @@ namespace Anidow
         // Configure the IoC container in here
         protected override void ConfigureIoC(IStyletIoCBuilder builder)
         {
-            builder.Bind<Assembly>().ToInstance(Assembly.GetExecutingAssembly());
+            var assembly = Assembly.GetExecutingAssembly();
+            builder.Bind<Assembly>().ToInstance(assembly);
             var tracker = InitTracker();
             builder.Bind<Tracker>().ToInstance(tracker);
             
-
             var logViewModel = new LogViewModel();
             InitLogger(logViewModel);
 
@@ -153,15 +158,12 @@ namespace Anidow
                                    .WriteTo.Console()
                                    .WriteTo.Sink(logViewModel, logLevel)
                                    .WriteTo.File(
-                                       "./logs/log-.txt", rollingInterval: RollingInterval.Day,
-                                       retainedFileCountLimit: 7);
+                                       "./logs/log-.txt", 
+                                       rollingInterval: RollingInterval.Day,
+                                       retainedFileCountLimit: 7, 
+                                       restrictedToMinimumLevel: LogEventLevel.Error);
 
             _logger = logConfiguration.CreateLogger();
-        }
-
-        public override void Start(string[] args)
-        {
-            base.Start(args);
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -171,33 +173,26 @@ namespace Anidow
             base.OnExit(e);
         }
 
-        protected override async void Configure()
+        protected override void Configure()
         {
 #if RELEASE
             var processes = Process.GetProcessesByName(
                 Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly()?.Location));
             if (processes.Length > 1)
             {
-                MessageBox.Show("Anidow is already running!", "Already running");
+                MessageBox.Show("Already running!", "Anidow");
                 Environment.Exit(0);
             }
 #endif
 
             var secret = Resources.AppCenter_Secret;
-            if (!AppCenter.Configured && !string.IsNullOrWhiteSpace(secret))
+            if (!string.IsNullOrWhiteSpace(secret) && !AppCenter.Configured)
             {
-                AppCenter.Start(secret, typeof(Crashes));
+                AppCenter.Start(secret, typeof(Crashes), typeof(Analytics));
             }
-
-            if (string.IsNullOrWhiteSpace(secret))
+            else
             {
                 _logger.Warning("AppCenter not configured, secret is empty");
-            }
-
-            // Perform any other configuration before the application starts
-            {
-                await using var db = new TrackContext();
-                await db.Database.MigrateAsync();
             }
 
             if (Application.Current.MainWindow != null)
@@ -211,48 +206,41 @@ namespace Anidow
             JobManager.JobException += info =>
                 _logger.Error(info.Exception, "An error just happened with a scheduled job");
 
-            var selfContained = false;
 #if SELF_CONTAINED && RELEASE
-            selfContained = true;
+            var selfContained = true;
+#else
+            var selfContained = false;
 #endif
             _logger.Information(
                 $"Anidow v{Assembly.GetExecutingAssembly().GetName().Version} selfcontained: {selfContained}");
-
-#if RELEASE
-            try
-            {
-                var (check, hasUpdate) = await _updateManager.HasUpdate();
-                if (hasUpdate && check != null)
-                {
-                    await _updateManager.Update(check);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "failed updating anidow");
-            }
-#endif
         }
 #if RELEASE
         protected override void OnUnhandledException(DispatcherUnhandledExceptionEventArgs e)
         {
             _logger.Fatal(e.Exception, e.Exception.Message);
-            var messageBox = new MessageBoxModel
+            if (AppCenter.Configured)
             {
-                Text = $"Would you like to report this crash?\n\nCrash message: '{e.Exception.Message}'",
-                Caption = "Anidow crashed!",
-                Icon = MessageBoxImage.Error,
-                Buttons = new[]
+                var messageBox = new MessageBoxModel
                 {
-                    MessageBoxButtons.Yes("Yes!"),
-                    MessageBoxButtons.No("No!"),
-                },
-                IsSoundEnabled = true,
-            };
-            var result = MessageBox.Show(messageBox);
-            if (result == MessageBoxResult.Yes)
+                    Text = $"Would you like to report this crash?\n\nCrash message: '{e.Exception.Message}'",
+                    Caption = "Anidow crashed!",
+                    Icon = MessageBoxImage.Error,
+                    Buttons = new[]
+                    {
+                        MessageBoxButtons.Yes("Yes!"),
+                        MessageBoxButtons.No("No!"),
+                    },
+                    IsSoundEnabled = true,
+                };
+                var result = MessageBox.Show(messageBox);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Crashes.TrackError(e.Exception);
+                }
+            }
+            else
             {
-                Crashes.TrackError(e.Exception);
+                MessageBox.Show(e.Exception.Message, "Anidow crashed!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 #endif

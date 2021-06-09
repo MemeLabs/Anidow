@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Anidow.Database;
 using Anidow.Database.Models;
+using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Interfaces;
 using Anidow.Services;
@@ -33,7 +34,7 @@ namespace Anidow.Pages
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
-        private readonly int _maxFilesInView = 50;
+        private const int MaxFilesInView = 50;
         private readonly TorrentService _torrentService;
         private readonly IWindowManager _windowManager;
 
@@ -127,7 +128,7 @@ namespace Anidow.Pages
 
         public async Task LoadMore()
         {
-            foreach (var episode in _episodes.Skip(Items.Count).Take(_maxFilesInView))
+            foreach (var episode in _episodes.Skip(Items.Count).Take(MaxFilesInView))
                 await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
             CanLoadMore = Items.Count < _episodes.Count;
             EpisodesLoaded = $"{Items.Count}/{_episodes.Count}";
@@ -152,7 +153,7 @@ namespace Anidow.Pages
             {
                 if (string.IsNullOrWhiteSpace(episode.File))
                 {
-                    _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _eventAggregator, _logger));
+                    _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _logger));
                     return;
                 }
 
@@ -261,6 +262,7 @@ namespace Anidow.Pages
             }
 
             Items.Remove(episode);
+            _eventAggregator.PublishOnUIThread(new RefreshHomeEvent());
         }
 
         public void OpenExternalLink(Episode episode)
@@ -270,7 +272,7 @@ namespace Anidow.Pages
 
         public void OpenFolder(Episode anime)
         {
-            _windowManager.ShowWindow(new FolderFilesViewModel(ref anime, _eventAggregator, _logger));
+            _windowManager.ShowWindow(new FolderFilesViewModel(ref anime, _logger));
         }
 
         public void DeselectItem()

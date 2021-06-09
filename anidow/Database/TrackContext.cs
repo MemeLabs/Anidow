@@ -1,10 +1,13 @@
-﻿using Anidow.Database.Models;
+﻿using System;
+using Anidow.Database.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Anidow.Database
 {
     public class TrackContext : DbContext
     {
+        public DbSet<AppState> AppStates { get; set; }
         public DbSet<Anime> Anime { get; set; }
         public DbSet<Episode> Episodes { get; set; }
         public DbSet<Cover> Covers { get; set; }
@@ -18,6 +21,10 @@ namespace Anidow.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AppState>()
+                        .Property(b => b.Created)
+                        .HasDefaultValue(DateTime.UtcNow);
+
         }
     }
 }
