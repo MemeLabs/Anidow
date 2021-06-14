@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:controls="clr-namespace:Notifications.Wpf.Core.Controls;assembly=Notifications.Wpf.Core"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:stylet="clr-namespace:Stylet;assembly=Stylet"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
@@ -46,7 +45,8 @@
     <ControlTemplate x:Key="CustomNotificationTemplate" TargetType="{x:Type controls:Notification}">
         <ControlTemplate.Resources>
             <DataTemplate x:Key="DefaultStringTemplate" DataType="{x:Type system:String}">
-                <Border MinHeight="80" Background="{Binding RelativeSource={RelativeSource AncestorType=controls:Notification}, Path=Background}">
+                <Border MinHeight="80"
+                        Background="{Binding RelativeSource={RelativeSource AncestorType=controls:Notification}, Path=Background}">
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using Anidow.Extensions;
@@ -60,6 +59,7 @@ namespace Anidow.Model
         [JsonIgnore] public bool CanTrack { get; set; }
 
         [JsonIgnore] public string SelectedSubGroup { get; set; }
+
         [JsonIgnore]
         public List<string> SubGroups
         {
@@ -69,13 +69,15 @@ namespace Anidow.Model
                 {
                     return null;
                 }
+
                 var list = new List<string>();
                 foreach (var torrent in Torrents)
                 {
                     var group = torrent.GetReleaseGroup();
                     var resolution = torrent.GetResolution();
                     var s = $"{group} | {resolution}";
-                    if (!string.IsNullOrWhiteSpace(group) && !string.IsNullOrWhiteSpace(resolution) && !list.Contains(s))
+                    if (!string.IsNullOrWhiteSpace(group) && !string.IsNullOrWhiteSpace(resolution) &&
+                        !list.Contains(s))
                     {
                         list.Add(s);
                     }

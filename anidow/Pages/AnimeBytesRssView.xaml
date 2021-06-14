@@ -92,7 +92,8 @@
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true">
             <ListView.View>
-                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True"
+                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         Header="Name"
                         HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}"
@@ -264,7 +265,9 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding ActiveItem.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
+                            <TextBox
+                                Text="{Binding ActiveItem.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
                             <Button
                                 Command="{s:Action OpenFolderBrowserDialog}"
                                 Content="{iconPacks:FontAwesome FolderOpenSolid}"

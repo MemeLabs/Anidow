@@ -77,7 +77,7 @@ namespace Anidow.Pages
         }
 
         //public bool CanDownload => ActiveItem != null && !string.IsNullOrWhiteSpace(ActiveItem.Folder);
-        
+
         protected override async void OnActivate()
         {
             if (CanSearch && Items.Count <= 0)
@@ -108,8 +108,8 @@ namespace Anidow.Pages
             foreach (var item in items)
             {
                 item.CanTrack = !tracked.Contains(item.GroupId)
-                                              && !string.IsNullOrWhiteSpace(item.Resolution)
-                                              && !string.IsNullOrWhiteSpace(item.GetReleaseGroup());
+                                && !string.IsNullOrWhiteSpace(item.Resolution)
+                                && !string.IsNullOrWhiteSpace(item.GetReleaseGroup());
 
                 await DispatcherUtil.DispatchAsync(() => Items.Add(item));
             }

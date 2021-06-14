@@ -154,7 +154,6 @@
                 </Grid.RowDefinitions>
 
 
-
                 <TextBlock Grid.Row="1" Margin="0,4,0,4">
                     Step 1: Open settings in qBittorrent
                 </TextBlock>
@@ -165,7 +164,6 @@
                     Margin="0,4"
                     HorizontalAlignment="Left"
                     Source="Images/OpenqBittorrentSettings.png" />
-
 
 
                 <TextBlock Grid.Row="3" Margin="0,8,0,4">
@@ -205,7 +203,8 @@
                     Margin="0,8,0,4"
                     TextWrapping="Wrap">
                     Step 5:<LineBreak />
-                    Fill out the settings on the left or close qBittorrent and click Quick setup button on the top.<LineBreak />
+                    Fill out the settings on the left or close qBittorrent and click Quick setup button on the top.
+                    <LineBreak />
 
                 </TextBlock>
 

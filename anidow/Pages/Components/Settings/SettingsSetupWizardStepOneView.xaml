@@ -23,7 +23,7 @@
         <TextBlock FontWeight="SemiBold">
             Default Anime Folder
         </TextBlock>
-        
+
         <TextBlock Grid.Row="1" Margin="16,4">
             Specify where you want your Anime saved by default
         </TextBlock>
@@ -37,7 +37,8 @@
                 <ColumnDefinition Width="8" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" extensions:WatermarkExtension.Watermark="C:/path/to/anime" />
+            <TextBox Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}"
+                     extensions:WatermarkExtension.Watermark="C:/path/to/anime" />
             <Button
                 Command="{s:Action SetAnimeFolder,
                                    ActionNotFound=Disable}"

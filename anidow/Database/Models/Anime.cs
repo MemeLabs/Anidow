@@ -29,7 +29,7 @@ namespace Anidow.Database.Models
         [NotMapped] public string ReleasedString => Released.Humanize();
         [NotMapped] public DateTime ReleasedLocal => Released.ToLocalTime();
         [NotMapped] public bool IsAiring => Status == AnimeStatus.Watching;
-        [NotMapped] public bool IsFinished => Status == AnimeStatus.Finished;
+        [NotMapped] public bool IsFinished => Status == AnimeStatus.Completed;
         [NotMapped] public int Episodes => EpisodeList?.Count ?? 0;
         [NotMapped] public List<Episode> EpisodeList { get; set; } = new();
         [NotMapped] public bool TrackedViewSelected { get; set; }

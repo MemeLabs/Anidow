@@ -16,7 +16,7 @@ namespace Anidow.Converters
             var color = status switch
             {
                 AnimeStatus.Watching => "#43A047",
-                AnimeStatus.Finished => "#039BE5",
+                AnimeStatus.Completed => "#039BE5",
                 AnimeStatus.Dropped => "#E53935",
                 _ => "Transparent",
             };

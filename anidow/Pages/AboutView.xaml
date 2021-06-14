@@ -57,7 +57,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Margin="0,0,0,4" Text="{Binding UpdateMessage}"/>
+            <TextBlock Margin="0,0,0,4" Text="{Binding UpdateMessage}" />
             <Button
                 Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
                 Grid.Row="1"

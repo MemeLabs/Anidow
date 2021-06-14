@@ -9,7 +9,6 @@ using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Events;
 using Anidow.Extensions;
-using Anidow.Interfaces;
 using Anidow.Services;
 using Anidow.Utils;
 using Humanizer;
@@ -17,9 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
 using MessageBox = AdonisUI.Controls.MessageBox;
-using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
-using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace Anidow.Pages
 {
@@ -32,9 +29,9 @@ namespace Anidow.Pages
 
     public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
     {
+        private const int MaxFilesInView = 50;
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
-        private const int MaxFilesInView = 50;
         private readonly TorrentService _torrentService;
         private readonly IWindowManager _windowManager;
 
@@ -174,7 +171,7 @@ namespace Anidow.Pages
 
         public async Task DeleteItem(Episode episode)
         {
-            episode ??= (Episode) ActiveItem;
+            episode ??= ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {
@@ -198,7 +195,6 @@ namespace Anidow.Pages
             {
                 _logger.Error(e, "failed deleting episode in database");
             }
-
         }
 
 
@@ -242,7 +238,7 @@ namespace Anidow.Pages
 
         public async Task UnHideItem(Episode episode)
         {
-            episode ??= (Episode) ActiveItem;
+            episode ??= ActiveItem;
             var index = Items.IndexOf(episode);
             if (index == -1)
             {

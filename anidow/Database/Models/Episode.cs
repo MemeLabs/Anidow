@@ -27,8 +27,9 @@ namespace Anidow.Database.Models
         public bool TorrentShowProgress => !string.IsNullOrWhiteSpace(TorrentId)
                                            && TorrentProgress is > 0f and < 1f;
 
-        public int Id { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
+
+        public int Id { get; set; }
         public string Name { get; set; }
         public string File { get; set; }
         public string TorrentId { get; set; }

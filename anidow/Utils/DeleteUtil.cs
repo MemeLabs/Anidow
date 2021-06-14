@@ -2,10 +2,10 @@
 
 namespace Anidow.Utils
 {
-    class DeleteUtil
+    internal class DeleteUtil
     {
         private static string DeleteText(string name) =>
-     $"This will completely delete all records of this item in Anidow.\nAre you sure you want to delete this?\n\n{name}";
+            $"This will completely delete all records of this item in Anidow.\nAre you sure you want to delete this?\n\n{name}";
 
 
         public static bool AskForConfirmation(string name)

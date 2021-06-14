@@ -5,20 +5,15 @@
     mc:Ignorable="d"
     x:Class="Anidow.Pages.Components.Tracked.TrackedListView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:helpers="clr-namespace:Anidow.Helpers"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
-    xmlns:pages="clr-namespace:Anidow.Pages"
-    xmlns:s="https://github.com/canton7/Stylet"
     xmlns:tracked="clr-namespace:Anidow.Pages.Components.Tracked"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
-        <helpers:BindingProxy Data="{Binding}" x:Key="ProxyContext" />
     </UserControl.Resources>
 
     <ListView

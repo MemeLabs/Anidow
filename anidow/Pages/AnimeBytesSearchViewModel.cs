@@ -56,7 +56,7 @@ namespace Anidow.Pages
                                      _settingsService.Settings.AnimeBytesSettings.PassKey);
 
         public bool CanGetItems { get; set; } = true;
-        
+
         protected override async void OnActivate()
         {
             if (CanSearch && Items.Count <= 0)
@@ -74,7 +74,7 @@ namespace Anidow.Pages
                 CanGetItems = true;
                 return;
             }
-            
+
             await using var db = new TrackContext();
             var tracked = await db.Anime.Select(a => a.GroupId).ToListAsync();
 
@@ -82,10 +82,10 @@ namespace Anidow.Pages
             foreach (var anime in response.Groups)
             {
                 anime.Folder = _settingsService.Settings.AnimeFolder;
-                anime.CanTrack = !tracked.Contains($"{anime.ID}") 
-                                 &&  anime.SubGroups.Count > 0
+                anime.CanTrack = !tracked.Contains($"{anime.ID}")
+                                 && anime.SubGroups.Count > 0
                                  && anime.GroupName.Equals("TV Series", StringComparison.InvariantCultureIgnoreCase);
-                
+
                 foreach (var torrent in anime.Torrents) torrent.Folder = anime.Folder;
                 await DispatcherUtil.DispatchAsync(() => Items.Add(anime));
             }
@@ -95,7 +95,7 @@ namespace Anidow.Pages
             LastSearch = DateTime.Now;
             CanGetItems = true;
         }
-        
+
         public async Task Track(AnimeBytesScrapeAnime item)
         {
             await using var db = new TrackContext();
@@ -113,7 +113,7 @@ namespace Anidow.Pages
             {
                 resolution = "1080p";
             }
-            
+
             if (parts.Contains("720p"))
             {
                 resolution = "720p";
@@ -131,7 +131,8 @@ namespace Anidow.Pages
             catch (Exception e)
             {
                 _logger.Error(e, "failed creating directory");
-                await NotificationUtil.ShowAsync("Error", $"failed creating directory:\n {item.Folder}", NotificationType.Error);
+                await NotificationUtil.ShowAsync("Error", $"failed creating directory:\n {item.Folder}",
+                    NotificationType.Error);
                 return;
             }
 
@@ -163,7 +164,7 @@ namespace Anidow.Pages
         public async Task Download(AnimeBytesScrapeAnime anime)
         {
             var selectedTorrent = anime.SelectedTorrent;
-            
+
             if (string.IsNullOrWhiteSpace(selectedTorrent.Folder))
             {
                 return;
@@ -175,7 +176,7 @@ namespace Anidow.Pages
                 return;
             }
 
-            
+
             _eventAggregator.PublishOnUIThread(new DownloadEvent
             {
                 Item = anime,

@@ -31,7 +31,6 @@ namespace Anidow.Helpers
                     "Anidow",
                     selfContained ? "anidow-full.zip" : "anidow.zip"),
                 new ZipPackageExtractor());
-
         }
 
         public async Task<(CheckForUpdatesResult?, bool)> HasUpdate()
@@ -45,7 +44,8 @@ namespace Anidow.Helpers
             return (check, true);
         }
 
-        public async Task Update(CheckForUpdatesResult? check, Action? closeApp = null, IProgress<double>? progress = null)
+        public async Task Update(CheckForUpdatesResult? check, Action? closeApp = null,
+            IProgress<double>? progress = null)
         {
             if (check?.LastVersion is null)
             {

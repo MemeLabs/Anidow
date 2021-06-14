@@ -1,12 +1,11 @@
 ﻿<UserControl
-    d:DataContext="{d:DesignInstance local:HistoryViewModel}"
+    d:DataContext="{d:DesignInstance local:HomeViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
-    x:Class="Anidow.Pages.HistoryView"
+    x:Class="Anidow.Pages.HomeView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
-    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
@@ -18,106 +17,44 @@
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
         <Grid.Resources>
-            <helpers:BindingProxy Data="{Binding}" x:Key="Proxy" />
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox Margin="2" extensions:LayerExtension.IncreaseLayer="True">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button
-                    Command="{s:Action LoadEpisodes,
-                                       ActionNotFound=Disable}"
-                    Grid.Column="0"
-                    Margin="0,0,4,0">
-                    <Button.CommandParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Button.CommandParameter>
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:FontAwesome Kind="SyncAltSolid" />
-                            <TextBlock
-                                Margin="4,0"
-                                Text="Refresh"
-                                VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-
-                <TextBlock
-                    Grid.Column="1"
-                    Margin="4,0"
-                    Text="Filter:"
-                    VerticalAlignment="Center" />
-
-                <ComboBox
-                    Grid.Column="2"
-                    ItemsSource="{Binding HistoryFilters, Mode=OneTime}"
-                    Margin="4,0"
-                    SelectedItem="{Binding FilterStatus}" />
-
-                <TextBlock
-                    Grid.Column="3"
-                    HorizontalAlignment="Left"
-                    Margin="4,0"
-                    Opacity=".7"
-                    Text="{Binding EpisodesLoaded}"
-                    VerticalAlignment="Center" />
-
-                <Button
-                    Command="{s:Action LoadMore,
-                                       ActionNotFound=Disable}"
-                    Grid.Column="4"
-                    Margin="4,0"
-                    Visibility="{Binding CanLoadMore, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
-                    Load more
-                </Button>
-
-                <TextBox
-                    Grid.Column="6"
-                    Margin="4,0,0,0"
-                    MinWidth="200"
-                    Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"
-                    extensions:WatermarkExtension.Watermark="Search..." />
-            </Grid>
-        </GroupBox>
         <TextBlock
-            Grid.Row="1"
+            Grid.Row="0"
+            Grid.RowSpan="2"
             HorizontalAlignment="Center"
             Opacity=".7"
             VerticalAlignment="Center"
             Visibility="{Binding Items.Count, Converter={x:Static converters:IsZeroToVisibilityConverter.Instance}}">
-            no history
+            nothing to watch
         </TextBlock>
 
         <ListView
-            Grid.Row="1"
+            Grid.Row="0"
             ItemContainerStyle="{StaticResource ListViewItemHome}"
             ItemsSource="{Binding Items}"
-            Loaded="{s:Action ListLoaded}"
             Margin="2"
-            ScrollViewer.CanContentScroll="True"
             SelectedItem="{Binding ActiveItem}"
-            VirtualizingPanel.IsVirtualizing="True"
-            VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-            VirtualizingPanel.VirtualizationMode="Recycling"
             extensions:GridViewSortExtension.AutoSort="True"
-            listViewLayout:ListViewLayoutManager.Enabled="true">
+            listViewLayout:ListViewLayoutManager.Enabled="true"
+            x:Name="ListView">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{s:Action LoadEpisodes,
+                                           ActionNotFound=Disable}"
+                        Header="Reload"
+                        Icon="{iconPacks:FontAwesome SyncAltSolid}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
                     <GridViewColumn
@@ -131,9 +68,11 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Button
-                                        Command="{s:Action UnHideItem,
+                                        Command="{s:Action HideItem,
                                                            ActionNotFound=Disable}"
                                         CommandParameter="{Binding}"
                                         Content="{iconPacks:FontAwesome TimesSolid,
@@ -144,7 +83,7 @@
                                         Margin="-14,-4,0,-4"
                                         Padding="4,5,4,4"
                                         Style="{StaticResource DeleteButton}"
-                                        ToolTip="Back to Home tab"
+                                        ToolTip="Hide"
                                         VerticalAlignment="Stretch"
                                         Width="27"
                                         extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
@@ -161,6 +100,28 @@
                                         ToolTipService.Placement="Bottom"
                                         VerticalAlignment="Center"
                                         x:Name="Name" />
+
+                                    <ProgressBar
+                                        Grid.Column="2"
+                                        Margin="8,0,0,0"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        ToolTip="Download progress"
+                                        Value="{Binding TorrentProgress}"
+                                        Visibility="{Binding TorrentShowProgress, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
+                                        Width="50"
+                                        extensions:ProgressBarExtension.Content="{Binding TorrentProgressContent}"
+                                        extensions:ProgressBarExtension.IsProgressAnimationEnabled="False" />
+
+                                    <Grid
+                                        Background="Transparent"
+                                        Grid.Column="3"
+                                        Margin="4,0,2,0"
+                                        ToolTip="Download finished"
+                                        VerticalAlignment="Center"
+                                        Visibility="{Binding TorrentFinished, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                                        <ContentControl Content="{iconPacks:FontAwesome CheckSolid}" />
+                                    </Grid>
                                 </Grid>
 
                                 <DataTemplate.Triggers>
@@ -189,22 +150,6 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
-                        Header="Watched"
-                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}"
-                        Width="120"
-                        extensions:GridViewSortExtension.PropertyName="WatchedDate"
-                        listViewLayout:FixedColumn.Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate DataType="models:Episode">
-                                <TextBlock Text="{Binding WatchedString}" ToolTipService.Placement="Bottom">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip Content="{Binding WatchedDateLocal}" ContentStringFormat="{}{0:g}" />
-                                    </TextBlock.ToolTip>
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn
                         Header="Added"
                         HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}"
                         Width="120"
@@ -228,9 +173,83 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
+        <Grid
+            Grid.Row="0"
+            HorizontalAlignment="Left"
+            Margin="2,-29"
+            VerticalAlignment="Top"
+            Visibility="{Binding AnimesToday.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+            <ToggleButton
+                Background="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}"
+                BorderThickness="0"
+                Command="{s:Action GetAiringEpisodesForToday,
+                                   ActionNotFound=Disable}"
+                Content="{Binding AnimesToday.Count}"
+                extensions:CornerRadiusExtension.CornerRadius="4"
+                extensions:CursorSpotlightExtension.BackgroundBrush="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}"
+                x:Name="PredictedToggleButton" />
+            <Popup
+                AllowsTransparency="True"
+                IsOpen="{Binding ElementName=PredictedToggleButton, Path=IsChecked}"
+                Placement="Bottom"
+                PlacementTarget="{Binding ElementName=PredictedToggleButton}"
+                StaysOpen="False"
+                VerticalOffset="4"
+                Width="{Binding ElementName=ListView, Path=ActualWidth}">
+                <Border
+                    Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+                    BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer2BorderBrush}}"
+                    BorderThickness="2"
+                    CornerRadius="4"
+                    Padding="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock>Predicted new releases today:</TextBlock>
+                        <Separator Grid.Row="1" />
+                        <ItemsControl
+                            Grid.Column="0"
+                            Grid.Row="2"
+                            ItemsSource="{Binding AnimesToday}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding DateString}" VerticalAlignment="Top">
+                                                <TextBlock.ToolTip>
+                                                    <ToolTip Content="{Binding DateLocal}"
+                                                             ContentStringFormat="{}{0:g}" />
+                                                </TextBlock.ToolTip>
+                                            </TextBlock>
+                                            <Separator
+                                                Grid.Column="1"
+                                                Margin="8,0"
+                                                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                                                VerticalAlignment="Stretch" />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                Text="{Binding Name}"
+                                                TextWrapping="Wrap"
+                                                VerticalAlignment="Top" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+            </Popup>
+        </Grid>
         <Expander
-            Grid.Row="2"
+            Grid.Row="1"
             Style="{StaticResource ExpanderCustom}"
             VerticalAlignment="Bottom"
             Visibility="{Binding ActiveItem, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}"
@@ -246,7 +265,6 @@
                         </Style>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -268,6 +286,7 @@
                         Grid.Column="1"
                         Text="Information"
                         VerticalAlignment="Center" />
+
                     <!--<TextBlock Grid.Column="2"
                                Margin="8,0"
                                VerticalAlignment="Center"
@@ -275,12 +294,11 @@
                                Text="{Binding ActiveItem.Id, StringFormat=(id: {0})}"
                                Visibility="{Binding ActiveItem.Id, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />-->
                     <Button
-                        Command="{s:Action DeselectItem,
-                                           ActionNotFound=Disable}"
+                        Command="{s:Action DeselectItem}"
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Grid.Column="4"
+                        Grid.Column="3"
                         Margin="0,-4"
                         Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
                 </Grid>
@@ -321,68 +339,46 @@
                         Margin="8,0,0,0" />
                 </Grid>
                 <Grid Grid.Row="2" Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="8" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="8" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <controls:SplitButton
-                        Background="#F44336"
-                        Command="{s:Action DeleteItem,
-                                           ActionNotFound=Disable}"
-                        CommandParameter="{Binding ActiveItem}"
-                        Content="Delete"
-                        Foreground="White"
-                        HorizontalContentAlignment="Center"
-                        extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                        extensions:RippleExtension.BackgroundBrush="#EF5350"
-                        s:View.ActionTarget="{Binding Data, Source={StaticResource Proxy}}">
-                        <controls:SplitButton.SplitMenu>
-                            <ContextMenu
-                                MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
-                                <MenuItem
-                                    Background="#F44336"
-                                    Command="{s:Action DeleteWithFile,
-                                                       NullTarget=Disable}"
-                                    CommandParameter="{Binding ActiveItem}"
-                                    Foreground="White"
-                                    Header="with file"
-                                    Icon="{iconPacks:FontAwesome FileVideoSolid}"
-                                    extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                                    extensions:RippleExtension.BackgroundBrush="#EF5350"
-                                    s:View.ActionTarget="{Binding Data, Source={StaticResource Proxy}}" />
-                            </ContextMenu>
-                        </controls:SplitButton.SplitMenu>
-                    </controls:SplitButton>
-
-                    <!--<Button Grid.Column="0"
-                            extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                            Background="#F44336"
-                            Command="{s:Action DeleteItem}"
-                            CommandParameter="{Binding ActiveItem}"
-                            Content="Delete" />-->
-                    <Button
-                        Command="{s:Action ToggleWatch}"
-                        CommandParameter="{Binding ActiveItem}"
-                        Content="Toggle Watched"
-                        Grid.Column="2"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
-                    <Button
-                        Command="{s:Action Watch}"
-                        CommandParameter="{Binding ActiveItem}"
-                        Content="Watch"
-                        Grid.Column="4"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
+                    <shared:EpisodeInformationActions DataContext="{Binding}" />
                 </Grid>
             </Grid>
         </Expander>
-
-        <shared:LoadingOverlay
-            DataContext="{Binding CanLoadEpisodes}"
-            Grid.Row="1"
-            Grid.RowSpan="2" />
+        <Border
+            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+            Grid.Row="2"
+            Padding="2"
+            extensions:LayerExtension.IncreaseLayer="True"
+            extensions:LayerExtension.Layer="1">
+            <TextBlock
+                HorizontalAlignment="Left"
+                Margin="4,0,0,0"
+                Text="{Binding NextCheckIn}"
+                ToolTip="next Check for new episodes/anime"
+                ToolTipService.Placement="Top"
+                VerticalAlignment="Center">
+                <TextBlock.ContextMenu>
+                    <ContextMenu Placement="Top">
+                        <MenuItem
+                            Command="{s:Action StartTracker,
+                                               ActionNotFound=Disable}"
+                            Header="Start"
+                            Icon="{iconPacks:FontAwesome PlaySolid}"
+                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
+                            s:View.ActionTarget="{Binding AnimeBytesService}" />
+                        <MenuItem
+                            Command="{s:Action StopTracker,
+                                               ActionNotFound=Disable}"
+                            Header="Pause"
+                            Icon="{iconPacks:FontAwesome PauseSolid}"
+                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
+                            s:View.ActionTarget="{Binding AnimeBytesService}" />
+                        <MenuItem
+                            Command="{s:Action ForceCheck}"
+                            Header="Check now"
+                            Icon="{iconPacks:FontAwesome SyncAltSolid}" />
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+        </Border>
     </Grid>
 </UserControl>

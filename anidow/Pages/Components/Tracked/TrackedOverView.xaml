@@ -10,7 +10,6 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Anidow.Pages.Components.Tracked"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:pages="clr-namespace:Anidow.Pages"
     xmlns:s="https://github.com/canton7/Stylet"
     d:DataContext="{d:DesignInstance local:TrackedOverViewModel}"
     d:DesignHeight="450"
@@ -55,7 +54,7 @@
                 <ComboBox Grid.Column="2" SelectedItem="{Binding FilterStatus}">
                     <enums:AnimeStatus>All</enums:AnimeStatus>
                     <enums:AnimeStatus>Watching</enums:AnimeStatus>
-                    <enums:AnimeStatus>Finished</enums:AnimeStatus>
+                    <enums:AnimeStatus>Completed</enums:AnimeStatus>
                     <enums:AnimeStatus>Dropped</enums:AnimeStatus>
                 </ComboBox>
 

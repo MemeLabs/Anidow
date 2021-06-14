@@ -6,34 +6,30 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using AdonisUI.Controls;
 using Anidow.Helpers;
 using Anidow.Model;
 using Anidow.Services;
-using Anidow.Torrent_Clients;
 using Anidow.Utils;
-using Screen = Stylet.Screen;
-
 using MessageBox = AdonisUI.Controls.MessageBox;
-using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
-using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
-using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
+using Screen = Stylet.Screen;
 
 namespace Anidow.Pages.Components.Settings
 {
     public class SettingsSetupWizardViewModel : Screen
     {
+        private const int Steps = 2;
+
+        private readonly string _iniPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "qBittorrent", "qBittorrent.ini");
 
         private readonly Regex _regex = new("[^0-9]+");
         private readonly SettingsService _settingsService;
 
-        private readonly string _iniPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "qBittorrent", "qBittorrent.ini");
-
-        private const int Steps = 2;
-
         public SettingsSetupWizardViewModel(SettingsService settingsService)
         {
-            _settingsService = settingsService ?? throw  new ArgumentNullException(nameof(settingsService));
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
         }
 
         public SettingsModel Settings => _settingsService.TempSettings;
@@ -42,6 +38,8 @@ namespace Anidow.Pages.Components.Settings
         public bool CanBack => CurrentStep >= 2;
         public bool CanNext => CurrentStep <= Steps;
         public bool IsFinish => CurrentStep == Steps;
+
+        public bool CanQuickSetupQBittorrent { get; set; }
 
         public void Back()
         {
@@ -60,12 +58,12 @@ namespace Anidow.Pages.Components.Settings
             }
         }
 
-        public bool CanQuickSetupQBittorrent { get; set; }
         public void QuickSetupQBittorrent()
         {
             if (ProcessUtil.IsRunning("qbittorrent"))
             {
-                MessageBox.Show("Please close qBittorrent before running quick setup.", "qBittorrent running!", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                MessageBox.Show("Please close qBittorrent before running quick setup.", "qBittorrent running!",
+                    MessageBoxButton.OK, MessageBoxImage.Asterisk);
                 return;
             }
 
@@ -113,8 +111,8 @@ namespace Anidow.Pages.Components.Settings
         {
             RequestClose();
         }
-        
-        
+
+
         private string OpenFolderBrowserDialog(string path)
         {
             using var dialog = new FolderBrowserDialog
@@ -124,7 +122,7 @@ namespace Anidow.Pages.Components.Settings
             var result = dialog.ShowDialog();
             return result == DialogResult.OK ? dialog.SelectedPath : path;
         }
-        
+
         public void SetAnimeFolder()
         {
             var folder = OpenFolderBrowserDialog(Settings.AnimeFolder);

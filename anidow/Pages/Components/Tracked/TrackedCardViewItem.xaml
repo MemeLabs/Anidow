@@ -20,7 +20,8 @@
                 <Style TargetType="Border">
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                             <Setter Property="Cursor" Value="Hand" />
                             <Setter Property="BorderThickness" Value="2" />
                         </Trigger>

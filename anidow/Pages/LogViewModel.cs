@@ -9,7 +9,6 @@ namespace Anidow.Pages
 {
     public class LogViewModel : Screen, ILogEventSink
     {
-
         public LogViewModel()
         {
             Items = new BindableCollection<LogEvent>();

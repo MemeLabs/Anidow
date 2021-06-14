@@ -7,20 +7,18 @@ using System.Windows;
 using Anidow.Helpers;
 using Anidow.Model;
 using Anidow.Utils;
-using Humanizer;
 using Newtonsoft.Json;
 using Onova.Models;
 using Serilog;
 using Stylet;
-using Screen = Stylet.Screen;
 
 namespace Anidow.Pages
 {
     public class AboutViewModel : Screen
     {
         private readonly Assembly _assembly;
-        private readonly UpdateManager _updateManager;
         private readonly ILogger _logger;
+        private readonly UpdateManager _updateManager;
         private CheckForUpdatesResult _lastCheck;
 
         public AboutViewModel(Assembly assembly, UpdateManager updateManager, ILogger logger)
@@ -30,16 +28,23 @@ namespace Anidow.Pages
             _logger = logger;
             DisplayName = "About";
         }
-        
+
 
         public IObservableCollection<Package> Packages { get; } = new BindableCollection<Package>();
 
         public string Copyright => $"© 2020-{DateTime.Now.Year} MemeLabs";
         public string ProjectUrl => "https://github.com/MemeLabs/Anidow";
-        public string AssemblyVersionString => $"{_assembly.GetName().Version} {(Environment.Is64BitProcess ? "(x64)" : "(x32)")}";
+
+        public string AssemblyVersionString =>
+            $"{_assembly.GetName().Version} {(Environment.Is64BitProcess ? "(x64)" : "(x32)")}";
+
         public string Product => "Anidow";
         public string UpdateMessage { get; private set; }
         public bool HasUpdate { get; private set; }
+
+        public bool CanCheckForUpdate { get; set; } = true;
+
+        public bool CanUpdateNow { get; private set; }
 
         protected override async void OnInitialActivate()
         {
@@ -48,7 +53,7 @@ namespace Anidow.Pages
             using var reader = new StreamReader(stream!);
             var json = await reader.ReadToEndAsync();
             Packages.AddRange(JsonConvert.DeserializeObject<Package[]>(json));
-            
+
             await CheckForUpdate();
         }
 
@@ -57,14 +62,13 @@ namespace Anidow.Pages
             LinkUtil.Open(ProjectUrl);
         }
 
-        public bool CanCheckForUpdate { get; set; } = true;
         public async Task CheckForUpdate()
         {
             CanCheckForUpdate = false;
             var (check, hasUpdate) = await _updateManager.HasUpdate();
             if (!hasUpdate)
             {
-                UpdateMessage = $"You have the latest version";
+                UpdateMessage = "You have the latest version";
             }
             else if (check is not null)
             {
@@ -77,7 +81,6 @@ namespace Anidow.Pages
             CanCheckForUpdate = true;
         }
 
-        public bool CanUpdateNow { get; private set; }
         public async Task UpdateNow()
         {
             CanUpdateNow = false;

@@ -1,7 +1,6 @@
 ﻿using System;
 using Anidow.Database.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Anidow.Database
 {
@@ -24,7 +23,6 @@ namespace Anidow.Database
             modelBuilder.Entity<AppState>()
                         .Property(b => b.Created)
                         .HasDefaultValue(DateTime.UtcNow);
-
         }
     }
 }

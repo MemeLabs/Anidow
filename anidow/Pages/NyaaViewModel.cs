@@ -65,10 +65,7 @@ namespace Anidow.Pages
             }
 
             Items.Clear();
-            foreach (var item in items)
-            {
-                await DispatcherUtil.DispatchAsync(() => Items.Add(item));
-            }
+            foreach (var item in items) await DispatcherUtil.DispatchAsync(() => Items.Add(item));
 
             _scrollViewer?.ScrollToTop();
             ActiveItem = null!;

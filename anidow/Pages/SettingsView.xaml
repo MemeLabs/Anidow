@@ -19,10 +19,13 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Center" Text="Settings" FontSize="22" FontWeight="SemiBold" />
         <ScrollViewer
+            Grid.Row="1"
             Margin="2"
             extensions1:TouchScrolling.IsEnabled="True"
             extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
@@ -30,13 +33,13 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="8" />
+                    <RowDefinition Height="4" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="8" />
+                    <RowDefinition Height="4" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="8" />
+                    <RowDefinition Height="4" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="8" />
+                    <RowDefinition Height="4" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -102,7 +105,8 @@
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
+                                     Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -176,7 +180,8 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Text="Torrent client:" />
-                            <ComboBox Grid.Column="1" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
+                            <ComboBox Grid.Column="1"
+                                      SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
                                 <ComboBoxItem Content="QBitTorrent" />
                                 <ComboBoxItem Content="Deluge (soon tm)" IsEnabled="False" />
                             </ComboBox>
@@ -213,21 +218,24 @@
                             Grid.Row="5"
                             Grid.Column="0"
                             Margin="0,4">
-                            <CheckBox Content="Notifications for downloads etc." IsChecked="{Binding Settings.Notifications}" />
+                            <CheckBox Content="Notifications for downloads etc."
+                                      IsChecked="{Binding Settings.Notifications}" />
 
                         </Grid>
                         <Grid
                             Grid.Row="5"
                             Grid.Column="2"
                             Margin="0,4">
-                            <CheckBox Content="On close minimize to notification area." IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
+                            <CheckBox Content="On close minimize to notification area."
+                                      IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
 
                         </Grid>
                         <Grid
                             Grid.Row="6"
                             Grid.Column="0"
                             Margin="0,4">
-                            <CheckBox Content="Start AnimeBytes tracker on launch" IsChecked="{Binding Settings.StartTrackerAnimeBytesOnLaunch}" />
+                            <CheckBox Content="Start AnimeBytes tracker on launch"
+                                      IsChecked="{Binding Settings.StartTrackerAnimeBytesOnLaunch}" />
                         </Grid>
                     </Grid>
                 </Expander>
@@ -320,7 +328,8 @@
                             Orientation="Horizontal">
                             <TextBlock>Passkey:</TextBlock>
                             <TextBlock Margin="8,0">
-                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account" RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account"
+                                           RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
                                     (click here)
                                 </Hyperlink>
                             </TextBlock>
@@ -387,7 +396,9 @@
                     <Expander.Style>
                         <Style BasedOn="{StaticResource ExpanderCustom}" TargetType="Expander">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}" Value="1">
+                                <DataTrigger
+                                    Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}"
+                                    Value="1">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -476,7 +487,7 @@
             </Grid>
         </ScrollViewer>
         <Grid
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="2"
             VerticalAlignment="Bottom"
             Visibility="{Binding SettingsService.CanSave, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">

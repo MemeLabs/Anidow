@@ -1,12 +1,10 @@
-﻿using System.ComponentModel;
-
-namespace Anidow.Enums
+﻿namespace Anidow.Enums
 {
     public enum AnimeStatus
     {
-        [Description("Watching")] Watching = 1,
-        Finished = 2,
+        Watching = 1,
+        Completed = 2,
         Dropped = 4,
-        All = Watching | Finished | Dropped,
+        All = Watching | Completed | Dropped,
     }
 }

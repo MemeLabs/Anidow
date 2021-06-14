@@ -27,6 +27,7 @@ namespace Anidow.Extensions
                 return string.Empty;
             }
         }
+
         public static string GetReleaseGroup(this AnimeBytesScrapeTorrent item)
         {
             var parts = item.Property.Split('|', StringSplitOptions.RemoveEmptyEntries)
@@ -80,6 +81,7 @@ namespace Anidow.Extensions
             var resolutionIndex = parts.FindIndex(p => Regex.IsMatch(p, @"\d+p"));
             return resolutionIndex == -1 ? string.Empty : parts[resolutionIndex];
         }
+
         public static string GetResolution(this AnimeBytesScrapeTorrent item)
         {
             var parts = item.Property.Split('|', StringSplitOptions.RemoveEmptyEntries)
@@ -108,6 +110,7 @@ namespace Anidow.Extensions
             db.Anime.Update(anime);
             await db.SaveChangesAsync();
         }
+
         public static async Task AddToDatabase(this Anime anime, Cover cover = null)
         {
             await using var db = new TrackContext();
@@ -130,7 +133,7 @@ namespace Anidow.Extensions
             {
                 return false;
             }
-            
+
             await using var db = new TrackContext();
             db.Attach(anime);
             db.Remove(anime);

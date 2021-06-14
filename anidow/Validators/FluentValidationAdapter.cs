@@ -32,7 +32,7 @@ namespace Anidow.Validators
                 return (await _validator.ValidateAsync(_subject, CancellationToken.None).ConfigureAwait(false))
                        .Errors.Select(x => x.ErrorMessage);
             }
-            catch (Exception )
+            catch (Exception)
             {
                 // ignore
                 return default;

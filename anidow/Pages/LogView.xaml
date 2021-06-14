@@ -9,7 +9,6 @@
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:serilog="clr-namespace:Serilog.Events;assembly=Serilog"
-    xmlns:utils="clr-namespace:Anidow.Utils"
     Title="Logs"
     Width="700"
     Height="400"
@@ -29,36 +28,50 @@
                             <Run.Style>
                                 <Style TargetType="{x:Type Run}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Verbose}">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                                        <DataTrigger Binding="{Binding Level}"
+                                                     Value="{x:Static serilog:LogEventLevel.Verbose}">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
                                         </DataTrigger>
 
-                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Debug}">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                                        <DataTrigger Binding="{Binding Level}"
+                                                     Value="{x:Static serilog:LogEventLevel.Debug}">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                                         </DataTrigger>
 
-                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Information}">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.SuccessBrush}}" />
+                                        <DataTrigger Binding="{Binding Level}"
+                                                     Value="{x:Static serilog:LogEventLevel.Information}">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource {x:Static adonisUi:Brushes.SuccessBrush}}" />
                                         </DataTrigger>
 
-                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Warning}">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.AlertBrush}}" />
+                                        <DataTrigger Binding="{Binding Level}"
+                                                     Value="{x:Static serilog:LogEventLevel.Warning}">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AlertBrush}}" />
                                         </DataTrigger>
 
-                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Error}">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
+                                        <DataTrigger Binding="{Binding Level}"
+                                                     Value="{x:Static serilog:LogEventLevel.Error}">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
                                         </DataTrigger>
 
-                                        <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Fatal}">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
+                                        <DataTrigger Binding="{Binding Level}"
+                                                     Value="{x:Static serilog:LogEventLevel.Fatal}">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
                                             <Setter Property="FontWeight" Value="Bold" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Run.Style>
                         </Run>
-                        <Run Text="{Binding ., Mode=OneWay, Converter={x:Static converters:LogEventRenderConverter.Instance}}" />
-                        <Run Foreground="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" Text="{Binding Exception, Mode=OneWay}" />
+                        <Run
+                            Text="{Binding ., Mode=OneWay, Converter={x:Static converters:LogEventRenderConverter.Instance}}" />
+                        <Run Foreground="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"
+                             Text="{Binding Exception, Mode=OneWay}" />
                     </TextBlock>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

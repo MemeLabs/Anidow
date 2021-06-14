@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,12 +19,12 @@ namespace Anidow.Pages.Components.Tracked
 {
     public class TrackedAnimeEditContentViewModel : Screen
     {
+        private readonly IEventAggregator _eventAggregator;
+        private readonly HttpClient _httpClient;
+        private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
         private readonly TaskbarIcon _taskbarIcon;
-        private readonly HttpClient _httpClient;
         private readonly IWindowManager _windowManager;
-        private readonly IEventAggregator _eventAggregator;
-        private readonly ILogger _logger;
 
         public TrackedAnimeEditContentViewModel(SettingsService settingsService, TaskbarIcon taskbarIcon,
             HttpClient httpClient, IWindowManager windowManager, IEventAggregator eventAggregator, ILogger logger)
@@ -37,7 +36,10 @@ namespace Anidow.Pages.Components.Tracked
             _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
         public Anime Anime { get; private set; }
+
+        public bool CanSaveAnime { get; set; } = true;
 
         public void SetAnime(Anime anime)
         {
@@ -59,15 +61,12 @@ namespace Anidow.Pages.Components.Tracked
                     _eventAggregator.PublishOnUIThread(new TrackedRefreshEvent());
                 }, null, TimeSpan.FromSeconds(10));
             }
-
         }
 
-        public bool CanSaveAnime { get; set; } = true;
         public async Task SaveAnime()
         {
             if (string.IsNullOrWhiteSpace(Anime.Group))
             {
-
                 await NotificationUtil.ShowAsync("Warning", "Group can not be empty!", NotificationType.Warning);
                 return;
             }
@@ -81,7 +80,6 @@ namespace Anidow.Pages.Components.Tracked
             {
                 await NotificationUtil.ShowAsync(Anime.Name, "Saved!", NotificationType.Success);
             }
-
         }
 
 
@@ -110,8 +108,8 @@ namespace Anidow.Pages.Components.Tracked
         {
             try
             {
-                var anime = (Anime)data.anime;
-                var url = (string)data.url;
+                var anime = (Anime) data.anime;
+                var url = (string) data.url;
                 Uri.TryCreate(url, UriKind.Absolute, out var uri);
                 if (uri == null)
                 {

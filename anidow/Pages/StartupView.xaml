@@ -1,0 +1,27 @@
+﻿<UserControl
+    x:Class="Anidow.Pages.StartupView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Anidow.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance local:ShellViewModel}"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ContentControl
+                Width="{adonisUi:Space 5}"
+                Height="{adonisUi:Space 5}"
+                ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingCircle}}"
+                Focusable="False" />
+            <TextBlock
+                Margin="8"
+                FontSize="18"
+                FontWeight="SemiBold"
+                Text="{Binding LoadingMessage, Mode=OneWay}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

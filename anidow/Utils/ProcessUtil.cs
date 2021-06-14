@@ -67,7 +67,7 @@ namespace Anidow.Utils
         {
             var processes = Process.GetProcessesByName(
                 Path.GetFileNameWithoutExtension(name));
-            
+
             return processes.Length <= 1;
         }
 
@@ -75,7 +75,7 @@ namespace Anidow.Utils
         {
             var processes = Process.GetProcessesByName(
                 Path.GetFileNameWithoutExtension(name));
-            
+
             return processes.Length < value;
         }
     }

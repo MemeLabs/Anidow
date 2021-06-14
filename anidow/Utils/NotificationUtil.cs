@@ -14,10 +14,10 @@ namespace Anidow.Utils
         private static readonly NotificationManager NotificationManager = new();
 
         public static async Task ShowAsync(
-            string title, 
+            string title,
             string message,
             NotificationType type = NotificationType.Information,
-            TimeSpan? duration = null, 
+            TimeSpan? duration = null,
             Action? onClick = null)
         {
             try
@@ -40,7 +40,8 @@ namespace Anidow.Utils
             }
         }
 
-        public static async Task ShowUndoAsync(string title, string message, Action? onUndo, Action? onClose = null, TimeSpan? expiration = default)
+        public static async Task ShowUndoAsync(string title, string message, Action? onUndo, Action? onClose = null,
+            TimeSpan? expiration = default)
         {
             var content = new NotificationUndoViewModel(NotificationManager)
             {
@@ -48,7 +49,7 @@ namespace Anidow.Utils
                 Message = message,
                 OnUndo = onUndo,
             };
-            
+
             await NotificationManager.ShowAsync(content, WindowArea, expiration, onClose: onClose);
         }
     }

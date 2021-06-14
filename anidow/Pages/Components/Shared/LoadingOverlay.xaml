@@ -18,7 +18,8 @@
         <ContentPresenter.Resources>
             <DataTemplate x:Key="Loading">
                 <Grid>
-                    <Border Background="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" Opacity="0.5" />
+                    <Border Background="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"
+                            Opacity="0.5" />
                     <ContentControl
                         Width="{adonisUi:Space 5}"
                         Height="{adonisUi:Space 5}"

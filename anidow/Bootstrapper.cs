@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
-using Anidow.Database;
-using Anidow.Database.Models;
 using Anidow.Factories;
 using Anidow.Helpers;
 using Anidow.Pages;
@@ -24,24 +21,21 @@ using Jot.Storage;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
-using ILogger = Serilog.ILogger;
-
 #if RELEASE
 using AdonisUI.Controls;
 using System.IO;
 using System.Windows.Threading;
 using System.Diagnostics;
-
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
+
 #endif
 
 namespace Anidow
@@ -50,8 +44,8 @@ namespace Anidow
     {
         private HttpClient _httpClient;
         private ILogger _logger;
-        private TaskbarIcon _taskBarIcon;
         private ShellView _shell;
+        private TaskbarIcon _taskBarIcon;
         private UpdateManager _updateManager;
 
         // Configure the IoC container in here
@@ -61,7 +55,7 @@ namespace Anidow
             builder.Bind<Assembly>().ToInstance(assembly);
             var tracker = InitTracker();
             builder.Bind<Tracker>().ToInstance(tracker);
-            
+
             var logViewModel = new LogViewModel();
             InitLogger(logViewModel);
 
@@ -158,9 +152,9 @@ namespace Anidow
                                    .WriteTo.Console()
                                    .WriteTo.Sink(logViewModel, logLevel)
                                    .WriteTo.File(
-                                       "./logs/log-.txt", 
+                                       "./logs/log-.txt",
                                        rollingInterval: RollingInterval.Day,
-                                       retainedFileCountLimit: 7, 
+                                       retainedFileCountLimit: 7,
                                        restrictedToMinimumLevel: LogEventLevel.Error);
 
             _logger = logConfiguration.CreateLogger();

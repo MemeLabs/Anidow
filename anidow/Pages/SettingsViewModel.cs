@@ -6,12 +6,9 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Anidow.Model;
-using Anidow.Pages.Components.Settings;
 using Anidow.Services;
 using Anidow.Utils;
-using Notifications.Wpf.Core;
 using Serilog;
-using Stylet;
 using Screen = Stylet.Screen;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -43,6 +40,7 @@ namespace Anidow.Pages
 
             Settings.AnimeFolder = folder;
         }
+
         private string OpenFolderBrowserDialog()
         {
             using var dialog = new FolderBrowserDialog

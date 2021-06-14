@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using AdonisUI;
-using Anidow.Helpers;
 using Anidow.Model;
 using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -17,10 +16,10 @@ namespace Anidow.Services
     // ReSharper disable once ClassNeverInstantiated.Global
     public class SettingsService : PropertyChangedBase
     {
-        private readonly ILogger _logger;
-        private readonly TaskbarIcon _taskbarIcon;
         private readonly Assembly _assembly;
+        private readonly ILogger _logger;
         private readonly StoreService _storeService;
+        private readonly TaskbarIcon _taskbarIcon;
 
         public SettingsService(StoreService storeService, ILogger logger,
             TaskbarIcon taskbarIcon, Assembly assembly)
@@ -53,7 +52,7 @@ namespace Anidow.Services
 
             TempSettings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
             Settings = await _storeService.Load<SettingsModel>("settings.json") ?? new SettingsModel();
-            
+
             TempSettings.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.QBitTorrent.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.NyaaSettings.PropertyChanged += SettingsOnPropertyChanged;
@@ -61,7 +60,7 @@ namespace Anidow.Services
 
             ResourceLocator.SetColorScheme(Application.Current.Resources,
                 TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
-            
+
             if (Settings.FirstStart)
             {
                 CanSave = true;
@@ -71,10 +70,10 @@ namespace Anidow.Services
         public async Task Save()
         {
             CanSave = false;
-            
+
             await _storeService.Save(TempSettings, "settings.json");
             Settings = await _storeService.Load<SettingsModel>("settings.json");
-            
+
             _logger.Information("saved setting's");
 
             ResourceLocator.SetColorScheme(Application.Current.Resources,

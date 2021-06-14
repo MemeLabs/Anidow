@@ -11,20 +11,22 @@ namespace Anidow.Helpers
     {
         private readonly string _path;
 
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        static extern long WritePrivateProfileString(string section, string key, string value, string filePath);
-
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        static extern int GetPrivateProfileString(string section, string key, string @default, StringBuilder retVal, int size, string filePath);
-
         public IniFile(string? iniPath = null)
         {
             if (iniPath is null)
             {
                 throw new ArgumentException(@"iniPath is null", nameof(iniPath));
             }
+
             _path = new FileInfo(iniPath).FullName;
         }
+
+        [DllImport("kernel32", CharSet = CharSet.Unicode)]
+        private static extern long WritePrivateProfileString(string section, string key, string value, string filePath);
+
+        [DllImport("kernel32", CharSet = CharSet.Unicode)]
+        private static extern int GetPrivateProfileString(string section, string key, string @default,
+            StringBuilder retVal, int size, string filePath);
 
         public string Read(string key, string? section = null)
         {
@@ -48,9 +50,6 @@ namespace Anidow.Helpers
             Write(null, null, section);
         }
 
-        public bool KeyExists(string key, string? section = null)
-        {
-            return Read(key, section).Length > 0;
-        }
+        public bool KeyExists(string key, string? section = null) => Read(key, section).Length > 0;
     }
 }

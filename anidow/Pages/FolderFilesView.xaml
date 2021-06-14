@@ -105,7 +105,8 @@
                 </GroupStyle>
             </ListView.GroupStyle>-->
             <ListView.View>
-                <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
+                <GridView AllowsColumnReorder="True"
+                          ColumnHeaderContainerStyle="{StaticResource GridViewLeftContainerStyle}">
                     <GridViewColumn
                         Header="Name"
                         HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}"

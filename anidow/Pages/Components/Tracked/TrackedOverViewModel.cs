@@ -1,4 +1,11 @@
-﻿using Anidow.Database;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Events;
@@ -7,21 +14,15 @@ using Anidow.Services;
 using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.EntityFrameworkCore;
+using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Notifications.Wpf.Core;
 
 namespace Anidow.Pages.Components.Tracked
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHandle<TrackedDeleteAnimeEvent>, IHandle<TrackedRefreshEvent>
+    public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHandle<TrackedDeleteAnimeEvent>,
+        IHandle<TrackedRefreshEvent>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly HttpClient _httpClient;
@@ -67,6 +68,23 @@ namespace Anidow.Pages.Components.Tracked
 
         public bool CanLoad { get; set; }
 
+        public void Handle(TrackedDeleteAnimeEvent message)
+        {
+            try
+            {
+                Items.Remove(message.Anime);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "couldn't delete anime from items");
+            }
+        }
+
+        public async void Handle(TrackedRefreshEvent message)
+        {
+            await Load();
+        }
+
         protected override async void OnInitialActivate()
         {
             _eventAggregator.Subscribe(this);
@@ -85,15 +103,14 @@ namespace Anidow.Pages.Components.Tracked
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
-                anime = anime.Where(a =>
-                                 a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
+                anime = anime.Where(a => a.Name.Contains(_search, StringComparison.InvariantCultureIgnoreCase))
                              .ToList();
             }
 
             anime = FilterStatus switch
             {
                 AnimeStatus.Watching => anime.Where(a => a.Status == AnimeStatus.Watching).ToList(),
-                AnimeStatus.Finished => anime.Where(a => a.Status == AnimeStatus.Finished).ToList(),
+                AnimeStatus.Completed => anime.Where(a => a.Status == AnimeStatus.Completed).ToList(),
                 AnimeStatus.Dropped => anime.Where(a => a.Status == AnimeStatus.Dropped).ToList(),
                 _ => anime,
             };
@@ -121,12 +138,12 @@ namespace Anidow.Pages.Components.Tracked
 
         public async Task SetToFinished(Anime anime)
         {
-            if (anime.Status == AnimeStatus.Finished)
+            if (anime.Status == AnimeStatus.Completed)
             {
                 return;
             }
 
-            anime.Status = AnimeStatus.Finished;
+            anime.Status = AnimeStatus.Completed;
             await anime.UpdateInDatabase();
         }
 
@@ -150,15 +167,15 @@ namespace Anidow.Pages.Components.Tracked
 
         public void CardEditAnime(object sender, MouseButtonEventArgs _)
         {
-            var anime = (Anime)((Grid)sender).DataContext;
+            var anime = (Anime) ((Grid) sender).DataContext;
             ChangeActiveItem(anime, false);
-            _eventAggregator.Publish(new OpenAnimeEditEvent{Anime = anime});
+            _eventAggregator.Publish(new OpenAnimeEditEvent {Anime = anime});
         }
 
         public void ListEditAnime(Anime anime)
         {
             ChangeActiveItem(anime, false);
-            _eventAggregator.Publish(new OpenAnimeEditEvent{Anime = anime});
+            _eventAggregator.Publish(new OpenAnimeEditEvent {Anime = anime});
         }
 
         public void DeselectItem()
@@ -189,29 +206,12 @@ namespace Anidow.Pages.Components.Tracked
             _scrollViewers = scrollView.ToArray();
         }
 
-        public void Handle(TrackedDeleteAnimeEvent message)
-        {
-            try
-            {
-                Items.Remove(message.Anime);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "couldn't delete anime from items");
-            }
-        }
-
-        public async void Handle(TrackedRefreshEvent message)
-        {
-            await Load();
-        }
-
         public async Task DownloadCover((object url, object anime) data)
         {
             try
             {
-                var anime = (Anime)data.anime;
-                var url = (string)data.url;
+                var anime = (Anime) data.anime;
+                var url = (string) data.url;
                 Uri.TryCreate(url, UriKind.Absolute, out var uri);
                 if (uri == null)
                 {
