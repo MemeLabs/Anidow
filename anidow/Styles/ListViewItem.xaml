@@ -29,12 +29,19 @@
                 <ContextMenu>
                     <MenuItem
                         Command="{s:Action ToggleWatch,
-                                           NullTarget=Disable}"
+                                           ActionNotFound=Disable}"
                         CommandParameter="{Binding}"
                         Header="{Binding WatchedHeaderString, Mode=OneWay}"
                         Icon="{iconPacks:FontAwesome EyeSolid}" />
                     <MenuItem
-                        Command="{s:Action OpenFolder}"
+                        Command="{s:Action HideItem,
+                                           ActionNotFound=Disable}"
+                        CommandParameter="{Binding}"
+                        Header="Hide"
+                        Icon="{iconPacks:FontAwesome TimesSolid}" />
+                    <MenuItem
+                        Command="{s:Action OpenFolder,
+                                           ActionNotFound=Disable}"
                         CommandParameter="{Binding}"
                         Header="Open Folder"
                         Icon="{iconPacks:FontAwesome FolderOpenSolid}" />
@@ -46,12 +53,14 @@
                         </MenuItem.Header>
 
                         <MenuItem
-                            Command="{s:Action DeleteItem}"
+                            Command="{s:Action DeleteItem,
+                                               ActionNotFound=Disable}"
                             CommandParameter="{Binding}"
                             Header="Without File"
                             Icon="{iconPacks:FontAwesome TrashSolid}" />
                         <MenuItem
-                            Command="{s:Action DeleteWithFile}"
+                            Command="{s:Action DeleteWithFile,
+                                               ActionNotFound=Disable}"
                             CommandParameter="{Binding}"
                             Header="With File"
                             Icon="{iconPacks:FontAwesome TrashSolid}" />
@@ -71,7 +80,7 @@
                 <ContextMenu>
                     <MenuItem
                         Command="{s:Action DeleteFile,
-                                           NullTarget=Disable}"
+                                           ActionNotFound=Disable}"
                         CommandParameter="{Binding}"
                         Header="Delete"
                         Icon="{iconPacks:FontAwesome TrashSolid}" />
@@ -93,19 +102,59 @@
         TargetType="ListViewItem">
         <Style.Triggers>
             <DataTrigger Binding="{Binding ShowInList}" Value="False">
+                <!--<DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Opacity"
+                                From="1"
+                                To="0"
+                                Duration="0:0:0.2" />
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Height"
+                                From="27"
+                                To="0"
+                                Duration="0:0:0.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Opacity"
+                                From="0"
+                                To="1"
+                                Duration="0:0:0.2" />
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Height"
+                                From="0"
+                                To="27"
+                                Duration="0:0:0.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>-->
                 <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
+
         </Style.Triggers>
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform />
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style
         x:Key="ColumnButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="-12,-4" />
+        <Setter Property="Margin" Value="-11, -4, 3,-4" />
         <Setter Property="Height" Value="25" />
-        <Setter Property="Width" Value="69" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Width" Value="68" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>

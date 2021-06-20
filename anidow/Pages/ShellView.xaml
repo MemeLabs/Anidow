@@ -35,6 +35,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="1"
@@ -55,7 +56,24 @@
                                    ActionNotFound=Disable}"
                 Content="{iconPacks:FontAwesome GithubBrands}"
                 Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
-                ToolTip="Open on Github" />
+                ToolTip="Open on Github"
+                ToolTipService.Placement="Bottom" />
+            <Button
+                Grid.Column="4"
+                Command="{s:Action OpenAbout,
+                                   ActionNotFound=Disable}"
+                Content="{iconPacks:FontAwesome InfoSolid}"
+                Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
+                ToolTip="About"
+                ToolTipService.Placement="Bottom" />
+            <ToggleButton
+                Grid.Column="5"
+                Command="{s:Action ToggleSettings,
+                                   ActionNotFound=Disable}"
+                Content="{iconPacks:FontAwesome CogSolid}"
+                Style="{DynamicResource {x:Static adonisUi:Styles.WindowToggleButton}}"
+                ToolTip="Settings"
+                ToolTipService.Placement="Bottom" />
         </Grid>
     </controls:AdonisWindow.TitleBarContent>
     <Grid>
@@ -63,48 +81,7 @@
             Margin="0,2,3,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Orientation="Horizontal">
-            <Button
-                Height="27"
-                extensions:CornerRadiusExtension.CornerRadius="4"
-                extensions:CursorSpotlightExtension.BackgroundBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
-                Background="Transparent"
-                BorderThickness="0"
-                Command="{s:Action OpenAbout,
-                                   ActionNotFound=Disable}"
-                Content="{iconPacks:FontAwesome InfoSolid,
-                                                Height=15,
-                                                Width=15}"
-                Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
-                ToolTip="About"
-                ToolTipService.Placement="Left" />
-            <ToggleButton
-                Height="27"
-                extensions:CornerRadiusExtension.CornerRadius="4"
-                BorderThickness="0"
-                Command="{s:Action ToggleSettings,
-                                   ActionNotFound=Disable}"
-                Content="{iconPacks:FontAwesome CogSolid,
-                                                Height=15,
-                                                Width=15}"
-                ToolTip="Settings"
-                ToolTipService.Placement="Left">
-                <ToggleButton.Style>
-                    <Style TargetType="ToggleButton"
-                           BasedOn="{StaticResource {x:Static adonisUi:Styles.DefaultToAccentToggleButton}}">
-                        <Style.Triggers>
-                            <Trigger Property="IsChecked" Value="True" />
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="extensions:CursorSpotlightExtension.BackgroundBrush"
-                                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
-
-        </StackPanel>
+            Orientation="Horizontal" />
 
 
         <ContentControl

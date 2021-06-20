@@ -45,8 +45,7 @@
     <ControlTemplate x:Key="CustomNotificationTemplate" TargetType="{x:Type controls:Notification}">
         <ControlTemplate.Resources>
             <DataTemplate x:Key="DefaultStringTemplate" DataType="{x:Type system:String}">
-                <Border MinHeight="80"
-                        Background="{Binding RelativeSource={RelativeSource AncestorType=controls:Notification}, Path=Background}">
+                <Border MinHeight="80" Background="{Binding RelativeSource={RelativeSource AncestorType=controls:Notification}, Path=Background}">
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"

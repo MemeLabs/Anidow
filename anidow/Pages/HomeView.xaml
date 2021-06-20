@@ -182,6 +182,7 @@
             <ToggleButton
                 Background="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}"
                 BorderThickness="0"
+                ToolTip="Click me!"
                 Command="{s:Action GetAiringEpisodesForToday,
                                    ActionNotFound=Disable}"
                 Content="{Binding AnimesToday.Count}"

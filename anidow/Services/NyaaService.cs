@@ -15,11 +15,14 @@ namespace Anidow.Services
     public class NyaaService : RssFeedService
     {
         private readonly SettingsService _settingsService;
+        private readonly FeedStorageService _feedStorageService;
 
-        public NyaaService(ILogger logger, HttpClient httpClient, SettingsService settingsService)
+        public NyaaService(ILogger logger, HttpClient httpClient, SettingsService settingsService,
+            FeedStorageService feedStorageService)
             : base(logger, httpClient)
         {
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _feedStorageService = feedStorageService ?? throw new ArgumentNullException(nameof(feedStorageService));
         }
 
         private SettingsModel Settings => _settingsService.Settings;
@@ -33,6 +36,7 @@ namespace Anidow.Services
                 return items.Where(i => i.Seeders >= minSeeders).ToList();
             }
 
+            _feedStorageService.SetNyaaRssFeedItems(items);
             return items;
         }
 

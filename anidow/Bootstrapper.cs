@@ -63,6 +63,7 @@ namespace Anidow
             builder.Bind<LogViewModel>().ToInstance(logViewModel);
 
             // Services
+            builder.Bind<FeedStorageService>().ToSelf().InSingletonScope();
             builder.Bind<NyaaService>().ToSelf().InSingletonScope();
             builder.Bind<AnimeBytesService>().ToSelf().InSingletonScope();
             builder.Bind<StoreService>().ToSelf();
@@ -145,7 +146,6 @@ namespace Anidow
 #if DEBUG
             logLevel = LogEventLevel.Verbose;
 #endif
-
             var logConfiguration = new LoggerConfiguration()
                                    .MinimumLevel.Is(logLevel)
                                    .Enrich.FromLogContext()

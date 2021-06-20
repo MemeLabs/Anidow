@@ -73,7 +73,7 @@ namespace Anidow.Services
             };
         }
 
-        public async Task<T> GetTorrents<T>()
+        private async Task<T> GetTorrents<T>()
         {
             return _settingsService.Settings.TorrentClient switch
             {
@@ -83,7 +83,7 @@ namespace Anidow.Services
             };
         }
 
-        public async Task UpdateTorrentProgress(IList<Episode> items)
+        public async Task UpdateTorrentProgress(IEnumerable<Episode> items)
         {
             var torrents = _settingsService.Settings.TorrentClient switch
             {
@@ -111,6 +111,7 @@ namespace Anidow.Services
 
                         var torrent = torrentItems.SingleOrDefault(t =>
                             t.hash.Equals(anime.TorrentId, StringComparison.InvariantCultureIgnoreCase));
+                        
                         if (torrent is null)
                         {
                             continue;
@@ -121,9 +122,9 @@ namespace Anidow.Services
 
                     break;
                 case TorrentClient.Deluge:
-                    break;
+                    throw new NotImplementedException();
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new NotImplementedException();
             }
         }
     }

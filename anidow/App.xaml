@@ -38,8 +38,7 @@
             </Style>
 
             <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="{x:Type ToolTip}">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
             </Style>
@@ -117,8 +116,7 @@
                                     CanContentScroll="True"
                                     Focusable="False"
                                     VerticalScrollBarVisibility="Auto">
-                                    <ItemsPresenter
-                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </ScrollViewer>
                             </Border>
                         </ControlTemplate>

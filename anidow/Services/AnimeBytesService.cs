@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Web;
+using Anidow.Annotations;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
@@ -33,11 +34,13 @@ namespace Anidow.Services
         private readonly SettingsService _settingsService;
         private readonly TaskbarIcon _taskbarIcon;
         private readonly TorrentService _torrentService;
+        private readonly FeedStorageService _feedStorageService;
         private int _initialRefreshTime;
         private Timer _tracker;
 
         public AnimeBytesService(ILogger logger, IEventAggregator eventAggregator, HttpClient httpClient,
-            SettingsService settingsService, TorrentService torrentService, TaskbarIcon taskbarIcon)
+            SettingsService settingsService, TorrentService torrentService, FeedStorageService feedStorageService,
+            TaskbarIcon taskbarIcon)
             : base(logger, httpClient)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -45,7 +48,13 @@ namespace Anidow.Services
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
+            _feedStorageService = feedStorageService ?? throw  new ArgumentNullException(nameof(feedStorageService));
             _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
+            _feedStorageService.OnAnimeBytesRssFeedItemsUpdatedEvent += async (_, _) =>
+            {
+                if (!TrackerIsRunning) return;
+                await CheckForNewEpisodes(_feedStorageService.AnimeBytesRssFeedItems);
+            };
         }
 
         private SettingsModel Settings => _settingsService.Settings;
@@ -115,7 +124,7 @@ namespace Anidow.Services
             await CheckForNewEpisodes();
         }
 
-        public async Task CheckForNewEpisodes()
+        public async Task CheckForNewEpisodes([CanBeNull] List<AnimeBytesTorrentItem> feedItems = null)
         {
             LastCheck = DateTime.Now;
             var animeBytesPassKey = _settingsService.Settings.AnimeBytesSettings.PassKey;
@@ -130,7 +139,7 @@ namespace Anidow.Services
                                             && a.Status == AnimeStatus.Watching)
                                 .ToListAsync();
 
-            var feedItems = await GetFeedItems(AnimeBytesFilter.Airing);
+            feedItems ??= await GetFeedItems(AnimeBytesFilter.Airing, false);
             anime.Reverse();
             foreach (var a in anime)
             {
@@ -213,7 +222,7 @@ namespace Anidow.Services
             }
         }
 
-        public async Task<List<AnimeBytesTorrentItem>> GetFeedItems(AnimeBytesFilter filter)
+        public async Task<List<AnimeBytesTorrentItem>> GetFeedItems(AnimeBytesFilter filter, bool addToFeedStorage = true)
         {
             if (string.IsNullOrWhiteSpace(Settings.AnimeBytesSettings.PassKey))
             {
@@ -221,13 +230,15 @@ namespace Anidow.Services
                 return default;
             }
 
-            return filter switch
+            var items = filter switch
             {
                 AnimeBytesFilter.All => await GetFeedItems(AllAnimeUrl, ToDomain) ?? new List<AnimeBytesTorrentItem>(),
                 AnimeBytesFilter.Airing => await GetFeedItems(AiringAnimeUrl, ToDomain) ??
                                            new List<AnimeBytesTorrentItem>(),
                 _ => throw new ArgumentOutOfRangeException(nameof(filter), filter, null),
             };
+            if (filter == AnimeBytesFilter.Airing && addToFeedStorage) _feedStorageService.SetAnimeBytesRssFeedItems(items);
+            return items;
         }
 
         private AnimeBytesTorrentItem ToDomain(SyndicationItem item)
@@ -319,7 +330,7 @@ namespace Anidow.Services
                         _ => new Dictionary<string, string>(),
                     };
                 }
-
+                _feedStorageService.SetAnimeBytesSearchFeedItems(anime.Groups);
                 return anime;
             }
             catch (Exception e)
