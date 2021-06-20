@@ -9,6 +9,8 @@
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:serilog="clr-namespace:Serilog.Events;assembly=Serilog"
+    xmlns:behaviors="clr-namespace:Anidow.Behaviors"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     Title="Logs"
     Width="700"
     Height="400"
@@ -20,6 +22,9 @@
     mc:Ignorable="d">
     <Grid Margin="4">
         <ItemsControl ItemsSource="{Binding Items, Mode=OneWay}" Style="{StaticResource ItemsControlVirtualizedStyle}">
+            <b:Interaction.Behaviors>
+                <behaviors:AutoScrollBehavior />
+            </b:Interaction.Behaviors>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="serilog:LogEvent">
                     <TextBlock TextWrapping="Wrap">

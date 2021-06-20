@@ -20,7 +20,7 @@ namespace Anidow.Pages
         {
             try
             {
-                DispatcherUtil.DispatchSync(() => Items.Insert(0, logEvent));
+                DispatcherUtil.DispatchSync(() => Items.Add(logEvent));
             }
             catch (Exception)
             {
