@@ -119,7 +119,7 @@
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true">
             <ListView.View>
-                <GridView>
+                <GridView AllowsColumnReorder="False">
                     <GridViewColumn
                         Header="Name"
                         HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}"

@@ -56,7 +56,7 @@
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
-                <GridView>
+                <GridView AllowsColumnReorder="False">
                     <GridViewColumn
                         Header="Name"
                         HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}"
