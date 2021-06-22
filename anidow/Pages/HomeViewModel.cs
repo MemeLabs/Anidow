@@ -404,38 +404,52 @@ namespace Anidow.Pages
         private async Task DownloadMissingCovers()
         {
             await using var db = new TrackContext();
-
             var rows = 0;
-            // remove cover if files don't exist
-            foreach (var cover in db.Covers)
+            try
             {
-                if (File.Exists(cover.FilePath))
+                // remove cover if files don't exist
+                foreach (var cover in db.Covers.Include(c => c.Animes).Include(c => c.Episodes))
                 {
-                    continue;
-                }
+                    if (File.Exists(cover.FilePath))
+                    {
+                        continue;
+                    }
 
-                db.Remove(cover);
-                rows += await db.SaveChangesAsync();
-                _logger.Information("removed cover id: {0}, file: {1}", cover.Id, cover.FilePath);
+                    //var anime = db.Anime.Where(a => a.CoverData.Id == cover.Id);
+
+                    db.Remove(cover);
+                    rows += await db.SaveChangesAsync();
+                    _logger.Information("removed cover id: {0}, file: {1}", cover.Id, cover.FilePath);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "error checking covers");
             }
 
-            var animes = await db.Anime.ToListAsync();
-            foreach (var anime in animes)
+            try
             {
-                anime.Created = anime.Created == default ? anime.Released : anime.Created;
-                var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);
-                anime.CoverData ??= coverData;
-                var episodes = db.Episodes.Where(e => e.AnimeId == anime.GroupId);
-                foreach (var episode in episodes)
+                // var animes = await db.Anime.ToListAsync();
+                foreach (var anime in db.Anime)
                 {
-                    episode.CoverData ??= coverData;
-                    episode.Created = episode.Created == default ? episode.Released : episode.Created;
+                    anime.Created = anime.Created == default ? anime.Released : anime.Created;
+                    var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);
+                    anime.CoverData ??= coverData;
+                    var episodes = db.Episodes.Where(e => e.AnimeId == anime.GroupId);
+                    foreach (var episode in episodes)
+                    {
+                        episode.CoverData ??= coverData;
+                        episode.Created = episode.Created == default ? episode.Released : episode.Created;
+                    }
+
+                    rows += await db.SaveChangesAsync();
                 }
-
-                ;
-
-                rows += await db.SaveChangesAsync();
             }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed getting coverData");
+            }
+           
 
             if (rows >= 1)
             {
