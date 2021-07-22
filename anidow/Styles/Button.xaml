@@ -4,7 +4,7 @@
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI">
 
-    
+
     <Style
         x:Key="DeleteButton"
         BasedOn="{StaticResource {x:Type Button}}"
@@ -110,8 +110,7 @@
                             </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -120,15 +119,11 @@
 
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
             </Trigger>
 
-            <DataTrigger
-                Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                Value="False">
-                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+            <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -154,21 +149,23 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid>
-                        <Border x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{TemplateBinding extensions:CornerRadiusExtension.CornerRadius}" />
+                        <Border
+                            x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding extensions:CornerRadiusExtension.CornerRadius}" />
 
-                        <ContentPresenter x:Name="ContentPresenter"
-                                          Margin="{TemplateBinding Padding}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          RenderOptions.ClearTypeHint="Auto"
-                                          TextOptions.TextFormattingMode="Display"
-                                          TextOptions.TextRenderingMode="Auto" />
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            RenderOptions.ClearTypeHint="Auto"
+                            TextOptions.TextFormattingMode="Display"
+                            TextOptions.TextRenderingMode="Auto" />
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -179,14 +176,14 @@
 
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="False">
-                            <Setter TargetName="Border" Property="Background" Value="Transparent"/>
+                            <Setter TargetName="Border" Property="Background" Value="Transparent" />
                         </Trigger>
 
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -212,5 +209,5 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    
+
 </ResourceDictionary>

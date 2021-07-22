@@ -61,6 +61,7 @@ namespace Anidow.Pages
 
             if (items is not {Count: > 0})
             {
+                CanGetItems = true;
                 return;
             }
 

@@ -121,13 +121,29 @@ namespace Anidow.Pages
             };
 
             await using var db = new TrackContext();
-            if (message.Item is AnimeBytesTorrentItem abti)
+            switch (message.Item)
             {
-                var anime = await db.Anime.FirstOrDefaultAsync(a => a.GroupId == abti.GroupId);
-                if (anime != null)
+                case AnimeBytesTorrentItem abti:
                 {
-                    item.AnimeId = anime.GroupId;
-                    item.CoverData ??= anime.CoverData;
+                    var anime = await db.Anime.FirstOrDefaultAsync(a => a.GroupId == abti.GroupId);
+                    if (anime != null)
+                    {
+                        item.AnimeId = anime.GroupId;
+                        item.CoverData ??= anime.CoverData;
+                    }
+
+                    break;
+                }
+                case AnimeBytesScrapeAnime absa:
+                {
+                    var anime = await db.Anime.FirstOrDefaultAsync(a => a.GroupId == absa.ID.ToString());
+                    if (anime != null)
+                    {
+                        item.AnimeId = anime.GroupId;
+                        item.CoverData ??= anime.CoverData;
+                    }
+
+                    break;
                 }
             }
 

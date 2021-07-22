@@ -48,8 +48,7 @@
                     <Separator />
                     <MenuItem CommandParameter="{Binding}" Icon="{iconPacks:FontAwesome TrashSolid}">
                         <MenuItem.Header>
-                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
-                                       Text="Delete" />
+                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" Text="Delete" />
                         </MenuItem.Header>
 
                         <MenuItem
@@ -89,8 +88,7 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Highlight}" Value="true">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -150,7 +148,7 @@
         x:Key="ColumnButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="-11, -4, 3,-4" />
+        <Setter Property="Margin" Value="-11,-4,3,-4" />
         <Setter Property="Height" Value="25" />
         <Setter Property="Width" Value="68" />
         <Setter Property="BorderThickness" Value="0" />

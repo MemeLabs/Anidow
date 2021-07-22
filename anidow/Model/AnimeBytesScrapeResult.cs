@@ -20,6 +20,7 @@ namespace Anidow.Model
 
     public class AnimeBytesScrapeAnime : ObservableObject
     {
+        private string _folder;
         public int ID { get; set; }
         public int Row { get; set; }
         public string CategoryName { get; set; }
@@ -55,7 +56,21 @@ namespace Anidow.Model
         [JsonIgnore] public string TagsString => Tags != null ? string.Join(", ", Tags) : null;
         [JsonIgnore] public int SelectedTorrentIndex { get; set; }
         [JsonIgnore] public AnimeBytesScrapeTorrent SelectedTorrent { get; set; }
-        [JsonIgnore] public string Folder { get; set; }
+
+        [JsonIgnore]
+        public string Folder
+        {
+            get => _folder;
+            set
+            {
+                _folder = value;
+                foreach (var torrent in Torrents)
+                {
+                    torrent.Folder = value;
+                }
+            }
+        }
+
         [JsonIgnore] public bool CanTrack { get; set; }
 
         [JsonIgnore] public string SelectedSubGroup { get; set; }
