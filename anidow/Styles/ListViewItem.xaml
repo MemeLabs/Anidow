@@ -24,6 +24,11 @@
         x:Key="ListViewItemHome"
         BasedOn="{StaticResource ListViewItemBase}"
         TargetType="ListViewItem">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding HomeHighlight}" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"/>
+            </DataTrigger>
+        </Style.Triggers>
         <Setter Property="ContextMenu">
             <Setter.Value>
                 <ContextMenu>

@@ -13,9 +13,6 @@
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:tracked="clr-namespace:Anidow.Pages.Components.Tracked"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <UserControl.Resources>
-    </UserControl.Resources>
-
     <ListView
         ItemContainerStyle="{StaticResource ListViewItemBase}"
         ItemsSource="{Binding Items, Mode=OneWay}"

@@ -43,6 +43,7 @@
             ItemsSource="{Binding Items}"
             Margin="2"
             SelectedItem="{Binding ActiveItem}"
+            SelectionChanged="{s:Action SelectionChanged}"
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             x:Name="ListView">

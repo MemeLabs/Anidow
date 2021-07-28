@@ -570,5 +570,24 @@ namespace Anidow.Pages
             });
 #endif
         }
+
+        public void SelectionChanged()
+        {
+            if (ActiveItem is null)
+            {
+                foreach (var episode in Items)
+                {
+                    episode.HomeHighlight = false;
+                }
+                return;
+            }
+            
+            foreach (var episode in Items)
+            {
+                episode.HomeHighlight = episode.AnimeId == ActiveItem.AnimeId 
+                                        && episode.Id != ActiveItem.Id
+                                        && ActiveItem.AnimeId != null;
+            }
+        }
     }
 }
