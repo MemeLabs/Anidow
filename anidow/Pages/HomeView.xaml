@@ -9,7 +9,6 @@
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-    xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
     xmlns:local="clr-namespace:Anidow.Pages"
@@ -351,36 +350,44 @@
             Padding="2"
             extensions:LayerExtension.IncreaseLayer="True"
             extensions:LayerExtension.Layer="1">
-            <TextBlock
-                HorizontalAlignment="Left"
-                Margin="4,0,0,0"
-                Text="{Binding NextCheckIn}"
-                ToolTip="next Check for new episodes/anime"
-                ToolTipService.Placement="Top"
-                VerticalAlignment="Center">
-                <TextBlock.ContextMenu>
-                    <ContextMenu Placement="Top">
-                        <MenuItem
-                            Command="{s:Action StartTracker,
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{DynamicResource {x:Static adonisUi:Styles.AccentToolbarButton}}"
+                        Command="{s:Action ForceCheck, ActionNotFound=Disable}"
+                        ToolTip="Check now"
+                        ToolTipService.Placement="Right">
+                    <iconPacks:FontAwesome Kind="SyncAltSolid" Height="10" Width="10" />
+                </Button>
+                <TextBlock
+                    HorizontalAlignment="Left"
+                    Margin="4,0,0,0"
+                    Text="{Binding NextCheckIn}"
+                    ToolTip="next Check for new episodes/anime"
+                    ToolTipService.Placement="Top"
+                    VerticalAlignment="Center">
+                    <TextBlock.ContextMenu>
+                        <ContextMenu Placement="Top">
+                            <MenuItem
+                                Command="{s:Action StartTracker,
                                                ActionNotFound=Disable}"
-                            Header="Start"
-                            Icon="{iconPacks:FontAwesome PlaySolid}"
-                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
-                            s:View.ActionTarget="{Binding AnimeBytesService}" />
-                        <MenuItem
-                            Command="{s:Action StopTracker,
+                                Header="Start"
+                                Icon="{iconPacks:FontAwesome PlaySolid}"
+                                Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
+                                s:View.ActionTarget="{Binding AnimeBytesService}" />
+                            <MenuItem
+                                Command="{s:Action StopTracker,
                                                ActionNotFound=Disable}"
-                            Header="Pause"
-                            Icon="{iconPacks:FontAwesome PauseSolid}"
-                            Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
-                            s:View.ActionTarget="{Binding AnimeBytesService}" />
-                        <MenuItem
-                            Command="{s:Action ForceCheck}"
-                            Header="Check now"
-                            Icon="{iconPacks:FontAwesome SyncAltSolid}" />
-                    </ContextMenu>
-                </TextBlock.ContextMenu>
-            </TextBlock>
+                                Header="Pause"
+                                Icon="{iconPacks:FontAwesome PauseSolid}"
+                                Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
+                                s:View.ActionTarget="{Binding AnimeBytesService}" />
+                            <MenuItem
+                                Command="{s:Action ForceCheck}"
+                                Header="Check now"
+                                Icon="{iconPacks:FontAwesome SyncAltSolid}" />
+                        </ContextMenu>
+                    </TextBlock.ContextMenu>
+                </TextBlock>
+            </StackPanel>
         </Border>
     </Grid>
 </UserControl>

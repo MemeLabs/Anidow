@@ -188,6 +188,7 @@ namespace Anidow.Pages
             CanForceCheck = false;
             await AnimeBytesService.CheckForNewEpisodes();
             await GetAiringEpisodesForToday();
+            await Task.Delay(300);
             CanForceCheck = true;
         }
 
