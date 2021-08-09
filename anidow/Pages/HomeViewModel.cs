@@ -277,9 +277,12 @@ namespace Anidow.Pages
             LinkUtil.Open(episode.Link);
         }
 
-        public void OpenFolder(Episode episode)
+        public async Task OpenFolder(Episode episode)
         {
+            episode.CanOpen = false;
             _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _logger));
+            await Task.Delay(100);
+            episode.CanOpen = true;
         }
 
         public async Task ToggleWatch(Episode episode)
@@ -304,7 +307,7 @@ namespace Anidow.Pages
                     return;
                 }
 
-                ProcessUtil.OpenFile(episode.File);
+                await ProcessUtil.OpenFile(episode);
 
                 episode.Watched = true;
                 episode.WatchedDate = DateTime.UtcNow;
@@ -315,7 +318,7 @@ namespace Anidow.Pages
                 _logger.Error(e, "failed opening file to watch");
                 MessageBox.Show($"Failed opening file\nerror: {e.Message}",
                     icon: MessageBoxImage.Error);
-                OpenFolder(episode);
+                await OpenFolder(episode);
             }
         }
 

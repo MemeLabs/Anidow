@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Anidow.Database.Models;
 
 namespace Anidow.Utils
 {
@@ -28,13 +30,22 @@ namespace Anidow.Utils
                 throw new ArgumentException($@"File extension not allowed: {file.Extension}");
             }
 
-            new Process
+            using var process = new Process
             {
                 StartInfo = new ProcessStartInfo(path)
                 {
                     UseShellExecute = true,
                 },
-            }.Start();
+            };
+            process.Start();
+            process.Close();
+        }
+        public static async Task OpenFile(Episode episode)
+        {
+            episode.CanOpen = false;
+            OpenFile(episode.File);
+            await Task.Delay(100);
+            episode.CanOpen = true;
         }
 
         public static bool IsAllowedFile(string path)

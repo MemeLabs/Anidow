@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using AdonisUI.Controls;
@@ -46,7 +47,7 @@ namespace Anidow.Pages
         public BindableCollection<FolderFilesModel> FileInfos { get; }
 
         public string Folder { get; set; }
-        public bool HasParentFolder { get; set; }
+        public bool HasParentFolder => !string.IsNullOrWhiteSpace(ParentFolder) && CanGoUpFolder;
         private string ParentFolder { get; set; }
 
         public bool CanLoadMore { get; set; }
@@ -58,9 +59,12 @@ namespace Anidow.Pages
             _ = OpenFolder(Folder);
         }
 
+        public bool CanGoUpFolder { get; set; } = true;
         public async Task GoUpFolder()
         {
+            CanGoUpFolder = false;
             await OpenFolder(ParentFolder);
+            CanGoUpFolder = true;
         }
 
         public async Task GetFilesFromFolder(bool clear = false)
@@ -160,7 +164,6 @@ namespace Anidow.Pages
             {
                 Folder = path;
                 ParentFolder = Directory.GetParent(Folder)?.FullName;
-                HasParentFolder = !string.IsNullOrWhiteSpace(ParentFolder);
                 await GetFilesFromFolder(true);
             }
             catch (Exception e)
