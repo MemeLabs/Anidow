@@ -27,7 +27,7 @@ namespace Anidow.Torrent_Clients
         }
 
         private SettingsModel Settings => _settingsService.Settings;
-        private string ApiUrl => $"{Settings.QBitTorrent.Host}:{Settings.QBitTorrent.Port}";
+        private string ApiUrl (SettingsModel settings) => $"{settings.QBitTorrent.Host}:{settings.QBitTorrent.Port}";
         private bool LoggedIn { get; set; }
 
 
@@ -40,7 +40,7 @@ namespace Anidow.Torrent_Clients
                 {new StringContent(item.Folder), "savepath"},
                 {new StringContent(Settings.QBitTorrent.Category), "category"},
             };
-            var response = await _httpClient.PostAsync($"{ApiUrl}/api/v2/torrents/add", m);
+            var response = await _httpClient.PostAsync($"{ApiUrl(Settings)}/api/v2/torrents/add", m);
             string content;
             if (response is {IsSuccessStatusCode: true})
             {
@@ -69,7 +69,7 @@ namespace Anidow.Torrent_Clients
             {
                 var response =
                     await _httpClient.GetAsync(
-                        $"{ApiUrl}/api/v2/torrents/delete?hashes={episode.TorrentId}&deleteFiles={withFile}");
+                        $"{ApiUrl(Settings)}/api/v2/torrents/delete?hashes={episode.TorrentId}&deleteFiles={withFile}");
                 return response?.IsSuccessStatusCode ?? false;
             }
             catch (Exception e)
@@ -79,31 +79,34 @@ namespace Anidow.Torrent_Clients
             }
         }
 
-        private async Task Login()
+        public async Task<bool> Login(SettingsModel settings = null)
         {
-            if (LoggedIn || !Settings.QBitTorrent.WithLogin)
+            settings ??= Settings;
+            if (LoggedIn || !settings.QBitTorrent.WithLogin)
             {
-                return;
+                return false;
             }
 
             var data = new Dictionary<string, string>
             {
-                {"username", Settings.QBitTorrent.Username},
-                {"password", Settings.QBitTorrent.Password},
+                {"username", settings.QBitTorrent.Username},
+                {"password", settings.QBitTorrent.Password},
             };
             var oldReferer = _httpClient.DefaultRequestHeaders.Referrer;
-            _httpClient.DefaultRequestHeaders.Referrer = new Uri(ApiUrl);
-            var login = await _httpClient.PostAsync($"{ApiUrl}/api/v2/auth/login", new FormUrlEncodedContent(data));
+            _httpClient.DefaultRequestHeaders.Referrer = new Uri(ApiUrl(settings));
+            var login = await _httpClient.PostAsync($"{ApiUrl(settings)}/api/v2/auth/login", new FormUrlEncodedContent(data));
             LoggedIn = login.IsSuccessStatusCode;
             _httpClient.DefaultRequestHeaders.Referrer = oldReferer;
+            return login.IsSuccessStatusCode;
         }
 
-        public async Task<T> GetTorrentList<T>()
+        public async Task<T> GetTorrentList<T>(SettingsModel settings = null)
         {
-            await Login();
+            settings ??= Settings;
+            await Login(settings);
             // /api/v2/torrents/info?category=sample%20category&sort=ratio
             var encodedCategory = HttpUtility.UrlEncode(Settings.QBitTorrent.Category);
-            var url = $"{ApiUrl}/api/v2/torrents/info?filter=all&category={encodedCategory}&sort=added_on";
+            var url = $"{ApiUrl(settings)}/api/v2/torrents/info?filter=all&category={encodedCategory}&sort=added_on";
             try
             {
                 var response = await _httpClient.GetStringAsync(url);
@@ -117,10 +120,10 @@ namespace Anidow.Torrent_Clients
             }
         }
 
-        //public async Task<string> GetVersion()
-        //{
-        //    var url = $"{ApiUrl}/api/v2/app/Version";
-        //    return await _httpClient.GetStringAsync(url);
-        //}
+        public async Task<string> GetVersion()
+        {
+            var url = $"{ApiUrl(Settings)}/api/v2/app/version";
+            return await _httpClient.GetStringAsync(url);
+        }
     }
 }

@@ -398,27 +398,6 @@ namespace Anidow.Pages
                       .ToRunEvery(1)
                       .Seconds()
             );
-#if DEBUG
-            ShowSetupWizard().ConfigureAwait(false);
-#endif
-        }
-
-
-        private async Task ShowSetupWizard()
-        {
-            await using var db = new TrackContext();
-            var appState = await db.AppStates.SingleOrDefaultAsync();
-#if DEBUG
-            if (appState is {FirstStart: false})
-#else
-            if (appState is {FirstStart: true})
-#endif
-            {
-                appState.FirstStart = false;
-                await db.SaveChangesAsync();
-
-                DispatcherUtil.DispatchSync(() => _windowManager.ShowDialog(_settingsSetupWizardViewModel));
-            }
         }
 
         private async Task DownloadMissingCovers()

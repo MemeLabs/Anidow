@@ -7,6 +7,7 @@ using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Factories;
 using Anidow.Interfaces;
+using Anidow.Model;
 using Anidow.Torrent_Clients;
 using BencodeNET.Parsing;
 using BencodeNET.Torrents;
@@ -73,14 +74,56 @@ namespace Anidow.Services
             };
         }
 
-        private async Task<T> GetTorrents<T>()
+        private async Task<T> GetTorrents<T>(SettingsModel settings = null)
         {
             return _settingsService.Settings.TorrentClient switch
             {
-                TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.GetTorrentList<T>(),
+                TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.GetTorrentList<T>(settings),
                 TorrentClient.Deluge => throw new NotImplementedException(),
                 _ => default,
             };
+        }
+        public async Task<(bool, string)> TestConnection(SettingsModel settings)
+        {
+            try
+            {
+                // TODO other torrent clients...
+                if (settings.QBitTorrent.WithLogin)
+                {
+                    if (await _clientFactory.GetQBitTorrent.Login(settings))
+                    {
+                        return (true, string.Empty);
+                    }
+
+                    return (false, string.Empty);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed torrent client authentication");
+                return (false, e.Message);
+            }
+            
+            try
+            {
+                var torrents = _settingsService.Settings.TorrentClient switch
+                {
+                    TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.GetTorrentList<QBitTorrentEntry[]>(settings),
+                    TorrentClient.Deluge => throw new NotImplementedException(),
+                    _ => default,
+                };
+                if (torrents is null)
+                {
+                    return (false, string.Empty);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed getting torrents from torrent client");
+                return (false, e.Message);
+            }
+
+            return (true, string.Empty);
         }
 
         public async Task UpdateTorrentProgress(IEnumerable<Episode> items)

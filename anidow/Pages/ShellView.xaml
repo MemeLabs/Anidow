@@ -109,7 +109,7 @@
 
         <controls1:NotificationArea
             x:Name="WindowArea"
-            MaxItems="5"
+            MaxItems="4"
             Position="BottomRight" />
     </Grid>
 </controls:AdonisWindow>

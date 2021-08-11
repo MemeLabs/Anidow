@@ -6,9 +6,11 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Anidow.Model;
+using Anidow.Pages.Components.Settings;
 using Anidow.Services;
 using Anidow.Utils;
 using Serilog;
+using Stylet;
 using Screen = Stylet.Screen;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -18,12 +20,18 @@ namespace Anidow.Pages
     public class SettingsViewModel : Screen
     {
         private readonly ILogger _logger;
+        private readonly SettingsSetupWizardViewModel _setupWizardViewModel;
+        private readonly IWindowManager _windowManager;
         private readonly Regex _regex = new("[^0-9]+");
 
-        public SettingsViewModel(ILogger logger, SettingsService settingsService)
+        public SettingsViewModel(ILogger logger, SettingsService settingsService, SettingsSetupWizardViewModel setupWizardViewModel,
+            IWindowManager windowManager)
         {
             SettingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _setupWizardViewModel = setupWizardViewModel ?? throw new ArgumentNullException(nameof(setupWizardViewModel));
+            _windowManager = windowManager;
+            ;
             DisplayName = "Settings";
         }
 
@@ -75,6 +83,11 @@ namespace Anidow.Pages
             {
                 _logger.Error(ex, "failed opening link to passkey");
             }
+        }
+
+        public void SetupWizard()
+        {
+            _windowManager.ShowDialog(_setupWizardViewModel);
         }
     }
 }

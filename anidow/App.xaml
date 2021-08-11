@@ -31,11 +31,11 @@
 
             <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type Window}" />
 
-            <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer">
-                <Setter Property="extensions:ScrollViewerExtension.VerticalScrollBarPlacement" Value="Overlay" />
-                <Setter Property="extensions:ScrollViewerExtension.HorizontalScrollBarPlacement" Value="Overlay" />
-                <Setter Property="extensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver" Value="True" />
-            </Style>
+            <!-- <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer"> -->
+            <!--     <Setter Property="extensions:ScrollViewerExtension.VerticalScrollBarPlacement" Value="Overlay" /> -->
+            <!--     <Setter Property="extensions:ScrollViewerExtension.HorizontalScrollBarPlacement" Value="Overlay" /> -->
+            <!--     <Setter Property="extensions:ScrollViewerExtension.HideScrollBarsUntilMouseOver" Value="True" /> -->
+            <!-- </Style> -->
 
             <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="{x:Type ToolTip}">
                 <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />

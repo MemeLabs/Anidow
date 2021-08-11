@@ -23,12 +23,31 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Center" Text="Settings" FontSize="22" FontWeight="SemiBold" />
+        <Grid Margin="6,4,6,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Grid.ColumnSpan="2"
+                       Text="Settings"
+                       FontSize="22" 
+                       FontWeight="SemiBold" />
+            <Button Grid.Column="1" Command="{s:Action SetupWizard}"
+                    VerticalAlignment="Center">
+                <StackPanel Orientation=" Horizontal">
+                    <iconPacks:FontAwesome Kind="MagicSolid"/>
+                    <TextBlock Margin="6,0,0,0" 
+                               VerticalAlignment="Center"
+                               Text="Setup Wizard"/>
+                </StackPanel>
+            </Button>
+        </Grid>
         <ScrollViewer
             Grid.Row="1"
             Margin="2"
             extensions1:TouchScrolling.IsEnabled="True"
-            extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
             VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.RowDefinitions>

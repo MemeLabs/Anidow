@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Helpers;
+using Anidow.Pages.Components.Settings;
 using Anidow.Services;
+using Anidow.Utils;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
@@ -13,14 +15,19 @@ namespace Anidow.Pages
     public class StartupViewModel : Screen
     {
         private readonly ILogger _logger;
+        private readonly IWindowManager _windowManager;
+        private readonly SettingsSetupWizardViewModel _setupWizardViewModel;
         private readonly SettingsService _settingsService;
         private readonly UpdateManager _updateManager;
 
-        public StartupViewModel(UpdateManager updateManager, SettingsService settingsService, ILogger logger)
+        public StartupViewModel(UpdateManager updateManager, SettingsService settingsService, ILogger logger,
+            IWindowManager windowManager, SettingsSetupWizardViewModel setupWizardViewModel)
         {
-            _updateManager = updateManager;
-            _settingsService = settingsService;
-            _logger = logger;
+            _updateManager = updateManager ?? throw new ArgumentNullException(nameof(updateManager));
+            _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+            _setupWizardViewModel = setupWizardViewModel ?? throw new ArgumentNullException(nameof(setupWizardViewModel));
         }
 
         public string LoadingMessage { get; private set; }
@@ -32,8 +39,30 @@ namespace Anidow.Pages
             LookForUpdates().ContinueWith(async _ =>
             {
                 await PrepareDatabase()
-                    .ContinueWith(async _ => await LoadSettings());
+                    .ContinueWith(async _ => await LoadSettings()
+                        .ContinueWith(async _ => await ShowSetupWizard()));
             });
+            
+        }
+        
+        private async Task ShowSetupWizard()
+        {
+            await using var db = new TrackContext();
+            var appState = await db.AppStates.SingleOrDefaultAsync();
+#if DEBUG
+            if (appState is {FirstStart: false})
+#else
+            if (appState is {FirstStart: true})
+#endif
+            {
+                appState.FirstStart = false;
+                await db.SaveChangesAsync();
+
+                DispatcherUtil.DispatchSync(() => _windowManager.ShowDialog(_setupWizardViewModel));
+            }
+            
+            // Finished everything! time to show homeview
+            OnFinished?.Invoke();
         }
 
         private async Task PrepareDatabase()
@@ -59,8 +88,6 @@ namespace Anidow.Pages
             // Initalize Settings
             await _settingsService.Initialize();
             await Task.Delay(500);
-
-            OnFinished?.Invoke();
         }
 
         private async Task LookForUpdates()

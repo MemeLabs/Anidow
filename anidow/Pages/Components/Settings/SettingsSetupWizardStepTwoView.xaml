@@ -8,6 +8,8 @@
     xmlns:local="clr-namespace:Anidow.Pages.Components.Settings"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI" 
     d:DataContext="{d:DesignInstance local:SettingsSetupWizardViewModel}"
     d:DesignHeight="300"
     d:DesignWidth="300"
@@ -31,25 +33,25 @@
                 qBittorrent setup
             </TextBlock>
 
-            <Button
-                Margin="8,0"
-                VerticalAlignment="Center"
-                Command="{s:Action QuickSetupQBittorrent,
-                                   ActionNotFound=Disable}"
-                Content="Quick setup qBittorrent" />
+            <!-- <Button -->
+            <!--     Margin="8,0" -->
+            <!--     VerticalAlignment="Center" -->
+            <!--     Command="{s:Action QuickSetupQBittorrent, -->
+            <!--                        ActionNotFound=Disable}" -->
+            <!--     Content="Quick setup qBittorrent" /> -->
         </StackPanel>
-
-        <StackPanel
-            Grid.Row="0"
-            Grid.Column="1"
-            Margin="8,0,0,8"
-            VerticalAlignment="Center"
-            Orientation="Horizontal">
-
-            <TextBlock VerticalAlignment="Center">
-                Manual setup qBittorrent
-            </TextBlock>
-        </StackPanel>
+        <!-- -->
+        <!-- <StackPanel -->
+        <!--     Grid.Row="0" -->
+        <!--     Grid.Column="1" -->
+        <!--     Margin="8,0,0,8" -->
+        <!--     VerticalAlignment="Center" -->
+        <!--     Orientation="Horizontal"> -->
+        <!-- -->
+        <!--     <TextBlock VerticalAlignment="Center"> -->
+        <!--         Manual setup qBittorrent -->
+        <!--     </TextBlock> -->
+        <!-- </StackPanel> -->
 
         <Grid
             Grid.Row="1"
@@ -115,7 +117,7 @@
                     IsEnabled="{Binding Settings.QBitTorrent.WithLogin}" />
 
             </Grid>
-            <Grid Grid.Row="2" Margin="0,4,0,4">
+            <Grid Grid.Row="2" Margin="0,4">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -131,10 +133,26 @@
                     extensions:WatermarkExtension.Watermark="Anime"
                     Text="{Binding Settings.QBitTorrent.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
+
+            <Grid Grid.Row="3" Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding ConnectionStatus}"
+                           VerticalAlignment="Center" />
+                <Button Grid.Column="1" 
+                        Command="{s:Action TestConnection, ActionNotFound=Disable}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
+                        Content="Test connection" />
+            </Grid>
         </Grid>
 
 
         <ScrollViewer
+            adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="AlwaysExpand"
+            adonisExtensions:ScrollViewerExtension.HorizontalScrollBarExpansionMode="NeverExpand"
             Grid.Row="1"
             Grid.Column="1"
             Margin="8,0,0,0"
@@ -167,7 +185,7 @@
 
 
                 <TextBlock Grid.Row="3" Margin="0,8,0,4">
-                    Step 2: Open WebUI settings
+                    Step 2: Select WebUI settings
                 </TextBlock>
 
                 <Image
@@ -203,9 +221,8 @@
                     Margin="0,8,0,4"
                     TextWrapping="Wrap">
                     Step 5:<LineBreak />
-                    Fill out the settings on the left or close qBittorrent and click Quick setup button on the top.
+                    Fill out the settings on the left
                     <LineBreak />
-
                 </TextBlock>
 
             </Grid>

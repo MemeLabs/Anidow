@@ -26,10 +26,12 @@ namespace Anidow.Pages.Components.Settings
 
         private readonly Regex _regex = new("[^0-9]+");
         private readonly SettingsService _settingsService;
+        private readonly TorrentService _torrentService;
 
-        public SettingsSetupWizardViewModel(SettingsService settingsService)
+        public SettingsSetupWizardViewModel(SettingsService settingsService, TorrentService torrentService)
         {
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+            _torrentService = torrentService ?? throw  new ArgumentNullException(nameof(torrentService));
         }
 
         public SettingsModel Settings => _settingsService.TempSettings;
@@ -40,6 +42,7 @@ namespace Anidow.Pages.Components.Settings
         public bool IsFinish => CurrentStep == Steps;
 
         public bool CanQuickSetupQBittorrent { get; set; }
+        public string ConnectionStatus { get; set; }
 
         public void Back()
         {
@@ -101,6 +104,7 @@ namespace Anidow.Pages.Components.Settings
             CanQuickSetupQBittorrent = true;
         }
 
+        public bool CanFinish { get; set; }
         public void Finish()
         {
             Task.Run(async () => await _settingsService.Save());
@@ -110,6 +114,7 @@ namespace Anidow.Pages.Components.Settings
         public void Cancel()
         {
             RequestClose();
+            CurrentStep = 1;
         }
 
 
@@ -138,6 +143,19 @@ namespace Anidow.Pages.Components.Settings
         public void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             e.Handled = _regex.IsMatch(e.Text);
+        }
+
+        public async Task TestConnection()
+        {
+            var (success, error) = await _torrentService.TestConnection(Settings);
+            if (success && string.IsNullOrEmpty(error))
+            {
+                CanFinish = true;
+                ConnectionStatus = "Success!";
+                return;
+            }
+
+            ConnectionStatus = "Failed!";
         }
     }
 }

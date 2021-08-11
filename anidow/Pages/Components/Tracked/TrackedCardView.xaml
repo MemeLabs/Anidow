@@ -10,12 +10,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:tracked="clr-namespace:Anidow.Pages.Components.Tracked"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI">
     <Grid>
         <ItemsControl ItemsSource="{Binding Items}" Margin="2">
             <ItemsControl.Template>
                 <ControlTemplate TargetType="{x:Type ItemsControl}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" extensions1:TouchScrolling.IsEnabled="True">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" extensions1:TouchScrolling.IsEnabled="True"
+                                  extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>

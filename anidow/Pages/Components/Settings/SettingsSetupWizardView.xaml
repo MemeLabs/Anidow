@@ -1,7 +1,7 @@
 <controls:AdonisWindow
-    Height="300"
+    Height="350"
     Title="Setup Wizard"
-    Width="600"
+    Width="700"
     d:DataContext="{d:DesignInstance local:SettingsSetupWizardViewModel}"
     mc:Ignorable="d"
     x:Class="Anidow.Pages.Components.Settings.SettingsSetupWizardView"
@@ -13,14 +13,33 @@
     xmlns:local="clr-namespace:Anidow.Pages.Components.Settings"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    ResizeMode="NoResize"
+    FontWeight="Medium"
+    FontSize="14"
+    WindowStyle="None"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid Margin="2,4">
+            <StackPanel Orientation=" Horizontal" HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <ContentControl Content="{iconPacks:FontAwesome MagicSolid, Height=20, Width=20}"
+                           VerticalAlignment="Center"/>
+                <TextBlock Margin="6,0,0,0"
+                           VerticalAlignment="Center"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           Text="Setup Wizard"/>
+                </StackPanel>
+        </Grid>
 
         <ContentPresenter
+            Grid.Row="1"
             Content="{Binding}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
@@ -53,7 +72,7 @@
         </ContentPresenter>
 
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="2"
             HorizontalAlignment="Right"
             Margin="16"
             Orientation="Horizontal">
