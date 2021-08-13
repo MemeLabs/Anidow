@@ -2,14 +2,14 @@
     x:Class="Anidow.Pages.Components.Settings.SettingsSetupWizardStepTwoView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:local="clr-namespace:Anidow.Pages.Components.Settings"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
-    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
-    xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI" 
     d:DataContext="{d:DesignInstance local:SettingsSetupWizardViewModel}"
     d:DesignHeight="300"
     d:DesignWidth="300"
@@ -33,23 +33,23 @@
                 qBittorrent setup
             </TextBlock>
 
-            <!-- <Button -->
-            <!--     Margin="8,0" -->
-            <!--     VerticalAlignment="Center" -->
-            <!--     Command="{s:Action QuickSetupQBittorrent, -->
-            <!--                        ActionNotFound=Disable}" -->
-            <!--     Content="Quick setup qBittorrent" /> -->
+            <!--  <Button  -->
+            <!--  Margin="8,0"  -->
+            <!--  VerticalAlignment="Center"  -->
+            <!--  Command="{s:Action QuickSetupQBittorrent,  -->
+            <!--  ActionNotFound=Disable}"  -->
+            <!--  Content="Quick setup qBittorrent" />  -->
         </StackPanel>
-        <!-- -->
-        <!-- <StackPanel -->
-        <!--     Grid.Row="0" -->
-        <!--     Grid.Column="1" -->
-        <!--     Margin="8,0,0,8" -->
-        <!--     VerticalAlignment="Center" -->
-        <!--     Orientation="Horizontal"> -->
-        <!-- -->
+        <!--    -->
+        <!--  <StackPanel  -->
+        <!--  Grid.Row="0"  -->
+        <!--  Grid.Column="1"  -->
+        <!--  Margin="8,0,0,8"  -->
+        <!--  VerticalAlignment="Center"  -->
+        <!--  Orientation="Horizontal">  -->
+        <!--    -->
         <!--     <TextBlock VerticalAlignment="Center"> -->
-        <!--         Manual setup qBittorrent -->
+        <!--  Manual setup qBittorrent  -->
         <!--     </TextBlock> -->
         <!-- </StackPanel> -->
 
@@ -140,22 +140,23 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{Binding ConnectionStatus}"
-                           VerticalAlignment="Center" />
-                <Button Grid.Column="1" 
-                        Command="{s:Action TestConnection, ActionNotFound=Disable}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
-                        Content="Test connection" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding ConnectionStatus}" />
+                <Button
+                    Grid.Column="1"
+                    Command="{s:Action TestConnection,
+                                       ActionNotFound=Disable}"
+                    Content="Test connection"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
             </Grid>
         </Grid>
 
 
         <ScrollViewer
-            adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="AlwaysExpand"
-            adonisExtensions:ScrollViewerExtension.HorizontalScrollBarExpansionMode="NeverExpand"
             Grid.Row="1"
             Grid.Column="1"
             Margin="8,0,0,0"
+            adonisExtensions:ScrollViewerExtension.HorizontalScrollBarExpansionMode="NeverExpand"
+            adonisExtensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="AlwaysExpand"
             VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.RowDefinitions>
@@ -221,8 +222,7 @@
                     Margin="0,8,0,4"
                     TextWrapping="Wrap">
                     Step 5:<LineBreak />
-                    Fill out the settings on the left
-                    <LineBreak />
+                    Fill out the settings on the left<LineBreak />
                 </TextBlock>
 
             </Grid>

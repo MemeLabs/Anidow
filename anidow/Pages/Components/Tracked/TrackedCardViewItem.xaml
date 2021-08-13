@@ -14,7 +14,10 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Border Padding="2" CornerRadius="4" MouseLeftButtonDown="{s:Action CardEditAnime}">
+    <Border
+        Padding="2"
+        CornerRadius="4"
+        MouseLeftButtonDown="{s:Action CardEditAnime}">
 
         <!--<Border.RenderTransform>
                 <ScaleTransform />
@@ -74,9 +77,9 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Use a VisualBrush of 'mask' as the opacity mask -->
+                <!--  Use a VisualBrush of 'mask' as the opacity mask  -->
                 <Grid.OpacityMask>
-                    <VisualBrush Visual="{Binding ElementName=Mask}"/>
+                    <VisualBrush Visual="{Binding ElementName=Mask}" />
                 </Grid.OpacityMask>
 
                 <Image

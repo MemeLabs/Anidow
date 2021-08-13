@@ -1,29 +1,31 @@
-<UserControl x:Class="Anidow.Pages.MainView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Anidow.Pages"
-             xmlns:stylet="clr-namespace:Stylet;assembly=Stylet"
-             xmlns:s="https://github.com/canton7/Stylet"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance local:MainViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
+<UserControl
+    x:Class="Anidow.Pages.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Anidow.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:stylet="clr-namespace:Stylet;assembly=Stylet"
+    d:DataContext="{d:DesignInstance local:MainViewModel}"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
     <Grid>
         <TabControl
             DisplayMemberPath="DisplayName"
-            SelectedIndex="0"
             ItemsSource="{Binding Items, Mode=OneWay}"
+            SelectedIndex="0"
             SelectedItem="{Binding ActiveItem, Mode=TwoWay}"
             Style="{StaticResource TabControlCustom}">
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="stylet:Screen">
                     <ContentControl
-                        HorizontalContentAlignment="Stretch"
-                        IsTabStop="False"
                         Margin="2"
+                        HorizontalContentAlignment="Stretch"
                         VerticalContentAlignment="Stretch"
-                        s:View.Model="{Binding}" />
+                        s:View.Model="{Binding}"
+                        IsTabStop="False" />
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

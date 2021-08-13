@@ -1,23 +1,25 @@
 ﻿<UserControl
-    d:DataContext="{d:DesignInstance tracked:TrackedOverViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d"
     x:Class="Anidow.Pages.Components.Tracked.TrackedCardView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:extensions1="clr-namespace:Anidow.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:tracked="clr-namespace:Anidow.Pages.Components.Tracked"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI">
+    d:DataContext="{d:DesignInstance tracked:TrackedOverViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <Grid>
-        <ItemsControl ItemsSource="{Binding Items}" Margin="2">
+        <ItemsControl Margin="2" ItemsSource="{Binding Items}">
             <ItemsControl.Template>
                 <ControlTemplate TargetType="{x:Type ItemsControl}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" extensions1:TouchScrolling.IsEnabled="True"
-                                  extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay">
+                    <ScrollViewer
+                        extensions1:TouchScrolling.IsEnabled="True"
+                        extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
+                        VerticalScrollBarVisibility="Auto">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>

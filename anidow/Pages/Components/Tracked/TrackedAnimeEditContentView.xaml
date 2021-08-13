@@ -1,10 +1,7 @@
 ﻿<UserControl
-    d:DataContext="{d:DesignInstance tracked:TrackedAnimeEditContentViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d"
     x:Class="Anidow.Pages.Components.Tracked.TrackedAnimeEditContentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUI="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -18,7 +15,10 @@
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:tracked="clr-namespace:Anidow.Pages.Components.Tracked"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    d:DataContext="{d:DesignInstance tracked:TrackedAnimeEditContentViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -26,10 +26,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Border
-            Background="{DynamicResource {x:Static adonisUI:Brushes.AccentBrush}}"
             Grid.Row="0"
             Margin="4,2,4,8"
-            Padding="4">
+            Padding="4"
+            Background="{DynamicResource {x:Static adonisUI:Brushes.AccentBrush}}">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -41,60 +41,60 @@
                 </Grid.ColumnDefinitions>
 
                 <Button
+                    Width="50"
+                    HorizontalAlignment="Left"
                     Command="{s:Action Close}"
                     Content="{iconPacks:FontAwesome ArrowLeftSolid}"
                     Foreground="White"
-                    HorizontalAlignment="Left"
                     Style="{DynamicResource {x:Static adonisUI:Styles.AccentToolbarButton}}"
-                    ToolTip="Go back"
-                    Width="50" />
+                    ToolTip="Go back" />
 
                 <TextBlock
-                    FontWeight="SemiBold"
-                    Foreground="White"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    FontWeight="SemiBold"
+                    Foreground="White">
                     Edit Anime
                 </TextBlock>
 
                 <TextBlock
                     Grid.Column="2"
-                    HorizontalAlignment="Right"
                     Margin="8,0,4,0"
-                    Text="{Binding Anime.Notification, Mode=OneWay}"
-                    VerticalAlignment="Center" />
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Text="{Binding Anime.Notification, Mode=OneWay}" />
 
                 <Button
+                    Grid.Column="3"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
                     Command="{s:Action SaveAnime,
                                        ActionNotFound=Disable}"
                     Content="Save"
-                    Grid.Column="3"
-                    Margin="4,0"
-                    ToolTip="Save changes"
-                    VerticalAlignment="Center" />
+                    ToolTip="Save changes" />
 
                 <Button
-                    Background="#F44336"
-                    Command="{s:Action Delete,
-                                       ActionNotFound=Disable}"
-                    Content="Delete"
-                    Foreground="White"
                     Grid.Column="4"
                     Margin="4,0,0,0"
                     VerticalAlignment="Center"
                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                    extensions:RippleExtension.BackgroundBrush="#EF5350" />
+                    extensions:RippleExtension.BackgroundBrush="#EF5350"
+                    Background="#F44336"
+                    Command="{s:Action Delete,
+                                       ActionNotFound=Disable}"
+                    Content="Delete"
+                    Foreground="White" />
             </Grid>
 
         </Border>
         <ScrollViewer
             Grid.Row="1"
-            VerticalScrollBarVisibility="Auto"
-            extensions1:TouchScrolling.IsEnabled="True">
-            <Grid Margin="2">
+            extensions1:TouchScrolling.IsEnabled="True"
+            VerticalScrollBarVisibility="Auto">
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="160" Width="160" />
+                    <ColumnDefinition Width="160" MinWidth="160" />
                     <ColumnDefinition Width="2" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -106,28 +106,28 @@
 
 
                 <Image
-                    Grid.Column="0"
                     Grid.Row="0"
-                    Margin="4,0,4,8"
+                    Grid.Column="0"
+                    Margin="0,0,4,8"
+                    VerticalAlignment="Top"
                     RenderOptions.BitmapScalingMode="HighQuality"
                     Source="{Binding Anime.CoverData.FilePath, IsAsync=True}"
-                    VerticalAlignment="Top"
                     Visibility="{Binding Anime.CoverData.File, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
 
                 <GridSplitter
-                    Grid.Column="1"
                     Grid.Row="0"
-                    VerticalAlignment="Stretch"
-                    Width="2" />
+                    Grid.Column="1"
+                    Width="2"
+                    VerticalAlignment="Stretch" />
 
                 <Border
-                    Background="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}"
-                    CornerRadius="4"
-                    Grid.Column="2"
                     Grid.Row="0"
-                    Margin="4,0,4,8"
+                    Grid.Column="2"
+                    Margin="4,0,0,8"
                     Padding="4"
-                    extensions:LayerExtension.IncreaseLayer="True">
+                    extensions:LayerExtension.IncreaseLayer="True"
+                    Background="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}"
+                    CornerRadius="4">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -142,20 +142,20 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock
-                            FontSize="16"
-                            FontWeight="SemiBold"
                             Grid.ColumnSpan="3"
                             Margin="4"
+                            FontSize="16"
+                            FontWeight="SemiBold"
                             Text="{Binding Anime.Name}"
                             TextWrapping="Wrap" />
                         <Separator
+                            Grid.Row="1"
                             Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Grid.Row="1" />
+                            Grid.ColumnSpan="3" />
 
                         <Grid
-                            Grid.Column="0"
                             Grid.Row="2"
+                            Grid.Column="0"
                             Margin="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -170,10 +170,10 @@
                         </Grid>
 
                         <Grid
-                            Grid.Column="1"
                             Grid.Row="2"
-                            IsEnabled="False"
+                            Grid.Column="1"
                             Margin="4"
+                            IsEnabled="False"
                             Opacity=".3">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -182,8 +182,8 @@
                             <TextBlock Margin="0,0,0,4" Text="Score:" />
                             <ComboBox
                                 Grid.Row="1"
-                                SelectedItem="{Binding Anime.Score, Mode=TwoWay}"
-                                extensions:LayerExtension.Layer="2">
+                                extensions:LayerExtension.Layer="2"
+                                SelectedItem="{Binding Anime.Score, Mode=TwoWay}">
                                 <system:Int16>1</system:Int16>
                                 <system:Int16>2</system:Int16>
                                 <system:Int16>3</system:Int16>
@@ -199,8 +199,8 @@
                         </Grid>
 
                         <Grid
-                            Grid.Column="0"
                             Grid.Row="3"
+                            Grid.Column="0"
                             Margin="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -211,8 +211,8 @@
                         </Grid>
 
                         <Grid
-                            Grid.Column="1"
                             Grid.Row="3"
+                            Grid.Column="1"
                             Margin="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -225,26 +225,24 @@
                             </ComboBox>
                         </Grid>
                         <Grid
+                            Grid.Row="4"
                             Grid.Column="0"
                             Grid.ColumnSpan="3"
-                            Grid.Row="4"
                             Margin="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock Margin="0,0,0,4" Text="Group:" />
-                            <TextBox Grid.Row="1"
-                                     Text="{Binding Anime.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox Grid.Row="1" Text="{Binding Anime.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </Grid>
                 </Border>
 
                 <Grid
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
                     Grid.Row="1"
-                    Margin="4">
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -252,10 +250,10 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock
-                        FontWeight="Bold"
                         Margin="4,0,4,4"
-                        Text="Folder:"
-                        VerticalAlignment="Center" />
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Folder:" />
 
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -270,76 +268,77 @@
                             TextWrapping="Wrap" />
 
                         <Button
+                            Grid.Column="1"
+                            Margin="8,0,8,0"
                             Command="{s:Action OpenFolderBrowserDialog,
                                                ActionNotFound=Disable}"
                             Content="{iconPacks:FontAwesome FolderPlusSolid}"
-                            Grid.Column="1"
-                            Margin="8,0,8,0"
                             ToolTip="Set new folder" />
 
                         <Button
+                            Grid.Column="2"
                             Command="{s:Action OpenFolderFilesWindow,
                                                ActionNotFound=Disable}"
                             Content="{iconPacks:FontAwesome FolderOpenSolid}"
-                            Grid.Column="2"
                             ToolTip="Open folder" />
                     </Grid>
 
                     <Expander
                         Grid.Row="2"
+                        Margin="0,8"
+                        extensions:LayerExtension.IncreaseLayer="True"
                         Header="{Binding Anime.Episodes}"
                         HeaderStringFormat="{}{0} Episodes"
-                        Margin="0,8"
                         Style="{StaticResource ExpanderCustom}"
-                        extensions:LayerExtension.IncreaseLayer="True">
+                        Visibility="{Binding Anime.Episodes, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
                         <ListView
-                            ItemContainerStyle="{StaticResource ListViewItemBase}"
-                            ItemsSource="{Binding Anime.EpisodeList, Mode=OneWay}"
                             extensions:GridViewSortExtension.AutoSort="True"
-                            listViewLayout:ListViewLayoutManager.Enabled="true">
+                            listViewLayout:ListViewLayoutManager.Enabled="true"
+                            ItemContainerStyle="{StaticResource ListViewItemBase}"
+                            ItemsSource="{Binding Anime.EpisodeList, Mode=OneWay}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn
-                                        Header="Name"
-                                        HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}"
                                         extensions:GridViewSortExtension.PropertyName="Name"
-                                        listViewLayout:RangeColumn.IsFillColumn="true">
+                                        listViewLayout:RangeColumn.IsFillColumn="true"
+                                        Header="Name"
+                                        HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="models:Episode">
                                                 <TextBlock
-                                                    HorizontalAlignment="Stretch"
                                                     Margin="-10,0,0,0"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Center"
                                                     Text="{Binding Name}"
                                                     TextTrimming="CharacterEllipsis"
                                                     TextWrapping="NoWrap"
                                                     ToolTip="{Binding Name}"
-                                                    ToolTipService.Placement="Bottom"
-                                                    VerticalAlignment="Center" />
+                                                    ToolTipService.Placement="Bottom" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn
-                                        Header="Episode"
-                                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}"
                                         Width="85"
                                         extensions:GridViewSortExtension.PropertyName="EpisodeNum"
-                                        listViewLayout:FixedColumn.Width="85">
+                                        listViewLayout:FixedColumn.Width="85"
+                                        Header="Episode"
+                                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="models:Episode">
                                                 <TextBlock
-                                                    HorizontalAlignment="Left"
+                                                    Width="78"
                                                     Margin="-12,0"
+                                                    HorizontalAlignment="Left"
                                                     Text="{Binding EpisodeNum}"
-                                                    TextAlignment="Center"
-                                                    Width="78" />
+                                                    TextAlignment="Center" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn
-                                        CellTemplate="{DynamicResource WatchOpen}"
-                                        HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}"
                                         Width="70"
-                                        listViewLayout:FixedColumn.Width="70" />
+                                        listViewLayout:FixedColumn.Width="70"
+                                        CellTemplate="{DynamicResource WatchOpen}"
+                                        HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}" />
                                 </GridView>
                             </ListView.View>
                         </ListView>

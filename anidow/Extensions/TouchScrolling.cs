@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Anidow.Extensions
@@ -81,6 +82,10 @@ namespace Anidow.Extensions
                 && e.Source is ScrollViewer
                 || e.Source is TextBox
                 || e.Source is PasswordBox
+                || e.Source is RichTextBox
+                || e.Source is Run
+                || e.OriginalSource is Run
+                || e.OriginalSource is Paragraph
                 || e.OriginalSource.ToString() == "System.Windows.Controls.TextBoxView")
             {
                 return;

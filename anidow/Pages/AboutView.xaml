@@ -59,19 +59,19 @@
 
             <TextBlock Margin="0,0,0,4" Text="{Binding UpdateMessage}" />
             <Button
-                Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}"
                 Grid.Row="1"
                 HorizontalAlignment="Center"
                 Command="{s:Action CheckForUpdate,
                                    ActionNotFound=Disable}"
-                Content="Check for Updates" />
+                Content="Check for Updates"
+                Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
             <Button
-                HorizontalAlignment="Center"
-                Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
                 Grid.Row="1"
+                HorizontalAlignment="Center"
                 Command="{s:Action UpdateNow,
                                    ActionNotFound=Disable}"
-                Content="Update now" />
+                Content="Update now"
+                Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
 
         </Grid>
 
