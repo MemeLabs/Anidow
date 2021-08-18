@@ -292,6 +292,7 @@
                         Style="{StaticResource ExpanderCustom}"
                         Visibility="{Binding Anime.Episodes, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
                         <ListView
+                            Margin="0,2,0,8"
                             extensions:GridViewSortExtension.AutoSort="True"
                             listViewLayout:ListViewLayoutManager.Enabled="true"
                             ItemContainerStyle="{StaticResource ListViewItemBase}"
