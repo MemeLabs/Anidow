@@ -26,8 +26,7 @@
         TargetType="ListViewItem">
         <Style.Triggers>
             <DataTrigger Binding="{Binding HomeHighlight}" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
             </DataTrigger>
         </Style.Triggers>
         <Setter Property="ContextMenu">
@@ -54,8 +53,7 @@
                     <Separator />
                     <MenuItem CommandParameter="{Binding}" Icon="{iconPacks:FontAwesome TrashSolid}">
                         <MenuItem.Header>
-                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
-                                       Text="Delete" />
+                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" Text="Delete" />
                         </MenuItem.Header>
 
                         <MenuItem
@@ -95,8 +93,7 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Highlight}" Value="true">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

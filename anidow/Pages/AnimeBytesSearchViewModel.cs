@@ -161,34 +161,36 @@ namespace Anidow.Pages
             ChangeActiveItem(null, false);
         }
 
-        public async Task Download(AnimeBytesScrapeAnime anime)
+        public async Task Download(AnimeBytesScrapeAnime item)
         {
-            var selectedTorrent = anime.SelectedTorrent;
+            var selectedTorrent = item.SelectedTorrent;
 
             if (string.IsNullOrWhiteSpace(selectedTorrent.Folder))
             {
                 return;
             }
 
+            item.CanDownload = false;
+            
             var (success, torrent) = await _torrentService.Download(selectedTorrent);
-            if (!success)
+            if (success)
             {
-                return;
+                _eventAggregator.PublishOnUIThread(new DownloadEvent
+                {
+                    Item = item,
+                    Torrent = torrent,
+                });
             }
 
-
-            _eventAggregator.PublishOnUIThread(new DownloadEvent
-            {
-                Item = anime,
-                Torrent = torrent,
-            });
+            await Task.Delay(100);
+            item.CanDownload = true;
         }
 
-        public void OpenFolderBrowserDialog(AnimeBytesScrapeAnime anime)
+        public void OpenFolderBrowserDialog(AnimeBytesScrapeAnime item)
         {
             using var dialog = new FolderBrowserDialog
             {
-                SelectedPath = anime.Folder ?? Directory.GetCurrentDirectory(),
+                SelectedPath = item.Folder ?? Directory.GetCurrentDirectory(),
             };
             var result = dialog.ShowDialog();
             if (result != DialogResult.OK)
@@ -196,8 +198,8 @@ namespace Anidow.Pages
                 return;
             }
 
-            anime.Folder = dialog.SelectedPath;
-            foreach (var torrent in anime.Torrents) torrent.Folder = dialog.SelectedPath;
+            item.Folder = dialog.SelectedPath;
+            foreach (var torrent in item.Torrents) torrent.Folder = dialog.SelectedPath;
         }
 
         public void OpenExternalLink(AnimeBytesScrapeAnime item)

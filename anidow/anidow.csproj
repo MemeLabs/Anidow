@@ -20,8 +20,7 @@
 		<PackageProjectUrl>https://github.com/MemeLabs/Anidow</PackageProjectUrl>
 		<Copyright>© 2020-2021 MemeLabs</Copyright>
 		<RepositoryUrl>https://github.com/MemeLabs/Anidow</RepositoryUrl>
-		<PackageLicenseFile></PackageLicenseFile>
-		<PackageTags>anime, nyaa, manga, animebytes, wpf, automation, torrent</PackageTags>
+		<PackageTags>anime, nyaa, manga, animebytes, wpf, automation, torrent, c#, mvvm, stylet</PackageTags>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 	</PropertyGroup>
 

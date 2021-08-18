@@ -20,5 +20,6 @@ namespace Anidow.Model
         public string Downloads { get; set; }
         public string DownloadLink { get; set; }
         public string Folder { get; set; }
+        public bool CanDownload { get; set; } = true;
     }
 }

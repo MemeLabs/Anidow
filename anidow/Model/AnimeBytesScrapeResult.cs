@@ -102,6 +102,8 @@ namespace Anidow.Model
                 return list;
             }
         }
+
+        [JsonIgnore] public bool CanDownload { get; set; } = true;
     }
 
     public class AnimeBytesScrapeTorrent : ObservableObject, ITorrentItem

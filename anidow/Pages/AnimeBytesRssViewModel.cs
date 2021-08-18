@@ -132,18 +132,20 @@ namespace Anidow.Pages
 
         public async Task Download(AnimeBytesTorrentItem item)
         {
+            item.CanDownload = false;
             _logger.Information($"downloading {item.Name}");
             var (success, torrent) = await _torrentService.Download(item);
-            if (!success)
+            if (success)
             {
-                return;
+                _eventAggregator.PublishOnUIThread(new DownloadEvent
+                {
+                    Item = item,
+                    Torrent = torrent,
+                });
             }
 
-            _eventAggregator.PublishOnUIThread(new DownloadEvent
-            {
-                Item = item,
-                Torrent = torrent,
-            });
+            await Task.Delay(100);
+            item.CanDownload = true;
         }
 
         public async Task Track(AnimeBytesTorrentItem item)

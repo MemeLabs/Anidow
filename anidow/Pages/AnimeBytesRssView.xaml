@@ -308,7 +308,8 @@
 
                             <Button
                                 Grid.Column="1"
-                                Command="{s:Action Download}"
+                                Command="{s:Action Download, ActionNotFound=Disable}"
+                                IsEnabled="{Binding ActiveItem.CanDownload}"
                                 CommandParameter="{Binding ActiveItem}"
                                 Content="Download"
                                 Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />

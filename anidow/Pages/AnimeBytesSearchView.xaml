@@ -386,6 +386,7 @@
 
                             <Button
                                 Grid.Column="2"
+                                IsEnabled="{Binding ActiveItem.CanDownload}"
                                 Command="{s:Action Download}"
                                 CommandParameter="{Binding ActiveItem}"
                                 Content="Download"

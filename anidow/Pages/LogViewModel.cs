@@ -16,6 +16,7 @@ namespace Anidow.Pages
 
         public IObservableCollection<LogEvent> Items { get; }
 
+        private LogEvent _lastLogEvent;
         public async void Emit(LogEvent logEvent)
         {
             try
@@ -30,11 +31,16 @@ namespace Anidow.Pages
             switch (logEvent.Level)
             {
                 case LogEventLevel.Error:
-                    await NotificationUtil.ShowAsync("Error",
-                        $"{logEvent.RenderMessage()}\n\n{logEvent.Exception?.Message}",
-                        NotificationType.Error);
+                    if (_lastLogEvent.Exception?.Message != logEvent.Exception?.Message)
+                    {
+                        await NotificationUtil.ShowAsync("Error",
+                            $"{logEvent.RenderMessage()}\n\n{logEvent.Exception?.Message}",
+                            NotificationType.Error);
+                    }
                     break;
             }
+
+            _lastLogEvent = logEvent;
         }
     }
 }
