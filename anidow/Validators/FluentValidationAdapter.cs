@@ -29,8 +29,8 @@ namespace Anidow.Validators
             // we'll deadlock unless we continue on another thread.
             try
             {
-                return (await _validator.ValidateAsync(_subject, CancellationToken.None).ConfigureAwait(false))
-                       .Errors.Select(x => x.ErrorMessage);
+                var errors = await _validator.ValidateAsync(_subject, CancellationToken.None).ConfigureAwait(false);
+                return errors.Errors.Select(x => x.ErrorMessage);
             }
             catch (Exception)
             {

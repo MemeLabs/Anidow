@@ -3,14 +3,16 @@ using System;
 using Anidow.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Anidow.Migrations
 {
     [DbContext(typeof(TrackContext))]
-    partial class TrackContextModelSnapshot : ModelSnapshot
+    [Migration("20210824185906_NotifyDownloaded")]
+    partial class NotifyDownloaded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,7 +77,7 @@ namespace Anidow.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(DateTime.UtcNow);
+                        .HasDefaultValue(new DateTime(2021, 8, 24, 18, 59, 6, 377, DateTimeKind.Utc).AddTicks(4491));
 
                     b.Property<bool>("FirstStart")
                         .HasColumnType("INTEGER");
@@ -199,9 +201,6 @@ namespace Anidow.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsRegex")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("MustMatch")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("NotifyItemId")

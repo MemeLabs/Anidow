@@ -10,24 +10,34 @@ namespace Anidow.Services
     {
         public FeedStorageService()
         {
-            AnimeBytesRssFeedItems = new List<AnimeBytesTorrentItem>();
+            AnimeBytesAiringRssFeedItems = new List<AnimeBytesTorrentItem>();
+            AnimeBytesAllRssFeedItems = new List<AnimeBytesTorrentItem>();
             AnimeBytesSearchFeedItems = new List<AnimeBytesScrapeAnime>();
             NyaaRssFeedItems = new List<NyaaTorrentItem>();
         }
 
-        public event EventHandler OnAnimeBytesRssFeedItemsUpdatedEvent;
+        public event EventHandler OnAnimeBytesAiringRssFeedItemsUpdatedEvent;
+        public event EventHandler OnAnimeBytesAllRssFeedItemsUpdatedEvent;
         public event EventHandler OnAnimeBytesSearchFeedItemsUpdatedEvent;
         public event EventHandler OnNyaaRssFeedItemsUpdatedEvent;
         
-        public List<AnimeBytesTorrentItem> AnimeBytesRssFeedItems { get; set; }
+        public List<AnimeBytesTorrentItem> AnimeBytesAiringRssFeedItems { get; set; }
+        public List<AnimeBytesTorrentItem> AnimeBytesAllRssFeedItems { get; set; }
         public List<AnimeBytesScrapeAnime> AnimeBytesSearchFeedItems { get; set; }
         public List<NyaaTorrentItem> NyaaRssFeedItems { get; set; }
 
-        public void SetAnimeBytesRssFeedItems(IEnumerable<AnimeBytesTorrentItem> items)
+        public void SetAnimeBytesAiringRssFeedItems(IEnumerable<AnimeBytesTorrentItem> items)
         {
-            AnimeBytesRssFeedItems.Clear();
-            AnimeBytesRssFeedItems.AddRange(items);
-            OnAnimeBytesRssFeedItemsUpdatedEvent?.Invoke(this, EventArgs.Empty);
+            AnimeBytesAiringRssFeedItems.Clear();
+            AnimeBytesAiringRssFeedItems.AddRange(items);
+            OnAnimeBytesAiringRssFeedItemsUpdatedEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetAnimeBytesAllRssFeedItems(IEnumerable<AnimeBytesTorrentItem> items)
+        {
+            AnimeBytesAllRssFeedItems.Clear();
+            AnimeBytesAllRssFeedItems.AddRange(items);
+            OnAnimeBytesAllRssFeedItemsUpdatedEvent?.Invoke(this, EventArgs.Empty);
         }
         
         public void SetAnimeBytesSearchFeedItems(IEnumerable<AnimeBytesScrapeAnime> items)

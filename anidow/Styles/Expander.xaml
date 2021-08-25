@@ -362,60 +362,58 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
-                    <Border>
-                        <DockPanel Background="{TemplateBinding Background}">
-                            <ToggleButton
-                                Name="HeaderSite"
-                                BorderThickness="0"
-                                Content="{TemplateBinding Header}"
-                                ContentStringFormat="{TemplateBinding HeaderStringFormat}"
-                                ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-                                Cursor="Hand"
-                                DockPanel.Dock="Top"
-                                Focusable="False"
-                                Foreground="White"
-                                IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                IsTabStop="False"
-                                Opacity="0.87"
-                                Style="{StaticResource ExpanderDownHeaderStyle}"
-                                TextElement.FontSize="15" />
+                    <DockPanel Background="{TemplateBinding Background}">
+                        <ToggleButton
+                            Name="HeaderSite"
+                            BorderThickness="0"
+                            Content="{TemplateBinding Header}"
+                            ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                            ContentTemplate="{TemplateBinding HeaderTemplate}"
+                            ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                            Cursor="Hand"
+                            DockPanel.Dock="Top"
+                            Focusable="False"
+                            Foreground="White"
+                            IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsTabStop="False"
+                            Style="{StaticResource ExpanderDownHeaderStyle}"
+                            TextElement.FontSize="15" />
 
-                            <Border
-                                x:Name="ExpandSiteContainerWrapper"
+                        <Border
+                            x:Name="ExpandSiteContainerWrapper"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+                            DockPanel.Dock="Bottom">
+
+                            <ScrollViewer
+                                x:Name="ExpandSiteContainer"
+                                Padding="{TemplateBinding Padding}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
-                                DockPanel.Dock="Bottom">
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Hidden">
+                                <ScrollViewer.Height>
+                                    <MultiBinding Converter="{converters:MathConverter}" ConverterParameter="x*y">
+                                        <Binding ElementName="ExpandSite" Path="ActualHeight" />
+                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                    </MultiBinding>
+                                </ScrollViewer.Height>
+                                <ScrollViewer.Tag>
+                                    <system:Double>0.0</system:Double>
+                                </ScrollViewer.Tag>
 
-                                <ScrollViewer
-                                    x:Name="ExpandSiteContainer"
-                                    Margin="{TemplateBinding Padding}"
+                                <ContentPresenter
+                                    x:Name="ExpandSite"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    HorizontalContentAlignment="Stretch"
-                                    VerticalContentAlignment="Bottom"
-                                    HorizontalScrollBarVisibility="Disabled"
-                                    VerticalScrollBarVisibility="Hidden">
-                                    <ScrollViewer.Height>
-                                        <MultiBinding Converter="{converters:MathConverter}" ConverterParameter="x*y">
-                                            <Binding ElementName="ExpandSite" Path="ActualHeight" />
-                                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
-                                        </MultiBinding>
-                                    </ScrollViewer.Height>
-                                    <ScrollViewer.Tag>
-                                        <system:Double>0.0</system:Double>
-                                    </ScrollViewer.Tag>
+                                    Focusable="False" />
+                            </ScrollViewer>
+                        </Border>
+                    </DockPanel>
 
-                                    <ContentPresenter
-                                        x:Name="ExpandSite"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        Focusable="False" />
-                                </ScrollViewer>
-                            </Border>
-                        </DockPanel>
-                    </Border>
 
                     <ControlTemplate.Triggers>
 

@@ -83,7 +83,6 @@
             VerticalAlignment="Top"
             Orientation="Horizontal" />
 
-
         <ContentControl
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"

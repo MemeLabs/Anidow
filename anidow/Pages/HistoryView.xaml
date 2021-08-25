@@ -147,7 +147,7 @@
                                         Content="{iconPacks:FontAwesome TimesSolid,
                                                                         Width=10,
                                                                         Height=10}"
-                                        Style="{StaticResource DeleteButton}"
+                                        Style="{StaticResource HideButton}"
                                         ToolTip="Back to Home tab" />
 
                                     <TextBlock

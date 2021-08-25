@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AdonisUI.Controls;
+using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Services;
 using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.EntityFrameworkCore;
 using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;
@@ -38,12 +41,21 @@ namespace Anidow.Pages.Components.Tracked
         }
 
         public Anime Anime { get; private set; }
+        public BindableCollection<Episode> Episodes { get; set; }
 
         public bool CanSaveAnime { get; set; } = true;
 
         public void SetAnime(Anime anime)
         {
             Anime = anime;
+        }
+
+        protected override async void OnInitialActivate()
+        {
+            base.OnInitialActivate();
+            await using var db = new TrackContext();
+            var episodes = await db.Episodes.Where(e => e.AnimeId == Anime.GroupId).ToListAsync();
+            Episodes = new BindableCollection<Episode>(episodes);
         }
 
         public async Task Delete()

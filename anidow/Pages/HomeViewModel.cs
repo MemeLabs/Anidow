@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using AdonisUI.Controls;
@@ -31,6 +33,7 @@ namespace Anidow.Pages
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly HttpClient _httpClient;
+        private readonly NotifyService _notifyService;
         private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
         private readonly SettingsSetupWizardViewModel _settingsSetupWizardViewModel;
@@ -43,7 +46,8 @@ namespace Anidow.Pages
             IWindowManager windowManager, AnimeBytesService animeBytesService,
             TorrentService torrentService, SettingsService settingsService,
             SettingsSetupWizardViewModel settingsSetupWizardViewModel,
-            TaskbarIcon taskbarIcon, HttpClient httpClient)
+            TaskbarIcon taskbarIcon, HttpClient httpClient,
+            NotifyService notifyService)
         {
             _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -53,11 +57,13 @@ namespace Anidow.Pages
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _notifyService = notifyService ?? throw new ArgumentNullException(nameof(notifyService));
             _settingsSetupWizardViewModel = settingsSetupWizardViewModel ??
                                             throw new ArgumentNullException(nameof(settingsSetupWizardViewModel));
             DisplayName = "Home";
         }
 
+        public string BadgeContent { get; set; }
         public AnimeBytesService AnimeBytesService { get; set; }
         public bool CanForceCheck { get; set; } = true;
         public string NextCheckIn { get; private set; } = "00:00";
@@ -398,6 +404,17 @@ namespace Anidow.Pages
                       .ToRunEvery(1)
                       .Seconds()
             );
+#if DEBUG
+            JobManager.AddJob(
+                () => { GetActiveWindowTitle(); },
+                s => s.WithName("Home:GetActiveWindowTitle")
+                      .NonReentrant()
+                      .ToRunEvery(10)
+                      .Seconds()
+            );
+            
+#endif
+
         }
 
         private async Task DownloadMissingCovers()
@@ -429,12 +446,14 @@ namespace Anidow.Pages
             try
             {
                 // var animes = await db.Anime.ToListAsync();
-                foreach (var anime in db.Anime)
+                foreach (var anime in db.Anime.Include(a => a.CoverData))
                 {
                     anime.Created = anime.Created == default ? anime.Released : anime.Created;
                     var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);
                     anime.CoverData ??= coverData;
-                    var episodes = db.Episodes.Where(e => e.AnimeId == anime.GroupId);
+                    var episodes = db.Episodes
+                                     .Include(e => e.CoverData)
+                                     .Where(e => e.AnimeId == anime.GroupId);
                     foreach (var episode in episodes)
                     {
                         episode.CoverData ??= coverData;
@@ -572,5 +591,28 @@ namespace Anidow.Pages
                                         && ActiveItem.AnimeId != null;
             }
         }
+
+#if DEBUG
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        private string GetActiveWindowTitle()
+        {
+            const int nChars = 256;
+            var buff = new StringBuilder(nChars);
+            var handle = GetForegroundWindow();
+
+            if (GetWindowText(handle, buff, nChars) <= 0)
+            {
+                return null;
+            }
+
+            _logger.Debug($"current window -> {buff}");
+            return buff.ToString();
+        }
+#endif
     }
 }

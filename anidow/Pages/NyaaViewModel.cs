@@ -16,6 +16,7 @@ using Stylet;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using ListView = System.Windows.Controls.ListView;
 
+
 namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
@@ -36,7 +37,6 @@ namespace Anidow.Pages
             _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
             DisplayName = "Nyaa";
         }
-
         public string SearchText { get; set; } = string.Empty;
         public string LastSearch { get; set; }
 

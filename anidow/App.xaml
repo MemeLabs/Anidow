@@ -111,8 +111,6 @@
                                 SnapsToDevicePixels="True">
                                 <ScrollViewer
                                     Padding="{TemplateBinding Control.Padding}"
-                                    extensions1:TouchScrolling.IsEnabled="True"
-                                    extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
                                     CanContentScroll="True"
                                     Focusable="False"
                                     VerticalScrollBarVisibility="Auto">

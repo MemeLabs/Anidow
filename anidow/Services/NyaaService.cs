@@ -27,7 +27,7 @@ namespace Anidow.Services
 
         private SettingsModel Settings => _settingsService.Settings;
 
-        public async Task<List<NyaaTorrentItem>> GetFeedItems(string url)
+        public async Task<List<NyaaTorrentItem>> GetFeedItems(string url, bool addToFeedStorage = true)
         {
             var items = await GetFeedItems(url, ToDomain) ?? new List<NyaaTorrentItem>();
             var minSeeders = _settingsService.Settings.NyaaSettings.HideTorrentsBelowSeeders;
@@ -36,7 +36,7 @@ namespace Anidow.Services
                 return items.Where(i => i.Seeders >= minSeeders).ToList();
             }
 
-            _feedStorageService.SetNyaaRssFeedItems(items);
+            if(addToFeedStorage) _feedStorageService.SetNyaaRssFeedItems(items);
             return items;
         }
 

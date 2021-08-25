@@ -12,8 +12,8 @@ namespace Anidow.Database.Models
         public DateTime Created { get; set; } = DateTime.Now;
         public string File { get; set; }
 
-        public virtual ICollection<Anime> Animes { get; set; }
-        public virtual ICollection<Episode> Episodes { get; set; }
+        public List<Anime> Animes { get; set; }
+        public List<Episode> Episodes { get; set; }
         [NotMapped] public string FilePath => Path.Combine(Directory.GetCurrentDirectory(), File);
     }
 }

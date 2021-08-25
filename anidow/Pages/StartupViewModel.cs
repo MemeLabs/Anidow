@@ -20,8 +20,12 @@ namespace Anidow.Pages
         private readonly SettingsService _settingsService;
         private readonly UpdateManager _updateManager;
 
-        public StartupViewModel(UpdateManager updateManager, SettingsService settingsService, ILogger logger,
-            IWindowManager windowManager, SettingsSetupWizardViewModel setupWizardViewModel)
+        public StartupViewModel(
+            UpdateManager updateManager, 
+            SettingsService settingsService,
+            ILogger logger,
+            IWindowManager windowManager, 
+            SettingsSetupWizardViewModel setupWizardViewModel)
         {
             _updateManager = updateManager ?? throw new ArgumentNullException(nameof(updateManager));
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
@@ -36,13 +40,15 @@ namespace Anidow.Pages
 
         protected override void OnInitialActivate()
         {
-            LookForUpdates().ContinueWith(async _ =>
+            LookForUpdates()
+
+
+                .ContinueWith(async _ =>
             {
                 await PrepareDatabase()
                     .ContinueWith(async _ => await LoadSettings()
                         .ContinueWith(async _ => await ShowSetupWizard()));
             });
-            
         }
         
         private async Task ShowSetupWizard()

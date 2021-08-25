@@ -3,14 +3,16 @@ using System;
 using Anidow.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Anidow.Migrations
 {
     [DbContext(typeof(TrackContext))]
-    partial class TrackContextModelSnapshot : ModelSnapshot
+    [Migration("20210824084354_Notify")]
+    partial class Notify
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,7 +77,7 @@ namespace Anidow.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(DateTime.UtcNow);
+                        .HasDefaultValue(new DateTime(2021, 8, 24, 8, 43, 53, 920, DateTimeKind.Utc).AddTicks(7852));
 
                     b.Property<bool>("FirstStart")
                         .HasColumnType("INTEGER");
@@ -201,9 +203,6 @@ namespace Anidow.Migrations
                     b.Property<bool>("IsRegex")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("MustMatch")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("NotifyItemId")
                         .HasColumnType("INTEGER");
 
@@ -228,9 +227,6 @@ namespace Anidow.Migrations
 
                     b.Property<string>("DownloadLink")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("Downloaded")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Json")
                         .HasColumnType("TEXT");

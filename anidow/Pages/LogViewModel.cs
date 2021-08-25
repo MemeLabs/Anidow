@@ -28,6 +28,7 @@ namespace Anidow.Pages
                 //ignore
             }
 
+
             switch (logEvent.Level)
             {
                 case LogEventLevel.Error:

@@ -162,7 +162,15 @@ namespace Anidow.Extensions
             var dx = point.X - capture.Point.X;
             if (Math.Abs(dy) > 5 || Math.Abs(dx) > 5)
             {
-                target.CaptureMouse();
+                try
+                {
+                    target.CaptureMouse();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return;
+                }
             }
 
             if (target.VerticalScrollBarVisibility != ScrollBarVisibility.Disabled)

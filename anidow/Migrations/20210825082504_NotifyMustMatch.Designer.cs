@@ -3,14 +3,16 @@ using System;
 using Anidow.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Anidow.Migrations
 {
     [DbContext(typeof(TrackContext))]
-    partial class TrackContextModelSnapshot : ModelSnapshot
+    [Migration("20210825082504_NotifyMustMatch")]
+    partial class NotifyMustMatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,7 +77,7 @@ namespace Anidow.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(DateTime.UtcNow);
+                        .HasDefaultValue(new DateTime(2021, 8, 25, 8, 25, 3, 922, DateTimeKind.Utc).AddTicks(9033));
 
                     b.Property<bool>("FirstStart")
                         .HasColumnType("INTEGER");

@@ -50,10 +50,10 @@ namespace Anidow.Services
             _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
             _feedStorageService = feedStorageService ?? throw  new ArgumentNullException(nameof(feedStorageService));
             _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
-            _feedStorageService.OnAnimeBytesRssFeedItemsUpdatedEvent += async (_, _) =>
+            _feedStorageService.OnAnimeBytesAiringRssFeedItemsUpdatedEvent += async (_, _) =>
             {
                 if (!TrackerIsRunning) return;
-                await CheckForNewEpisodes(_feedStorageService.AnimeBytesRssFeedItems);
+                await CheckForNewEpisodes(_feedStorageService.AnimeBytesAiringRssFeedItems);
             };
         }
 
@@ -237,7 +237,20 @@ namespace Anidow.Services
                                            new List<AnimeBytesTorrentItem>(),
                 _ => throw new ArgumentOutOfRangeException(nameof(filter), filter, null),
             };
-            if (filter == AnimeBytesFilter.Airing && addToFeedStorage) _feedStorageService.SetAnimeBytesRssFeedItems(items);
+            if (addToFeedStorage)
+            {
+                switch (filter)
+                {
+                    case AnimeBytesFilter.All:
+                        _feedStorageService.SetAnimeBytesAllRssFeedItems(items);
+                        break;
+                    case AnimeBytesFilter.Airing:
+                        _feedStorageService.SetAnimeBytesAiringRssFeedItems(items);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(filter), filter, null);
+                }
+            }
             return items;
         }
 

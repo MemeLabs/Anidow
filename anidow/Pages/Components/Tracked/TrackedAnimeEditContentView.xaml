@@ -287,16 +287,16 @@
                         Grid.Row="2"
                         Margin="0,8"
                         extensions:LayerExtension.IncreaseLayer="True"
-                        Header="{Binding Anime.Episodes}"
+                        Header="{Binding Episodes.Count}"
                         HeaderStringFormat="{}{0} Episodes"
                         Style="{StaticResource ExpanderCustom}"
-                        Visibility="{Binding Anime.Episodes, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                        Visibility="{Binding Episodes.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
                         <ListView
-                            Margin="0,2,0,8"
+                            Margin="4"
                             extensions:GridViewSortExtension.AutoSort="True"
                             listViewLayout:ListViewLayoutManager.Enabled="true"
                             ItemContainerStyle="{StaticResource ListViewItemBase}"
-                            ItemsSource="{Binding Anime.EpisodeList, Mode=OneWay}">
+                            ItemsSource="{Binding Episodes, Mode=OneWay}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn

@@ -4,5 +4,6 @@
     {
         Nyaa,
         AnimeBytes,
+        All,
     }
 }

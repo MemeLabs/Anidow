@@ -119,7 +119,6 @@ namespace Anidow.Pages.Components.Tracked
             Items.Clear();
             foreach (var a in anime)
             {
-                a.EpisodeList = await db.Episodes.Where(e => e.AnimeId == a.GroupId).ToListAsync();
                 await DispatcherUtil.DispatchAsync(() => Items.Add(a));
             }
 
