@@ -60,7 +60,7 @@ namespace Anidow.Migrations
                     Link = table.Column<string>(type: "TEXT", nullable: true),
                     Json = table.Column<string>(type: "TEXT", nullable: true),
                     UserNotified = table.Column<bool>(type: "INTEGER", nullable: false),
-                    KeywordsData = table.Column<string>(type: "TEXT", nullable: true),
+                    Keywords = table.Column<string>(type: "TEXT", nullable: true),
                     NotifyItemId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

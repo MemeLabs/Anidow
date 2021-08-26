@@ -71,7 +71,7 @@
             Grid.Column="4"
             Command="{s:Action ToggleWatch}"
             CommandParameter="{Binding ActiveItem}"
-            Content="Toggle Watched"
+            Content="Toggle watched"
             Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
         <Button
             Grid.Column="6"

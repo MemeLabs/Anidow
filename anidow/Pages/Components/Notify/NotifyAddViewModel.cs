@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Automation;
 using System.Windows.Input;
 using Anidow.Database;
+using Anidow.Database.Models;
 using Anidow.Enums;
+using Anidow.Events;
 using Microsoft.EntityFrameworkCore;
 using Stylet;
 
@@ -15,25 +17,23 @@ namespace Anidow.Pages.Components.Notify
     public class NotifyAddViewModel : Screen
     {
         private readonly IEventAggregator _eventAggregator;
-        public NotifyItem Item { get; set; } = new();
-        public int ItemId { get; set; }
-        public BindableCollection<NotifyItemKeyword> Keywords { get; set; }
-        public bool IsEdit { get; set; }
+        public NotifyItem Item { get; set; }
+        private readonly bool _isEdit;
 
         public NotifyAddViewModel(IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
+            Item  = new NotifyItem();
             Title = "Add";
-            Keywords = new BindableCollection<NotifyItemKeyword>(Item.Keywords);
+            _eventAggregator = eventAggregator;
         }
 
         public NotifyAddViewModel(NotifyItem item, IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
             Item = item;
             Title = "Edit";
-            IsEdit = true;
-            Keywords = new BindableCollection<NotifyItemKeyword>(Item.Keywords);
+            
+            _isEdit = true;
+            _eventAggregator = eventAggregator;
         }
 
         public string Title { get; set; }
@@ -63,7 +63,7 @@ namespace Anidow.Pages.Components.Notify
             return true;
         }
 
-        public bool CanAdd => !IsEdit && CanCanAddMethod();
+        public bool CanAdd => !_isEdit && CanCanAddMethod();
         public async Task Add()
         {
             await using var db = new TrackContext();
@@ -94,7 +94,7 @@ namespace Anidow.Pages.Components.Notify
                 MustMatch = MustMatch,
             };
             
-            if (IsEdit)
+            if (_isEdit)
             {
                 await using var db = new TrackContext();
                 db.NotifyItemKeywords.Add(newKeyword);
@@ -102,7 +102,6 @@ namespace Anidow.Pages.Components.Notify
             }
             
             Item.Keywords.Add(newKeyword);
-            Keywords.Add(newKeyword);
 
             Keyword = string.Empty;
             NotifyOfPropertyChange(() => CanAdd);
@@ -112,9 +111,8 @@ namespace Anidow.Pages.Components.Notify
         public async Task RemoveKeyword(NotifyItemKeyword keyword)
         {
             Item.Keywords.Remove(keyword);
-            Keywords.Remove(keyword);
-
-            if (IsEdit)
+            
+            if (_isEdit)
             {
                 await using var db = new TrackContext();
                 db.Attach(keyword);
@@ -128,7 +126,7 @@ namespace Anidow.Pages.Components.Notify
         
         public async Task Close()
         {
-            if (IsEdit)
+            if (_isEdit)
             {
                 await using var db = new TrackContext();
                 db.Attach(Item);
@@ -137,15 +135,14 @@ namespace Anidow.Pages.Components.Notify
             }
             RequestClose(true);
         }
-
-
+        
         public void Keyword_OnPreviewKeyDown(object _, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
             {
                 return;
             }
-            AddKeyword().Wait();
+            AddKeyword().ConfigureAwait(false);
             e.Handled = true;
         }
     }

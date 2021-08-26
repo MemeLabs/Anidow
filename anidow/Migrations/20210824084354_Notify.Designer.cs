@@ -231,7 +231,7 @@ namespace Anidow.Migrations
                     b.Property<string>("Json")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("KeywordsData")
+                    b.Property<string>("Keywords")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Link")

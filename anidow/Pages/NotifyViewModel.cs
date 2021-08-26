@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AdonisUI.Controls;
 using Anidow.Database;
+using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Interfaces;
@@ -87,8 +88,12 @@ namespace Anidow.Pages
                             continue;
                         }
 
-                        DispatcherUtil.DispatchSync(() => { item.Matches.Add(nm); });
+                        DispatcherUtil.DispatchSync(() => item.Matches.Add(nm));
                     }
+                    
+                    item.Matches =
+                        new BindableCollection<NotifyItemMatch>(
+                            item.Matches.OrderBy(m => m.Seen).ThenByDescending(m => m.Created));
                 }
             }
             else
@@ -138,12 +143,8 @@ namespace Anidow.Pages
 
         public void Edit(NotifyItem item)
         {
-            var result = _windowManager.ShowDialog(new NotifyAddViewModel(item, _eventAggregator));
-            if (result is true)
-            {
-                item.OnPropertyChanged("KeywordsString");
-                NotifyOfPropertyChange(nameof(item));
-            }
+            _windowManager.ShowDialog(new NotifyAddViewModel(item, _eventAggregator));
+            item.OnPropertyChanged("KeywordsString");
         }
 
         public async Task ClearMatches(NotifyItem item)
@@ -283,69 +284,5 @@ namespace Anidow.Pages
             await Task.Delay(100);
             item.CanCheckNow = true;
         }
-    }
-
-    public class NotifyItemAddOrUpdateEvent
-    {
-        public NotifyItem Item { get; init; }
-        public bool IsUpdate { get; set; }
-    }
-
-    public class NotifyItem : ObservableObject
-    {
-        public int Id { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now;
-        public string Name { get; set; }
-        public NotifySite Site { get; set; } = NotifySite.All;
-        public bool MatchAll { get; set; }
-        public ICollection<NotifyItemKeyword> Keywords { get; set; } = new BindableCollection<NotifyItemKeyword>();
-        public ICollection<NotifyItemMatch> Matches { get; set; } = new BindableCollection<NotifyItemMatch>();
-
-        [NotMapped]
-        public string KeywordsString =>
-            Keywords is not null ? string.Join(", ", Keywords?.Select(k => k.Word)) : string.Empty;
-
-        [NotMapped] public bool Matched => Matches?.Count > 0;
-        [NotMapped] public int MatchesUnseen => Matches?.Count(m => !m.Seen) ?? 0;
-        [NotMapped] public bool CanCheckNow { get; set; } = true;
-    }
-
-    public class NotifyItemKeyword
-    {
-        public int Id { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now;
-
-        public string Word { get; set; }
-        public bool IsRegex { get; set; }
-        public bool IsCaseSensitive { get; set; }
-        public bool MustMatch { get; set; }
-
-        public int NotifyItemId { get; set; }
-        public virtual NotifyItem NotifyItem { get; set; }
-    }
-
-    public class NotifyItemMatch : ObservableObject
-    {
-        public int Id { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now;
-        public NotifySite Site { get; set; }
-        public bool Seen { get; set; }
-        public string Name { get; set; }
-        public string DownloadLink { get; set; }
-        public string Link { get; set; }
-        public string Json { get; set; }
-        public bool UserNotified { get; set; }
-        public bool Downloaded { get; set; }
-        public string KeywordsData { get; set; }
-
-        [NotMapped]
-        public string[] Keywords
-        {
-            get => KeywordsData?.Split("\0");
-            set => KeywordsData = string.Join("\0", value);
-        }
-
-        public int NotifyItemId { get; set; }
-        public virtual NotifyItem NotifyItem { get; set; }
     }
 }

@@ -26,6 +26,11 @@ namespace Anidow.Database
             modelBuilder.Entity<AppState>()
                         .Property(b => b.Created)
                         .HasDefaultValue(DateTime.UtcNow);
+            modelBuilder.Entity<NotifyItemMatch>()
+                        .Property(p => p.Keywords)
+                        .HasConversion(
+                            v => string.Join("\0", v),
+                            v => v.Split("\0", StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

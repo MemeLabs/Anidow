@@ -11,6 +11,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:utils="clr-namespace:Anidow.Utils"
@@ -55,7 +56,7 @@
             ItemsSource="{Binding Items}"
             Style="{DynamicResource ItemsControlVirtualizedStyle}">
             <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="local:NotifyItem">
+                <DataTemplate DataType="models:NotifyItem">
                     <Expander Margin="0,0,0,4" Style="{StaticResource ExpanderCustom}">
                         <Expander.Header>
                             <Grid>
@@ -78,6 +79,7 @@
                                         Text="{Binding Name}"
                                         TextTrimming="CharacterEllipsis"
                                         TextWrapping="NoWrap" />
+
                                     <TextBlock
                                         Margin="6,0"
                                         VerticalAlignment="Center"
@@ -88,6 +90,7 @@
                                         TextTrimming="CharacterEllipsis"
                                         TextWrapping="NoWrap"
                                         Visibility="{Binding KeywordsString, Converter={x:Static converters:IsStringNullOrEmptyToVisibilityConverter.Instance}}" />
+
                                 </StackPanel>
                                 <Border
                                     Grid.Column="1"
@@ -121,6 +124,7 @@
                                 MaxHeight="200"
                                 Margin="0,0,0,6"
                                 ItemsSource="{Binding Matches, Mode=OneWay}"
+                                Style="{DynamicResource ItemsControlVirtualizedStyle}"
                                 Visibility="{Binding Matches.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
 
                                 <ItemsControl.Template>
@@ -134,7 +138,7 @@
                                     </ControlTemplate>
                                 </ItemsControl.Template>
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="local:NotifyItemMatch">
+                                    <DataTemplate DataType="models:NotifyItemMatch">
                                         <Border
                                             Margin="0,0,0,6"
                                             Padding="6,4"

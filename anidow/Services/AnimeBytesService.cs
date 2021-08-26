@@ -293,8 +293,14 @@ namespace Anidow.Services
                 $"https://animebytes.tv/scrape.php?torrent_pass={passkey}&username={username}&type=anime&searchstr={search}";
             try
             {
-                var response = await _httpClient.GetStringAsync(url);
-                var anime = JsonSerializer.Deserialize<AnimeBytesScrapeResult>(response);
+                var response = await _httpClient.GetAsync(url);
+                if (response is not  {IsSuccessStatusCode: true})
+                {
+                    return default;
+                }
+
+                var body = await response.Content.ReadAsByteArrayAsync();
+                var anime = JsonSerializer.Deserialize<AnimeBytesScrapeResult>(body);
                 if (anime == null)
                 {
                     _logger.Error("AnimeBytesScrapeResult is null");
@@ -330,7 +336,7 @@ namespace Anidow.Services
                             JsonSerializer.Deserialize<List<string>>(json),
                         { } j when j.StartsWith("{") =>
                             JsonSerializer.Deserialize<Dictionary<string, string>>(json)?.Values.ToList(),
-                        _ => new List<string>(),
+                        _ => default,
                     };
 
                     je = (JsonElement) a.Links;
@@ -340,7 +346,7 @@ namespace Anidow.Services
                     {
                         { } j when j.StartsWith("{") =>
                             JsonSerializer.Deserialize<Dictionary<string, string>>(json),
-                        _ => new Dictionary<string, string>(),
+                        _ => default,
                     };
                 }
                 _feedStorageService.SetAnimeBytesSearchFeedItems(anime.Groups);

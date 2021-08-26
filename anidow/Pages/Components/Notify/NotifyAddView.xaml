@@ -11,6 +11,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Anidow.Pages.Components.Notify"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:pages="clr-namespace:Anidow.Pages"
     xmlns:s="https://github.com/canton7/Stylet"
     Title="Setup Wizard"
@@ -167,7 +168,7 @@
                     Grid.Row="5"
                     Margin="0,4"
                     Padding="6"
-                    ItemsSource="{Binding Keywords, Mode=OneWay}">
+                    ItemsSource="{Binding Item.Keywords, Mode=OneWay}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel IsItemsHost="True" />
@@ -185,7 +186,7 @@
                         </ControlTemplate>
                     </ItemsControl.Template>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="pages:NotifyItemKeyword">
+                        <DataTemplate DataType="models:NotifyItemKeyword">
                             <Border
                                 Height="25"
                                 Margin="0,0,6,6"
