@@ -152,7 +152,7 @@ namespace Anidow.Services
                             continue;
                         }
 
-                        var torrent = torrentItems.SingleOrDefault(t =>
+                        var torrent = torrentItems.FirstOrDefault(t =>
                             t.hash.Equals(anime.TorrentId, StringComparison.InvariantCultureIgnoreCase));
                         
                         if (torrent is null)
