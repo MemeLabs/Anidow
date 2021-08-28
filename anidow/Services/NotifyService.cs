@@ -335,7 +335,8 @@ namespace Anidow.Services
 
         private void NotifyUser(NotifyItem item, int matches)
         {
-            _taskbarIcon.ShowBalloonTip("New Match(s) Found!", $"Found {matches} new match(s) for {item.Name}",
+            _taskbarIcon.ShowBalloonTip(
+                $"New {"match".ToQuantity(matches)} found!", $"Found {matches} new {"match".ToQuantity(matches, ShowQuantityAs.None)} for {item.Name}", 
                 BalloonIcon.Info);
         }
     }
