@@ -57,6 +57,7 @@ namespace Anidow.Pages
         protected override async void OnViewLoaded()
         {
             await LookForUpdates();
+            // causes ui freeze when not in Task.Run
             await Task.Run(async () => await PrepareDatabase());
             await LoadSettings();
             await ShowSetupWizard();

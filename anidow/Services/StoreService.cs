@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Serilog;
@@ -24,13 +23,15 @@ namespace Anidow.Services
                 return;
             }
 
-            var data = JsonSerializer.Serialize(value, new JsonSerializerOptions
+
+            await using var createStream = File.Create(path);
+            await JsonSerializer.SerializeAsync(createStream, value, new JsonSerializerOptions
             {
                 IgnoreNullValues = true,
                 WriteIndented = true,
                 IgnoreReadOnlyProperties = true,
             });
-            await File.WriteAllTextAsync(path, data, Encoding.UTF8);
+            await createStream.DisposeAsync();
         }
 
         public async Task<T> Load<T>(string path)
