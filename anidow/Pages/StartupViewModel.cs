@@ -44,14 +44,22 @@ namespace Anidow.Pages
         public bool ShowError { get; set; }
         public string ErrorStack { get; set; }
 
-        protected override void OnInitialActivate()
+        // protected override void OnInitialActivate()
+        // {
+        //     LookForUpdates().ContinueWith(async _ =>
+        //     {
+        //         await PrepareDatabase()
+        //             .ContinueWith(async _ => await LoadSettings()
+        //                 .ContinueWith(async _ => await ShowSetupWizard()));
+        //     });
+        // }
+
+        protected override async void OnViewLoaded()
         {
-            LookForUpdates().ContinueWith(async _ =>
-            {
-                await PrepareDatabase()
-                    .ContinueWith(async _ => await LoadSettings()
-                        .ContinueWith(async _ => await ShowSetupWizard()));
-            });
+            await LookForUpdates();
+            await Task.Run(async () => await PrepareDatabase());
+            await LoadSettings();
+            await ShowSetupWizard();
         }
 
         private async Task ShowSetupWizard()
