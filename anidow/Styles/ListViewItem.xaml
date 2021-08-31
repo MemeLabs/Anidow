@@ -100,7 +100,7 @@
 
 
     <Style
-        x:Key="ListViewItemAnimebytesRss"
+        x:Key="ListViewItemAnimeBytesRss"
         BasedOn="{StaticResource ListViewItemBase}"
         TargetType="ListViewItem">
         <Style.Triggers>

@@ -35,8 +35,6 @@ namespace Anidow.Services
         private readonly TaskbarIcon _taskbarIcon;
         private readonly TorrentService _torrentService;
         private readonly FeedStorageService _feedStorageService;
-        private int _initialRefreshTime;
-        private Timer _tracker;
 
         public AnimeBytesService(ILogger logger, IEventAggregator eventAggregator, HttpClient httpClient,
             SettingsService settingsService, TorrentService torrentService, FeedStorageService feedStorageService,
@@ -52,7 +50,6 @@ namespace Anidow.Services
             _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
             _feedStorageService.OnAnimeBytesAiringRssFeedItemsUpdatedEvent += async (_, _) =>
             {
-                if (!TrackerIsRunning) return;
                 await CheckForNewEpisodes(_feedStorageService.AnimeBytesAiringRssFeedItems);
             };
         }
@@ -69,60 +66,6 @@ namespace Anidow.Services
         public DateTime LastCheck { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public void InitTracker()
-        {
-            _tracker = new Timer {Interval = 1000 * 60 * _settingsService.Settings.RefreshTime};
-            _tracker.Elapsed += TrackerOnElapsed;
-            _initialRefreshTime = _settingsService.Settings.RefreshTime;
-            _settingsService.SettingsSavedEvent += OnSettingsSavedEvent;
-#if RELEASE
-            if (!string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.PassKey))
-            {
-                StartTracker();
-            }
-#endif
-        }
-
-        public void StartTracker()
-        {
-            LastCheck = DateTime.Now;
-            _tracker.Start();
-            TrackerIsRunning = true;
-            _ = NotificationUtil.ShowAsync("Tracker", "Started!");
-        }
-
-        public void StopTracker()
-        {
-            _tracker.Stop();
-            TrackerIsRunning = false;
-            _ = NotificationUtil.ShowAsync("Tracker", "Stopped!");
-        }
-
-        private void OnSettingsSavedEvent(object sender, EventArgs e)
-        {
-            if (_settingsService.Settings.RefreshTime == _initialRefreshTime)
-            {
-                return;
-            }
-
-            StopTracker();
-
-            _initialRefreshTime = _settingsService.Settings.RefreshTime;
-            _tracker.Interval = 1000 * 60 * _initialRefreshTime;
-
-            if (string.IsNullOrWhiteSpace(_settingsService.Settings.AnimeBytesSettings.PassKey))
-            {
-                return;
-            }
-
-            StartTracker();
-        }
-
-        private async void TrackerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            await CheckForNewEpisodes();
-        }
 
         public async Task CheckForNewEpisodes([CanBeNull] List<AnimeBytesTorrentItem> feedItems = null)
         {
@@ -370,6 +313,25 @@ namespace Anidow.Services
                     var value = p.GetValue(obj, null);
                     p.SetValue(obj, HttpUtility.HtmlDecode(value as string), null);
                 }
+        }
+
+        public async Task<AnimeBytesStatsResponse> GetStats()
+        {
+            // https://animebytes.tv/api/stats/
+            var passkey = _settingsService.Settings.AnimeBytesSettings.PassKey;
+            if (string.IsNullOrWhiteSpace(passkey))
+            {
+                return null;
+            }
+
+            var url = $"https://animebytes.tv/api/stats/{passkey}";
+
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            var stats = await JsonSerializer.DeserializeAsync<AnimeBytesStatsResponse>(stream);
+            return stats;
         }
     }
 }

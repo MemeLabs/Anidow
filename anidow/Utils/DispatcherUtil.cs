@@ -7,6 +7,16 @@ namespace Anidow.Utils
 {
     public class DispatcherUtil
     {
+        public static async Task DispatchAsync(Func<Task> action)
+        {
+            if (Application.Current is not null)
+            {
+                await Application.Current?.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
+                return;
+            }
+
+            await action();
+        }
         public static async Task DispatchAsync(Action action)
         {
             if (Application.Current is not null)

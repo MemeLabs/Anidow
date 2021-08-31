@@ -198,7 +198,7 @@
                 VerticalOffset="4">
                 <Border
                     Padding="8"
-                    Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+                    Background="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}"
                     BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer2BorderBrush}}"
                     BorderThickness="2"
                     CornerRadius="4">
@@ -249,6 +249,7 @@
         </Grid>
         <Expander
             Grid.Row="1"
+            Margin="2,0"
             VerticalAlignment="Bottom"
             extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
             extensions:LayerExtension.IncreaseLayer="True"
@@ -342,55 +343,5 @@
                 </Grid>
             </Grid>
         </Expander>
-        <Border
-            Grid.Row="2"
-            Padding="2"
-            extensions:LayerExtension.IncreaseLayer="True"
-            extensions:LayerExtension.Layer="1"
-            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
-            <StackPanel Orientation="Horizontal">
-                <Button
-                    Command="{s:Action ForceCheck,
-                                       ActionNotFound=Disable}"
-                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentToolbarButton}}"
-                    ToolTip="Check now"
-                    ToolTipService.Placement="Right">
-                    <iconPacks:FontAwesome
-                        Width="10"
-                        Height="10"
-                        Kind="SyncAltSolid" />
-                </Button>
-                <TextBlock
-                    Margin="4,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Text="{Binding NextCheckIn}"
-                    ToolTip="next Check for new episodes/anime"
-                    ToolTipService.Placement="Top">
-                    <TextBlock.ContextMenu>
-                        <ContextMenu Placement="Top">
-                            <MenuItem
-                                s:View.ActionTarget="{Binding AnimeBytesService}"
-                                Command="{s:Action StartTracker,
-                                                   ActionNotFound=Disable}"
-                                Header="Start"
-                                Icon="{iconPacks:FontAwesome PlaySolid}"
-                                Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
-                            <MenuItem
-                                s:View.ActionTarget="{Binding AnimeBytesService}"
-                                Command="{s:Action StopTracker,
-                                                   ActionNotFound=Disable}"
-                                Header="Pause"
-                                Icon="{iconPacks:FontAwesome PauseSolid}"
-                                Visibility="{Binding AnimeBytesService.TrackerIsRunning, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
-                            <MenuItem
-                                Command="{s:Action ForceCheck}"
-                                Header="Check now"
-                                Icon="{iconPacks:FontAwesome SyncAltSolid}" />
-                        </ContextMenu>
-                    </TextBlock.ContextMenu>
-                </TextBlock>
-            </StackPanel>
-        </Border>
     </Grid>
 </UserControl>

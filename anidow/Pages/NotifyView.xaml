@@ -195,7 +195,7 @@
                                                                 <DataTrigger Binding="{Binding Site}" Value="Nyaa">
                                                                     <Setter Property="Background" Value="CornflowerBlue" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding Site}" Value="Animebytes">
+                                                                <DataTrigger Binding="{Binding Site}" Value="AnimeBytes">
                                                                     <Setter Property="Background" Value="HotPink" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>

@@ -131,7 +131,15 @@ namespace Anidow.Pages
                                 .Where(i => SiteFilter.HasFlag(i.Site))
                                 .OrderByDescending(i => i.Created)
                                 .ToListAsync();
-            foreach (var item in items) await DispatcherUtil.DispatchAsync(() => Items.Add(item));
+            foreach (var item in items)
+            {
+                item.Matches = new BindableCollection<NotifyItemMatch>(
+                    item.Matches
+                        .OrderBy(m => m.Seen)
+                        .ThenByDescending(m => m.Created)
+                );
+                await DispatcherUtil.DispatchAsync(() => Items.Add(item));
+            };
 
             UpdateBadgeContent();
         }
@@ -270,8 +278,9 @@ namespace Anidow.Pages
             switch (item.Site)
             {
                 case NotifySite.All:
-                    await _notifyService.NyaaJob(item.Id, null);
-                    await _notifyService.AnimeBytesJob(item.Id, null);
+                    var nyaaJob = _notifyService.NyaaJob(item.Id, null);
+                    var animeBytesJob = _notifyService.AnimeBytesJob(item.Id, null);
+                    await Task.WhenAll(nyaaJob, animeBytesJob);
                     break;
                 case NotifySite.AnimeBytes:
                     await _notifyService.AnimeBytesJob(item.Id, null);

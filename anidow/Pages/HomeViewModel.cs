@@ -15,6 +15,7 @@ using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Model;
 using Anidow.Pages.Components.Settings;
+using Anidow.Pages.Components.Status;
 using Anidow.Services;
 using Anidow.Utils;
 using BencodeNET.Torrents;
@@ -47,8 +48,10 @@ namespace Anidow.Pages
             TorrentService torrentService, SettingsService settingsService,
             SettingsSetupWizardViewModel settingsSetupWizardViewModel,
             TaskbarIcon taskbarIcon, HttpClient httpClient,
+            StatusViewModel statusViewModel,
             NotifyService notifyService)
         {
+            StatusViewModel = statusViewModel ?? throw new ArgumentNullException(nameof(statusViewModel));
             _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
@@ -65,8 +68,7 @@ namespace Anidow.Pages
 
         public string BadgeContent { get; set; }
         public AnimeBytesService AnimeBytesService { get; set; }
-        public bool CanForceCheck { get; set; } = true;
-        public string NextCheckIn { get; private set; } = "00:00";
+        public StatusViewModel StatusViewModel { get; }
         public Timer NextCheckTimer { get; set; }
         public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
         public bool IsEnabled => _settingsService != null && !_settingsService.Settings.FirstStart;
@@ -175,27 +177,6 @@ namespace Anidow.Pages
                 await LoadEpisodes();
                 await GetAiringEpisodesForToday();
             });
-        }
-
-        private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            if (!AnimeBytesService.TrackerIsRunning)
-            {
-                return;
-            }
-
-            var lastCheck = AnimeBytesService.LastCheck;
-            var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.Settings.RefreshTime);
-            NextCheckIn = $"{nextCheck - DateTime.Now:mm\\:ss}";
-        }
-
-        public async Task ForceCheck()
-        {
-            CanForceCheck = false;
-            await AnimeBytesService.CheckForNewEpisodes();
-            await GetAiringEpisodesForToday();
-            await Task.Delay(300);
-            CanForceCheck = true;
         }
 
         private string CreatePropertyEpisode(AnimeBytesScrapeAnime ab)
@@ -383,20 +364,10 @@ namespace Anidow.Pages
         {
             _eventAggregator.Subscribe(this);
 
-            NextCheckTimer = new Timer(100);
-            NextCheckTimer.Elapsed += NextCheckTimerOnElapsed;
-            NextCheckTimer.Start();
-
             Task.Run(async () => await LoadEpisodes());
             Task.Run(async () => await DownloadMissingCovers());
             Task.Run(async () => await GetAiringEpisodesForToday());
-
-            // Starting the tracker
-            if (_settingsService.Settings.StartTrackerAnimeBytesOnLaunch)
-            {
-                AnimeBytesService.InitTracker();
-            }
-
+            
             JobManager.AddJob(
                 () => { UpdateTorrents().Wait(); },
                 s => s.WithName("Home:UpdateTorrents")

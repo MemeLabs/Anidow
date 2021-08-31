@@ -65,52 +65,16 @@ namespace Anidow.Services
             foreach (var item in items) _ = AnimeBytesJob(item, _feedStorageService.AnimeBytesAllRssFeedItems);
         }
 
-        private void NotifyTrackerJob()
-        {
-            try
-            {
-                _nyaaService.GetFeedItems("https://nyaa.si/?page=rss&c=1_2&f=0").Wait();
-            }
-            catch (Exception)
-            {
-                // ignore 
-            }
-
-            try
-            {
-                var animeBytesPassKey = _settingsService.Settings.AnimeBytesSettings.PassKey;
-                if (string.IsNullOrWhiteSpace(animeBytesPassKey))
-                {
-                    return;
-                }
-
-                _animeBytesService.GetFeedItems(AnimeBytesFilter.All).Wait();
-            }
-            catch (Exception)
-            {
-                // ignore 
-            }
-        }
-
         public void Init()
         {
             _feedStorageService.OnAnimeBytesAllRssFeedItemsUpdatedEvent += OnOnAnimeBytesRssFeedItemsUpdatedEvent;
             _feedStorageService.OnNyaaRssFeedItemsUpdatedEvent += OnOnNyaaRssFeedItemsUpdatedEvent;
-            JobManager.AddJob(NotifyTrackerJob, s =>
-            {
-                s.WithName("NotifyService:NotifyTrackerJob")
-                 .NonReentrant()
-                 .ToRunNow()
-                 .AndEvery(5)
-                 .Minutes();
-            });
         }
 
         public void Stop()
         {
             _feedStorageService.OnAnimeBytesAllRssFeedItemsUpdatedEvent -= OnOnAnimeBytesRssFeedItemsUpdatedEvent;
             _feedStorageService.OnNyaaRssFeedItemsUpdatedEvent -= OnOnNyaaRssFeedItemsUpdatedEvent;
-            JobManager.RemoveJob("NotifyService:NotifyTrackerJob");
         }
 
         public async Task AnimeBytesJob(int id, List<AnimeBytesTorrentItem>? feedItems)
@@ -246,7 +210,7 @@ namespace Anidow.Services
                 return;
             }
 
-            feedItems ??= await _nyaaService.GetFeedItems("https://nyaa.si/?page=rss&c=1_2&f=0", false);
+            feedItems ??= await _nyaaService.GetFeedItems(NyaaFilter.NoFilter, "", false);
             if (feedItems is null)
             {
                 return;
