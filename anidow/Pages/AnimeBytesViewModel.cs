@@ -32,6 +32,7 @@ namespace Anidow.Pages
         }
 
         public AnimeBytesStats Stats { get; set; } = new();
+        public bool StatsLoading { get; set; }
 
         protected override void OnInitialActivate()
         {
@@ -45,6 +46,7 @@ namespace Anidow.Pages
 
         public async Task GetStats()
         {
+            StatsLoading = true;
             try
             {
                 var stats = await _service.GetStats();
@@ -62,8 +64,8 @@ namespace Anidow.Pages
             catch (Exception e)
             {
                 _logger.Error(e, "failed getting AnimeBytes stats");
-                throw;
             }
+            StatsLoading = false;
         }
         
         public void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

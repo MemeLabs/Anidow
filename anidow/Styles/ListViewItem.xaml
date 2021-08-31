@@ -28,6 +28,16 @@
             <DataTrigger Binding="{Binding HomeHighlight}" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
             </DataTrigger>
+            <!--override design for futureepisode
+            <DataTrigger Binding="{Binding IsFuture}" Value="True">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <TextBlock Text="LUL"></TextBlock>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>-->
         </Style.Triggers>
         <Setter Property="ContextMenu">
             <Setter.Value>
