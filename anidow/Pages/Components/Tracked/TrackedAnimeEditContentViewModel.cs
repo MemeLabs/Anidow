@@ -41,21 +41,12 @@ namespace Anidow.Pages.Components.Tracked
         }
 
         public Anime Anime { get; private set; }
-        public BindableCollection<Episode> Episodes { get; set; }
 
         public bool CanSaveAnime { get; set; } = true;
 
         public void SetAnime(Anime anime)
         {
             Anime = anime;
-        }
-
-        protected override async void OnInitialActivate()
-        {
-            base.OnInitialActivate();
-            await using var db = new TrackContext();
-            var episodes = await db.Episodes.Where(e => e.AnimeId == Anime.GroupId).ToListAsync();
-            Episodes = new BindableCollection<Episode>(episodes);
         }
 
         public async Task Delete()

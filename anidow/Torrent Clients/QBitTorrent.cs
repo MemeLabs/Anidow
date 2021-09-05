@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
-using Anidow.Database.Models;
 using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Services;
@@ -54,7 +53,7 @@ namespace Anidow.Torrent_Clients
             return false;
         }
 
-        public async Task<bool> Remove(Episode episode, bool withFile = false)
+        public async Task<bool> Remove(IEpisode episode, bool withFile = false)
         {
             if (string.IsNullOrEmpty(episode.TorrentId))
             {

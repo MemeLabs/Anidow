@@ -27,7 +27,6 @@ namespace Anidow.Services
             await using var createStream = File.Create(path);
             await JsonSerializer.SerializeAsync(createStream, value, new JsonSerializerOptions
             {
-                IgnoreNullValues = true,
                 WriteIndented = true,
                 IgnoreReadOnlyProperties = true,
             });

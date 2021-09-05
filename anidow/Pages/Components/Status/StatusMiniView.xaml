@@ -38,7 +38,8 @@
                 Content="{iconPacks:FontAwesome SyncSolid,
                                                 Height=10,
                                                 Width=10}"
-                Style="{DynamicResource {x:Static adonisUi:Styles.AccentToolbarButton}}" />
+                Style="{DynamicResource {x:Static adonisUi:Styles.AccentToolbarButton}}"
+                ToolTip="Refresh Nyaa now" />
         </StackPanel>
 
         <StackPanel
@@ -58,7 +59,8 @@
                 Content="{iconPacks:FontAwesome SyncSolid,
                                                 Height=10,
                                                 Width=10}"
-                Style="{DynamicResource {x:Static adonisUi:Styles.AccentToolbarButton}}" />
+                Style="{DynamicResource {x:Static adonisUi:Styles.AccentToolbarButton}}"
+                ToolTip="Refresh AnimeBytes (all)  now" />
         </StackPanel>
 
         <StackPanel
@@ -78,7 +80,8 @@
                 Content="{iconPacks:FontAwesome SyncSolid,
                                                 Height=10,
                                                 Width=10}"
-                Style="{DynamicResource {x:Static adonisUi:Styles.AccentToolbarButton}}" />
+                Style="{DynamicResource {x:Static adonisUi:Styles.AccentToolbarButton}}"
+                ToolTip="Refresh AnimeBytes (airing)  now" />
         </StackPanel>
 
     </Grid>

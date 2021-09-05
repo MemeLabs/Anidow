@@ -28,8 +28,8 @@
             <DataTrigger Binding="{Binding HomeHighlight}" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
             </DataTrigger>
-            <!--override design for futureepisode
-            <DataTrigger Binding="{Binding IsFuture}" Value="True">
+            <!--  override design for futureepisode  -->
+            <!--<DataTrigger Binding="{Binding IsFuture}" Value="True">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
@@ -80,6 +80,23 @@
                             Icon="{iconPacks:FontAwesome TrashSolid}" />
                     </MenuItem>
 
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="ListViewItemTrackedList"
+        BasedOn="{StaticResource ListViewItemBase}"
+        TargetType="ListViewItem">
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{s:Action ListEditAnime,
+                                           ActionNotFound=Disable}"
+                        CommandParameter="{Binding}"
+                        Header="Edit" />
                 </ContextMenu>
             </Setter.Value>
         </Setter>

@@ -25,11 +25,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Border
+        <GroupBox
             Grid.Row="0"
-            Margin="4,2,4,8"
-            Padding="4"
-            Background="{DynamicResource {x:Static adonisUI:Brushes.AccentBrush}}">
+            Margin="2"
+            extensions:LayerExtension.IncreaseLayer="True">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -53,6 +52,7 @@
                     Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
+                    FontSize="16"
                     FontWeight="SemiBold"
                     Foreground="White">
                     Edit Anime
@@ -87,9 +87,11 @@
                     Foreground="White" />
             </Grid>
 
-        </Border>
+        </GroupBox>
         <ScrollViewer
             Grid.Row="1"
+            Margin="2"
+            Padding="0"
             extensions1:TouchScrolling.IsEnabled="True"
             VerticalScrollBarVisibility="Auto">
             <Grid>
@@ -287,16 +289,16 @@
                         Grid.Row="2"
                         Margin="0,8"
                         extensions:LayerExtension.IncreaseLayer="True"
-                        Header="{Binding Episodes.Count}"
+                        Header="{Binding Anime.EpisodeList.Count}"
                         HeaderStringFormat="{}{0} Episodes"
                         Style="{StaticResource ExpanderCustom}"
-                        Visibility="{Binding Episodes.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                        Visibility="{Binding Anime.EpisodeList.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
                         <ListView
                             Margin="4"
                             extensions:GridViewSortExtension.AutoSort="True"
                             listViewLayout:ListViewLayoutManager.Enabled="true"
                             ItemContainerStyle="{StaticResource ListViewItemBase}"
-                            ItemsSource="{Binding Episodes, Mode=OneWay}">
+                            ItemsSource="{Binding Anime.EpisodeList, Mode=OneWay}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn

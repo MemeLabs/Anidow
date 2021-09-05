@@ -53,18 +53,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AdonisUI" Version="1.17.0" />
-		<PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.0" />
-		<PackageReference Include="BencodeNET" Version="4.0.0" />
-		<PackageReference Include="FluentScheduler" Version="5.5.1" />
+		<PackageReference Include="AdonisUI" Version="1.17.1"/>
+		<PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1"/>
+		<PackageReference Include="BencodeNET" Version="4.0.0"/>
+		<PackageReference Include="FluentScheduler" Version="5.5.1"/>
 		<PackageReference Include="Fody" Version="6.5.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.18" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
-		<PackageReference Include="Humanizer.Core" Version="2.11.10" />
-		<PackageReference Include="Jot" Version="2.1.8" />
+		<PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.18"/>
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.36"/>
+		<PackageReference Include="Humanizer.Core" Version="2.11.10"/>
+		<PackageReference Include="Jot" Version="2.1.8"/>
 		<PackageReference Include="MahApps.Metro.IconPacks.FontAwesome" Version="4.8.0" />
 		<PackageReference Include="Microsoft.AppCenter" Version="4.3.0" />
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.3.0" />

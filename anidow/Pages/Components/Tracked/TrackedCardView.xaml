@@ -17,6 +17,7 @@
             <ItemsControl.Template>
                 <ControlTemplate TargetType="{x:Type ItemsControl}">
                     <ScrollViewer
+                        Padding="0"
                         extensions1:TouchScrolling.IsEnabled="True"
                         extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
                         VerticalScrollBarVisibility="Auto">

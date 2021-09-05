@@ -13,6 +13,7 @@ using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Extensions;
+using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Pages.Components.Settings;
 using Anidow.Pages.Components.Status;
@@ -29,7 +30,7 @@ using Stylet;
 namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class HomeViewModel : Conductor<Episode>.Collection.OneActive, IHandle<DownloadEvent>,
+    public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<DownloadEvent>,
         IHandle<RefreshHomeEvent>, IHandle<AddToHomeEvent>
     {
         private readonly IEventAggregator _eventAggregator;
@@ -193,7 +194,7 @@ namespace Anidow.Pages
             }
         }
 
-        public async Task HideItem(Episode episode)
+        public async Task HideItem(IEpisode episode)
         {
             episode ??= ActiveItem;
             var index = Items.IndexOf(episode);
@@ -226,7 +227,7 @@ namespace Anidow.Pages
             }, null, TimeSpan.FromSeconds(5));
         }
 
-        public async Task DeleteItem(Episode episode)
+        public async Task DeleteItem(IEpisode episode)
         {
             episode ??= ActiveItem;
             var index = Items.IndexOf(episode);

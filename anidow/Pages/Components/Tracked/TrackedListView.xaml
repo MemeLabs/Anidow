@@ -4,10 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-    xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
+    xmlns:s="https://github.com/canton7/Stylet"
     xmlns:tracked="clr-namespace:Anidow.Pages.Components.Tracked"
     d:DataContext="{d:DesignInstance tracked:TrackedOverViewModel}"
     d:DesignHeight="450"
@@ -17,8 +17,9 @@
         Margin="2"
         extensions:GridViewSortExtension.AutoSort="True"
         listViewLayout:ListViewLayoutManager.Enabled="true"
-        ItemContainerStyle="{StaticResource ListViewItemBase}"
-        ItemsSource="{Binding Items, Mode=OneWay}">
+        ItemContainerStyle="{StaticResource ListViewItemTrackedList}"
+        ItemsSource="{Binding Items, Mode=OneWay}"
+        MouseDoubleClick="{s:Action OnMouseDoubleClickListEditAnime}">
         <ListView.View>
             <GridView AllowsColumnReorder="False">
                 <GridViewColumn
@@ -56,11 +57,6 @@
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-                <GridViewColumn
-                    Width="70"
-                    listViewLayout:FixedColumn.Width="70"
-                    CellTemplate="{DynamicResource EditCell}"
-                    HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}" />
             </GridView>
         </ListView.View>
     </ListView>

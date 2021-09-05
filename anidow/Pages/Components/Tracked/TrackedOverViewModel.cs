@@ -96,10 +96,10 @@ namespace Anidow.Pages.Components.Tracked
         {
             CanLoad = false;
             await using var db = new TrackContext();
-            var anime = await Task.Run(async () => await db.Anime
-                                                           .Include(a => a.CoverData)
-                                                           .OrderByDescending(a => a.Released)
-                                                           .ToListAsync());
+            var anime = await db.Anime
+                                .Include(a => a.CoverData)
+                                .OrderByDescending(a => a.Released)
+                                .ToListAsync();
 
             if (!string.IsNullOrWhiteSpace(Search))
             {
@@ -119,6 +119,8 @@ namespace Anidow.Pages.Components.Tracked
             Items.Clear();
             foreach (var a in anime)
             {
+                var episodes = db.Episodes.Where(e => e.AnimeId == a.GroupId);
+                a.EpisodeList = new BindableCollection<Episode>(episodes);
                 await DispatcherUtil.DispatchAsync(() => Items.Add(a));
             }
 
@@ -171,10 +173,16 @@ namespace Anidow.Pages.Components.Tracked
             _eventAggregator.Publish(new OpenAnimeEditEvent {Anime = anime});
         }
 
+        public void OnMouseDoubleClickListEditAnime(object sender, MouseButtonEventArgs e)
+        {
+            var listView = (ListView)sender;
+            var anime = (Anime)listView.SelectedItem;
+            ListEditAnime(anime);
+        }
+
         public void ListEditAnime(Anime anime)
         {
-            ChangeActiveItem(anime, false);
-            _eventAggregator.Publish(new OpenAnimeEditEvent {Anime = anime});
+            _eventAggregator.Publish(new OpenAnimeEditEvent { Anime = anime });
         }
 
         public void DeselectItem()
