@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Services;
 using FluentScheduler;
-using Humanizer;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using Stylet;
 
@@ -84,6 +78,11 @@ namespace Anidow.Pages.Components.Status
         
         private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
+            if (AppState is null)
+            {
+                return;
+            }
+
             if (RunningNyaa && IsOpen ||
                 AppState.ShowStatusMiniViewNyaa && RunningNyaa)
             {

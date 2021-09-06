@@ -147,7 +147,7 @@ namespace Anidow.Pages
                 {
                     LoadingMessage = "Found update! updating now...";
                     await Task.Delay(300);
-                    await _updateManager.Update(check, () => RequestClose());
+                    await _updateManager.Update(check, () => Application.Current.Shutdown());
                 }
             }
             catch (Exception e)

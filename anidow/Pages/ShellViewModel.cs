@@ -46,10 +46,10 @@ namespace Anidow.Pages
             {
                 ChangeActiveItem(mainViewModel, true);
                 CanToggleSettings = true;
+                Items.Add(mainViewModel);
+                Items.Add(settingsViewModel);
             };
             Items.Add(startupViewModel);
-            Items.Add(mainViewModel);
-            Items.Add(settingsViewModel);
             ActiveItem = startupViewModel;
         }
 
