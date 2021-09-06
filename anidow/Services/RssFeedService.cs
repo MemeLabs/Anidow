@@ -26,77 +26,75 @@ namespace Anidow.Services
         {
             if (string.IsNullOrWhiteSpace(url))
             {
-                _logger.Information("GetFeedItems - empty url");
-                return default;
+                _logger.Warning($"GetFeedItems - empty url '{url}'");
+                return null;
             }
 
-            var content = await GetRssFeedStringAsync(url);
-            if (content == default)
-            {
-                return default;
-            }
-
-            var feed = await Task.Run(() => ParseRssFeed(content));
+            var feed = ParseRssFeed(await GetRssFeedStringAsync(url));
 
             return feed?.Items.Select(func).ToList();
         }
 
-        private async Task<string> GetRssFeedStringAsync(string url)
+        private async Task<Stream> GetRssFeedStringAsync(string url)
         {
-            _logger.Information($"getting rss feed items from {url}");
+            _logger.Debug($"getting rss feed items from {url}");
             try
             {
                 var response = await _httpClient.GetAsync(url);
                 if (response is not {IsSuccessStatusCode: true})
                 {
-                    _logger.Information($"getting {url} returned null");
-                    return default;
+                    _logger.Warning($"getting {url} returned null");
+                    return null;
                 }
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.Information($"getting {url} returned unsuccessful status code {response.StatusCode}");
-                    return default;
+                    _logger.Warning($"getting {url} returned unsuccessful status code {response.StatusCode}");
+                    return null;
                 }
 
                 if (response.Content.Headers.ContentType == null)
                 {
                     _logger.Warning($"got empty ContentType {url}");
-                    return default;
+                    return null;
                 }
 
                 var mediaType = response.Content.Headers.ContentType.MediaType;
 
                 if (mediaType == "application/xml")
                 {
-                    var content = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStreamAsync();
 
                     return content;
                 }
 
                 _logger.Error($"wrong content-type, expected 'application/xml' got '{mediaType}'");
 
-                return default;
+                return null;
             }
             catch (Exception e)
             {
                 _logger.Error(e, "failed getting rss feed");
-                return default;
+                return null;
             }
         }
 
-        private SyndicationFeed ParseRssFeed(string content)
+        private SyndicationFeed ParseRssFeed(Stream contentStream)
         {
+            if (contentStream is null)
+            {
+                return null;
+            }
             try
             {
-                var xmlReader = XmlReader.Create(new StringReader(content));
+                var xmlReader = XmlReader.Create(contentStream);
                 var feed = SyndicationFeed.Load(xmlReader);
                 return feed;
             }
             catch (Exception e)
             {
                 _logger.Error(e, "error parsing xml content");
-                return default;
+                return null;
             }
         }
 

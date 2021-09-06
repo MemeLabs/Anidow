@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using AdonisUI.Controls;
@@ -11,8 +13,10 @@ using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Extensions;
+using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Pages.Components.Settings;
+using Anidow.Pages.Components.Status;
 using Anidow.Services;
 using Anidow.Utils;
 using BencodeNET.Torrents;
@@ -26,11 +30,12 @@ using Stylet;
 namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class HomeViewModel : Conductor<Episode>.Collection.OneActive, IHandle<DownloadEvent>,
+    public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<DownloadEvent>,
         IHandle<RefreshHomeEvent>, IHandle<AddToHomeEvent>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly HttpClient _httpClient;
+        private readonly NotifyService _notifyService;
         private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
         private readonly SettingsSetupWizardViewModel _settingsSetupWizardViewModel;
@@ -43,8 +48,11 @@ namespace Anidow.Pages
             IWindowManager windowManager, AnimeBytesService animeBytesService,
             TorrentService torrentService, SettingsService settingsService,
             SettingsSetupWizardViewModel settingsSetupWizardViewModel,
-            TaskbarIcon taskbarIcon, HttpClient httpClient)
+            TaskbarIcon taskbarIcon, HttpClient httpClient,
+            StatusViewModel statusViewModel,
+            NotifyService notifyService)
         {
+            StatusViewModel = statusViewModel ?? throw new ArgumentNullException(nameof(statusViewModel));
             _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
@@ -53,14 +61,15 @@ namespace Anidow.Pages
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _notifyService = notifyService ?? throw new ArgumentNullException(nameof(notifyService));
             _settingsSetupWizardViewModel = settingsSetupWizardViewModel ??
                                             throw new ArgumentNullException(nameof(settingsSetupWizardViewModel));
             DisplayName = "Home";
         }
 
+        public string BadgeContent { get; set; }
         public AnimeBytesService AnimeBytesService { get; set; }
-        public bool CanForceCheck { get; set; } = true;
-        public string NextCheckIn { get; private set; } = "00:00";
+        public StatusViewModel StatusViewModel { get; }
         public Timer NextCheckTimer { get; set; }
         public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
         public bool IsEnabled => _settingsService != null && !_settingsService.Settings.FirstStart;
@@ -171,27 +180,6 @@ namespace Anidow.Pages
             });
         }
 
-        private void NextCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            if (!AnimeBytesService.TrackerIsRunning)
-            {
-                return;
-            }
-
-            var lastCheck = AnimeBytesService.LastCheck;
-            var nextCheck = lastCheck + TimeSpan.FromMinutes(_settingsService.Settings.RefreshTime);
-            NextCheckIn = $"{nextCheck - DateTime.Now:mm\\:ss}";
-        }
-
-        public async Task ForceCheck()
-        {
-            CanForceCheck = false;
-            await AnimeBytesService.CheckForNewEpisodes();
-            await GetAiringEpisodesForToday();
-            await Task.Delay(300);
-            CanForceCheck = true;
-        }
-
         private string CreatePropertyEpisode(AnimeBytesScrapeAnime ab)
         {
             try
@@ -206,7 +194,7 @@ namespace Anidow.Pages
             }
         }
 
-        public async Task HideItem(Episode episode)
+        public async Task HideItem(IEpisode episode)
         {
             episode ??= ActiveItem;
             var index = Items.IndexOf(episode);
@@ -239,7 +227,7 @@ namespace Anidow.Pages
             }, null, TimeSpan.FromSeconds(5));
         }
 
-        public async Task DeleteItem(Episode episode)
+        public async Task DeleteItem(IEpisode episode)
         {
             episode ??= ActiveItem;
             var index = Items.IndexOf(episode);
@@ -377,20 +365,10 @@ namespace Anidow.Pages
         {
             _eventAggregator.Subscribe(this);
 
-            NextCheckTimer = new Timer(100);
-            NextCheckTimer.Elapsed += NextCheckTimerOnElapsed;
-            NextCheckTimer.Start();
-
             Task.Run(async () => await LoadEpisodes());
             Task.Run(async () => await DownloadMissingCovers());
             Task.Run(async () => await GetAiringEpisodesForToday());
-
-            // Starting the tracker
-            if (_settingsService.Settings.StartTrackerAnimeBytesOnLaunch)
-            {
-                AnimeBytesService.InitTracker();
-            }
-
+            
             JobManager.AddJob(
                 () => { UpdateTorrents().Wait(); },
                 s => s.WithName("Home:UpdateTorrents")
@@ -398,6 +376,17 @@ namespace Anidow.Pages
                       .ToRunEvery(1)
                       .Seconds()
             );
+#if DEBUG
+            JobManager.AddJob(
+                () => { GetActiveWindowTitle(); },
+                s => s.WithName("Home:GetActiveWindowTitle")
+                      .NonReentrant()
+                      .ToRunEvery(10)
+                      .Seconds()
+            );
+            
+#endif
+
         }
 
         private async Task DownloadMissingCovers()
@@ -429,12 +418,14 @@ namespace Anidow.Pages
             try
             {
                 // var animes = await db.Anime.ToListAsync();
-                foreach (var anime in db.Anime)
+                foreach (var anime in db.Anime.Include(a => a.CoverData))
                 {
                     anime.Created = anime.Created == default ? anime.Released : anime.Created;
                     var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);
                     anime.CoverData ??= coverData;
-                    var episodes = db.Episodes.Where(e => e.AnimeId == anime.GroupId);
+                    var episodes = db.Episodes
+                                     .Include(e => e.CoverData)
+                                     .Where(e => e.AnimeId == anime.GroupId);
                     foreach (var episode in episodes)
                     {
                         episode.CoverData ??= coverData;
@@ -572,5 +563,28 @@ namespace Anidow.Pages
                                         && ActiveItem.AnimeId != null;
             }
         }
+
+#if DEBUG
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        private string GetActiveWindowTitle()
+        {
+            const int nChars = 256;
+            var buff = new StringBuilder(nChars);
+            var handle = GetForegroundWindow();
+
+            if (GetWindowText(handle, buff, nChars) <= 0)
+            {
+                return null;
+            }
+
+            _logger.Debug($"current window -> {buff}");
+            return buff.ToString();
+        }
+#endif
     }
 }

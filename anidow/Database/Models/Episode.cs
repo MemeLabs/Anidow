@@ -38,7 +38,7 @@ namespace Anidow.Database.Models
         public DateTime WatchedDate { get; set; }
         public bool Hide { get; set; }
         public string Link { get; set; }
-
+        [NotMapped] public bool IsFuture { get; set; }
         [NotMapped] public string ReleasedString => Released.Humanize();
         [NotMapped] public string WatchedString => WatchedDate == default ? string.Empty : WatchedDate.Humanize();
         [NotMapped] public string EpisodeNum => Name.GetEpisode();

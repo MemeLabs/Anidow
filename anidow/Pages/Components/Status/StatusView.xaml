@@ -1,0 +1,204 @@
+﻿<UserControl
+    x:Class="Anidow.Pages.Components.Status.StatusView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:Anidow.Pages.Components.Status"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:s="https://github.com/canton7/Stylet"
+    d:DataContext="{d:DesignInstance local:StatusViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="Transparent"
+    mc:Ignorable="d">
+    <Border
+        Padding="6"
+        extensions:LayerExtension.IncreaseLayer="True"
+        extensions:LayerExtension.Layer="2"
+        Background="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}"
+        BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer2BorderBrush}}"
+        BorderThickness="2"
+        CornerRadius="4">
+        <StackPanel>
+            <Label Margin="0,0,0,6" Content="RSS feed refresh timers" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"
+                    Content="1."
+                    IsChecked="{Binding AppState.ShowStatusMiniViewNyaa}" />
+
+                <Button
+                    Grid.Column="1"
+                    Command="{s:Action CheckNyaa,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome SyncSolid}" />
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="Nyaa"
+                    ToolTip="Used for notification rules in Notify" />
+
+                <TextBlock
+                    Grid.Column="3"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding NextCheckNyaaIn}">
+                    <TextBlock.ToolTip>
+                        <TextBlock>
+                            <Run Text="{Binding LastCheckNyaa, StringFormat='{}last: {0:t}'}" />
+                            <LineBreak />
+                            <Run Text="{Binding NextCheckNyaa, StringFormat='{}next: {0:t}'}" />
+                        </TextBlock>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+
+                <Button
+                    Grid.Column="4"
+                    Margin="4,0,0,0"
+                    Command="{s:Action StartNyaa,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome PlaySolid}"
+                    Visibility="{Binding RunningNyaa, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+                <Button
+                    Grid.Column="5"
+                    Margin="4,0,0,0"
+                    Command="{s:Action PauseNyaa,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome PauseSolid}"
+                    Visibility="{Binding RunningNyaa, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+
+            </Grid>
+            <Separator Margin="0,4" Background="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+            <Grid IsEnabled="{Binding IsEnabledAnimeBytesAll, Mode=OneWay}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"
+                    Content="2."
+                    IsChecked="{Binding AppState.ShowStatusMiniViewAnimeBytesAll}" />
+
+                <Button
+                    Grid.Column="1"
+                    Command="{s:Action CheckAnimeBytesAll,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome SyncSolid}" />
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="AnimeBytes (all)"
+                    ToolTip="Used for notification rules in Notify" />
+                <TextBlock
+                    Grid.Column="3"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding NextCheckAnimeBytesAllIn}">
+                    <TextBlock.ToolTip>
+                        <TextBlock>
+                            <Run Text="{Binding LastCheckAnimeBytesAll, StringFormat='{}last: {0:t}'}" />
+                            <LineBreak />
+                            <Run Text="{Binding NextCheckAnimeBytesAll, StringFormat='{}next: {0:t}'}" />
+                        </TextBlock>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+
+                <Button
+                    Grid.Column="4"
+                    Margin="4,0,0,0"
+                    Command="{s:Action StartAnimeBytesAll,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome PlaySolid}"
+                    Visibility="{Binding RunningAnimeBytesAll, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+                <Button
+                    Grid.Column="5"
+                    Margin="4,0,0,0"
+                    Command="{s:Action PauseAnimeBytesAll,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome PauseSolid}"
+                    Visibility="{Binding RunningAnimeBytesAll, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+
+            </Grid>
+            <Separator Margin="0,4" Background="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+            <Grid IsEnabled="{Binding IsEnabledAnimeBytesAiring, Mode=OneWay}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"
+                    Content="3."
+                    IsChecked="{Binding AppState.ShowStatusMiniViewAnimeBytesAiring}" />
+
+                <Button
+                    Grid.Column="1"
+                    Command="{s:Action CheckAnimeBytesAiring,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome SyncSolid}" />
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="AnimeBytes (airing)"
+                    ToolTip="Used for tracked anime and notification rules in Notify" />
+
+                <TextBlock
+                    Grid.Column="3"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding NextCheckAnimeBytesAiringIn}">
+                    <TextBlock.ToolTip>
+                        <TextBlock>
+                            <Run Text="{Binding LastCheckAnimeBytesAiring, StringFormat='{}last: {0:t}'}" />
+                            <LineBreak />
+                            <Run Text="{Binding NextCheckAnimeBytesAiring, StringFormat='{}next: {0:t}'}" />
+                        </TextBlock>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+
+                <Button
+                    Grid.Column="4"
+                    Margin="4,0,0,0"
+                    Command="{s:Action StartAnimeBytesAiring,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome PlaySolid}"
+                    Visibility="{Binding RunningAnimeBytesAiring, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+                <Button
+                    Grid.Column="5"
+                    Margin="4,0,0,0"
+                    Command="{s:Action PauseAnimeBytesAiring,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome PauseSolid}"
+                    Visibility="{Binding RunningAnimeBytesAiring, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

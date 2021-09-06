@@ -14,97 +14,103 @@
     Width="700"
     Height="350"
     d:DataContext="{d:DesignInstance local:SettingsSetupWizardViewModel}"
+    Background="Transparent"
     FontSize="14"
     FontWeight="Medium"
     ResizeMode="NoResize"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid Margin="2,4">
-            <StackPanel
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation=" Horizontal">
-                <ContentControl VerticalAlignment="Center" Content="{iconPacks:FontAwesome MagicSolid, Height=20, Width=20}" />
-                <TextBlock
-                    Margin="6,0,0,0"
+    <Border
+        Background="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"
+        BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}"
+        BorderThickness="2"
+        CornerRadius="4">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Margin="2,4">
+                <StackPanel
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    FontSize="22"
-                    FontWeight="SemiBold"
-                    Text="Setup Wizard" />
+                    Orientation=" Horizontal">
+                    <ContentControl VerticalAlignment="Center" Content="{iconPacks:FontAwesome MagicSolid, Height=20, Width=20}" />
+                    <TextBlock
+                        Margin="6,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        FontWeight="SemiBold"
+                        Text="Setup Wizard" />
+                </StackPanel>
+            </Grid>
+
+            <ContentPresenter
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Content="{Binding}">
+                <ContentPresenter.Resources>
+                    <DataTemplate x:Key="StepOne">
+                        <local:SettingsSetupWizardStepOneView />
+                    </DataTemplate>
+                    <DataTemplate x:Key="StepTwo">
+                        <local:SettingsSetupWizardStepTwoView />
+                    </DataTemplate>
+                    <DataTemplate x:Key="StepThree">
+                        <local:SettingsSetupWizardStepThreeView />
+                    </DataTemplate>
+                </ContentPresenter.Resources>
+                <ContentPresenter.Style>
+                    <Style TargetType="{x:Type ContentPresenter}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="1">
+                                <Setter Property="ContentTemplate" Value="{StaticResource StepOne}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="2">
+                                <Setter Property="ContentTemplate" Value="{StaticResource StepTwo}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="3">
+                                <Setter Property="ContentTemplate" Value="{StaticResource StepThree}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentPresenter.Style>
+            </ContentPresenter>
+
+            <StackPanel
+                Grid.Row="2"
+                Margin="16"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
+                    Command="{s:Action RequestClose,
+                                       ActionNotFound=Disable}"
+                    Content="Cancel"
+                    Style="{DynamicResource DeleteButton}" />
+                <Button
+                    Margin="8,0,0,0"
+                    Command="{s:Action Back,
+                                       ActionNotFound=Disable}"
+                    Content="Back" />
+                <Button
+                    Margin="8,0"
+                    Command="{s:Action Next,
+                                       ActionNotFound=Disable}"
+                    Content="Next"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
+                    Visibility="{Binding IsFinish, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+                <Button
+                    Margin="8,0"
+                    Command="{s:Action Finish,
+                                       ActionNotFound=Disable}"
+                    Content="Finish"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
+                    Visibility="{Binding IsFinish, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+
             </StackPanel>
         </Grid>
-
-        <ContentPresenter
-            Grid.Row="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Content="{Binding}">
-            <ContentPresenter.Resources>
-                <DataTemplate x:Key="StepOne">
-                    <local:SettingsSetupWizardStepOneView />
-                </DataTemplate>
-                <DataTemplate x:Key="StepTwo">
-                    <local:SettingsSetupWizardStepTwoView />
-                </DataTemplate>
-                <DataTemplate x:Key="StepThree">
-                    <local:SettingsSetupWizardStepThreeView />
-                </DataTemplate>
-            </ContentPresenter.Resources>
-            <ContentPresenter.Style>
-                <Style TargetType="{x:Type ContentPresenter}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="1">
-                            <Setter Property="ContentTemplate" Value="{StaticResource StepOne}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="2">
-                            <Setter Property="ContentTemplate" Value="{StaticResource StepTwo}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding CurrentStep, Mode=OneWay}" Value="3">
-                            <Setter Property="ContentTemplate" Value="{StaticResource StepThree}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentPresenter.Style>
-        </ContentPresenter>
-
-        <StackPanel
-            Grid.Row="2"
-            Margin="16"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-            <Button
-                extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                extensions:RippleExtension.BackgroundBrush="#EF5350"
-                Background="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"
-                Command="{s:Action RequestClose,
-                                   ActionNotFound=Disable}"
-                Content="Cancel" />
-            <Button
-                Margin="8,0,0,0"
-                Command="{s:Action Back,
-                                   ActionNotFound=Disable}"
-                Content="Back" />
-            <Button
-                Margin="8,0"
-                Command="{s:Action Next,
-                                   ActionNotFound=Disable}"
-                Content="Next"
-                Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
-                Visibility="{Binding IsFinish, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
-            <Button
-                Margin="8,0"
-                Command="{s:Action Finish,
-                                   ActionNotFound=Disable}"
-                Content="Finish"
-                Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
-                Visibility="{Binding IsFinish, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
-
-        </StackPanel>
-    </Grid>
+    </Border>
 </controls:AdonisWindow>

@@ -135,8 +135,8 @@ namespace Anidow.Extensions
             }
 
             await using var db = new TrackContext();
-            db.Attach(anime);
-            db.Remove(anime);
+            db.Anime.Attach(anime);
+            db.Anime.Remove(anime);
             var rows = await db.SaveChangesAsync();
             return rows >= 1;
         }

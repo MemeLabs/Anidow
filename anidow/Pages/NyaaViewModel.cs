@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Model;
@@ -15,6 +16,7 @@ using Serilog;
 using Stylet;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using ListView = System.Windows.Controls.ListView;
+
 
 namespace Anidow.Pages
 {
@@ -36,7 +38,6 @@ namespace Anidow.Pages
             _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
             DisplayName = "Nyaa";
         }
-
         public string SearchText { get; set; } = string.Empty;
         public string LastSearch { get; set; }
 
@@ -56,8 +57,7 @@ namespace Anidow.Pages
         public async Task GetItems()
         {
             CanGetItems = false;
-            var items = await _nyaaService.GetFeedItems(
-                $"https://nyaa.si/?page=rss&c=1_2&f={SelectedFilterIndex}&q={SearchText}");
+            var items = await _nyaaService.GetFeedItems((NyaaFilter)SelectedFilterIndex, SearchText.Trim());
 
             if (items is not {Count: > 0})
             {

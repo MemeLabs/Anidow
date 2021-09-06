@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Anidow.Enums;
 using Anidow.Model;
 using Humanizer;
+using Stylet;
 
 namespace Anidow.Database.Models
 {
@@ -31,7 +32,7 @@ namespace Anidow.Database.Models
         [NotMapped] public bool IsAiring => Status == AnimeStatus.Watching;
         [NotMapped] public bool IsFinished => Status == AnimeStatus.Completed;
         [NotMapped] public int Episodes => EpisodeList?.Count ?? 0;
-        [NotMapped] public List<Episode> EpisodeList { get; set; } = new();
+        [NotMapped] public ICollection<Episode> EpisodeList { get; set; } = new BindableCollection<Episode>();
         [NotMapped] public bool TrackedViewSelected { get; set; }
         [NotMapped] public string Notification { get; set; }
     }

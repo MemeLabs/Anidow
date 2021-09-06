@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Factories;
 using Anidow.Interfaces;
@@ -64,7 +63,7 @@ namespace Anidow.Services
             }
         }
 
-        public async Task<bool> Remove(Episode anime, bool withFile = false)
+        public async Task<bool> Remove(IEpisode anime, bool withFile = false)
         {
             return _settingsService.Settings.TorrentClient switch
             {
@@ -126,7 +125,7 @@ namespace Anidow.Services
             return (true, string.Empty);
         }
 
-        public async Task UpdateTorrentProgress(IEnumerable<Episode> items)
+        public async Task UpdateTorrentProgress(IEnumerable<IEpisode> items)
         {
             var torrents = _settingsService.Settings.TorrentClient switch
             {
@@ -152,7 +151,7 @@ namespace Anidow.Services
                             continue;
                         }
 
-                        var torrent = torrentItems.SingleOrDefault(t =>
+                        var torrent = torrentItems.FirstOrDefault(t =>
                             t.hash.Equals(anime.TorrentId, StringComparison.InvariantCultureIgnoreCase));
                         
                         if (torrent is null)

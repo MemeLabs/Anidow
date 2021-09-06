@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
 using Timer = System.Timers.Timer;
@@ -57,7 +58,7 @@ namespace Anidow.Utils
             }
         }
 
-        public static void DebounceAction(object key, Action<ActionConfig> actionOnTimeout, Dispatcher sync,
+        public static void DebounceAction(object key, Func<ActionConfig, Task> actionOnTimeout, Dispatcher sync,
             TimeSpan? timeout = null)
         {
             DebounceActionCustom(key, d =>
@@ -72,7 +73,7 @@ namespace Anidow.Utils
             });
         }
 
-        public static void DebounceAction(object key, Action<ActionConfig> actionOnTimeout, TimeSpan? timeout = null,
+        public static void DebounceAction(object key, Func<ActionConfig, Task> actionOnTimeout, TimeSpan? timeout = null,
             ISynchronizeInvoke sync = null)
         {
             DebounceActionCustom(key, d =>
@@ -253,7 +254,7 @@ namespace Anidow.Utils
         public class ActionConfig : ConfigBase
         {
             public object Data;
-            public new Action<ActionConfig> OnTimeout;
+            public new Func<ActionConfig, Task> OnTimeout;
 
             protected override void InvokeOnTimeout()
             {

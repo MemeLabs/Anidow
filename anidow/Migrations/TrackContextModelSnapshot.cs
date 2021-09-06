@@ -14,7 +14,7 @@ namespace Anidow.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.6");
+                .HasAnnotation("ProductVersion", "5.0.9");
 
             modelBuilder.Entity("Anidow.Database.Models.Anime", b =>
                 {
@@ -78,6 +78,15 @@ namespace Anidow.Migrations
                         .HasDefaultValue(DateTime.UtcNow);
 
                     b.Property<bool>("FirstStart")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowStatusMiniViewAnimeBytesAiring")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowStatusMiniViewAnimeBytesAll")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowStatusMiniViewNyaa")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -163,10 +172,110 @@ namespace Anidow.Migrations
                     b.ToTable("Episodes");
                 });
 
+            modelBuilder.Entity("Anidow.Database.Models.NotifyItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("MatchAll")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Site")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotifyItems");
+                });
+
+            modelBuilder.Entity("Anidow.Database.Models.NotifyItemKeyword", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCaseSensitive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRegex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("MustMatch")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NotifyItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Word")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotifyItemId");
+
+                    b.ToTable("NotifyItemKeywords");
+                });
+
+            modelBuilder.Entity("Anidow.Database.Models.NotifyItemMatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DownloadLink")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Downloaded")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Json")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Keywords")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("NotifyItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Seen")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Site")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("UserNotified")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotifyItemId");
+
+                    b.ToTable("NotifyItemMatches");
+                });
+
             modelBuilder.Entity("Anidow.Database.Models.Anime", b =>
                 {
                     b.HasOne("Anidow.Database.Models.Cover", "CoverData")
-                        .WithMany()
+                        .WithMany("Animes")
                         .HasForeignKey("CoverDataId");
 
                     b.Navigation("CoverData");
@@ -175,10 +284,46 @@ namespace Anidow.Migrations
             modelBuilder.Entity("Anidow.Database.Models.Episode", b =>
                 {
                     b.HasOne("Anidow.Database.Models.Cover", "CoverData")
-                        .WithMany()
+                        .WithMany("Episodes")
                         .HasForeignKey("CoverDataId");
 
                     b.Navigation("CoverData");
+                });
+
+            modelBuilder.Entity("Anidow.Database.Models.NotifyItemKeyword", b =>
+                {
+                    b.HasOne("Anidow.Database.Models.NotifyItem", "NotifyItem")
+                        .WithMany("Keywords")
+                        .HasForeignKey("NotifyItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NotifyItem");
+                });
+
+            modelBuilder.Entity("Anidow.Database.Models.NotifyItemMatch", b =>
+                {
+                    b.HasOne("Anidow.Database.Models.NotifyItem", "NotifyItem")
+                        .WithMany("Matches")
+                        .HasForeignKey("NotifyItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NotifyItem");
+                });
+
+            modelBuilder.Entity("Anidow.Database.Models.Cover", b =>
+                {
+                    b.Navigation("Animes");
+
+                    b.Navigation("Episodes");
+                });
+
+            modelBuilder.Entity("Anidow.Database.Models.NotifyItem", b =>
+                {
+                    b.Navigation("Keywords");
+
+                    b.Navigation("Matches");
                 });
 #pragma warning restore 612, 618
         }

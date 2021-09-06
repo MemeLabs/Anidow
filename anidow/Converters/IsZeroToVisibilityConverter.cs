@@ -20,8 +20,10 @@ namespace Anidow.Converters
     {
         public static readonly IsNotZeroToVisibilityConverter Instance = new();
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            value != null && (int) value == 0 ? Visibility.Collapsed : Visibility.Visible;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value is null or 0 ? Visibility.Collapsed : Visibility.Visible;
+        }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
             throw new NotImplementedException();

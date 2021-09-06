@@ -3,10 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
     d:DataContext="{d:DesignInstance local:AnimeBytesViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -62,5 +64,69 @@
 
         </TabControl>
         <!--<ContentControl Grid.Row="1" s:View.Model="{Binding ActiveItem}" />-->
+
+        <Border
+            Height="27"
+            Margin="4,4"
+            Padding="6,4"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"
+            CornerRadius="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <shared:LoadingDots
+                    Width="{adonisUi:Space 2}"
+                    Height="{adonisUi:Space 2}"
+                    DataContext="{Binding StatsLoading}"
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"/>
+
+                <Label Grid.Column="1" Content="Class: " />
+                <TextBlock Grid.Column="2" Text="{Binding Stats.Class}" />
+
+                <Label
+                    Grid.Column="3"
+                    Margin="10,0,0,0"
+                    Content="H&amp;R: "
+                    Visibility="{Binding Stats.HitAndRuns, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}" />
+                <TextBlock Grid.Column="4" Visibility="{Binding Stats.HitAndRuns, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                    <Hyperlink
+                        FontWeight="Bold"
+                        Foreground="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"
+                        NavigateUri="https://animebytes.tv/alltorrents.php?action=history&amp;hnronly=1"
+                        RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                        <TextBlock Text="{Binding Stats.HitAndRuns}" />
+                    </Hyperlink>
+                </TextBlock>
+
+                <TextBlock Grid.Column="5" Margin="10,0,0,0">
+                    <TextBlock.ToolTip>
+                        <TextBlock>
+                            <Run Text="{Binding Stats.YenPerHour, StringFormat='{}Hourly: {0}'}" />
+                            <LineBreak />
+                            <Run Text="{Binding Stats.YenPerDay, StringFormat='{}Daily: {0}'}" />
+                            <LineBreak />
+                            <LineBreak />
+                            <Run Text="Click here to open Konbini in your browser" />
+                        </TextBlock>
+                    </TextBlock.ToolTip>
+                    <Hyperlink
+                        Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
+                        NavigateUri="https://animebytes.tv/konbini"
+                        RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                        <TextBlock Text="{Binding Stats.Yen}" />
+                    </Hyperlink>
+                </TextBlock>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

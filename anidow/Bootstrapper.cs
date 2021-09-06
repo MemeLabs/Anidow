@@ -9,12 +9,11 @@ using System.Windows.Markup;
 using Anidow.Factories;
 using Anidow.Helpers;
 using Anidow.Pages;
+using Anidow.Pages.Components.Status;
 using Anidow.Properties;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
-using Anidow.Validators;
 using FluentScheduler;
-using FluentValidation;
 using Hardcodet.Wpf.TaskbarNotification;
 using Jot;
 using Jot.Storage;
@@ -26,6 +25,7 @@ using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
+
 #if RELEASE
 using AdonisUI.Controls;
 using System.IO;
@@ -35,7 +35,6 @@ using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
-
 #endif
 
 namespace Anidow
@@ -69,13 +68,13 @@ namespace Anidow
             builder.Bind<StoreService>().ToSelf();
             builder.Bind<TorrentService>().ToSelf().InSingletonScope();
             builder.Bind<SettingsService>().ToSelf().InSingletonScope();
+            builder.Bind<NotifyService>().ToSelf().InSingletonScope();
+            builder.Bind<AppService>().ToSelf().InSingletonScope();
+
+            builder.Bind<StatusViewModel>().ToSelf().InSingletonScope();
 
             builder.Bind<QBitTorrent>().ToSelf();
             builder.Bind<TorrentClientFactory>().ToSelf().InSingletonScope();
-
-            // Validator IDK how to do validation stuff
-            builder.Bind(typeof(IModelValidator<>)).To(typeof(FluentValidationAdapter<>));
-            builder.Bind(typeof(IValidator<>)).ToAllImplementations();
 
             _httpClient = InitHttpClient();
             builder.Bind<HttpClient>().ToInstance(_httpClient);
@@ -163,6 +162,7 @@ namespace Anidow
         protected override void OnExit(ExitEventArgs e)
         {
             _taskBarIcon?.Dispose();
+            JobManager.RemoveAllJobs();
             JobManager.Stop();
             base.OnExit(e);
         }
@@ -199,6 +199,8 @@ namespace Anidow
             JobManager.Initialize();
             JobManager.JobException += info =>
                 _logger.Error(info.Exception, "An error just happened with a scheduled job");
+            //JobManager.JobStart += info => _logger.Debug($"{info.Name}: started");
+            //JobManager.JobEnd += info =>_logger.Debug($"{info.Name}: ended ({info.Duration})");
 
 #if SELF_CONTAINED && RELEASE
             var selfContained = true;

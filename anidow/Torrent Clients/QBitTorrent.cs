@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
-using Anidow.Database.Models;
 using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Services;
@@ -41,22 +40,20 @@ namespace Anidow.Torrent_Clients
                 {new StringContent(Settings.QBitTorrent.Category), "category"},
             };
             var response = await _httpClient.PostAsync($"{ApiUrl(Settings)}/api/v2/torrents/add", m);
-            string content;
+            var content = await response?.Content?.ReadAsStringAsync();
             if (response is {IsSuccessStatusCode: true})
             {
-                content = await response.Content?.ReadAsStringAsync();
                 _logger.Information(content);
                 return true;
             }
-
-            content = await response?.Content?.ReadAsStringAsync();
+            
             _logger.Error(content);
 
             _logger.Information($"failed adding {item.DownloadLink} to qbittorrent");
             return false;
         }
 
-        public async Task<bool> Remove(Episode episode, bool withFile = false)
+        public async Task<bool> Remove(IEpisode episode, bool withFile = false)
         {
             if (string.IsNullOrEmpty(episode.TorrentId))
             {
@@ -109,7 +106,7 @@ namespace Anidow.Torrent_Clients
             var url = $"{ApiUrl(settings)}/api/v2/torrents/info?filter=all&category={encodedCategory}&sort=added_on";
             try
             {
-                var response = await _httpClient.GetStringAsync(url);
+                var response = await _httpClient.GetByteArrayAsync(url);
                 var list = JsonSerializer.Deserialize<T>(response);
                 return list;
             }

@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AdonisUI.Controls;
+using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Services;
 using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.EntityFrameworkCore;
 using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;

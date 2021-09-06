@@ -27,8 +27,16 @@ namespace Anidow.Services
 
         private SettingsModel Settings => _settingsService.Settings;
 
-        public async Task<List<NyaaTorrentItem>> GetFeedItems(string url)
+        public async Task<List<NyaaTorrentItem>> GetFeedItems(NyaaFilter filter, string search = "", bool addToFeedStorage = true)
         {
+            var url = filter switch
+            {
+                NyaaFilter.NoFilter => $"https://nyaa.si/?page=rss&c=1_2&f=0&q={search}",
+                NyaaFilter.NoRemakes => $"https://nyaa.si/?page=rss&c=1_2&f=1&q={search}",
+                NyaaFilter.TrustedOnly => $"https://nyaa.si/?page=rss&c=1_2&f=2&q={search}",
+                _ => throw new ArgumentOutOfRangeException(nameof(filter), filter, null),
+            };
+
             var items = await GetFeedItems(url, ToDomain) ?? new List<NyaaTorrentItem>();
             var minSeeders = _settingsService.Settings.NyaaSettings.HideTorrentsBelowSeeders;
             if (minSeeders > -1)
@@ -36,7 +44,7 @@ namespace Anidow.Services
                 return items.Where(i => i.Seeders >= minSeeders).ToList();
             }
 
-            _feedStorageService.SetNyaaRssFeedItems(items);
+            if(addToFeedStorage) _feedStorageService.SetNyaaRssFeedItems(items);
             return items;
         }
 

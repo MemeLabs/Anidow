@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Serilog;
@@ -24,13 +23,14 @@ namespace Anidow.Services
                 return;
             }
 
-            var data = JsonSerializer.Serialize(value, new JsonSerializerOptions
+
+            await using var createStream = File.Create(path);
+            await JsonSerializer.SerializeAsync(createStream, value, new JsonSerializerOptions
             {
-                IgnoreNullValues = true,
                 WriteIndented = true,
                 IgnoreReadOnlyProperties = true,
             });
-            await File.WriteAllTextAsync(path, data, Encoding.UTF8);
+            await createStream.DisposeAsync();
         }
 
         public async Task<T> Load<T>(string path)
@@ -41,15 +41,14 @@ namespace Anidow.Services
                 return default;
             }
 
-            var data = await File.ReadAllTextAsync(path);
-
             try
             {
-                return JsonSerializer.Deserialize<T>(data);
+                await using var openStream = File.OpenRead(path);
+                return await JsonSerializer.DeserializeAsync<T>(openStream);
             }
             catch (Exception e)
             {
-                _logger.Fatal(e, $"failed parsing {0}", path);
+                _logger.Fatal(e, "failed parsing {0}", path);
                 return default;
             }
         }
