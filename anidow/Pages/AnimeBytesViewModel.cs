@@ -29,6 +29,8 @@ namespace Anidow.Pages
             Items.Add(searchViewModel ?? throw new ArgumentNullException(nameof(searchViewModel)));
             Items.Add(rssViewModel ?? throw new ArgumentNullException(nameof(rssViewModel)));
             DisplayName = "AnimeBytes";
+
+            this.Bind(x => x.StatsLoading, (_, _) => NotifyOfPropertyChange(() => CanGetStats));
         }
 
         public AnimeBytesStats Stats { get; set; } = new();
@@ -44,6 +46,7 @@ namespace Anidow.Pages
                      .Minutes());
         }
 
+        public bool CanGetStats => !StatsLoading; 
         public async Task GetStats()
         {
             StatsLoading = true;

@@ -5,6 +5,7 @@
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
@@ -73,6 +74,15 @@
             VerticalAlignment="Top"
             Background="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"
             CornerRadius="4">
+            <Border.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{s:Action GetStats,
+                                           ActionNotFound=Disable}"
+                        Header="Refresh"
+                        Icon="{iconPacks:FontAwesome SyncSolid}" />
+                </ContextMenu>
+            </Border.ContextMenu>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -86,9 +96,9 @@
                 <shared:LoadingDots
                     Width="{adonisUi:Space 2}"
                     Height="{adonisUi:Space 2}"
-                    DataContext="{Binding StatsLoading}"
                     Margin="0,0,8,0"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    DataContext="{Binding StatsLoading}" />
 
                 <Label Grid.Column="1" Content="Class: " />
                 <TextBlock Grid.Column="2" Text="{Binding Stats.Class}" />

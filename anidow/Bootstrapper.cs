@@ -115,10 +115,10 @@ namespace Anidow
                 AutomaticDecompression = DecompressionMethods.All,
                 UseCookies = true,
             };
-            var httpClient = new HttpClient(clientHandler) {Timeout = TimeSpan.FromSeconds(10)};
+            var httpClient = new HttpClient(clientHandler) {Timeout = TimeSpan.FromSeconds(60)};
             httpClient.DefaultRequestHeaders.UserAgent.Clear();
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36");
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36");
             httpClient.DefaultRequestHeaders.Add("dnt", "1");
             httpClient.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
             httpClient.DefaultRequestHeaders.Accept.ParseAdd("*/*");

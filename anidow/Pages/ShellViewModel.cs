@@ -16,7 +16,7 @@ using Stylet;
 namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class ShellViewModel : Conductor<Screen>.Collection.OneActive
+    public sealed class ShellViewModel : Conductor<Screen>.Collection.OneActive
     {
         public static ShellViewModel Instance;
         private readonly AboutViewModel _aboutViewModel;
@@ -44,13 +44,13 @@ namespace Anidow.Pages
             Instance ??= this;
             startupViewModel.OnFinished = () =>
             {
+                Items.Add(mainViewModel);
                 ChangeActiveItem(mainViewModel, true);
                 CanToggleSettings = true;
-                Items.Add(mainViewModel);
-                Items.Add(settingsViewModel);
             };
             Items.Add(startupViewModel);
-            ActiveItem = startupViewModel;
+            Items.Add(settingsViewModel);
+            ChangeActiveItem(startupViewModel, false);
         }
 
         public SettingsViewModel SettingsViewModel { get; }
