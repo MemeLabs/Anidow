@@ -7,7 +7,7 @@ namespace Anidow.Torrent_Clients
     public class QBitTorrentEntry
     {
         public int added_on { get; set; }
-        public int amount_left { get; set; }
+        public long amount_left { get; set; }
         public bool auto_tmm { get; set; }
         public float availability { get; set; }
         public string category { get; set; }
@@ -47,7 +47,7 @@ namespace Anidow.Torrent_Clients
         public string tracker { get; set; }
         public int up_limit { get; set; }
         public long uploaded { get; set; }
-        public int uploaded_session { get; set; }
+        public long uploaded_session { get; set; }
         public int upspeed { get; set; }
     }
 }
