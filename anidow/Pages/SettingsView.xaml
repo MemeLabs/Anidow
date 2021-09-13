@@ -154,7 +154,7 @@
                                 TextChanged="{s:Action RefreshTimeTextChanged}" />
                         </Grid>
 
-                        <Grid
+                        <!--<Grid
                             Grid.Row="3"
                             Grid.Column="0"
                             Margin="0,4">
@@ -188,7 +188,7 @@
                                     ToolTip="Dark"
                                     ToolTipService.Placement="Right" />
                             </ListBox>
-                        </Grid>
+                        </Grid>-->
 
                         <Grid
                             Grid.Row="2"
@@ -236,7 +236,7 @@
                         </Grid>
 
                         <Grid
-                            Grid.Row="5"
+                            Grid.Row="3"
                             Grid.Column="0"
                             Margin="0,4">
                             <CheckBox Content="Notifications for downloads etc." IsChecked="{Binding Settings.Notifications}" />
@@ -250,7 +250,7 @@
 
                         </Grid>
                         <Grid
-                            Grid.Row="6"
+                            Grid.Row="5"
                             Grid.Column="0"
                             Margin="0,4">
                             <CheckBox Content="Start AnimeBytes tracker on launch" IsChecked="{Binding Settings.StartTrackerAnimeBytesOnLaunch}" />

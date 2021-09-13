@@ -58,8 +58,8 @@ namespace Anidow.Services
             TempSettings.NyaaSettings.PropertyChanged += SettingsOnPropertyChanged;
             TempSettings.AnimeBytesSettings.PropertyChanged += SettingsOnPropertyChanged;
 
-            ResourceLocator.SetColorScheme(Application.Current.Resources,
-                TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
+            //ResourceLocator.SetColorScheme(Application.Current.Resources,
+            //    TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
 
             if (Settings.FirstStart)
             {
