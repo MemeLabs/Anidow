@@ -324,7 +324,7 @@
                         <Grid
                             Grid.Row="4"
                             Margin="0,4"
-                            Visibility="{Binding ActiveItem.LinksDict.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                            Visibility="{Binding ActiveItem.LinksDict.Count, FallbackValue=Collapsed, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
