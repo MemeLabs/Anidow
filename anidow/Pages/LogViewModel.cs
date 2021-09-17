@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using Anidow.Utils;
 using Notifications.Wpf.Core;
 using Serilog.Core;
@@ -15,8 +17,27 @@ namespace Anidow.Pages
         }
 
         public IObservableCollection<LogEvent> Items { get; }
+        public int ErrorCount => Items.Count(i => i.Level == LogEventLevel.Error);
+        public int InformationCount => Items.Count(i => i.Level == LogEventLevel.Information);
+        public int WarningCount => Items.Count(i => i.Level == LogEventLevel.Warning);
+        public int DebugCount => Items.Count(i => i.Level == LogEventLevel.Debug);
+
+        public bool ShowError { get; set; } = true;
+        public bool ShowInformation { get; set; } = true;
+        public bool ShowWarning { get; set; } = true;
+        public bool ShowDebug { get; set; }
 
         private LogEvent _lastLogEvent;
+
+        public void OpenLogsFolder()
+        {
+            if (!Directory.Exists("logs"))
+            {
+                Directory.CreateDirectory("logs");
+            }
+
+            ProcessUtil.OpenFolder("logs");
+        }
         public async void Emit(LogEvent logEvent)
         {
             try
@@ -41,6 +62,11 @@ namespace Anidow.Pages
                     break;
             }
 
+            NotifyOfPropertyChange(nameof(ErrorCount));
+            NotifyOfPropertyChange(nameof(WarningCount));
+            NotifyOfPropertyChange(nameof(InformationCount));
+            NotifyOfPropertyChange(nameof(DebugCount));
+            
             _lastLogEvent = logEvent;
         }
     }

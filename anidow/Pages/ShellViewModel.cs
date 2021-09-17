@@ -11,8 +11,6 @@ using Humanizer;
 using Notifications.Wpf.Core;
 using Stylet;
 
-#pragma warning disable 1998
-
 namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
@@ -23,7 +21,7 @@ namespace Anidow.Pages
         private readonly LogViewModel _logViewModel;
         private readonly SettingsService _settingsService;
         private readonly IWindowManager _windowManager;
-        public MainViewModel MainViewModel;
+        private readonly MainViewModel _mainViewModel;
 
         public ShellViewModel(
             MainViewModel mainViewModel,
@@ -35,7 +33,7 @@ namespace Anidow.Pages
             IWindowManager windowManager)
         {
             SettingsViewModel = settingsViewModel ?? throw new ArgumentNullException(nameof(settingsViewModel));
-            MainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
+            _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             _logViewModel = logViewModel ?? throw new ArgumentNullException(nameof(logViewModel));
             _aboutViewModel = aboutViewModel ?? throw new ArgumentNullException(nameof(aboutViewModel));
@@ -65,7 +63,7 @@ namespace Anidow.Pages
 
         public void ToggleSettings()
         {
-            ActiveItem = ActiveItem == MainViewModel ? SettingsViewModel : MainViewModel;
+            ActiveItem = ActiveItem == _mainViewModel ? SettingsViewModel : _mainViewModel;
         }
 
 

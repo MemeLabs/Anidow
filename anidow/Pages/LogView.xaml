@@ -12,7 +12,9 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:s="https://github.com/canton7/Stylet"
     xmlns:serilog="clr-namespace:Serilog.Events;assembly=Serilog"
+    x:Name="LogWindow"
     Title="Logs"
     Width="700"
     Height="400"
@@ -23,7 +25,53 @@
     WindowStyle="ToolWindow"
     mc:Ignorable="d">
     <Grid Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <GroupBox Margin="2" extensions:LayerExtension.IncreaseLayer="True">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Command="{s:Action OpenLogsFolder, ActionNotFound=Disable}" Content="Open logs folder" />
+                <StackPanel
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <ToggleButton
+                        Margin="4,0"
+                        IsChecked="{Binding ShowInformation}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.DefaultToAccentToggleButton}}">
+                        <TextBlock Text="{Binding InformationCount, StringFormat='{}{0} Informations'}" />
+                    </ToggleButton>
+                    <ToggleButton
+                        Margin="4,0"
+                        IsChecked="{Binding ShowWarning}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.DefaultToAccentToggleButton}}">
+                        <TextBlock Text="{Binding WarningCount, StringFormat='{}{0} Warnings'}" />
+                    </ToggleButton>
+                    <ToggleButton
+                        Margin="4,0"
+                        IsChecked="{Binding ShowError}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.DefaultToAccentToggleButton}}">
+                        <TextBlock Text="{Binding ErrorCount, StringFormat='{}{0} Errors'}" />
+                    </ToggleButton>
+                    <ToggleButton
+                        Margin="4,0"
+                        IsChecked="{Binding ShowDebug}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.DefaultToAccentToggleButton}}"
+                        Visibility="{Binding DebugCount, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                        <TextBlock Text="{Binding DebugCount, StringFormat='{}{0} Debugs'}" />
+                    </ToggleButton>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
         <ItemsControl
+            Grid.Row="1"
+            Margin="2"
             extensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="AlwaysExpand"
             ItemsSource="{Binding Items, Mode=OneWay}"
             Style="{StaticResource ItemsControlVirtualizedStyle}">
@@ -33,10 +81,44 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="serilog:LogEvent">
                     <Border
-                        Margin="4,0,4,4"
+                        Margin="0,0,0,4"
                         Padding="6"
                         Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
                         CornerRadius="4">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Error}" />
+                                            <Condition Binding="{Binding DataContext.ShowError, ElementName=LogWindow}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Information}" />
+                                            <Condition Binding="{Binding DataContext.ShowInformation, ElementName=LogWindow}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Warning}" />
+                                            <Condition Binding="{Binding DataContext.ShowWarning, ElementName=LogWindow}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Debug}" />
+                                            <Condition Binding="{Binding DataContext.ShowDebug, ElementName=LogWindow}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -104,6 +186,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <TextBlock
+            Grid.Row="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Visibility="{Binding Items.Count, Converter={x:Static converters:IsZeroToVisibilityConverter.Instance}}">

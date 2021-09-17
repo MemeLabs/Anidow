@@ -6,8 +6,6 @@ using Anidow.Pages.Components.Status;
 using Anidow.Services;
 using Stylet;
 
-#pragma warning disable 1998
-
 namespace Anidow.Pages
 {
     // ReSharper disable once ClassNeverInstantiated.Global
