@@ -9,6 +9,8 @@ a program to automatically download new episodes of anime from Animebytes
 
 you can download the latest version [here](https://github.com/MemeLabs/Anidow/releases)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G65MH8Z)
+
 # Screenshots
 
 <table>
