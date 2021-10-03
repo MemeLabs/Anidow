@@ -69,7 +69,7 @@ namespace Anidow.Pages
         {
             CanGetItems = false;
             var response = await _animeBytesService.SearchAnime(Search);
-            if (response == default)
+            if (response is null)
             {
                 CanGetItems = true;
                 return;
@@ -144,7 +144,6 @@ namespace Anidow.Pages
                 GroupId = item.ID.ToString(),
                 Name = item.FullName,
                 GroupUrl = $"https://animebytes.tv/torrents.php?id={item.ID}",
-                Released = default,
                 Resolution = resolution,
                 Group = group,
                 Status = AnimeStatus.Watching,

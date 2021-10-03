@@ -396,7 +396,11 @@ namespace Anidow.Pages
             try
             {
                 // remove cover if files don't exist
-                foreach (var cover in db.Covers.Include(c => c.Animes).Include(c => c.Episodes))
+                var covers = await db.Covers
+                               .Include(c => c.Animes)
+                               .Include(c => c.Episodes)
+                               .ToListAsync();
+                foreach (var cover in covers)
                 {
                     if (File.Exists(cover.FilePath))
                     {
@@ -417,15 +421,18 @@ namespace Anidow.Pages
 
             try
             {
-                // var animes = await db.Anime.ToListAsync();
-                foreach (var anime in db.Anime.Include(a => a.CoverData))
+                var animes = await db.Anime
+                                     .Include(a => a.CoverData)
+                                     .ToListAsync();
+                foreach (var anime in animes)
                 {
                     anime.Created = anime.Created == default ? anime.Released : anime.Created;
                     var coverData = anime.CoverData ?? await anime.Cover.GetCoverData(anime, _httpClient, _logger);
                     anime.CoverData ??= coverData;
-                    var episodes = db.Episodes
+                    var episodes = await db.Episodes
                                      .Include(e => e.CoverData)
-                                     .Where(e => e.AnimeId == anime.GroupId);
+                                     .Where(e => e.AnimeId == anime.GroupId)
+                                     .ToListAsync();
                     foreach (var episode in episodes)
                     {
                         episode.CoverData ??= coverData;
@@ -450,9 +457,11 @@ namespace Anidow.Pages
         public async Task LoadEpisodes()
         {
             await using var db = new TrackContext();
-            var episodes = db.Episodes.Where(e => !e.Hide)
+            var episodes = await db.Episodes
+                             .Where(e => !e.Hide)
                              .Include(e => e.CoverData)
-                             .OrderBy(e => e.Released);
+                             .OrderBy(e => e.Released)
+                             .ToListAsync();
 
             Items.Clear();
             foreach (var episode in episodes) await DispatcherUtil.DispatchAsync(() => Items.Add(episode));

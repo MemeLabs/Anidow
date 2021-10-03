@@ -25,6 +25,7 @@
     TextElement.FontSize="14"
     TextElement.FontWeight="Regular"
     TextOptions.TextRenderingMode="Auto"
+    TitleBarBackground="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"
     TitleBarForeground="{DynamicResource {x:Static adonisUi:Brushes.AccentForegroundBrush}}"
     mc:Ignorable="d">
     <controls:AdonisWindow.TitleBarContent>

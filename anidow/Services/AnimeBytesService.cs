@@ -229,7 +229,7 @@ namespace Anidow.Services
             var passkey = _settingsService.Settings.AnimeBytesSettings.PassKey;
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(passkey))
             {
-                return default;
+                return null;
             }
 
             var url =
@@ -239,15 +239,15 @@ namespace Anidow.Services
                 var response = await _httpClient.GetAsync(url);
                 if (response is not  {IsSuccessStatusCode: true})
                 {
-                    return default;
+                    return null;
                 }
 
-                var body = await response.Content.ReadAsByteArrayAsync();
-                var anime = JsonSerializer.Deserialize<AnimeBytesScrapeResult>(body);
+                var body = await response.Content.ReadAsStreamAsync();
+                var anime = await JsonSerializer.DeserializeAsync<AnimeBytesScrapeResult>(body);
                 if (anime == null)
                 {
                     _logger.Error("AnimeBytesScrapeResult is null");
-                    return default;
+                    return null;
                 }
 
                 var minSeeders = _settingsService.Settings.NyaaSettings.HideTorrentsBelowSeeders;
@@ -279,7 +279,7 @@ namespace Anidow.Services
                             JsonSerializer.Deserialize<List<string>>(json),
                         { } j when j.StartsWith("{") =>
                             JsonSerializer.Deserialize<Dictionary<string, string>>(json)?.Values.ToList(),
-                        _ => default,
+                        _ => null,
                     };
 
                     je = (JsonElement) a.Links;
@@ -289,7 +289,7 @@ namespace Anidow.Services
                     {
                         { } j when j.StartsWith("{") =>
                             JsonSerializer.Deserialize<Dictionary<string, string>>(json),
-                        _ => default,
+                        _ => null,
                     };
                 }
                 _feedStorageService.SetAnimeBytesSearchFeedItems(anime.Groups);

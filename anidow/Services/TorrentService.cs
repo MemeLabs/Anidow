@@ -53,7 +53,7 @@ namespace Anidow.Services
             try
             {
                 var response = await _httpClient.GetStreamAsync(itemDownloadLink);
-                var torrent = _bencodeParser.Parse<Torrent>(response);
+                var torrent = await _bencodeParser.ParseAsync<Torrent>(response);
                 return torrent;
             }
             catch (Exception e)

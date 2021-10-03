@@ -678,9 +678,9 @@
                             x:Name="ExpandSiteContainerWrapper"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            CornerRadius="0,0,4,4"
-                            ClipToBounds="True"
                             Background="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}"
+                            ClipToBounds="True"
+                            CornerRadius="0,0,4,4"
                             DockPanel.Dock="Bottom">
                             <ScrollViewer
                                 x:Name="ExpandSiteContainer"

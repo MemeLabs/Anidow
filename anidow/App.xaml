@@ -29,6 +29,13 @@
             <Color x:Key="{x:Static adonisUi:Colors.SuccessColor}">#388e3c</Color>
             <!--<Color x:Key="{x:Static adonisUi:Colors.AlertColor}">#f57c00</Color>-->
 
+            <!--  Cool Grey  -->
+            <!--<Color x:Key="{x:Static adonisUi:Colors.Layer0BackgroundColor}">#1f2933</Color>
+            <Color x:Key="{x:Static adonisUi:Colors.Layer1BackgroundColor}">#323f48</Color>
+            <Color x:Key="{x:Static adonisUi:Colors.Layer2BackgroundColor}">#3e4c59</Color>
+            <Color x:Key="{x:Static adonisUi:Colors.Layer3BackgroundColor}">#52606d</Color>
+            <Color x:Key="{x:Static adonisUi:Colors.Layer4BackgroundColor}">#616e7c</Color>-->
+
             <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type Window}" />
 
             <!-- <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer"> -->
