@@ -6,7 +6,8 @@
     xmlns:anidow="clr-namespace:Anidow"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:extensions1="clr-namespace:Anidow.Extensions"
-    xmlns:s="https://github.com/canton7/Stylet">
+    xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI">
     <Application.Resources>
         <s:ApplicationLoader LoadStyletResources="False">
             <s:ApplicationLoader.Bootstrapper>
@@ -29,14 +30,16 @@
             <Color x:Key="{x:Static adonisUi:Colors.SuccessColor}">#388e3c</Color>
             <!--<Color x:Key="{x:Static adonisUi:Colors.AlertColor}">#f57c00</Color>-->
 
-            <!--  Cool Grey  -->
-            <!--<Color x:Key="{x:Static adonisUi:Colors.Layer0BackgroundColor}">#1f2933</Color>
-            <Color x:Key="{x:Static adonisUi:Colors.Layer1BackgroundColor}">#323f48</Color>
-            <Color x:Key="{x:Static adonisUi:Colors.Layer2BackgroundColor}">#3e4c59</Color>
-            <Color x:Key="{x:Static adonisUi:Colors.Layer3BackgroundColor}">#52606d</Color>
-            <Color x:Key="{x:Static adonisUi:Colors.Layer4BackgroundColor}">#616e7c</Color>-->
+            <!--  Dark  -->
+            <!--<Color x:Key="{x:Static adonisUi:Colors.Layer0BackgroundColor}">#151515</Color>
+            <Color x:Key="{x:Static adonisUi:Colors.Layer1BackgroundColor}">#242424</Color>
+            <Color x:Key="{x:Static adonisUi:Colors.Layer2BackgroundColor}">#0F0F0F</Color>
+            <Color x:Key="{x:Static adonisUi:Colors.Layer3BackgroundColor}">#2F2E2F</Color>
+            <Color x:Key="{x:Static adonisUi:Colors.Layer4BackgroundColor}">#000000</Color>-->
 
-            <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type Window}" />
+            <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:AdonisWindow}" >
+                <!--<Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"></Setter>-->
+            </Style>
 
             <!-- <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer"> -->
             <!--     <Setter Property="extensions:ScrollViewerExtension.VerticalScrollBarPlacement" Value="Overlay" /> -->

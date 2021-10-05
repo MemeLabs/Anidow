@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using AdonisUI.Controls;
 using Anidow.Database;
 using Anidow.Database.Models;
@@ -167,6 +169,12 @@ namespace Anidow.Pages.Components.Tracked
             _windowManager.ShowWindow(new FolderFilesViewModel(ref episode, _logger));
             await Task.Delay(100);
             episode.CanOpen = true;
+        }
+
+        public void ShowImage(object sender, MouseButtonEventArgs _)
+        {
+            var img = (Image)sender;
+            ImageUtil.ShowImage(img.Source);
         }
     }
 }

@@ -211,6 +211,8 @@
                     MaxHeight="{Binding ElementName=Panel, Path=ActualHeight, Mode=OneWay, FallbackValue=100}"
                     Margin="0,0,8,0"
                     VerticalAlignment="Top"
+                    Cursor="Hand"
+                    MouseLeftButtonUp="{s:Action ShowImage}"
                     RenderOptions.BitmapScalingMode="HighQuality"
                     Source="{Binding ActiveItem.Image, IsAsync=True}"
                     ToolTipService.ShowDuration="9999999">

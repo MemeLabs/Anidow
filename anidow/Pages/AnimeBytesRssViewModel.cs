@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
@@ -229,6 +230,12 @@ namespace Anidow.Pages
             }
 
             _scrollViewer ??= scrollView;
+        }
+
+        public void ShowImage(object sender, MouseButtonEventArgs _)
+        {
+            var img = (Image)sender;
+            ImageUtil.ShowImage(img.Source);
         }
     }
 }

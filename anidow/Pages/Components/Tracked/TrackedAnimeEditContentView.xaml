@@ -112,6 +112,8 @@
                     Grid.Column="0"
                     Margin="0,0,4,8"
                     VerticalAlignment="Top"
+                    Cursor="Hand"
+                    MouseLeftButtonUp="{s:Action ShowImage}"
                     RenderOptions.BitmapScalingMode="HighQuality"
                     Source="{Binding Anime.CoverData.FilePath, IsAsync=True}"
                     Visibility="{Binding Anime.CoverData.File, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />

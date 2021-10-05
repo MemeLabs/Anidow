@@ -21,6 +21,7 @@ using Serilog;
 using Stylet;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using ListView = System.Windows.Controls.ListView;
+using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace Anidow.Pages
 {
@@ -222,7 +223,7 @@ namespace Anidow.Pages
             e.Handled = true;
         }
 
-        public void ListLoaded(object sender, RoutedEventArgs e)
+        public void ListLoaded(object sender, RoutedEventArgs _)
         {
             if (sender is not ListView listView || _scrollViewer != null)
             {
@@ -236,6 +237,12 @@ namespace Anidow.Pages
             }
 
             _scrollViewer ??= scrollView;
+        }
+
+        public void ShowImage(object sender, MouseButtonEventArgs _)
+        {
+            var img = (Image)sender;
+            ImageUtil.ShowImage(img.Source);
         }
     }
 }

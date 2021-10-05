@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Anidow.Pages;
+using Stylet;
 
 namespace Anidow.Utils
 {
@@ -21,5 +25,36 @@ namespace Anidow.Utils
         }
 
         public static Icon UriToIcon(string link) => Icon.FromHandle(UriToBitmap(link).GetHicon());
+
+        public static void ShowImage(ImageSource source)
+        {
+            var imageView = new ImageView
+            {
+                Image =
+                {
+                    Source = source,
+                },
+                Owner = Application.Current.MainWindow,
+            };
+            imageView.ShowDialog();
+        }
+
+        public static void ShowImage(string url)
+        {
+            if (string.IsNullOrEmpty(url)) return;
+
+            var ok = Uri.TryCreate(url, UriKind.Absolute, out var uri);
+            if (!ok) return;
+            
+            var imageView = new ImageView
+            {
+                Image =
+                {
+                    Source = new BitmapImage(uri),
+                },
+                Owner = Application.Current.MainWindow,
+            };
+            imageView.ShowDialog();
+        }
     }
 }
