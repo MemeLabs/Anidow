@@ -41,7 +41,8 @@
             Grid.Row="1"
             Margin="4,0,4,4"
             Padding="2"
-            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
+            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+            CornerRadius="4">
             <Grid extensions:LayerExtension.IncreaseLayer="True" extensions:LayerExtension.Layer="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />

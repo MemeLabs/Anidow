@@ -28,6 +28,7 @@
         <GroupBox
             Grid.Row="0"
             Margin="2"
+            extensions:CornerRadiusExtension.CornerRadius="4"
             extensions:LayerExtension.IncreaseLayer="True">
 
             <Grid>
@@ -90,43 +91,59 @@
         </GroupBox>
         <ScrollViewer
             Grid.Row="1"
-            Margin="2"
+            Margin="2,4,2,2"
             Padding="0"
             extensions1:TouchScrolling.IsEnabled="True"
             VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="160" MinWidth="160" />
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" MaxHeight="225" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
 
-                <Image
+                <!--  Rounded mask (stretches to fill Grid)  -->
+                <Border
+                    Name="Mask"
+                    Margin="0,0,4,8"
+                    Background="{DynamicResource {x:Static adonisUI:Brushes.Layer0BackgroundBrush}}"
+                    CornerRadius="4" />
+
+                <Grid
                     Grid.Row="0"
                     Grid.Column="0"
                     Margin="0,0,4,8"
-                    VerticalAlignment="Top"
-                    Cursor="Hand"
-                    MouseLeftButtonUp="{s:Action ShowImage}"
-                    RenderOptions.BitmapScalingMode="HighQuality"
-                    Source="{Binding Anime.CoverData.FilePath, IsAsync=True}"
-                    Visibility="{Binding Anime.CoverData.File, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+                    VerticalAlignment="Top">
 
-                <GridSplitter
+                    <Grid.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=Mask}" />
+                    </Grid.OpacityMask>
+                    <Image
+                        Height="225"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Cursor="Hand"
+                        MouseLeftButtonUp="{s:Action ShowImage}"
+                        RenderOptions.BitmapScalingMode="HighQuality"
+                        Source="{Binding Anime.CoverData.FilePath, IsAsync=True}"
+                        Stretch="Uniform"
+                        Visibility="{Binding Anime.CoverData.File, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+
+                </Grid>
+                <!--<GridSplitter
                     Grid.Row="0"
                     Grid.Column="1"
                     Width="2"
-                    VerticalAlignment="Stretch" />
+                    VerticalAlignment="Stretch" />-->
 
                 <Border
                     Grid.Row="0"
-                    Grid.Column="2"
+                    Grid.Column="1"
                     Margin="4,0,0,8"
                     Padding="4"
                     extensions:LayerExtension.IncreaseLayer="True"
@@ -157,6 +174,7 @@
                             Grid.Column="0"
                             Grid.ColumnSpan="3" />
 
+                        <!--  Status  -->
                         <Grid
                             Grid.Row="2"
                             Grid.Column="0"
@@ -173,6 +191,7 @@
                             </ComboBox>
                         </Grid>
 
+                        <!--  Score  -->
                         <Grid
                             Grid.Row="2"
                             Grid.Column="1"
@@ -202,6 +221,7 @@
 
                         </Grid>
 
+                        <!--  Date added  -->
                         <Grid
                             Grid.Row="3"
                             Grid.Column="0"
@@ -214,6 +234,7 @@
                             <DatePicker Grid.Row="1" Text="{Binding Anime.Created, Mode=TwoWay}" />
                         </Grid>
 
+                        <!--  Resolution  -->
                         <Grid
                             Grid.Row="3"
                             Grid.Column="1"
@@ -228,6 +249,8 @@
                                 <system:String>1080p</system:String>
                             </ComboBox>
                         </Grid>
+
+                        <!--  Group  -->
                         <Grid
                             Grid.Row="4"
                             Grid.Column="0"

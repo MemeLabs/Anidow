@@ -18,5 +18,6 @@ namespace Anidow.Model
         public QBitTorrentSettingsModel QBitTorrent { get; set; } = new();
         public AnimeBytesSettingsModel AnimeBytesSettings { get; set; } = new();
         public NyaaSettingsModel NyaaSettings { get; set; } = new();
+        public string AniListJwt { get; set; }
     }
 }

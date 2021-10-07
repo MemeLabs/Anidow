@@ -56,18 +56,16 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="4" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="4" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="4" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <Expander
                     Grid.Row="0"
+                    Margin="0,0,0,4"
                     extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
                     extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="True"
@@ -258,7 +256,8 @@
                     </Grid>
                 </Expander>
                 <Expander
-                    Grid.Row="2"
+                    Grid.Row="1"
+                    Margin="0,0,0,4"
                     extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
@@ -302,7 +301,8 @@
                     </Grid>
                 </Expander>
                 <Expander
-                    Grid.Row="4"
+                    Grid.Row="2"
+                    Margin="0,0,0,4"
                     extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
@@ -382,7 +382,53 @@
                     </Grid>
                 </Expander>
                 <Expander
-                    Grid.Row="6"
+                    Grid.Row="3"
+                    Margin="0,0,0,4"
+                    extensions:LayerExtension.IncreaseLayer="True"
+                    IsExpanded="False"
+                    Style="{StaticResource ExpanderCustom}">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.Resources>
+                                <Style TargetType="Grid">
+                                    <Style.Setters>
+                                        <Setter Property="TextElement.Foreground" Value="White" />
+                                    </Style.Setters>
+                                </Style>
+                            </Grid.Resources>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="AniList" />
+                        </Grid>
+                    </Expander.Header>
+                    <Grid Margin="{adonisUi:Space 1}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel
+                            Grid.Row="0"
+                            Margin="0,4"
+                            Orientation="Horizontal">
+                            <TextBlock>Token:</TextBlock>
+                            <TextBlock Margin="8,0">
+                                <Hyperlink NavigateUri="https://anilist.co/api/v2/oauth/authorize?client_id=6669&amp;response_type=token" RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                                    (click here to get the token)
+                                </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                        <PasswordBox
+                            Grid.Row="1"
+                            Margin="0,0,0,4"
+                            helpers:Secure.Password="{Binding Settings.AniListJwt, UpdateSourceTrigger=PropertyChanged}" />
+
+                    </Grid>
+
+                </Expander>
+                <Expander
+                    Grid.Row="4"
+                    Margin="0,0,0,4"
                     extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False">
                     <Expander.Header>

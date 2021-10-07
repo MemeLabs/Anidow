@@ -1,19 +1,24 @@
 ﻿using System;
-using System.Linq;
+using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using AdonisUI.Controls;
-using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Events;
 using Anidow.Extensions;
+using Anidow.GraphQL;
 using Anidow.Services;
 using Anidow.Utils;
+using GraphQL;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.SystemTextJson;
 using Hardcodet.Wpf.TaskbarNotification;
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;
@@ -45,7 +50,7 @@ namespace Anidow.Pages.Components.Tracked
         public Anime Anime { get; private set; }
 
         public bool CanSaveAnime { get; set; } = true;
-
+        
         public void SetAnime(Anime anime)
         {
             Anime = anime;
@@ -113,8 +118,8 @@ namespace Anidow.Pages.Components.Tracked
         {
             try
             {
-                var anime = (Anime) data.anime;
-                var url = (string) data.url;
+                var anime = (Anime)data.anime;
+                var url = (string)data.url;
                 Uri.TryCreate(url, UriKind.Absolute, out var uri);
                 if (uri == null)
                 {
@@ -139,7 +144,6 @@ namespace Anidow.Pages.Components.Tracked
 
         public async Task Watch(Episode episode)
         {
-            
             try
             {
                 if (string.IsNullOrWhiteSpace(episode.File))
@@ -175,6 +179,17 @@ namespace Anidow.Pages.Components.Tracked
         {
             var img = (Image)sender;
             ImageUtil.ShowImage(img.Source);
+        }
+
+        public bool SearchAnimeLoading { get; set; }
+        public bool CanSearchAnime => !string.IsNullOrWhiteSpace(_settingsService.Settings.AniListJwt) && !SearchAnimeLoading;
+        public async Task SearchAnime()
+        {
+            SearchAnimeLoading = true;
+            var graphQlClient = new GraphQLHttpClient("https://graphql.anilist.co", new SystemTextJsonSerializer());
+            graphQlClient.HttpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"Bearer {_settingsService.Settings.AniListJwt}");
+            var graphQlResponse = await graphQlClient.SendQueryAsync<AnimeSearchResult>(GraphQLQueries.SearchQuery(Anime.Name, 5));
+            SearchAnimeLoading = false;
         }
     }
 }

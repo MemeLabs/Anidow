@@ -41,14 +41,17 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid x:Name="HeaderPanelScroll" Background="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}">
+            <Border
+                x:Name="HeaderPanelScroll"
+                Background="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
+                CornerRadius="4">
                 <Grid x:Name="HeaderPanelGrid">
                     <TabPanel
                         x:Name="HeaderPanel"
                         IsItemsHost="true"
                         KeyboardNavigation.TabIndex="1" />
                 </Grid>
-            </Grid>
+            </Border>
             <Grid
                 x:Name="ContentPanel"
                 Grid.Row="1"

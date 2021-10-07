@@ -23,7 +23,10 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox Margin="2" extensions:LayerExtension.IncreaseLayer="True">
+        <GroupBox
+            Margin="2"
+            extensions:CornerRadiusExtension.CornerRadius="4"
+            extensions:LayerExtension.IncreaseLayer="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
