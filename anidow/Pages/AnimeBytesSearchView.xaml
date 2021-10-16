@@ -78,7 +78,7 @@
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             IsSynchronizedWithCurrentItem="True"
-            ItemContainerStyle="{StaticResource ListViewItemBase}"
+            ItemContainerStyle="{StaticResource ListViewItemAnimeBytesSearch}"
             ItemsSource="{Binding Items}"
             Loaded="{s:Action ListLoaded}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"

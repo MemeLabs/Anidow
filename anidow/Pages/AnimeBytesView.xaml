@@ -5,6 +5,7 @@
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:Anidow.Extensions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -59,7 +60,17 @@
                         HorizontalContentAlignment="Stretch"
                         VerticalContentAlignment="Stretch"
                         s:View.Model="{Binding}"
-                        IsTabStop="False" />
+                        IsTabStop="False">
+                        <extensions:ContentControlExtensions.ContentChangedAnimation>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    From="0"
+                                    To="1"
+                                    Duration="0:0:.2" />
+                            </Storyboard>
+                        </extensions:ContentControlExtensions.ContentChangedAnimation>
+                    </ContentControl>
                 </DataTemplate>
             </TabControl.ContentTemplate>
 
@@ -68,7 +79,7 @@
 
         <Border
             Height="27"
-            Margin="4,4"
+            Margin="4"
             Padding="6,4"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"

@@ -30,5 +30,6 @@ namespace Anidow.Model
         public string DownloadLink { get; set; }
         public string Folder { get; set; }
         public bool CanDownload { get; set; } = true;
+        public bool IsTracked { get; set; }
     }
 }

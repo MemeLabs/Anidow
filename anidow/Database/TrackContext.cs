@@ -1,5 +1,6 @@
 ﻿using System;
 using Anidow.Database.Models;
+using Anidow.GraphQL;
 using Anidow.Pages;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,8 @@ namespace Anidow.Database
         public DbSet<Anime> Anime { get; set; }
         public DbSet<Episode> Episodes { get; set; }
         public DbSet<Cover> Covers { get; set; }
+        public DbSet<AniListAnime> AniListAnime { get; set; }
+
         public DbSet<NotifyItem> NotifyItems { get; set; }
         public DbSet<NotifyItemMatch> NotifyItemMatches { get; set; }
         public DbSet<NotifyItemKeyword> NotifyItemKeywords { get; set; }
@@ -23,11 +26,13 @@ namespace Anidow.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AppState>()
-                        .Property(b => b.Created)
-                        .HasDefaultValue(DateTime.UtcNow);
             modelBuilder.Entity<NotifyItemMatch>()
                         .Property(p => p.Keywords)
+                        .HasConversion(
+                            v => string.Join("\0", v),
+                            v => v.Split("\0", StringSplitOptions.RemoveEmptyEntries));
+            modelBuilder.Entity<AniListAnime>()
+                        .Property(p => p.Genres)
                         .HasConversion(
                             v => string.Join("\0", v),
                             v => v.Split("\0", StringSplitOptions.RemoveEmptyEntries));

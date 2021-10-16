@@ -3,14 +3,16 @@ using System;
 using Anidow.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Anidow.Migrations
 {
     [DbContext(typeof(TrackContext))]
-    partial class TrackContextModelSnapshot : ModelSnapshot
+    [Migration("20211014193239_AniListAnimes")]
+    partial class AniListAnimes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,9 +294,6 @@ namespace Anidow.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("AlternativeTitles")
-                        .HasColumnType("TEXT");
 
                     b.Property<int?>("AverageScore")
                         .HasColumnType("INTEGER");

@@ -22,6 +22,7 @@ namespace Anidow.Pages
         private readonly SettingsService _settingsService;
         private readonly IWindowManager _windowManager;
         private readonly MainViewModel _mainViewModel;
+        private bool _skipHide;
 
         public ShellViewModel(
             MainViewModel mainViewModel,
@@ -81,6 +82,7 @@ namespace Anidow.Pages
 
         public void Close()
         {
+            _skipHide = true;
             RequestClose();
         }
 
@@ -113,7 +115,7 @@ namespace Anidow.Pages
         public void Window_Closing(object sender, CancelEventArgs e)
         {
             AdonisWindow ??= (AdonisWindow) sender;
-            if (_settingsService.Settings is {MinimizeToNotificationArea: true})
+            if (_settingsService.Settings is {MinimizeToNotificationArea: true} && _skipHide == false)
             {
                 AdonisWindow.Hide();
                 e.Cancel = true;

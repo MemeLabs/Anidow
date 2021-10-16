@@ -43,6 +43,23 @@
             <Setter.Value>
                 <ContextMenu>
                     <MenuItem
+                        Command="{s:Action ShowInformation,
+                                           ActionNotFound=Disable}"
+                        CommandParameter="{Binding}"
+                        Header="Information"
+                        Icon="{iconPacks:FontAwesome InfoSolid}"
+                        Visibility="{Binding HasAniListAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                    <Separator Visibility="{Binding HasAniListAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+
+                    <MenuItem
+                        Command="{s:Action EditAnime,
+                                           ActionNotFound=Disable}"
+                        CommandParameter="{Binding}"
+                        Header="Edit"
+                        Icon="{iconPacks:FontAwesome EditSolid}"
+                        Visibility="{Binding HasAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                    <Separator />
+                    <MenuItem
                         Command="{s:Action ToggleWatch,
                                            ActionNotFound=Disable}"
                         CommandParameter="{Binding}"
@@ -110,6 +127,14 @@
             <Setter.Value>
                 <ContextMenu>
                     <MenuItem
+                        Command="{s:Action SetFolder,
+                                           ActionNotFound=Disable}"
+                        CommandParameter="{Binding}"
+                        Header="Set as Folder"
+                        Icon="{iconPacks:FontAwesome FolderSolid}"
+                        Visibility="{Binding CanSetFolder, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                    <Separator />
+                    <MenuItem
                         Command="{s:Action DeleteFile,
                                            ActionNotFound=Disable}"
                         CommandParameter="{Binding}"
@@ -131,6 +156,16 @@
         BasedOn="{StaticResource ListViewItemBase}"
         TargetType="ListViewItem">
         <Style.Triggers>
+            <DataTrigger Binding="{Binding IsTracked}" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Opacity=".2" Color="#425595" />
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+            </Trigger>
             <DataTrigger Binding="{Binding ShowInList}" Value="False">
                 <!--<DataTrigger.EnterActions>
                     <BeginStoryboard>
@@ -168,12 +203,28 @@
             </DataTrigger>
 
         </Style.Triggers>
-        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
         <Setter Property="RenderTransform">
             <Setter.Value>
                 <RotateTransform />
             </Setter.Value>
         </Setter>
+    </Style>
+    <Style
+        x:Key="ListViewItemAnimeBytesSearch"
+        BasedOn="{StaticResource ListViewItemBase}"
+        TargetType="ListViewItem">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsTracked}" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Opacity=".2" Color="#425595" />
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style

@@ -8,7 +8,7 @@ namespace Anidow.Database.Models
     public class AppState : ObservableObject
     {
         public int Id { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
         public bool FirstStart { get; set; } = true;
 
         public bool ShowStatusMiniViewNyaa { get; set; }

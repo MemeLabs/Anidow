@@ -98,6 +98,7 @@ namespace Anidow.Pages.Components.Tracked
             await using var db = new TrackContext();
             var anime = await db.Anime
                                 .Include(a => a.CoverData)
+                                .Include(a => a.AniListAnime)
                                 .OrderByDescending(a => a.Released)
                                 .ToListAsync();
 
@@ -170,7 +171,7 @@ namespace Anidow.Pages.Components.Tracked
         {
             var anime = (Anime) ((Border) sender).DataContext;
             ChangeActiveItem(anime, false);
-            _eventAggregator.Publish(new OpenAnimeEditEvent {Anime = anime});
+            ListEditAnime(anime);
         }
 
         public void OnMouseDoubleClickListEditAnime(object sender, MouseButtonEventArgs e)
@@ -180,9 +181,10 @@ namespace Anidow.Pages.Components.Tracked
             ListEditAnime(anime);
         }
 
-        public void ListEditAnime(Anime anime)
+        private void ListEditAnime(Anime anime)
         {
-            _eventAggregator.Publish(new OpenAnimeEditEvent { Anime = anime });
+            _trackedAnimeEditContentViewModel.SetAnime(anime);
+            _windowManager.ShowDialog(_trackedAnimeEditContentViewModel);
         }
 
         public void DeselectItem()

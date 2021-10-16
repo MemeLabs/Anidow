@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using AdonisUI.Controls;
+using System.Windows;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
@@ -15,8 +15,10 @@ using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Interfaces;
 using Anidow.Model;
+using Anidow.Pages.Components.AnimeInfo;
 using Anidow.Pages.Components.Settings;
 using Anidow.Pages.Components.Status;
+using Anidow.Pages.Components.Tracked;
 using Anidow.Services;
 using Anidow.Utils;
 using BencodeNET.Torrents;
@@ -26,6 +28,8 @@ using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
+using MessageBox = AdonisUI.Controls.MessageBox;
+using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 
 namespace Anidow.Pages
 {
@@ -35,6 +39,7 @@ namespace Anidow.Pages
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly HttpClient _httpClient;
+        private readonly TrackedAnimeEditContentViewModel _trackedAnimeEditContentViewModel;
         private readonly NotifyService _notifyService;
         private readonly ILogger _logger;
         private readonly SettingsService _settingsService;
@@ -50,6 +55,7 @@ namespace Anidow.Pages
             SettingsSetupWizardViewModel settingsSetupWizardViewModel,
             TaskbarIcon taskbarIcon, HttpClient httpClient,
             StatusViewModel statusViewModel,
+            TrackedAnimeEditContentViewModel trackedAnimeEditContentViewModel,
             NotifyService notifyService)
         {
             StatusViewModel = statusViewModel ?? throw new ArgumentNullException(nameof(statusViewModel));
@@ -61,6 +67,8 @@ namespace Anidow.Pages
             _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
             _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _trackedAnimeEditContentViewModel = trackedAnimeEditContentViewModel ??
+                                                throw new ArgumentNullException(nameof(trackedAnimeEditContentViewModel));
             _notifyService = notifyService ?? throw new ArgumentNullException(nameof(notifyService));
             _settingsSetupWizardViewModel = settingsSetupWizardViewModel ??
                                             throw new ArgumentNullException(nameof(settingsSetupWizardViewModel));
@@ -167,6 +175,15 @@ namespace Anidow.Pages
 
             await db.AddAsync(item);
             await db.SaveChangesAsync();
+
+            if (!string.IsNullOrEmpty(item.AnimeId))
+            {
+                var animeDb = await db.Anime
+                                      .Include(a => a.AniListAnime)
+                                      .FirstOrDefaultAsync(a => a.GroupId == item.AnimeId);
+                item.Anime = animeDb;
+            }
+
             Items.Add(item);
             await GetAiringEpisodesForToday();
         }
@@ -464,7 +481,17 @@ namespace Anidow.Pages
                              .ToListAsync();
 
             Items.Clear();
-            foreach (var episode in episodes) await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
+
+            foreach (var episode in episodes)
+            {
+                var anime = await db.Anime
+                                    .Include(a => a.AniListAnime)
+                                    .FirstOrDefaultAsync(a => a.GroupId == episode.AnimeId);
+                episode.Anime = anime;
+
+                await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
+            }
+
             ActiveItem = null;
 #if DEBUG
             Items.Add(new Episode
@@ -572,6 +599,38 @@ namespace Anidow.Pages
                                         && ActiveItem.AnimeId != null;
             }
         }
+
+        public void TrackAnime()
+        {
+            // TODO make this prettier somehow...
+            MainViewModel.Instance.ActiveItem = MainViewModel.Instance.Items[2];
+        }
+
+        public void ShowInformation(Episode episode)
+        {
+            if(episode?.Anime?.AniListAnime is null) return;
+
+            var window = new AnimeInfoPanelWindow
+            {
+                DataContext = episode.Anime.AniListAnime,
+                Owner = Application.Current.MainWindow,
+            };
+            window.ShowDialog();
+        }
+
+
+        public async Task EditAnime(Episode episode)
+        {
+            if (episode?.Anime is null) return;
+
+            await using var db = new TrackContext();
+            var episodes = db.Episodes.Where(e => e.AnimeId == episode.Anime.GroupId);
+            episode.Anime.EpisodeList = new BindableCollection<Episode>(episodes);
+
+            _trackedAnimeEditContentViewModel.SetAnime(episode.Anime);
+            _windowManager.ShowDialog(_trackedAnimeEditContentViewModel);
+        }
+
 
 #if DEBUG
         [DllImport("user32.dll")]

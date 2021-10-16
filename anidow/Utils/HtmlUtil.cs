@@ -15,13 +15,15 @@ namespace Anidow.Utils
         /// <returns></returns>
         public static string ConvertToPlainText(string html)
         {
+            if (string.IsNullOrEmpty(html)) return string.Empty; 
+
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
 
             var sw = new StringWriter();
             ConvertTo(doc.DocumentNode, sw);
             sw.Flush();
-            return sw.ToString();
+            return sw.ToString().Replace("\n\n\n", "\n").Replace("\n\n", "\n");
         }
 
 

@@ -4,10 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:anidow="clr-namespace:Anidow"
+    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:extensions1="clr-namespace:Anidow.Extensions"
-    xmlns:s="https://github.com/canton7/Stylet"
-    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI">
+    xmlns:s="https://github.com/canton7/Stylet">
     <Application.Resources>
         <s:ApplicationLoader LoadStyletResources="False">
             <s:ApplicationLoader.Bootstrapper>
@@ -37,7 +37,7 @@
             <Color x:Key="{x:Static adonisUi:Colors.Layer3BackgroundColor}">#2F2E2F</Color>
             <Color x:Key="{x:Static adonisUi:Colors.Layer4BackgroundColor}">#000000</Color>-->
 
-            <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:AdonisWindow}" >
+            <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:AdonisWindow}">
                 <!--<Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"></Setter>-->
             </Style>
 

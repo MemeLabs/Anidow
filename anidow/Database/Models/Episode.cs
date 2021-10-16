@@ -44,8 +44,11 @@ namespace Anidow.Database.Models
         [NotMapped] public string EpisodeNum => Name.GetEpisode();
         [NotMapped] public bool HomeHighlight { get; set; }
         [NotMapped] public bool CanOpen { get; set; } = true;
+        [NotMapped] public bool HasAniListAnime => Anime?.AniListAnime is not null;
+        [NotMapped] public bool HasAnime => Anime is not null;
 
         public string AnimeId { get; set; }
+        [NotMapped] public Anime Anime { get; set; }
         public string Folder { get; set; }
         public string DownloadLink { get; set; }
     }

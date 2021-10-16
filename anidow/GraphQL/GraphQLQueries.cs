@@ -10,7 +10,7 @@ namespace Anidow.GraphQL
             return new GraphQLRequest
             {
                 Query = @"
-                    query AnimeSearch($search: String, $perPPage: Int) {
+                    query AnimeSearch($search: String, $perPage: Int) {
                         Page(perPage: $perPage, page: 1) {
                             pageInfo {
                                 total
@@ -36,6 +36,13 @@ namespace Anidow.GraphQL
                                 medium
                                 color
                             }
+                            idMal
+                            genres
+                            averageScore
+                            episodes
+                            season
+                            seasonYear
+                            format
                         }
                     }
                 }",

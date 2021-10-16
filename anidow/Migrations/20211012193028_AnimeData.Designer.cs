@@ -3,14 +3,16 @@ using System;
 using Anidow.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Anidow.Migrations
 {
     [DbContext(typeof(TrackContext))]
-    partial class TrackContextModelSnapshot : ModelSnapshot
+    [Migration("20211012193028_AnimeData")]
+    partial class AnimeData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,9 +22,6 @@ namespace Anidow.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("AniListAnimeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Cover")
@@ -76,8 +75,6 @@ namespace Anidow.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AniListAnimeId");
-
                     b.HasIndex("CoverDataId");
 
                     b.ToTable("Anime");
@@ -90,7 +87,9 @@ namespace Anidow.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2021, 10, 12, 19, 30, 28, 284, DateTimeKind.Utc).AddTicks(4513));
 
                     b.Property<bool>("FirstStart")
                         .HasColumnType("INTEGER");
@@ -287,67 +286,11 @@ namespace Anidow.Migrations
                     b.ToTable("NotifyItemMatches");
                 });
 
-            modelBuilder.Entity("Anidow.GraphQL.AniListAnime", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AlternativeTitles")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AverageScore")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Cover")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("Episodes")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Format")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Genres")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("IdMal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Season")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("SeasonYear")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SiteUrl")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AniListAnime");
-                });
-
             modelBuilder.Entity("Anidow.Database.Models.Anime", b =>
                 {
-                    b.HasOne("Anidow.GraphQL.AniListAnime", "AniListAnime")
-                        .WithMany("Animes")
-                        .HasForeignKey("AniListAnimeId");
-
                     b.HasOne("Anidow.Database.Models.Cover", "CoverData")
                         .WithMany("Animes")
                         .HasForeignKey("CoverDataId");
-
-                    b.Navigation("AniListAnime");
 
                     b.Navigation("CoverData");
                 });
@@ -395,11 +338,6 @@ namespace Anidow.Migrations
                     b.Navigation("Keywords");
 
                     b.Navigation("Matches");
-                });
-
-            modelBuilder.Entity("Anidow.GraphQL.AniListAnime", b =>
-                {
-                    b.Navigation("Animes");
                 });
 #pragma warning restore 612, 618
         }

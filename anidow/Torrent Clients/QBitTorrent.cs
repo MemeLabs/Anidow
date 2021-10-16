@@ -7,6 +7,7 @@ using System.Web;
 using Anidow.Interfaces;
 using Anidow.Model;
 using Anidow.Services;
+using BencodeNET.Torrents;
 using Serilog;
 
 namespace Anidow.Torrent_Clients
@@ -30,12 +31,18 @@ namespace Anidow.Torrent_Clients
         private bool LoggedIn { get; set; }
 
 
-        public async Task<bool> Add(ITorrentItem item)
+        public async Task<bool> Add(ITorrentItem item, Torrent torrent = null)
         {
             await Login();
+            var downloadLink = item.DownloadLink;
+            if (torrent is not null)
+            {
+                downloadLink = torrent.GetMagnetLink();
+            }
+
             var m = new MultipartFormDataContent(Guid.NewGuid().ToString())
             {
-                {new StringContent(item.DownloadLink), "urls"},
+                {new StringContent(downloadLink), "urls"},
                 {new StringContent(item.Folder), "savepath"},
                 {new StringContent(Settings.QBitTorrent.Category), "category"},
             };

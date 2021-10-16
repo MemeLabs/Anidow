@@ -244,7 +244,11 @@
                                             FontWeight="Bold"
                                             Text="aA" />
                                     </Border>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Word}" />
+                                    <TextBox
+                                        VerticalAlignment="Center"
+                                        IsReadOnly="True"
+                                        Style="{DynamicResource {x:Static adonisUi:Styles.SelectableTextBlockTextBox}}"
+                                        Text="{Binding Word}" />
                                     <Button
                                         Margin="6,0,0,0"
                                         Command="{s:Action RemoveKeyword,

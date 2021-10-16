@@ -10,32 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Anidow.Pages
+namespace Anidow.Pages.Components.AnimeInfo
 {
     /// <summary>
-    /// Interaction logic for ImageView.xaml
+    /// Interaction logic for AnimeInfoPanelContent.xaml
     /// </summary>
-    public partial class ImageView
+    public partial class AnimeInfoPanelContent : UserControl
     {
-        public ImageView()
+        public AnimeInfoPanelContent()
         {
             InitializeComponent();
-        }
-
-        public string Url { get; set; }
-
-        private void ButtonCopy_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Clipboard.SetText(Url);
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
         }
     }
 }

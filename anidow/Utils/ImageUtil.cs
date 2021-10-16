@@ -53,6 +53,7 @@ namespace Anidow.Utils
                     Source = new BitmapImage(uri),
                 },
                 Owner = Application.Current.MainWindow,
+                Url = url,
             };
             imageView.ShowDialog();
         }

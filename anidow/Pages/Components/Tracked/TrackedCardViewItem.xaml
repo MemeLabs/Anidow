@@ -6,8 +6,10 @@
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+    xmlns:helpers="clr-namespace:Anidow.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
+    x:Name="Card"
     Width="140"
     Height="190"
     Margin="0,0,5,5"
@@ -16,47 +18,52 @@
     mc:Ignorable="d">
     <Border
         Padding="2"
+        BorderThickness="2"
         CornerRadius="4"
         MouseLeftButtonDown="{s:Action CardEditAnime}">
 
-        <!--<Border.RenderTransform>
-                <ScaleTransform />
-            </Border.RenderTransform>-->
+        <Border.RenderTransform>
+            <ScaleTransform />
+        </Border.RenderTransform>
         <Border.Style>
             <Style TargetType="Border">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                         <Setter Property="Cursor" Value="Hand" />
-                        <!--<Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
-                                            To="1.2" Duration="0:0:.3"/>
-                                        <DoubleAnimation
-                                            Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
-                                            To="1.2" Duration="0:0:.3"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
-                                            To="1.0" Duration="0:0:.3"/>
-                                        <DoubleAnimation
-                                            Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
-                                            To="1.0" Duration="0:0:.3"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>-->
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
+                                        To="1.02"
+                                        Duration="0:0:.1" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
+                                        To="1.02"
+                                        Duration="0:0:.1" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
+                                        To="1.0"
+                                        Duration="0:0:.1" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
+                                        To="1.0"
+                                        Duration="0:0:.1" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
                         <Setter Property="BorderBrush" Value="Transparent" />
                         <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
-                        <Setter Property="BorderThickness" Value="2" />
+                        <!--<Setter Property="BorderThickness" Value="2" />-->
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -91,7 +98,7 @@
 
                 <StackPanel
                     Grid.Row="0"
-                    Margin="8"
+                    Margin="4,8"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Visibility="{Binding CoverData.File, Converter={x:Static converters:IsNotNullToVisibilityConverter.Instance}}">
@@ -108,21 +115,22 @@
 
                 <Grid
                     Grid.Row="1"
-                    Background="Black"
-                    Opacity=".4" />
-                <Grid
-                    Grid.Row="1"
                     Height="45"
                     HorizontalAlignment="Stretch">
-                    <TextBlock
+                    <Grid.Background>
+                        <SolidColorBrush Opacity=".4" Color="Black" />
+                    </Grid.Background>
+
+                    <helpers:OutlinedTextBlock
                         Margin="4"
-                        HorizontalAlignment="Center"
+                        HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        FontSize="12"
+                        Fill="White"
+                        FontSize="13"
                         FontWeight="Bold"
-                        Foreground="White"
+                        Stroke="Black"
                         Text="{Binding Name}"
-                        TextTrimming="CharacterEllipsis"
+                        TextTrimming="WordEllipsis"
                         TextWrapping="Wrap"
                         ToolTip="{Binding Name}"
                         ToolTipService.Placement="Top" />

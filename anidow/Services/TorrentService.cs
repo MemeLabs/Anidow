@@ -38,7 +38,7 @@ namespace Anidow.Services
 #if RELEASE
             var result = _settingsService.Settings.TorrentClient switch
             {
-                TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.Add(item),
+                TorrentClient.QBitTorrent => await _clientFactory.GetQBitTorrent.Add(item, torrent),
                 TorrentClient.Deluge => throw new NotImplementedException(),
                 _ => false,
             };

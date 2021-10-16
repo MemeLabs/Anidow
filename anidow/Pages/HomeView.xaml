@@ -24,15 +24,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Opacity=".7"
-            Visibility="{Binding Items.Count, Converter={x:Static converters:IsZeroToVisibilityConverter.Instance}}">
-            nothing to watch
-        </TextBlock>
+
 
         <ListView
             x:Name="ListView"
@@ -171,6 +163,24 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{Binding Items.Count, Converter={x:Static converters:IsZeroToVisibilityConverter.Instance}}">
+            <TextBlock HorizontalAlignment="Center" Opacity=".7">
+                nothing to watch
+            </TextBlock>
+            <Button
+                Margin="0,8"
+                BorderThickness="0"
+                Command="{s:Action TrackAnime,
+                                   ActionNotFound=Disable}"
+                Content="Click here to track new Anime" />
+        </StackPanel>
+
         <Grid
             Grid.Row="0"
             Margin="2,-29"

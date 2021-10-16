@@ -108,6 +108,7 @@ namespace Anidow.Pages
             Items.Clear();
             foreach (var item in items)
             {
+                item.IsTracked = tracked.Contains(item.GroupId);
                 item.CanTrack = !tracked.Contains(item.GroupId)
                                 && !string.IsNullOrWhiteSpace(item.Resolution)
                                 && !string.IsNullOrWhiteSpace(item.GetReleaseGroup());
@@ -200,6 +201,7 @@ namespace Anidow.Pages
             await db.Anime.AddAsync(anime);
             await db.SaveChangesAsync();
             item.CanTrack = false;
+            item.IsTracked = true;
         }
 
 

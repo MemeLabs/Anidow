@@ -20,7 +20,7 @@ namespace Anidow.Pages
         private readonly Anime _anime;
         private readonly Episode _episode;
         private readonly ILogger _logger;
-        private readonly int _maxFilesInView = 100;
+        private const int MaxFilesInView = 100;
         private readonly string _name;
         private List<FolderFilesModel> _files;
 
@@ -114,7 +114,7 @@ namespace Anidow.Pages
 
         public async Task LoadMore()
         {
-            foreach (var filesModel in _files.Skip(FileInfos.Count).Take(_maxFilesInView))
+            foreach (var filesModel in _files.Skip(FileInfos.Count).Take(MaxFilesInView))
                 await DispatcherUtil.DispatchAsync(() => FileInfos.Add(filesModel));
             CanLoadMore = FileInfos.Count < _files.Count;
             DisplayName = $"Files ({FileInfos.Count}/{_files.Count}) - {_name}";
@@ -213,6 +213,20 @@ namespace Anidow.Pages
             catch (Exception e)
             {
                 _logger.Error(e, "couldn't open folder");
+            }
+        }
+
+        public async Task SetFolder(FolderFilesModel files)
+        {
+            if (_episode is not null)
+            {
+                _episode.Folder = files.File.FullName;
+                await _episode.UpdateInDatabase();
+            }
+            if (_anime is not null)
+            {
+                _anime.Folder = files.File.FullName;
+                await _episode.UpdateInDatabase();
             }
         }
         // TODO figure out how highlited items are on Top

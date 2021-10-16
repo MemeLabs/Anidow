@@ -104,6 +104,7 @@ namespace Anidow.Model
         }
 
         [JsonIgnore] public bool CanDownload { get; set; } = true;
+        [JsonIgnore] public bool IsTracked { get; set; }
     }
 
     public class AnimeBytesScrapeTorrent : ObservableObject, ITorrentItem

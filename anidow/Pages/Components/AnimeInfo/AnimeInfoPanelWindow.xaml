@@ -1,0 +1,19 @@
+﻿<controls:AdonisWindow
+    x:Class="Anidow.Pages.Components.AnimeInfo.AnimeInfoPanelWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:animeInfo="clr-namespace:Anidow.Pages.Components.AnimeInfo"
+    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:graphQl="clr-namespace:Anidow.GraphQL"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Anidow - Anime Information"
+    Width="700"
+    Height="455"
+    d:DataContext="{d:DesignInstance graphQl:AniListAnime}"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="ToolWindow"
+    mc:Ignorable="d">
+    <animeInfo:AnimeInfoPanel Margin="4" />
+</controls:AdonisWindow>

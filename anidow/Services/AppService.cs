@@ -30,10 +30,7 @@ namespace Anidow.Services
             State = await db.AppStates.FirstOrDefaultAsync();
             if (State is null)
             {
-                State = new AppState
-                {
-                    Created = DateTime.UtcNow,
-                };
+                State = new AppState();
                 await db.AppStates.AddAsync(State);
                 await db.SaveChangesAsync();
             }

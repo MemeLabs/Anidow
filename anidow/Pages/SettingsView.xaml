@@ -549,10 +549,11 @@
         </ScrollViewer>
         <Grid
             Grid.Row="2"
-            Margin="2"
+            Margin="4"
             VerticalAlignment="Bottom"
             Visibility="{Binding SettingsService.CanSave, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Button
+                extensions:CornerRadiusExtension.CornerRadius="4"
                 s:View.ActionTarget="{Binding SettingsService}"
                 Command="{s:Action Save}"
                 Content="Save"

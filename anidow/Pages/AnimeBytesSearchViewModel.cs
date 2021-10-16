@@ -83,6 +83,7 @@ namespace Anidow.Pages
             foreach (var anime in response.Groups)
             {
                 anime.Folder = _settingsService.Settings.AnimeFolder;
+                anime.IsTracked = tracked.Contains($"{anime.ID}");
                 anime.CanTrack = !tracked.Contains($"{anime.ID}")
                                  && anime.SubGroups.Count > 0
                                  && anime.GroupName.Equals("TV Series", StringComparison.InvariantCultureIgnoreCase);
@@ -154,6 +155,7 @@ namespace Anidow.Pages
             await db.Anime.AddAsync(anime);
             await db.SaveChangesAsync();
             item.CanTrack = false;
+            item.IsTracked = true;
         }
 
         public void DeselectItem()

@@ -355,17 +355,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border Padding="8" Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
+                    <Border Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
                         <Grid SnapsToDevicePixels="True">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <ContentControl
                                 x:Name="Arrow"
-                                Grid.Column="2"
+                                Grid.Column="0"
+                                Margin="8,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Content="{iconPacks:FontAwesome SortUpSolid,
@@ -381,7 +381,6 @@
 
                             <ContentPresenter
                                 Grid.Column="1"
-                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Content="{TemplateBinding Content}"
                                 ContentStringFormat="{TemplateBinding ContentStringFormat}"
