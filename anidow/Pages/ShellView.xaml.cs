@@ -1,13 +1,12 @@
 ﻿using Jot;
 
-namespace Anidow.Pages
+namespace Anidow.Pages;
+
+public partial class ShellView
 {
-    public partial class ShellView
+    public ShellView(Tracker tracker)
     {
-        public ShellView(Tracker tracker)
-        {
-            InitializeComponent();
-            tracker.Track(this);
-        }
+        InitializeComponent();
+        tracker.Track(this);
     }
 }

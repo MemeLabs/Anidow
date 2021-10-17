@@ -2,13 +2,12 @@
 
 using System.Windows.Controls;
 
-namespace Anidow.Pages
+namespace Anidow.Pages;
+
+public partial class MainView : UserControl
 {
-    public partial class MainView : UserControl
+    public MainView()
     {
-        public MainView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

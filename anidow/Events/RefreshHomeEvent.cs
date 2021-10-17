@@ -1,6 +1,5 @@
-﻿namespace Anidow.Events
+﻿namespace Anidow.Events;
+
+public class RefreshHomeEvent
 {
-    public class RefreshHomeEvent
-    {
-    }
 }

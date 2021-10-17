@@ -17,134 +17,133 @@ using Stylet;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using ListView = System.Windows.Controls.ListView;
 
+namespace Anidow.Pages;
 
-namespace Anidow.Pages
+// ReSharper disable once ClassNeverInstantiated.Global
+public class NyaaViewModel : Conductor<NyaaTorrentItem>.Collection.OneActive
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class NyaaViewModel : Conductor<NyaaTorrentItem>.Collection.OneActive
+    private readonly IEventAggregator _eventAggregator;
+    private readonly ILogger _logger;
+    private readonly NyaaService _nyaaService;
+    private readonly TorrentService _torrentService;
+    private ScrollViewer _scrollViewer;
+
+    public NyaaViewModel(ILogger logger, IEventAggregator eventAggregator, NyaaService nyaaService,
+        TorrentService torrentService)
     {
-        private readonly IEventAggregator _eventAggregator;
-        private readonly ILogger _logger;
-        private readonly NyaaService _nyaaService;
-        private readonly TorrentService _torrentService;
-        private ScrollViewer _scrollViewer;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
+        _nyaaService = nyaaService ?? throw new ArgumentNullException(nameof(nyaaService));
+        _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
+        DisplayName = "Nyaa";
+    }
 
-        public NyaaViewModel(ILogger logger, IEventAggregator eventAggregator, NyaaService nyaaService,
-            TorrentService torrentService)
+    public string SearchText { get; set; } = string.Empty;
+    public string LastSearch { get; set; }
+
+    public List<string> Filters => new()
+    {
+        "No filter",
+        "No remakes",
+        "Trusted only",
+    };
+
+    public int SelectedFilterIndex { get; set; }
+
+    public bool CanGetItems { get; set; }
+
+    //public bool CanDownload => ActiveItem != null && !string.IsNullOrWhiteSpace(ActiveItem.Folder);
+
+    public async Task GetItems()
+    {
+        CanGetItems = false;
+        var items = await _nyaaService.GetFeedItems((NyaaFilter)SelectedFilterIndex, SearchText.Trim());
+
+        if (items is not { Count: > 0 })
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
-            _nyaaService = nyaaService ?? throw new ArgumentNullException(nameof(nyaaService));
-            _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
-            DisplayName = "Nyaa";
-        }
-        public string SearchText { get; set; } = string.Empty;
-        public string LastSearch { get; set; }
-
-        public List<string> Filters => new()
-        {
-            "No filter",
-            "No remakes",
-            "Trusted only",
-        };
-
-        public int SelectedFilterIndex { get; set; }
-
-        public bool CanGetItems { get; set; }
-
-        //public bool CanDownload => ActiveItem != null && !string.IsNullOrWhiteSpace(ActiveItem.Folder);
-
-        public async Task GetItems()
-        {
-            CanGetItems = false;
-            var items = await _nyaaService.GetFeedItems((NyaaFilter)SelectedFilterIndex, SearchText.Trim());
-
-            if (items is not {Count: > 0})
-            {
-                CanGetItems = true;
-                return;
-            }
-
-            Items.Clear();
-            foreach (var item in items) await DispatcherUtil.DispatchAsync(() => Items.Add(item));
-
-            _scrollViewer?.ScrollToTop();
-            ActiveItem = null!;
-            LastSearch = $"{DateTime.Now:T}";
             CanGetItems = true;
+            return;
         }
 
-        public void DeselectItem()
-        {
-            ChangeActiveItem(null, false);
-        }
+        Items.Clear();
+        foreach (var item in items) await DispatcherUtil.DispatchAsync(() => Items.Add(item));
 
-        public void OpenExternalLink(NyaaTorrentItem item)
-        {
-            LinkUtil.Open(item.Link);
-        }
+        _scrollViewer?.ScrollToTop();
+        ActiveItem = null!;
+        LastSearch = $"{DateTime.Now:T}";
+        CanGetItems = true;
+    }
 
-        public async Task Download(NyaaTorrentItem item)
+    public void DeselectItem()
+    {
+        ChangeActiveItem(null, false);
+    }
+
+    public void OpenExternalLink(NyaaTorrentItem item)
+    {
+        LinkUtil.Open(item.Link);
+    }
+
+    public async Task Download(NyaaTorrentItem item)
+    {
+        item.CanDownload = false;
+        _logger.Information($"downloading {item.Name}");
+        var (success, torrent) = await _torrentService.Download(item);
+        if (success)
         {
-            item.CanDownload = false;
-            _logger.Information($"downloading {item.Name}");
-            var (success, torrent) = await _torrentService.Download(item);
-            if (success)
+            _eventAggregator.PublishOnUIThread(new DownloadEvent
             {
-                _eventAggregator.PublishOnUIThread(new DownloadEvent
-                {
-                    Item = item,
-                    Torrent = torrent,
-                });
-            }
-
-            await Task.Delay(100);
-            item.CanDownload = true;
+                Item = item,
+                Torrent = torrent,
+            });
         }
 
-        protected override async void OnInitialActivate()
+        await Task.Delay(100);
+        item.CanDownload = true;
+    }
+
+    protected override async void OnInitialActivate()
+    {
+        await GetItems();
+    }
+
+    public async void OnPreviewKeyDown(object _, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter)
         {
-            await GetItems();
+            return;
         }
 
-        public async void OnPreviewKeyDown(object _, KeyEventArgs e)
+        await GetItems().ConfigureAwait(false);
+        e.Handled = true;
+    }
+
+    public void OpenFolderBrowserDialog()
+    {
+        using var dialog = new FolderBrowserDialog
         {
-            if (e.Key != Key.Enter)
-            {
-                return;
-            }
-
-            await GetItems().ConfigureAwait(false);
-            e.Handled = true;
-        }
-
-        public void OpenFolderBrowserDialog()
+            SelectedPath = ActiveItem.Folder,
+        };
+        var result = dialog.ShowDialog();
+        if (result == DialogResult.OK)
         {
-            using var dialog = new FolderBrowserDialog
-            {
-                SelectedPath = ActiveItem.Folder,
-            };
-            var result = dialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                ActiveItem.Folder = dialog.SelectedPath;
-            }
+            ActiveItem.Folder = dialog.SelectedPath;
         }
+    }
 
-        public void ListLoaded(object sender, RoutedEventArgs e)
+    public void ListLoaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is not ListView listView || _scrollViewer != null)
         {
-            if (sender is not ListView listView || _scrollViewer != null)
-            {
-                return;
-            }
-
-            var scrollView = listView.FindVisualChildren<ScrollViewer>().FirstOrDefault();
-            if (scrollView == null)
-            {
-                return;
-            }
-
-            _scrollViewer ??= scrollView;
+            return;
         }
+
+        var scrollView = listView.FindVisualChildren<ScrollViewer>().FirstOrDefault();
+        if (scrollView == null)
+        {
+            return;
+        }
+
+        _scrollViewer ??= scrollView;
     }
 }

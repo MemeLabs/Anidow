@@ -1,41 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace Anidow.Pages
+namespace Anidow.Pages;
+
+/// <summary>
+///     Interaction logic for ImageView.xaml
+/// </summary>
+public partial class ImageView
 {
-    /// <summary>
-    /// Interaction logic for ImageView.xaml
-    /// </summary>
-    public partial class ImageView
+    public ImageView()
     {
-        public ImageView()
+        InitializeComponent();
+    }
+
+    public string Url { get; set; }
+
+    private void ButtonCopy_OnClick(object sender, RoutedEventArgs e)
+    {
+        try
         {
-            InitializeComponent();
+            Clipboard.SetText(Url);
         }
-
-        public string Url { get; set; }
-
-        private void ButtonCopy_OnClick(object sender, RoutedEventArgs e)
+        catch (Exception)
         {
-            try
-            {
-                Clipboard.SetText(Url);
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
+            //ignore
         }
     }
 }

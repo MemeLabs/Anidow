@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using Anidow.Helpers;
 using Anidow.Pages.Components.Status;
 using Anidow.Services;
 using Stylet;
@@ -12,6 +11,7 @@ namespace Anidow.Pages;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class MainViewModel : Conductor<Screen>.Collection.OneActive
 {
+    public static MainViewModel Instance;
     private readonly AboutViewModel _aboutViewModel;
     private readonly NotifyViewModel _notifyViewModel;
     private readonly SettingsService _settingsService;
@@ -45,7 +45,6 @@ public class MainViewModel : Conductor<Screen>.Collection.OneActive
     }
 
     public StatusViewModel StatusViewModel { get; }
-    public static MainViewModel Instance;
 
     public void OpenAbout()
     {

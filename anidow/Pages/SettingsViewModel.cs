@@ -14,80 +14,80 @@ using Stylet;
 using Screen = Stylet.Screen;
 using TextBox = System.Windows.Controls.TextBox;
 
-namespace Anidow.Pages
+namespace Anidow.Pages;
+
+// ReSharper disable once ClassNeverInstantiated.Global
+public class SettingsViewModel : Screen
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class SettingsViewModel : Screen
+    private readonly ILogger _logger;
+    private readonly Regex _regex = new("[^0-9]+");
+    private readonly SettingsSetupWizardViewModel _setupWizardViewModel;
+    private readonly IWindowManager _windowManager;
+
+    public SettingsViewModel(ILogger logger, SettingsService settingsService,
+        SettingsSetupWizardViewModel setupWizardViewModel,
+        IWindowManager windowManager)
     {
-        private readonly ILogger _logger;
-        private readonly SettingsSetupWizardViewModel _setupWizardViewModel;
-        private readonly IWindowManager _windowManager;
-        private readonly Regex _regex = new("[^0-9]+");
+        SettingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _setupWizardViewModel = setupWizardViewModel ?? throw new ArgumentNullException(nameof(setupWizardViewModel));
+        _windowManager = windowManager;
+        ;
+        DisplayName = "Settings";
+    }
 
-        public SettingsViewModel(ILogger logger, SettingsService settingsService, SettingsSetupWizardViewModel setupWizardViewModel,
-            IWindowManager windowManager)
+    public SettingsService SettingsService { get; }
+    public SettingsModel Settings => SettingsService.TempSettings;
+
+    public void SetAnimeFolder()
+    {
+        var folder = OpenFolderBrowserDialog();
+        if (string.IsNullOrWhiteSpace(folder))
         {
-            SettingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _setupWizardViewModel = setupWizardViewModel ?? throw new ArgumentNullException(nameof(setupWizardViewModel));
-            _windowManager = windowManager;
-            ;
-            DisplayName = "Settings";
+            return;
         }
 
-        public SettingsService SettingsService { get; }
-        public SettingsModel Settings => SettingsService.TempSettings;
+        Settings.AnimeFolder = folder;
+    }
 
-        public void SetAnimeFolder()
+    private string OpenFolderBrowserDialog()
+    {
+        using var dialog = new FolderBrowserDialog
         {
-            var folder = OpenFolderBrowserDialog();
-            if (string.IsNullOrWhiteSpace(folder))
-            {
-                return;
-            }
+            SelectedPath = Directory.GetCurrentDirectory(),
+        };
+        var result = dialog.ShowDialog();
+        return result == DialogResult.OK ? dialog.SelectedPath : default;
+    }
 
-            Settings.AnimeFolder = folder;
-        }
+    public void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = _regex.IsMatch(e.Text);
+    }
 
-        private string OpenFolderBrowserDialog()
+    public void RefreshTimeTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (sender is TextBox textBox && string.IsNullOrWhiteSpace(textBox.Text))
         {
-            using var dialog = new FolderBrowserDialog
-            {
-                SelectedPath = Directory.GetCurrentDirectory(),
-            };
-            var result = dialog.ShowDialog();
-            return result == DialogResult.OK ? dialog.SelectedPath : default;
+            textBox.Text = "1";
         }
+    }
 
-        public void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+    public void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+    {
+        try
         {
-            e.Handled = _regex.IsMatch(e.Text);
+            LinkUtil.Open(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "failed opening link to passkey");
+        }
+    }
 
-        public void RefreshTimeTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is TextBox textBox && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.Text = "1";
-            }
-        }
-
-        public void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            try
-            {
-                LinkUtil.Open(e.Uri.AbsoluteUri);
-                e.Handled = true;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "failed opening link to passkey");
-            }
-        }
-
-        public void SetupWizard()
-        {
-            _windowManager.ShowDialog(_setupWizardViewModel);
-        }
+    public void SetupWizard()
+    {
+        _windowManager.ShowDialog(_setupWizardViewModel);
     }
 }

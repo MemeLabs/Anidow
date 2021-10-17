@@ -234,7 +234,8 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock VerticalAlignment="Top" Text="{Binding DateString}">
                                                 <TextBlock.ToolTip>
-                                                    <ToolTip Content="{Binding DateLocal}" ContentStringFormat="{}{0:g}" />
+                                                    <ToolTip Content="{Binding DateLocal}"
+                                                             ContentStringFormat="{}{0:g}" />
                                                 </TextBlock.ToolTip>
                                             </TextBlock>
                                             <Separator

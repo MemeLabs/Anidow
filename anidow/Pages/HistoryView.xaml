@@ -15,7 +15,6 @@
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance local:HistoryViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -59,7 +58,7 @@
                     Margin="0,0,4,0"
                     Command="{s:Action NextPage,
                                        ActionNotFound=Disable}"
-                    Content="{iconPacks:FontAwesome ArrowRightSolid}"/>
+                    Content="{iconPacks:FontAwesome ArrowRightSolid}" />
                 <Button
                     Grid.Column="2"
                     Margin="0,0,4,0"
@@ -384,7 +383,8 @@
                         Content="Delete"
                         Foreground="White">
                         <controls:SplitButton.SplitMenu>
-                            <ContextMenu MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                            <ContextMenu
+                                MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
                                 <MenuItem
                                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                                     extensions:RippleExtension.BackgroundBrush="#EF5350"

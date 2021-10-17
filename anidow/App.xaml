@@ -5,8 +5,6 @@
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:anidow="clr-namespace:Anidow"
     xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
-    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-    xmlns:extensions1="clr-namespace:Anidow.Extensions"
     xmlns:s="https://github.com/canton7/Stylet">
     <Application.Resources>
         <s:ApplicationLoader LoadStyletResources="False">
@@ -48,7 +46,8 @@
             <!-- </Style> -->
 
             <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="{x:Type ToolTip}">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
             </Style>
@@ -124,7 +123,8 @@
                                     CanContentScroll="True"
                                     Focusable="False"
                                     VerticalScrollBarVisibility="Auto">
-                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    <ItemsPresenter
+                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </ScrollViewer>
                             </Border>
                         </ControlTemplate>

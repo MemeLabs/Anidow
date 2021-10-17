@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:Anidow.Extensions"
     xmlns:graphQl="clr-namespace:Anidow.GraphQL"
-    xmlns:local="clr-namespace:Anidow.Pages.Components.AnimeInfo"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DataContext="{d:DesignInstance graphQl:AniListAnime}"
     d:DesignHeight="450"

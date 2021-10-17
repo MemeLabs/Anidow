@@ -1,9 +1,8 @@
 ﻿using Anidow.Database.Models;
 
-namespace Anidow.Events
+namespace Anidow.Events;
+
+public class AddToHomeEvent
 {
-    public class AddToHomeEvent
-    {
-        public Episode Episode { get; init; }
-    }
+    public Episode Episode { get; init; }
 }

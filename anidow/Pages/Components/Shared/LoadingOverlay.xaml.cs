@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace Anidow.Pages.Components.Shared
+namespace Anidow.Pages.Components.Shared;
+
+/// <summary>
+///     Interaktionslogik für LoadingOverlay.xaml
+/// </summary>
+public partial class LoadingOverlay : UserControl
 {
-    /// <summary>
-    ///     Interaktionslogik für LoadingOverlay.xaml
-    /// </summary>
-    public partial class LoadingOverlay : UserControl
+    public LoadingOverlay()
     {
-        public LoadingOverlay()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

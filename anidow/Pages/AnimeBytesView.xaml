@@ -42,10 +42,12 @@
                                 <ControlTemplate.Triggers>
 
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                                        <Setter TargetName="Border" Property="Background"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" />
+                                        <Setter TargetName="Border" Property="Background"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -119,7 +121,8 @@
                     Margin="10,0,0,0"
                     Content="H&amp;R: "
                     Visibility="{Binding Stats.HitAndRuns, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}" />
-                <TextBlock Grid.Column="4" Visibility="{Binding Stats.HitAndRuns, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                <TextBlock Grid.Column="4"
+                           Visibility="{Binding Stats.HitAndRuns, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
                     <Hyperlink
                         FontWeight="Bold"
                         Foreground="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"

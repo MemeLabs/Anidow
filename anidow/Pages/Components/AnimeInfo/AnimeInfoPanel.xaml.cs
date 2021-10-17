@@ -3,27 +3,26 @@ using System.Windows.Controls;
 using Anidow.GraphQL;
 using Anidow.Utils;
 
-namespace Anidow.Pages.Components.AnimeInfo
+namespace Anidow.Pages.Components.AnimeInfo;
+
+/// <summary>
+///     Interaction logic for AnimeInfoPanel.xaml
+/// </summary>
+public partial class AnimeInfoPanel : UserControl
 {
-    /// <summary>
-    /// Interaction logic for AnimeInfoPanel.xaml
-    /// </summary>
-    public partial class AnimeInfoPanel : UserControl
+    public AnimeInfoPanel()
     {
-        public AnimeInfoPanel()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            var ctx = (AniListAnime) ((Button)sender).DataContext;
-            ShowImage(ctx.Cover);
-        }
+    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    {
+        var ctx = (AniListAnime)((Button)sender).DataContext;
+        ShowImage(ctx.Cover);
+    }
 
-        private void ShowImage(string url)
-        {
-            ImageUtil.ShowImage(url);
-        }
+    private void ShowImage(string url)
+    {
+        ImageUtil.ShowImage(url);
     }
 }

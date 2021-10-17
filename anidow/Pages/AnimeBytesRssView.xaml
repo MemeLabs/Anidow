@@ -268,7 +268,9 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding ActiveItem.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
+                            <TextBox
+                                Text="{Binding ActiveItem.Folder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
                             <Button
                                 Grid.Column="1"
                                 Margin="8,0,0,0"

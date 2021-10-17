@@ -1,8 +1,7 @@
-﻿namespace Anidow.Enums
+﻿namespace Anidow.Enums;
+
+public enum TorrentClient
 {
-    public enum TorrentClient
-    {
-        QBitTorrent = 0,
-        Deluge = 1,
-    }
+    QBitTorrent = 0,
+    Deluge = 1,
 }

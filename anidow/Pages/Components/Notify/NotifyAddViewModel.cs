@@ -1,149 +1,145 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Automation;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using Anidow.Database;
 using Anidow.Database.Models;
-using Anidow.Enums;
 using Anidow.Events;
-using Microsoft.EntityFrameworkCore;
 using Stylet;
 
-namespace Anidow.Pages.Components.Notify
+namespace Anidow.Pages.Components.Notify;
+
+public class NotifyAddViewModel : Screen
 {
-    public class NotifyAddViewModel : Screen
+    private readonly IEventAggregator _eventAggregator;
+    private readonly bool _isEdit;
+
+    public NotifyAddViewModel(IEventAggregator eventAggregator)
     {
-        private readonly IEventAggregator _eventAggregator;
-        public NotifyItem Item { get; set; }
-        private readonly bool _isEdit;
+        Item = new NotifyItem();
+        Title = "Add";
+        _eventAggregator = eventAggregator;
+    }
 
-        public NotifyAddViewModel(IEventAggregator eventAggregator)
+    public NotifyAddViewModel(NotifyItem item, IEventAggregator eventAggregator)
+    {
+        Item = item;
+        Title = "Edit";
+
+        _isEdit = true;
+        _eventAggregator = eventAggregator;
+    }
+
+    public NotifyItem Item { get; set; }
+
+    public string Title { get; set; }
+
+    public bool UseRegex { get; set; }
+    public bool CaseSensitive { get; set; }
+    public bool MustMatch { get; set; }
+
+    public string Keyword { get; set; }
+    public string ErrorMessage { get; set; }
+
+    public bool CanAdd => !_isEdit && CanCanAddMethod();
+
+    private bool CanCanAddMethod()
+    {
+        if (string.IsNullOrEmpty(Item.Name))
         {
-            Item  = new NotifyItem();
-            Title = "Add";
-            _eventAggregator = eventAggregator;
+            ErrorMessage = "Name can not be empty";
+            return false;
         }
 
-        public NotifyAddViewModel(NotifyItem item, IEventAggregator eventAggregator)
+        if (Item.Keywords.Count < 1)
         {
-            Item = item;
-            Title = "Edit";
-            
-            _isEdit = true;
-            _eventAggregator = eventAggregator;
+            ErrorMessage = "You need at least one keyword";
+            return false;
         }
 
-        public string Title { get; set; }
+        ErrorMessage = null;
+        return true;
+    }
 
-        public bool UseRegex { get; set; }
-        public bool CaseSensitive { get; set; }
-        public bool MustMatch { get; set; }
+    public async Task Add()
+    {
+        await using var db = new TrackContext();
+        await db.NotifyItems.AddAsync(Item);
+        await db.SaveChangesAsync();
 
-        public string Keyword { get; set; }
-        public string ErrorMessage { get; set; }
-
-        private bool CanCanAddMethod()
+        _eventAggregator.PublishOnUIThread(new NotifyItemAddOrUpdateEvent
         {
-            if (string.IsNullOrEmpty(Item.Name))
-            {
-                ErrorMessage = "Name can not be empty";
-                return false;
-            }
+            Item = Item,
+        });
 
-            if (Item.Keywords.Count < 1)
-            {
-                ErrorMessage = "You need at least one keyword";
-                return false;
-            }
+        RequestClose(true);
+    }
 
-            ErrorMessage = null;
-            return true;
+    public async Task AddKeyword()
+    {
+        if (string.IsNullOrEmpty(Keyword))
+        {
+            return;
         }
 
-        public bool CanAdd => !_isEdit && CanCanAddMethod();
-        public async Task Add()
+        var newKeyword = new NotifyItemKeyword
+        {
+            NotifyItemId = Item.Id,
+            Word = Keyword.Trim(),
+            IsRegex = UseRegex,
+            IsCaseSensitive = CaseSensitive,
+            MustMatch = MustMatch,
+        };
+
+        if (_isEdit)
         {
             await using var db = new TrackContext();
-            await db.NotifyItems.AddAsync(Item);
+            db.NotifyItemKeywords.Add(newKeyword);
             await db.SaveChangesAsync();
-
-            _eventAggregator.PublishOnUIThread(new NotifyItemAddOrUpdateEvent
-            {
-                Item = Item,
-            });
-
-            RequestClose(true);
         }
 
-        public async Task AddKeyword()
+        Item.Keywords.Add(newKeyword);
+
+        Keyword = string.Empty;
+        NotifyOfPropertyChange(() => CanAdd);
+        NotifyOfPropertyChange(() => Item.Keywords);
+    }
+
+    public async Task RemoveKeyword(NotifyItemKeyword keyword)
+    {
+        Item.Keywords.Remove(keyword);
+
+        if (_isEdit)
         {
-            if (string.IsNullOrEmpty(Keyword))
-            {
-                return;
-            }
-
-            var newKeyword = new NotifyItemKeyword
-            {
-                NotifyItemId = Item.Id,
-                Word = Keyword.Trim(),
-                IsRegex = UseRegex,
-                IsCaseSensitive = CaseSensitive,
-                MustMatch = MustMatch,
-            };
-            
-            if (_isEdit)
-            {
-                await using var db = new TrackContext();
-                db.NotifyItemKeywords.Add(newKeyword);
-                await db.SaveChangesAsync();
-            }
-            
-            Item.Keywords.Add(newKeyword);
-
-            Keyword = string.Empty;
-            NotifyOfPropertyChange(() => CanAdd);
-            NotifyOfPropertyChange(() => Item.Keywords);
+            await using var db = new TrackContext();
+            db.Attach(keyword);
+            db.Remove(keyword);
+            await db.SaveChangesAsync();
         }
 
-        public async Task RemoveKeyword(NotifyItemKeyword keyword)
+        NotifyOfPropertyChange(() => CanAdd);
+        NotifyOfPropertyChange(() => Item.Keywords);
+    }
+
+    public async Task Close()
+    {
+        if (_isEdit)
         {
-            Item.Keywords.Remove(keyword);
-            
-            if (_isEdit)
-            {
-                await using var db = new TrackContext();
-                db.Attach(keyword);
-                db.Remove(keyword);
-                await db.SaveChangesAsync();
-            }
+            await using var db = new TrackContext();
+            db.Attach(Item);
+            db.Update(Item);
+            await db.SaveChangesAsync();
+        }
 
-            NotifyOfPropertyChange(() => CanAdd);
-            NotifyOfPropertyChange(() => Item.Keywords);
-        }
-        
-        public async Task Close()
+        RequestClose(true);
+    }
+
+    public void Keyword_OnPreviewKeyDown(object _, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter)
         {
-            if (_isEdit)
-            {
-                await using var db = new TrackContext();
-                db.Attach(Item);
-                db.Update(Item);
-                await db.SaveChangesAsync();
-            }
-            RequestClose(true);
+            return;
         }
-        
-        public void Keyword_OnPreviewKeyDown(object _, KeyEventArgs e)
-        {
-            if (e.Key != Key.Enter)
-            {
-                return;
-            }
-            AddKeyword().ConfigureAwait(false);
-            e.Handled = true;
-        }
+
+        AddKeyword().ConfigureAwait(false);
+        e.Handled = true;
     }
 }

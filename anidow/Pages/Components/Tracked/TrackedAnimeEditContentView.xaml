@@ -51,10 +51,12 @@
                             <ControlTemplate.Triggers>
 
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}" />
+                                    <Setter TargetName="Border" Property="Background"
+                                            Value="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}" />
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUI:Brushes.Layer0BackgroundBrush}}" />
+                                    <Setter TargetName="Border" Property="Background"
+                                            Value="{DynamicResource {x:Static adonisUI:Brushes.Layer0BackgroundBrush}}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -62,7 +64,8 @@
                 </Setter>
             </Style>
         </TabControl.Resources>
-        <TabItem Header="Information" Visibility="{Binding Anime.AniListAnime, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
+        <TabItem Header="Information"
+                 Visibility="{Binding Anime.AniListAnime, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
             <animeInfo:AnimeInfoPanel DataContext="{Binding Anime.AniListAnime}" />
         </TabItem>
         <TabItem Padding="0" Header="Settings">
@@ -99,10 +102,12 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="False">
-                                            <Setter Property="Background" Value="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}" />
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}" />
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{DynamicResource {x:Static adonisUI:Brushes.AccentBrush}}" />
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource {x:Static adonisUI:Brushes.AccentBrush}}" />
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -141,9 +146,11 @@
                                         VerticalAlignment="Center"
                                         Visibility="{Binding Anime.CoverData.File, Converter={x:Static converters:IsNotNullToVisibilityConverter.Instance}}">
                                         <TextBox x:Name="CoverUrl" extensions:WatermarkExtension.Watermark="Url ..." />
-                                        <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}" Content="Download Cover">
+                                        <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}"
+                                                Content="Download Cover">
                                             <Button.CommandParameter>
-                                                <MultiBinding Converter="{x:Static converters:DownloadCoverConverter.Instance}">
+                                                <MultiBinding
+                                                    Converter="{x:Static converters:DownloadCoverConverter.Instance}">
                                                     <Binding ElementName="CoverUrl" Path="Text" />
                                                     <Binding Path="Anime" />
                                                 </MultiBinding>
@@ -270,7 +277,8 @@
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <TextBlock Margin="0,0,0,4" Text="Group:" />
-                                        <TextBox Grid.Row="1" Text="{Binding Anime.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Grid.Row="1"
+                                                 Text="{Binding Anime.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     </Grid>
 
                                     <Grid

@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace Anidow.Pages
+namespace Anidow.Pages;
+
+/// <summary>
+///     Interaction logic for StartupView.xaml
+/// </summary>
+public partial class StartupView : UserControl
 {
-    /// <summary>
-    ///     Interaction logic for StartupView.xaml
-    /// </summary>
-    public partial class StartupView : UserControl
+    public StartupView()
     {
-        public StartupView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

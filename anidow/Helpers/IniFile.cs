@@ -5,51 +5,50 @@ using System.Text;
 
 #nullable enable
 
-namespace Anidow.Helpers
+namespace Anidow.Helpers;
+
+public class IniFile
 {
-    public class IniFile
+    private readonly string _path;
+
+    public IniFile(string? iniPath = null)
     {
-        private readonly string _path;
-
-        public IniFile(string? iniPath = null)
+        if (iniPath is null)
         {
-            if (iniPath is null)
-            {
-                throw new ArgumentException(@"iniPath is null", nameof(iniPath));
-            }
-
-            _path = new FileInfo(iniPath).FullName;
+            throw new ArgumentException(@"iniPath is null", nameof(iniPath));
         }
 
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern long WritePrivateProfileString(string section, string key, string value, string filePath);
-
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern int GetPrivateProfileString(string section, string key, string @default,
-            StringBuilder retVal, int size, string filePath);
-
-        public string Read(string key, string? section = null)
-        {
-            var retVal = new StringBuilder(255);
-            GetPrivateProfileString(section!, key, "", retVal, 255, _path);
-            return retVal.ToString();
-        }
-
-        public void Write(string? key, string? value, string? section = null)
-        {
-            WritePrivateProfileString(section!, key!, value!, _path);
-        }
-
-        public void DeleteKey(string key, string? section = null)
-        {
-            Write(key, null, section);
-        }
-
-        public void DeleteSection(string? section = null)
-        {
-            Write(null, null, section);
-        }
-
-        public bool KeyExists(string key, string? section = null) => Read(key, section).Length > 0;
+        _path = new FileInfo(iniPath).FullName;
     }
+
+    [DllImport("kernel32", CharSet = CharSet.Unicode)]
+    private static extern long WritePrivateProfileString(string section, string key, string value, string filePath);
+
+    [DllImport("kernel32", CharSet = CharSet.Unicode)]
+    private static extern int GetPrivateProfileString(string section, string key, string @default,
+        StringBuilder retVal, int size, string filePath);
+
+    public string Read(string key, string? section = null)
+    {
+        var retVal = new StringBuilder(255);
+        GetPrivateProfileString(section!, key, "", retVal, 255, _path);
+        return retVal.ToString();
+    }
+
+    public void Write(string? key, string? value, string? section = null)
+    {
+        WritePrivateProfileString(section!, key!, value!, _path);
+    }
+
+    public void DeleteKey(string key, string? section = null)
+    {
+        Write(key, null, section);
+    }
+
+    public void DeleteSection(string? section = null)
+    {
+        Write(null, null, section);
+    }
+
+    public bool KeyExists(string key, string? section = null) => Read(key, section).Length > 0;
 }

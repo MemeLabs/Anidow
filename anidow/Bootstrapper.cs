@@ -25,7 +25,6 @@ using Serilog.Core;
 using Serilog.Events;
 using Stylet;
 using StyletIoC;
-
 #if RELEASE
 using AdonisUI.Controls;
 using System.IO;
@@ -115,7 +114,7 @@ namespace Anidow
                 AutomaticDecompression = DecompressionMethods.All,
                 UseCookies = true,
             };
-            var httpClient = new HttpClient(clientHandler) {Timeout = TimeSpan.FromSeconds(60)};
+            var httpClient = new HttpClient(clientHandler) { Timeout = TimeSpan.FromSeconds(60) };
             httpClient.DefaultRequestHeaders.UserAgent.Clear();
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36");
@@ -133,7 +132,7 @@ namespace Anidow
             tracker.Configure<ShellView>()
                    .Id(_ =>
                        $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
-                   .Properties(w => new {w.Height, w.Width, w.Left, w.Top, w.WindowState})
+                   .Properties(w => new { w.Height, w.Width, w.Left, w.Top, w.WindowState })
                    .PersistOn(nameof(ShellView.Closing))
                    .StopTrackingOn(nameof(ShellView.Closing));
             return tracker;

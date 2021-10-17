@@ -37,7 +37,8 @@
                 <ColumnDefinition Width="8" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
+                     Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
             <Button
                 Grid.Row="0"
                 Grid.Column="2"

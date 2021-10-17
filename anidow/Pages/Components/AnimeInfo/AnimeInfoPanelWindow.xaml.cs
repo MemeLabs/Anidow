@@ -1,15 +1,12 @@
-﻿using System.Windows;
+﻿namespace Anidow.Pages.Components.AnimeInfo;
 
-namespace Anidow.Pages.Components.AnimeInfo
+/// <summary>
+///     Interaction logic for AnimeInfoPanelWindow.xaml
+/// </summary>
+public partial class AnimeInfoPanelWindow
 {
-    /// <summary>
-    /// Interaction logic for AnimeInfoPanelWindow.xaml
-    /// </summary>
-    public partial class AnimeInfoPanelWindow
+    public AnimeInfoPanelWindow()
     {
-        public AnimeInfoPanelWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

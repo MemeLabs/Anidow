@@ -70,6 +70,10 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
     public bool CanLoadMore { get; set; } = true;
     public bool CanLoadEpisodes { get; set; } = true;
 
+    public bool CanNextPage => Page < TotalPages;
+
+    public bool CanPreviousPage => Page > 1;
+
     protected override async void OnInitialActivate()
     {
         await HomePage();
@@ -86,14 +90,13 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
         {
             return;
         }
-        
+
         var page = Page;
         Page = 1;
 
         await LoadPage(page);
     }
 
-    public bool CanNextPage => Page < TotalPages;
     public async Task NextPage()
     {
         if (Page == TotalPages || !CanLoadEpisodes)
@@ -107,7 +110,6 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
         await LoadPage(page);
     }
 
-    public bool CanPreviousPage => Page > 1;
     public async Task PreviousPage()
     {
         if (Page == 1 || !CanLoadEpisodes)
@@ -127,6 +129,7 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
         _cancellationTokenSource.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
     }
+
     private async Task LoadPage(int page)
     {
         if (!CanLoadEpisodes)

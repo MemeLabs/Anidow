@@ -2,13 +2,12 @@
 
 using System.Windows.Controls;
 
-namespace Anidow.Pages.Components.Status
+namespace Anidow.Pages.Components.Status;
+
+public partial class StatusMiniView : UserControl
 {
-    public partial class StatusMiniView : UserControl
+    public StatusMiniView()
     {
-        public StatusMiniView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

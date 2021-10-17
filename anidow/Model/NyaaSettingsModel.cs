@@ -1,7 +1,6 @@
-﻿namespace Anidow.Model
+﻿namespace Anidow.Model;
+
+public class NyaaSettingsModel : ObservableObject
 {
-    public class NyaaSettingsModel : ObservableObject
-    {
-        public int HideTorrentsBelowSeeders { get; set; } = -1;
-    }
+    public int HideTorrentsBelowSeeders { get; set; } = -1;
 }

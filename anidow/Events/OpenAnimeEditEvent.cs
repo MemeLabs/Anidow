@@ -1,9 +1,8 @@
 ﻿using Anidow.Database.Models;
 
-namespace Anidow.Events
+namespace Anidow.Events;
+
+public class OpenAnimeEditEvent
 {
-    public class OpenAnimeEditEvent
-    {
-        public Anime Anime { get; set; }
-    }
+    public Anime Anime { get; set; }
 }

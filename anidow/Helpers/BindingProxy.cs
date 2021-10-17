@@ -1,23 +1,22 @@
 ﻿using System.Windows;
 
-namespace Anidow.Helpers
+namespace Anidow.Helpers;
+
+public class BindingProxy : Freezable
 {
-    public class BindingProxy : Freezable
+    // Using a DependencyProperty as the backing store for Data.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty DataProperty =
+        DependencyProperty.Register("Data", typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
+
+    public object Data
     {
-        // Using a DependencyProperty as the backing store for Data.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DataProperty =
-            DependencyProperty.Register("Data", typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
-
-        public object Data
-        {
-            get => GetValue(DataProperty);
-            set => SetValue(DataProperty, value);
-        }
-
-        #region Overrides of Freezable
-
-        protected override Freezable CreateInstanceCore() => new BindingProxy();
-
-        #endregion
+        get => GetValue(DataProperty);
+        set => SetValue(DataProperty, value);
     }
+
+    #region Overrides of Freezable
+
+    protected override Freezable CreateInstanceCore() => new BindingProxy();
+
+    #endregion
 }

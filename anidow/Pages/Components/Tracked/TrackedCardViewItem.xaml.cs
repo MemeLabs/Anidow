@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace Anidow.Pages.Components.Tracked
+namespace Anidow.Pages.Components.Tracked;
+
+/// <summary>
+///     Interaktionslogik für TrackedCardViewItem.xaml
+/// </summary>
+public partial class TrackedCardViewItem : UserControl
 {
-    /// <summary>
-    ///     Interaktionslogik für TrackedCardViewItem.xaml
-    /// </summary>
-    public partial class TrackedCardViewItem : UserControl
+    public TrackedCardViewItem()
     {
-        public TrackedCardViewItem()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,13 +1,12 @@
-﻿namespace Anidow.Pages.Components.Notification
+﻿namespace Anidow.Pages.Components.Notification;
+
+/// <summary>
+///     Interaction logic for NotificationUndoView.xaml
+/// </summary>
+public partial class NotificationUndoView
 {
-    /// <summary>
-    ///     Interaction logic for NotificationUndoView.xaml
-    /// </summary>
-    public partial class NotificationUndoView
+    public NotificationUndoView()
     {
-        public NotificationUndoView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

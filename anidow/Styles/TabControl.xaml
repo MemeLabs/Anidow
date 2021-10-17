@@ -70,7 +70,8 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid x:Name="HeaderPanelScroll" Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
+            <Grid x:Name="HeaderPanelScroll"
+                  Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
                 <Grid x:Name="HeaderPanelGrid">
                     <TabPanel
                         x:Name="HeaderPanel"
@@ -155,10 +156,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                            <Setter TargetName="Border" Property="Background"
+                                    Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                            <Setter TargetName="Border" Property="Background"
+                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                             <Setter TargetName="Border" Property="TextElement.Foreground" Value="White" />
                         </Trigger>
                     </ControlTemplate.Triggers>

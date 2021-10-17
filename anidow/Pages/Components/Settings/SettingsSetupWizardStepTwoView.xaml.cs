@@ -2,13 +2,12 @@
 
 using System.Windows.Controls;
 
-namespace Anidow.Pages.Components.Settings
+namespace Anidow.Pages.Components.Settings;
+
+public partial class SettingsSetupWizardStepTwoView : UserControl
 {
-    public partial class SettingsSetupWizardStepTwoView : UserControl
+    public SettingsSetupWizardStepTwoView()
     {
-        public SettingsSetupWizardStepTwoView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

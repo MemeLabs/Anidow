@@ -12,7 +12,6 @@
     xmlns:local="clr-namespace:Anidow.Pages.Components.Notify"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
-    xmlns:pages="clr-namespace:Anidow.Pages"
     xmlns:s="https://github.com/canton7/Stylet"
     Title="Setup Wizard"
     Width="700"
