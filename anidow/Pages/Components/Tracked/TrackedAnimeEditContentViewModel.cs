@@ -206,9 +206,14 @@ public class TrackedAnimeEditContentViewModel : Screen
         _graphQlClient.HttpClient.DefaultRequestHeaders.Authorization =
             AuthenticationHeaderValue.Parse($"Bearer {_settingsService.Settings.AniListJwt}");
         var name = Anime.Name;
-        if (name.Contains(" - TV Series"))
+        
+        if (name.Contains(" - TV Series ["))
         {
-            name = name[..name.IndexOf(" - TV Series", StringComparison.InvariantCultureIgnoreCase)];
+            name = name[..name.IndexOf(" - TV Series [", StringComparison.InvariantCulture)];
+        }
+        else if (name.Contains(" - ONA ["))
+        {
+            name = name[..name.IndexOf(" - ONA [", StringComparison.InvariantCulture)];
         }
 
         var query = GraphQLQueries.SearchQuery(name);

@@ -23,7 +23,7 @@
 		<PackageTags>anime, nyaa, manga, animebytes, wpf, automation, torrent, c#, mvvm, stylet</PackageTags>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<PackageVersion>1.4.0</PackageVersion>
-		<DebugType>portable</DebugType>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(SelfContained)'=='true'">

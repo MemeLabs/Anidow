@@ -78,6 +78,7 @@ public class AboutViewModel : Screen
             CanUpdateNow = true;
         }
 
+        await Task.Delay(300);
         CanCheckForUpdate = true;
     }
 

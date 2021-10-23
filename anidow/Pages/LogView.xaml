@@ -31,7 +31,7 @@
         <GroupBox
             Margin="2"
             extensions:CornerRadiusExtension.CornerRadius="4"
-            extensions:LayerExtension.IncreaseLayer="True">
+            >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />

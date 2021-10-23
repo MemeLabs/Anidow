@@ -2,7 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
-    xmlns:converters="clr-namespace:Anidow.Converters">
+    xmlns:converters="clr-namespace:Anidow.Converters"
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI">
     <ControlTemplate x:Key="TabControlCustomHorizontal" TargetType="{x:Type TabControl}">
         <Grid KeyboardNavigation.TabNavigation="Local">
             <Grid.RowDefinitions>
@@ -70,8 +71,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid x:Name="HeaderPanelScroll"
-                  Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
+            <Grid x:Name="HeaderPanelScroll" Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
                 <Grid x:Name="HeaderPanelGrid">
                     <TabPanel
                         x:Name="HeaderPanel"
@@ -118,6 +118,7 @@
     </Style>
 
     <Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
+        <Setter Property="extensions:LayerExtension.Layer" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -156,12 +157,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                             <Setter TargetName="Border" Property="TextElement.Foreground" Value="White" />
                         </Trigger>
                     </ControlTemplate.Triggers>

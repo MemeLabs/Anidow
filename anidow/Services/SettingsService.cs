@@ -76,8 +76,8 @@ public class SettingsService : PropertyChangedBase
 
         _logger.Information("saved setting's");
 
-        ResourceLocator.SetColorScheme(Application.Current.Resources,
-            TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
+        ////ResourceLocator.SetColorScheme(Application.Current.Resources,
+        ////    TempSettings.IsDark ? ResourceLocator.DarkColorScheme : ResourceLocator.LightColorScheme);
 
         SettingsSavedEvent?.Invoke(this, EventArgs.Empty);
         await NotificationUtil.ShowAsync("Settings", "Saved!", NotificationType.Success);

@@ -53,112 +53,105 @@
         <!--     </TextBlock> -->
         <!-- </StackPanel> -->
 
-        <Border
+        <Grid
             Grid.Row="1"
-            Grid.Column="0"
-            Padding="8"
-            extensions:LayerExtension.IncreaseLayer="True"
-            Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
-            CornerRadius="4">
-
-            <Grid Margin="0,0,8,0">
+            Grid.Column="0" Margin="0,0,8,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Grid Margin="0,0,0,4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="8" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
 
-                    <TextBlock Margin="0,0,0,4">IP address:</TextBlock>
-                    <TextBox
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        extensions:WatermarkExtension.Watermark="http://localhost"
-                        Text="{Binding Settings.QBitTorrent.Host, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        Margin="0,0,0,4">
-                        Port:
-                    </TextBlock>
-                    <TextBox
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Width="50"
-                        extensions:WatermarkExtension.Watermark="1584"
-                        PreviewTextInput="{s:Action NumberValidationTextBox}"
-                        Text="{Binding Settings.QBitTorrent.Port, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-                <Grid Grid.Row="1" Margin="0,4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="8" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="8" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <CheckBox IsChecked="{Binding Settings.QBitTorrent.WithLogin}">
-                        With Login
-                    </CheckBox>
-                    <TextBox
-                        Grid.Column="2"
-                        extensions:WatermarkExtension.Watermark="Username"
-                        IsEnabled="{Binding Settings.QBitTorrent.WithLogin}"
-                        Text="{Binding Settings.QBitTorrent.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <PasswordBox
-                        Grid.Column="4"
-                        extensions:WatermarkExtension.Watermark="Password"
-                        helpers:Secure.Password="{Binding Settings.QBitTorrent.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        IsEnabled="{Binding Settings.QBitTorrent.WithLogin}" />
+                <TextBlock Margin="0,0,0,4">IP address:</TextBlock>
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    extensions:WatermarkExtension.Watermark="http://localhost"
+                    Text="{Binding Settings.QBitTorrent.Host, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="0,0,0,4">
+                    Port:
+                </TextBlock>
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Width="50"
+                    extensions:WatermarkExtension.Watermark="1584"
+                    PreviewTextInput="{s:Action NumberValidationTextBox}"
+                    Text="{Binding Settings.QBitTorrent.Port, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <Grid Grid.Row="1" Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CheckBox IsChecked="{Binding Settings.QBitTorrent.WithLogin}">
+                    With Login
+                </CheckBox>
+                <TextBox
+                    Grid.Column="2"
+                    extensions:WatermarkExtension.Watermark="Username"
+                    IsEnabled="{Binding Settings.QBitTorrent.WithLogin}"
+                    Text="{Binding Settings.QBitTorrent.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <PasswordBox
+                    Grid.Column="4"
+                    extensions:WatermarkExtension.Watermark="Password"
+                    helpers:Secure.Password="{Binding Settings.QBitTorrent.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding Settings.QBitTorrent.WithLogin}" />
 
-                </Grid>
-                <Grid Grid.Row="2" Margin="0,4">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <TextBlock
-                        Grid.Row="0"
-                        Margin="0,0,0,4"
-                        VerticalAlignment="Center"
-                        Text="Category:" />
-                    <TextBox
-                        Grid.Row="1"
-                        Margin="0,0,0,4"
-                        extensions:WatermarkExtension.Watermark="Anime"
-                        Text="{Binding Settings.QBitTorrent.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-
-                <Grid
-                    Grid.Row="3"
-                    Margin="0,4"
-                    VerticalAlignment="Bottom">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock VerticalAlignment="Center" Text="{Binding ConnectionStatus}" />
-                    <Button
-                        Grid.Column="1"
-                        Command="{s:Action TestConnection,
-                                           ActionNotFound=Disable}"
-                        Content="Test connection"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
-                </Grid>
+            </Grid>
+            <Grid Grid.Row="2" Margin="0,4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,4"
+                    VerticalAlignment="Center"
+                    Text="Category:" />
+                <TextBox
+                    Grid.Row="1"
+                    Margin="0,0,0,4"
+                    extensions:WatermarkExtension.Watermark="Anime"
+                    Text="{Binding Settings.QBitTorrent.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
-        </Border>
+            <Grid
+                Grid.Row="3"
+                Margin="0,4"
+                VerticalAlignment="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock VerticalAlignment="Center" Text="{Binding ConnectionStatus}" />
+                <Button
+                    Grid.Column="1"
+                    Command="{s:Action TestConnection,
+                                           ActionNotFound=Disable}"
+                    Content="Test connection"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
+            </Grid>
+        </Grid>
+
 
         <ScrollViewer
             Grid.Row="1"

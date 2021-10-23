@@ -40,7 +40,7 @@
                 VerticalAlignment="Center"
                 Command="{s:Action SetupWizard}">
                 <StackPanel Orientation=" Horizontal">
-                    <iconPacks:FontAwesome Kind="MagicSolid" />
+                    <ContentControl VerticalAlignment="Center" Content="{iconPacks:FontAwesome MagicSolid}" />
                     <TextBlock
                         Margin="6,0,0,0"
                         VerticalAlignment="Center"
@@ -66,8 +66,6 @@
                 <Expander
                     Grid.Row="0"
                     Margin="0,0,0,4"
-                    extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="True"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
@@ -101,14 +99,6 @@
                             <ColumnDefinition Width="16" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Separator
-                            Grid.Row="2"
-                            Grid.RowSpan="5"
-                            Grid.Column="1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Opacity=".3"
-                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
                         <TextBlock
                             Grid.Row="0"
@@ -126,8 +116,7 @@
                                 <ColumnDefinition Width="8" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime"
-                                     Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox extensions:WatermarkExtension.Watermark="C:/path/to/anime" Text="{Binding Settings.AnimeFolder, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
                                 Grid.Row="0"
                                 Grid.Column="2"
@@ -201,8 +190,7 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Text="Torrent client:" />
-                            <ComboBox Grid.Column="1"
-                                      SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
+                            <ComboBox Grid.Column="1" SelectedIndex="{Binding Settings.TorrentClient, UpdateSourceTrigger=PropertyChanged, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}">
                                 <ComboBoxItem Content="QBitTorrent" />
                                 <ComboBoxItem Content="Deluge (soon tm)" IsEnabled="False" />
                             </ComboBox>
@@ -239,31 +227,27 @@
                             Grid.Row="3"
                             Grid.Column="0"
                             Margin="0,4">
-                            <CheckBox Content="Notifications for downloads etc."
-                                      IsChecked="{Binding Settings.Notifications}" />
+                            <CheckBox Content="Notifications for downloads etc." IsChecked="{Binding Settings.Notifications}" />
 
                         </Grid>
                         <Grid
-                            Grid.Row="5"
+                            Grid.Row="4"
                             Grid.Column="2"
                             Margin="0,4">
-                            <CheckBox Content="On close minimize to notification area."
-                                      IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
+                            <CheckBox Content="On close minimize to notification area." IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
 
                         </Grid>
                         <Grid
-                            Grid.Row="5"
+                            Grid.Row="4"
                             Grid.Column="0"
                             Margin="0,4">
-                            <CheckBox Content="Start AnimeBytes tracker on launch"
-                                      IsChecked="{Binding Settings.StartTrackerAnimeBytesOnLaunch}" />
+                            <CheckBox Content="Start AnimeBytes tracker on launch" IsChecked="{Binding Settings.StartTrackerAnimeBytesOnLaunch}" />
                         </Grid>
                     </Grid>
                 </Expander>
                 <Expander
                     Grid.Row="1"
                     Margin="0,0,0,4"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
@@ -308,7 +292,6 @@
                 <Expander
                     Grid.Row="2"
                     Margin="0,0,0,4"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
@@ -351,8 +334,7 @@
                             Orientation="Horizontal">
                             <TextBlock>Passkey:</TextBlock>
                             <TextBlock Margin="8,0">
-                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account"
-                                           RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                                <Hyperlink NavigateUri="https://animebytes.tv/user.php?action=edit#account" RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
                                     (click here)
                                 </Hyperlink>
                             </TextBlock>
@@ -390,7 +372,6 @@
                 <Expander
                     Grid.Row="3"
                     Margin="0,0,0,4"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
@@ -419,9 +400,7 @@
                             Orientation="Horizontal">
                             <TextBlock>Token:</TextBlock>
                             <TextBlock Margin="8,0">
-                                <Hyperlink
-                                    NavigateUri="https://anilist.co/api/v2/oauth/authorize?client_id=6669&amp;response_type=token"
-                                    RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
+                                <Hyperlink NavigateUri="https://anilist.co/api/v2/oauth/authorize?client_id=6669&amp;response_type=token" RequestNavigate="{s:Action Hyperlink_RequestNavigate}">
                                     (click here to get the token)
                                 </Hyperlink>
                             </TextBlock>
@@ -437,7 +416,6 @@
                 <Expander
                     Grid.Row="4"
                     Margin="0,0,0,4"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False">
                     <Expander.Header>
                         <Grid>
@@ -467,9 +445,7 @@
                     <Expander.Style>
                         <Style BasedOn="{StaticResource ExpanderCustom}" TargetType="Expander">
                             <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}"
-                                    Value="1">
+                                <DataTrigger Binding="{Binding Settings.TorrentClient, Converter={x:Static converters:TorrentClientEnumToIntConverter.Instance}}" Value="1">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>

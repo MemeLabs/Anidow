@@ -29,22 +29,16 @@
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
 
-                                <Ellipse
-                                    x:Name="Circle"
-                                    Width="19"
-                                    Height="19"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Stroke="{TemplateBinding BorderBrush}" />
-
                                 <ContentControl
                                     x:Name="Arrow"
                                     Grid.Column="0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.Expander}}"
+                                    Content="{iconPacks:FontAwesome SortUpSolid,
+                                                                    Width=10,
+                                                                    Height=10}"
                                     Focusable="False"
-                                    Foreground="{TemplateBinding BorderBrush}"
+                                    Foreground="White"
                                     RenderTransformOrigin="0.5 0.5">
                                     <ContentControl.RenderTransform>
                                         <RotateTransform Angle="0" />
@@ -56,7 +50,7 @@
                                 Grid.Row="1"
                                 Margin="0,4,0,0"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
+                                VerticalAlignment="Center"
                                 RecognizesAccessKey="True"
                                 SnapsToDevicePixels="True" />
                         </Grid>
@@ -115,22 +109,16 @@
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
 
-                                <Ellipse
-                                    x:Name="Circle"
-                                    Width="19"
-                                    Height="19"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Stroke="{TemplateBinding BorderBrush}" />
-
                                 <ContentControl
                                     x:Name="Arrow"
                                     Grid.Column="0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.Expander}}"
+                                    Content="{iconPacks:FontAwesome SortUpSolid,
+                                                                    Width=10,
+                                                                    Height=10}"
                                     Focusable="False"
-                                    Foreground="{TemplateBinding BorderBrush}"
+                                    Foreground="White"
                                     RenderTransformOrigin="0.5 0.5">
                                     <ContentControl.RenderTransform>
                                         <RotateTransform Angle="0" />
@@ -201,22 +189,16 @@
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
 
-                                <Ellipse
-                                    x:Name="Circle"
-                                    Width="19"
-                                    Height="19"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Stroke="{TemplateBinding BorderBrush}" />
-
                                 <ContentControl
                                     x:Name="Arrow"
                                     Grid.Column="0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.Expander}}"
+                                    Content="{iconPacks:FontAwesome SortUpSolid,
+                                                                    Width=10,
+                                                                    Height=10}"
                                     Focusable="False"
-                                    Foreground="{TemplateBinding BorderBrush}"
+                                    Foreground="White"
                                     RenderTransformOrigin="0.5 0.5">
                                     <ContentControl.RenderTransform>
                                         <RotateTransform Angle="0" />
@@ -490,15 +472,13 @@
                         <Trigger Property="ExpandDirection" Value="Up">
                             <Setter TargetName="ExpandSiteContainerWrapper" Property="DockPanel.Dock" Value="Top" />
                             <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Bottom" />
-                            <Setter TargetName="HeaderSite" Property="Style"
-                                    Value="{StaticResource ExpanderUpHeaderStyle}" />
+                            <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource ExpanderUpHeaderStyle}" />
                         </Trigger>
 
                         <Trigger Property="ExpandDirection" Value="Right">
                             <Setter TargetName="ExpandSiteContainerWrapper" Property="DockPanel.Dock" Value="Right" />
                             <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Left" />
-                            <Setter TargetName="HeaderSite" Property="Style"
-                                    Value="{StaticResource ExpanderRightHeaderStyle}" />
+                            <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource ExpanderRightHeaderStyle}" />
                             <Setter TargetName="ExpandSiteContainer" Property="Height" Value="Auto" />
                             <Setter TargetName="ExpandSiteContainer" Property="Width">
                                 <Setter.Value>
@@ -513,8 +493,7 @@
                         <Trigger Property="ExpandDirection" Value="Left">
                             <Setter TargetName="ExpandSiteContainerWrapper" Property="DockPanel.Dock" Value="Left" />
                             <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Right" />
-                            <Setter TargetName="HeaderSite" Property="Style"
-                                    Value="{StaticResource ExpanderLeftHeaderStyle}" />
+                            <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource ExpanderLeftHeaderStyle}" />
                             <Setter TargetName="ExpandSiteContainer" Property="Height" Value="Auto" />
                             <Setter TargetName="ExpandSiteContainer" Property="Width">
                                 <Setter.Value>
@@ -616,8 +595,7 @@
                         </Trigger>
 
                         <Trigger SourceName="HeaderSite" Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -627,25 +605,16 @@
 
         <Style.Triggers>
 
-            <DataTrigger
-                Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}"
-                Value="2">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}" />
+            <DataTrigger Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}" Value="2">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}" />
             </DataTrigger>
 
-            <DataTrigger
-                Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}"
-                Value="3">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer3BackgroundBrush}}" />
+            <DataTrigger Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}" Value="3">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer3BackgroundBrush}}" />
             </DataTrigger>
 
-            <DataTrigger
-                Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}"
-                Value="4">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer4BackgroundBrush}}" />
+            <DataTrigger Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}" Value="4">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer4BackgroundBrush}}" />
             </DataTrigger>
 
             <Trigger Property="IsFocused" Value="True">
@@ -653,10 +622,8 @@
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
             </Trigger>
 
         </Style.Triggers>
@@ -732,15 +699,13 @@
                         <Trigger Property="ExpandDirection" Value="Up">
                             <Setter TargetName="ExpandSiteContainerWrapper" Property="DockPanel.Dock" Value="Top" />
                             <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Bottom" />
-                            <Setter TargetName="HeaderSite" Property="Style"
-                                    Value="{StaticResource ExpanderUpHeaderStyle}" />
+                            <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource ExpanderUpHeaderStyle}" />
                         </Trigger>
 
                         <Trigger Property="ExpandDirection" Value="Right">
                             <Setter TargetName="ExpandSiteContainerWrapper" Property="DockPanel.Dock" Value="Right" />
                             <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Left" />
-                            <Setter TargetName="HeaderSite" Property="Style"
-                                    Value="{StaticResource ExpanderRightHeaderStyle}" />
+                            <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource ExpanderRightHeaderStyle}" />
                             <Setter TargetName="ExpandSiteContainer" Property="Height" Value="Auto" />
                             <Setter TargetName="ExpandSiteContainer" Property="Width">
                                 <Setter.Value>
@@ -755,8 +720,7 @@
                         <Trigger Property="ExpandDirection" Value="Left">
                             <Setter TargetName="ExpandSiteContainerWrapper" Property="DockPanel.Dock" Value="Left" />
                             <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Right" />
-                            <Setter TargetName="HeaderSite" Property="Style"
-                                    Value="{StaticResource ExpanderLeftHeaderStyle}" />
+                            <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource ExpanderLeftHeaderStyle}" />
                             <Setter TargetName="ExpandSiteContainer" Property="Height" Value="Auto" />
                             <Setter TargetName="ExpandSiteContainer" Property="Width">
                                 <Setter.Value>
@@ -858,8 +822,7 @@
                         </Trigger>
 
                         <Trigger SourceName="HeaderSite" Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -869,25 +832,16 @@
 
         <Style.Triggers>
 
-            <DataTrigger
-                Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}"
-                Value="2">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}" />
+            <DataTrigger Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}" Value="2">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}" />
             </DataTrigger>
 
-            <DataTrigger
-                Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}"
-                Value="3">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer3BackgroundBrush}}" />
+            <DataTrigger Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}" Value="3">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer3BackgroundBrush}}" />
             </DataTrigger>
 
-            <DataTrigger
-                Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}"
-                Value="4">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer4BackgroundBrush}}" />
+            <DataTrigger Binding="{Binding Path=(adonisExtensions:LayerExtension.ComputedLayer), RelativeSource={RelativeSource Self}}" Value="4">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer4BackgroundBrush}}" />
             </DataTrigger>
 
             <Trigger Property="IsFocused" Value="True">
@@ -895,10 +849,8 @@
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
             </Trigger>
 
         </Style.Triggers>

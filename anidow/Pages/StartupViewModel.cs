@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows;
 using Anidow.Database;
 using Anidow.Helpers;
 using Anidow.Pages.Components.Settings;
@@ -154,6 +155,9 @@ public class StartupViewModel : Screen
             {
                 _logger.Error(e, "failed updating anidow");
             }
+#else
+        _logger.Information("Not looking for updates");
+        await Task.Delay(0);
 #endif
     }
 }

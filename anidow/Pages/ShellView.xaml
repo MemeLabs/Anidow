@@ -26,7 +26,7 @@
     TextElement.FontSize="14"
     TextElement.FontWeight="Regular"
     TextOptions.TextRenderingMode="Auto"
-    TitleBarBackground="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"
+    TitleBarBackground="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
     TitleBarForeground="{DynamicResource {x:Static adonisUi:Brushes.AccentForegroundBrush}}"
     mc:Ignorable="d">
     <controls:AdonisWindow.TitleBarContent>
@@ -78,7 +78,7 @@
                 ToolTipService.Placement="Bottom" />
         </Grid>
     </controls:AdonisWindow.TitleBarContent>
-    <Grid>
+    <Grid Margin="0,4,0,0">
         <StackPanel
             Margin="0,2,3,0"
             HorizontalAlignment="Right"

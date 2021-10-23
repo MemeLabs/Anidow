@@ -45,6 +45,7 @@ public class AnimeBytesRssViewModel : Conductor<AnimeBytesTorrentItem>.Collectio
         _animeBytesService = animeBytesService ?? throw new ArgumentNullException(nameof(animeBytesService));
         _torrentService = torrentService ?? throw new ArgumentNullException(nameof(torrentService));
         _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
+        _settingsService.SettingsSavedEvent += (_, _) => NotifyOfPropertyChange(nameof(CanSearch));
         DisplayName = "Rss feed";
     }
 

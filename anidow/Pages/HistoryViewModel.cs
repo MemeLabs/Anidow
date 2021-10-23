@@ -383,14 +383,14 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
         _scrollViewer ??= scrollView;
     }
 
-    public void OnPreviewKeyDown(object _, KeyEventArgs e)
+    public async Task OnPreviewKeyDown(object _, KeyEventArgs e)
     {
         if (e.Key != Key.Enter)
         {
             return;
         }
 
-        HomePage();
+        await HomePage();
         e.Handled = true;
     }
 
