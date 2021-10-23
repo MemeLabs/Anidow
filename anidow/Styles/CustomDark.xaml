@@ -166,4 +166,10 @@
         </Style.Triggers>
     </Style>
 
+
+    <Style  BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" />
+    </Style>
+
 </ResourceDictionary>
