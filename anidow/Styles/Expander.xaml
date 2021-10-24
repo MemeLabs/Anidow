@@ -29,22 +29,16 @@
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
 
-                                <Ellipse
-                                    x:Name="Circle"
-                                    Width="19"
-                                    Height="19"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Stroke="{TemplateBinding BorderBrush}" />
-
                                 <ContentControl
                                     x:Name="Arrow"
                                     Grid.Column="0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.Expander}}"
+                                    Content="{iconPacks:FontAwesome SortUpSolid,
+                                                                    Width=10,
+                                                                    Height=10}"
                                     Focusable="False"
-                                    Foreground="{TemplateBinding BorderBrush}"
+                                    Foreground="White"
                                     RenderTransformOrigin="0.5 0.5">
                                     <ContentControl.RenderTransform>
                                         <RotateTransform Angle="0" />
@@ -56,7 +50,7 @@
                                 Grid.Row="1"
                                 Margin="0,4,0,0"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
+                                VerticalAlignment="Center"
                                 RecognizesAccessKey="True"
                                 SnapsToDevicePixels="True" />
                         </Grid>
@@ -115,22 +109,16 @@
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
 
-                                <Ellipse
-                                    x:Name="Circle"
-                                    Width="19"
-                                    Height="19"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Stroke="{TemplateBinding BorderBrush}" />
-
                                 <ContentControl
                                     x:Name="Arrow"
                                     Grid.Column="0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.Expander}}"
+                                    Content="{iconPacks:FontAwesome SortUpSolid,
+                                                                    Width=10,
+                                                                    Height=10}"
                                     Focusable="False"
-                                    Foreground="{TemplateBinding BorderBrush}"
+                                    Foreground="White"
                                     RenderTransformOrigin="0.5 0.5">
                                     <ContentControl.RenderTransform>
                                         <RotateTransform Angle="0" />
@@ -201,22 +189,16 @@
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
 
-                                <Ellipse
-                                    x:Name="Circle"
-                                    Width="19"
-                                    Height="19"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Stroke="{TemplateBinding BorderBrush}" />
-
                                 <ContentControl
                                     x:Name="Arrow"
                                     Grid.Column="0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.Expander}}"
+                                    Content="{iconPacks:FontAwesome SortUpSolid,
+                                                                    Width=10,
+                                                                    Height=10}"
                                     Focusable="False"
-                                    Foreground="{TemplateBinding BorderBrush}"
+                                    Foreground="White"
                                     RenderTransformOrigin="0.5 0.5">
                                     <ContentControl.RenderTransform>
                                         <RotateTransform Angle="0" />
@@ -355,17 +337,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border Padding="8" Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
+                    <Border Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}">
                         <Grid SnapsToDevicePixels="True">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <ContentControl
                                 x:Name="Arrow"
-                                Grid.Column="2"
+                                Grid.Column="0"
+                                Margin="8,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Content="{iconPacks:FontAwesome SortUpSolid,
@@ -381,7 +363,6 @@
 
                             <ContentPresenter
                                 Grid.Column="1"
-                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Content="{TemplateBinding Content}"
                                 ContentStringFormat="{TemplateBinding ContentStringFormat}"

@@ -1,9 +1,8 @@
-﻿namespace Anidow.Enums
+﻿namespace Anidow.Enums;
+
+public enum Site
 {
-    public enum Site
-    {
-        Nyaa,
-        AnimeBytes,
-        All,
-    }
+    Nyaa,
+    AnimeBytes,
+    All,
 }

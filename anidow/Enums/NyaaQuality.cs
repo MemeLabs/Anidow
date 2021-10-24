@@ -1,9 +1,8 @@
-﻿namespace Anidow.Enums
+﻿namespace Anidow.Enums;
+
+public enum NyaaQuality
 {
-    public enum NyaaQuality
-    {
-        Normal,
-        Remake,
-        Trusted,
-    }
+    Normal,
+    Remake,
+    Trusted,
 }

@@ -1,9 +1,8 @@
 ﻿using Anidow.Database.Models;
 
-namespace Anidow.Events
+namespace Anidow.Events;
+
+public class TrackedDeleteAnimeEvent
 {
-    public class TrackedDeleteAnimeEvent
-    {
-        public Anime Anime { get; set; }
-    }
+    public Anime Anime { get; set; }
 }

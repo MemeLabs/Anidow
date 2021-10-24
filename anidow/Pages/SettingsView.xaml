@@ -40,7 +40,7 @@
                 VerticalAlignment="Center"
                 Command="{s:Action SetupWizard}">
                 <StackPanel Orientation=" Horizontal">
-                    <iconPacks:FontAwesome Kind="MagicSolid" />
+                    <ContentControl VerticalAlignment="Center" Content="{iconPacks:FontAwesome MagicSolid}" />
                     <TextBlock
                         Margin="6,0,0,0"
                         VerticalAlignment="Center"
@@ -66,8 +66,6 @@
                 <Expander
                     Grid.Row="0"
                     Margin="0,0,0,4"
-                    extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="True"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
@@ -101,14 +99,6 @@
                             <ColumnDefinition Width="16" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Separator
-                            Grid.Row="2"
-                            Grid.RowSpan="5"
-                            Grid.Column="1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Opacity=".3"
-                            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
                         <TextBlock
                             Grid.Row="0"
@@ -241,14 +231,14 @@
 
                         </Grid>
                         <Grid
-                            Grid.Row="5"
+                            Grid.Row="4"
                             Grid.Column="2"
                             Margin="0,4">
                             <CheckBox Content="On close minimize to notification area." IsChecked="{Binding Settings.MinimizeToNotificationArea}" />
 
                         </Grid>
                         <Grid
-                            Grid.Row="5"
+                            Grid.Row="4"
                             Grid.Column="0"
                             Margin="0,4">
                             <CheckBox Content="Start AnimeBytes tracker on launch" IsChecked="{Binding Settings.StartTrackerAnimeBytesOnLaunch}" />
@@ -258,7 +248,6 @@
                 <Expander
                     Grid.Row="1"
                     Margin="0,0,0,4"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
@@ -303,7 +292,6 @@
                 <Expander
                     Grid.Row="2"
                     Margin="0,0,0,4"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
@@ -384,7 +372,6 @@
                 <Expander
                     Grid.Row="3"
                     Margin="0,0,0,4"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False"
                     Style="{StaticResource ExpanderCustom}">
                     <Expander.Header>
@@ -429,7 +416,6 @@
                 <Expander
                     Grid.Row="4"
                     Margin="0,0,0,4"
-                    extensions:LayerExtension.IncreaseLayer="True"
                     IsExpanded="False">
                     <Expander.Header>
                         <Grid>
@@ -549,10 +535,11 @@
         </ScrollViewer>
         <Grid
             Grid.Row="2"
-            Margin="2"
+            Margin="4"
             VerticalAlignment="Bottom"
             Visibility="{Binding SettingsService.CanSave, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
             <Button
+                extensions:CornerRadiusExtension.CornerRadius="4"
                 s:View.ActionTarget="{Binding SettingsService}"
                 Command="{s:Action Save}"
                 Content="Save"

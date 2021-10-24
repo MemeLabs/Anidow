@@ -1,0 +1,165 @@
+﻿<UserControl
+    x:Class="Anidow.Pages.Components.AnimeInfo.AnimeInfoPanelContent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:converters="clr-namespace:Anidow.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:Anidow.Extensions"
+    xmlns:graphQl="clr-namespace:Anidow.GraphQL"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance graphQl:AniListAnime}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <Border
+        Margin="0,8,0,0"
+        VerticalAlignment="Stretch"
+        Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+        CornerRadius="4">
+        <ScrollViewer
+            Padding="8,4"
+            extensions:TouchScrolling.IsEnabled="True"
+            VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,4,0,0"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Text="Alternative titles" />
+
+                <Separator Grid.Row="1" />
+
+                <TextBox
+                    Grid.Row="2"
+                    Margin="8,4"
+                    IsReadOnly="True"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.SelectableTextBlockTextBox}}"
+                    Text="{Binding AlternativeTitles}"
+                    TextWrapping="Wrap" />
+
+
+                <TextBlock
+                    Grid.Row="3"
+                    Margin="0,8,0,0"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Text="Details" />
+
+                <Separator Grid.Row="4" />
+
+                <Grid Grid.Row="5" Margin="8,4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Type:" />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="{Binding Format}" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="Episodes:"
+                        Visibility="{Binding Episodes, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding Episodes}"
+                        Visibility="{Binding Episodes, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="Status:" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding Status}" />
+
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Text="Season:"
+                        Visibility="{Binding SeasonYear, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Visibility="{Binding SeasonYear, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} {1}">
+                                <Binding Path="Season" />
+                                <Binding Path="SeasonYear" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Text="Genres:" />
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Text="{Binding GenresString}" />
+
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Text="Score:"
+                        Visibility="{Binding AverageScore, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Text="{Binding AverageScore, StringFormat={}{0}%}"
+                        Visibility="{Binding AverageScore, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
+
+                </Grid>
+
+
+                <TextBlock
+                    Grid.Row="6"
+                    Margin="0,8,0,0"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Text="Synopsis" />
+
+                <Separator Grid.Row="7" />
+
+                <TextBox
+                    Grid.Row="8"
+                    Margin="8,4"
+                    IsReadOnly="True"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.SelectableTextBlockTextBox}}"
+                    Text="{Binding DescriptionString, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+
+            </Grid>
+        </ScrollViewer>
+    </Border>
+</UserControl>

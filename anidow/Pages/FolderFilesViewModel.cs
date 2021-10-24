@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using AdonisUI.Controls;
@@ -13,215 +12,230 @@ using Anidow.Utils;
 using Serilog;
 using Stylet;
 
-namespace Anidow.Pages
+namespace Anidow.Pages;
+
+public class FolderFilesViewModel : Screen
 {
-    public class FolderFilesViewModel : Screen
+    private const int MaxFilesInView = 100;
+    private readonly Anime _anime;
+    private readonly Episode _episode;
+    private readonly ILogger _logger;
+    private readonly string _name;
+    private List<FolderFilesModel> _files;
+
+    public FolderFilesViewModel(ref Episode episode, ILogger logger)
     {
-        private readonly Anime _anime;
-        private readonly Episode _episode;
-        private readonly ILogger _logger;
-        private readonly int _maxFilesInView = 100;
-        private readonly string _name;
-        private List<FolderFilesModel> _files;
+        _episode = episode ?? throw new ArgumentNullException(nameof(episode));
+        _name = episode.Name;
+        Folder = episode.Folder;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        FileInfos = new BindableCollection<FolderFilesModel>();
+        DisplayName = $"Files - {episode.Name}";
+    }
 
-        public FolderFilesViewModel(ref Episode episode, ILogger logger)
+    public FolderFilesViewModel(Anime anime, ILogger logger)
+    {
+        _anime = anime ?? throw new ArgumentNullException(nameof(anime));
+        _name = anime.Name;
+        Folder = anime.Folder;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        FileInfos = new BindableCollection<FolderFilesModel>();
+        DisplayName = $"Files - {anime.Name}";
+    }
+
+    public BindableCollection<FolderFilesModel> FileInfos { get; }
+
+    public string Folder { get; set; }
+    public bool HasParentFolder => !string.IsNullOrWhiteSpace(ParentFolder) && CanGoUpFolder;
+    private string ParentFolder { get; set; }
+
+    public bool CanLoadMore { get; set; }
+
+    public bool CanOpenFolder { get; set; }
+
+    public bool CanGoUpFolder { get; set; } = true;
+
+    protected override void OnActivate()
+    {
+        _ = OpenFolder(Folder);
+    }
+
+    public async Task GoUpFolder()
+    {
+        CanGoUpFolder = false;
+        await OpenFolder(ParentFolder);
+        CanGoUpFolder = true;
+    }
+
+    public async Task GetFilesFromFolder(bool clear = false)
+    {
+        if (!Directory.Exists(Folder))
         {
-            _episode = episode ?? throw new ArgumentNullException(nameof(episode));
-            _name = episode.Name;
-            Folder = episode.Folder;
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            FileInfos = new BindableCollection<FolderFilesModel>();
-            DisplayName = $"Files - {episode.Name}";
+            return;
         }
 
-        public FolderFilesViewModel(Anime anime, ILogger logger)
+        var files = await Task.Run(() => Directory.GetFileSystemEntries(Folder)
+                                                  .Select(f => new FileInfo(f))
+                                                  .OrderByDescending(f =>
+                                                      f.Attributes.HasFlag(FileAttributes.Directory))
+                                                  .ThenByDescending(f => f.LastWriteTime));
+
+        _files = new List<FolderFilesModel>();
+        foreach (var file in files)
         {
-            _anime = anime ?? throw new ArgumentNullException(nameof(anime));
-            _name = anime.Name;
-            Folder = anime.Folder;
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            FileInfos = new BindableCollection<FolderFilesModel>();
-            DisplayName = $"Files - {anime.Name}";
-        }
-
-        public BindableCollection<FolderFilesModel> FileInfos { get; }
-
-        public string Folder { get; set; }
-        public bool HasParentFolder => !string.IsNullOrWhiteSpace(ParentFolder) && CanGoUpFolder;
-        private string ParentFolder { get; set; }
-
-        public bool CanLoadMore { get; set; }
-
-        public bool CanOpenFolder { get; set; }
-
-        protected override void OnActivate()
-        {
-            _ = OpenFolder(Folder);
-        }
-
-        public bool CanGoUpFolder { get; set; } = true;
-        public async Task GoUpFolder()
-        {
-            CanGoUpFolder = false;
-            await OpenFolder(ParentFolder);
-            CanGoUpFolder = true;
-        }
-
-        public async Task GetFilesFromFolder(bool clear = false)
-        {
-            if (!Directory.Exists(Folder))
-            {
-                return;
-            }
-
-            var files = await Task.Run(() => Directory.GetFileSystemEntries(Folder)
-                                                      .Select(f => new FileInfo(f))
-                                                      .OrderByDescending(f =>
-                                                          f.Attributes.HasFlag(FileAttributes.Directory))
-                                                      .ThenByDescending(f => f.LastWriteTime));
-
-            _files = new List<FolderFilesModel>();
-            foreach (var file in files)
-            {
-                var item = new FolderFilesModel {File = file};
-                if (_episode != null)
-                {
-                    var nameSplit = file.Name
-                                        .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(f => f.Trim());
-                    if (!string.IsNullOrEmpty(_episode.EpisodeNum) && nameSplit.Contains(_episode.EpisodeNum))
-                    {
-                        item.Highlight = true;
-                    }
-                }
-
-                _files.Add(item);
-            }
-
-            if (clear)
-            {
-                FileInfos.Clear();
-            }
-
-            await LoadMore();
-#if DEBUG
-            if (FileInfos.Count >= 4)
-            {
-                FileInfos[3].Highlight = true;
-            }
-#endif
-        }
-
-        public async Task LoadMore()
-        {
-            foreach (var filesModel in _files.Skip(FileInfos.Count).Take(_maxFilesInView))
-                await DispatcherUtil.DispatchAsync(() => FileInfos.Add(filesModel));
-            CanLoadMore = FileInfos.Count < _files.Count;
-            DisplayName = $"Files ({FileInfos.Count}/{_files.Count}) - {_name}";
-        }
-
-        public async Task Watch(FileInfo fileInfo)
-        {
+            var item = new FolderFilesModel { File = file };
             if (_episode != null)
             {
-                if (string.IsNullOrWhiteSpace(_episode.File))
+                var nameSplit = file.Name
+                                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(f => f.Trim());
+                if (!string.IsNullOrEmpty(_episode.EpisodeNum) && nameSplit.Contains(_episode.EpisodeNum))
                 {
-                    _episode.File = fileInfo.FullName;
+                    item.Highlight = true;
                 }
-
-                _episode.Watched = true;
-                _episode.WatchedDate = DateTime.UtcNow;
-                try
-                {
-                    await _episode.UpdateInDatabase();
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e, "failed updating episode in database");
-                }
-                //_eventAggregator.PublishOnUIThread(new RefreshHomeEvent());
             }
 
-            try
-            {
-                ProcessUtil.OpenFile(fileInfo.FullName);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "failed opening file");
-                MessageBox.Show($"Failed opening file\nerror: {e.Message}",
-                    icon: MessageBoxImage.Error);
-                return;
-            }
-
-            Close();
+            _files.Add(item);
         }
 
-        public async Task OpenFolder(string path)
+        if (clear)
         {
-            CanOpenFolder = false;
-            try
-            {
-                Folder = path;
-                ParentFolder = Directory.GetParent(Folder)?.FullName;
-                await GetFilesFromFolder(true);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "error opening folder");
-            }
-
-            CanOpenFolder = true;
+            FileInfos.Clear();
         }
 
-
-        public void Close()
+        await LoadMore();
+#if DEBUG
+        if (FileInfos.Count >= 4)
         {
-            RequestClose();
+            FileInfos[3].Highlight = true;
         }
-
-        public void DeleteFile(FolderFilesModel file)
-        {
-            try
-            {
-                file.File.Delete();
-                FileInfos.Remove(file);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "error deleting", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        public async void OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Enter)
-            {
-                return;
-            }
-
-            await GetFilesFromFolder();
-            e.Handled = true;
-        }
-
-        public void OpenFolderInExplorer()
-        {
-            try
-            {
-                ProcessUtil.OpenFolder(Folder);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "couldn't open folder");
-            }
-        }
-        // TODO figure out how highlited items are on Top
-        //public void ListView_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    var lv = (ListView)sender;
-        //    var view = (CollectionView)CollectionViewSource.GetDefaultView(lv.ItemsSource);
-        //    var groupDescription = new PropertyGroupDescription("Highlight");
-        //    view.GroupDescriptions?.Add(groupDescription);
-        //}
+#endif
     }
+
+    public async Task LoadMore()
+    {
+        foreach (var filesModel in _files.Skip(FileInfos.Count).Take(MaxFilesInView))
+            await DispatcherUtil.DispatchAsync(() => FileInfos.Add(filesModel));
+        CanLoadMore = FileInfos.Count < _files.Count;
+        DisplayName = $"Files ({FileInfos.Count}/{_files.Count}) - {_name}";
+    }
+
+    public async Task Watch(FileInfo fileInfo)
+    {
+        if (_episode != null)
+        {
+            if (string.IsNullOrWhiteSpace(_episode.File))
+            {
+                _episode.File = fileInfo.FullName;
+            }
+
+            _episode.Watched = true;
+            _episode.WatchedDate = DateTime.UtcNow;
+            try
+            {
+                await _episode.UpdateInDatabase();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "failed updating episode in database");
+            }
+            //_eventAggregator.PublishOnUIThread(new RefreshHomeEvent());
+        }
+
+        try
+        {
+            ProcessUtil.OpenFile(fileInfo.FullName);
+        }
+        catch (Exception e)
+        {
+            _logger.Error(e, "failed opening file");
+            MessageBox.Show($"Failed opening file\nerror: {e.Message}",
+                icon: MessageBoxImage.Error);
+            return;
+        }
+
+        Close();
+    }
+
+    public async Task OpenFolder(string path)
+    {
+        CanOpenFolder = false;
+        try
+        {
+            Folder = path;
+            ParentFolder = Directory.GetParent(Folder)?.FullName;
+            await GetFilesFromFolder(true);
+        }
+        catch (Exception e)
+        {
+            _logger.Error(e, "error opening folder");
+        }
+
+        CanOpenFolder = true;
+    }
+
+
+    public void Close()
+    {
+        RequestClose();
+    }
+
+    public void DeleteFile(FolderFilesModel file)
+    {
+        try
+        {
+            file.File.Delete();
+            FileInfos.Remove(file);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message, "error deleting", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    public async void OnPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter)
+        {
+            return;
+        }
+
+        await GetFilesFromFolder();
+        e.Handled = true;
+    }
+
+    public void OpenFolderInExplorer()
+    {
+        try
+        {
+            ProcessUtil.OpenFolder(Folder);
+        }
+        catch (Exception e)
+        {
+            _logger.Error(e, "couldn't open folder");
+        }
+    }
+
+    public async Task SetFolder(FolderFilesModel files)
+    {
+        if (_episode is not null)
+        {
+            _episode.Folder = files.File.FullName;
+            await _episode.UpdateInDatabase();
+        }
+
+        if (_anime is not null)
+        {
+            _anime.Folder = files.File.FullName;
+            await _episode.UpdateInDatabase();
+        }
+    }
+    // TODO figure out how highlited items are on Top
+    //public void ListView_Loaded(object sender, RoutedEventArgs e)
+    //{
+    //    var lv = (ListView)sender;
+    //    var view = (CollectionView)CollectionViewSource.GetDefaultView(lv.ItemsSource);
+    //    var groupDescription = new PropertyGroupDescription("Highlight");
+    //    view.GroupDescriptions?.Add(groupDescription);
+    //}
 }

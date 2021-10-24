@@ -1,16 +1,14 @@
-using System.Windows.Forms;
 using GraphQL;
 
-namespace Anidow.GraphQL
+namespace Anidow.GraphQL;
+
+public class GraphQLQueries
 {
-    public class GraphQLQueries
-    {
-        public static GraphQLRequest SearchQuery(string search, int results = 5, int page = 1)
+    public static GraphQLRequest SearchQuery(string search, int results = 5, int page = 1) =>
+        new GraphQLRequest
         {
-            return new GraphQLRequest
-            {
-                Query = @"
-                    query AnimeSearch($search: String, $perPPage: Int) {
+            Query = @"
+                    query AnimeSearch($search: String, $perPage: Int) {
                         Page(perPage: $perPage, page: 1) {
                             pageInfo {
                                 total
@@ -36,17 +34,22 @@ namespace Anidow.GraphQL
                                 medium
                                 color
                             }
+                            idMal
+                            genres
+                            averageScore
+                            episodes
+                            season
+                            seasonYear
+                            format
                         }
                     }
                 }",
-                OperationName = "AnimeSearch",
-                Variables = new
-                {
-                    search,
-                    page,
-                    perPage = results,
-                },
-            };
-        }
-    }
+            OperationName = "AnimeSearch",
+            Variables = new
+            {
+                search,
+                page,
+                perPage = results,
+            },
+        };
 }

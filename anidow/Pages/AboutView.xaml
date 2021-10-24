@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="https://github.com/canton7/Stylet"
@@ -63,8 +64,18 @@
                 HorizontalAlignment="Center"
                 Command="{s:Action CheckForUpdate,
                                    ActionNotFound=Disable}"
-                Content="Check for Updates"
-                Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+                Visibility="{Binding HasUpdate, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl
+                        Margin="0,0,8,0"
+                        VerticalAlignment="Center"
+                        Content="{iconPacks:FontAwesome SyncSolid,
+                                                        Spin=True,
+                                                        Height=12}"
+                        Visibility="{Binding CanCheckForUpdate, Converter={x:Static s:BoolToVisibilityConverter.InverseInstance}}" />
+                    <TextBlock Text="Check for Updates" />
+                </StackPanel>
+            </Button>
             <Button
                 Grid.Row="1"
                 HorizontalAlignment="Center"

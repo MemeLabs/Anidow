@@ -14,7 +14,6 @@
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:utils="clr-namespace:Anidow.Utils"
     d:DataContext="{d:DesignInstance local:NotifyViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -27,7 +26,7 @@
         <GroupBox
             Margin="2"
             extensions:CornerRadiusExtension.CornerRadius="4"
-            extensions:LayerExtension.IncreaseLayer="True">
+            >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -153,10 +152,12 @@
                                                             <Setter Property="Opacity" Value=".6" />
                                                         </DataTrigger>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer2IntenseHighlightBrush}}" />
+                                                            <Setter Property="Background"
+                                                                    Value="{DynamicResource {x:Static adonisUi:Brushes.Layer2IntenseHighlightBrush}}" />
                                                         </Trigger>
                                                         <Trigger Property="IsMouseOver" Value="False">
-                                                            <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}" />
+                                                            <Setter Property="Background"
+                                                                    Value="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}" />
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -170,7 +171,8 @@
                                                     </Grid.RowDefinitions>
                                                     <TextBlock FontWeight="Bold" Text="Matched keywords:" />
                                                     <Separator Grid.Row="1" />
-                                                    <ItemsControl Grid.Row="2" ItemsSource="{Binding Keywords, Mode=OneTime}">
+                                                    <ItemsControl Grid.Row="2"
+                                                                  ItemsSource="{Binding Keywords, Mode=OneTime}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate DataType="system:String">
                                                                 <TextBlock Text="{Binding}" />
@@ -196,9 +198,11 @@
                                                         <Style TargetType="Border">
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding Site}" Value="Nyaa">
-                                                                    <Setter Property="Background" Value="CornflowerBlue" />
+                                                                    <Setter Property="Background"
+                                                                            Value="CornflowerBlue" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding Site}" Value="AnimeBytes">
+                                                                <DataTrigger Binding="{Binding Site}"
+                                                                             Value="AnimeBytes">
                                                                     <Setter Property="Background" Value="HotPink" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
@@ -214,7 +218,8 @@
                                                                     <DataTrigger Binding="{Binding Site}" Value="Nyaa">
                                                                         <Setter Property="Text" Value="N" />
                                                                     </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Site}" Value="AnimeBytes">
+                                                                    <DataTrigger Binding="{Binding Site}"
+                                                                        Value="AnimeBytes">
                                                                         <Setter Property="Text" Value="A" />
                                                                     </DataTrigger>
                                                                 </Style.Triggers>

@@ -4,23 +4,22 @@ using System.Threading;
 using System.Windows.Data;
 using Serilog.Events;
 
-namespace Anidow.Converters
+namespace Anidow.Converters;
+
+public class LogEventRenderConverter : IValueConverter
 {
-    public class LogEventRenderConverter : IValueConverter
+    public static readonly LogEventRenderConverter Instance = new();
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public static readonly LogEventRenderConverter Instance = new();
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (value is LogEvent @event)
         {
-            if (value is LogEvent @event)
-            {
-                return @event.RenderMessage(Thread.CurrentThread.CurrentUICulture);
-            }
-
-            return string.Empty;
+            return @event.RenderMessage(Thread.CurrentThread.CurrentUICulture);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
-            throw new NotImplementedException();
+        return string.Empty;
     }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
 }

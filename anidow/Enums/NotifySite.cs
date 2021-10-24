@@ -1,11 +1,10 @@
 ﻿// // Created: 24-08-2021 18:29
 
-namespace Anidow.Enums
+namespace Anidow.Enums;
+
+public enum NotifySite
 {
-    public enum NotifySite
-    {
-        AnimeBytes = 1,
-        Nyaa = 2,
-        All = Nyaa | AnimeBytes,
-    }
+    AnimeBytes = 1,
+    Nyaa = 2,
+    All = Nyaa | AnimeBytes,
 }

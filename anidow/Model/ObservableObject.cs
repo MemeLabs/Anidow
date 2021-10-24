@@ -1,17 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Anidow.Annotations;
+using Anidow.Properties;
 
-namespace Anidow.Model
+namespace Anidow.Model;
+
+public class ObservableObject : INotifyPropertyChanged
 {
-    public class ObservableObject : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    [NotifyPropertyChangedInvocator]
+    public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace Anidow.Interfaces
+﻿namespace Anidow.Interfaces;
+
+public interface ITorrentItem
 {
-    public interface ITorrentItem
-    {
-        string Folder { get; set; }
-        string DownloadLink { get; set; }
-    }
+    string Folder { get; set; }
+    string DownloadLink { get; set; }
 }

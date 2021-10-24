@@ -1,8 +1,7 @@
-﻿namespace Anidow.Enums
+﻿namespace Anidow.Enums;
+
+public enum AnimeBytesFilter
 {
-    public enum AnimeBytesFilter
-    {
-        All,
-        Airing,
-    }
+    All,
+    Airing,
 }

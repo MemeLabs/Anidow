@@ -14,12 +14,15 @@ namespace Anidow.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.9");
+                .HasAnnotation("ProductVersion", "5.0.10");
 
             modelBuilder.Entity("Anidow.Database.Models.Anime", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AniListAnimeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Cover")
@@ -34,6 +37,9 @@ namespace Anidow.Migrations
                     b.Property<string>("Folder")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Genres")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Group")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -44,6 +50,9 @@ namespace Anidow.Migrations
                     b.Property<string>("GroupUrl")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("IdMal")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
@@ -53,13 +62,21 @@ namespace Anidow.Migrations
                     b.Property<string>("Resolution")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Score")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Site")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Synopsis")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AniListAnimeId");
 
                     b.HasIndex("CoverDataId");
 
@@ -73,9 +90,7 @@ namespace Anidow.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValue(DateTime.UtcNow);
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("FirstStart")
                         .HasColumnType("INTEGER");
@@ -272,11 +287,67 @@ namespace Anidow.Migrations
                     b.ToTable("NotifyItemMatches");
                 });
 
+            modelBuilder.Entity("Anidow.GraphQL.AniListAnime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AlternativeTitles")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("AverageScore")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Cover")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Episodes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Format")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Genres")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("IdMal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Season")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SeasonYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SiteUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AniListAnime");
+                });
+
             modelBuilder.Entity("Anidow.Database.Models.Anime", b =>
                 {
+                    b.HasOne("Anidow.GraphQL.AniListAnime", "AniListAnime")
+                        .WithMany("Animes")
+                        .HasForeignKey("AniListAnimeId");
+
                     b.HasOne("Anidow.Database.Models.Cover", "CoverData")
                         .WithMany("Animes")
                         .HasForeignKey("CoverDataId");
+
+                    b.Navigation("AniListAnime");
 
                     b.Navigation("CoverData");
                 });
@@ -324,6 +395,11 @@ namespace Anidow.Migrations
                     b.Navigation("Keywords");
 
                     b.Navigation("Matches");
+                });
+
+            modelBuilder.Entity("Anidow.GraphQL.AniListAnime", b =>
+                {
+                    b.Navigation("Animes");
                 });
 #pragma warning restore 612, 618
         }

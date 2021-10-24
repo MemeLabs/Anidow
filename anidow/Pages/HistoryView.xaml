@@ -15,7 +15,6 @@
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:shared="clr-namespace:Anidow.Pages.Components.Shared"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     d:DataContext="{d:DesignInstance local:HistoryViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -32,7 +31,7 @@
         <GroupBox
             Margin="2"
             extensions:CornerRadiusExtension.CornerRadius="4"
-            extensions:LayerExtension.IncreaseLayer="True">
+            >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -40,41 +39,64 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+
                 <Button
                     Grid.Column="0"
                     Margin="0,0,4,0"
-                    Command="{s:Action LoadEpisodes,
-                                       ActionNotFound=Disable}">
-                    <Button.CommandParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Button.CommandParameter>
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:FontAwesome Kind="SyncAltSolid" />
-                            <TextBlock
-                                Margin="4,0"
-                                VerticalAlignment="Center"
-                                Text="Refresh" />
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
+                    Command="{s:Action PreviousPage,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome ArrowLeftSolid}" />
+                <Button
+                    Grid.Column="1"
+                    Margin="0,0,4,0"
+                    Command="{s:Action NextPage,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome ArrowRightSolid}" />
+                <Button
+                    Grid.Column="2"
+                    Margin="0,0,4,0"
+                    Command="{s:Action RefreshPage,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome SyncAltSolid}" />
+                <Button
+                    Grid.Column="3"
+                    Margin="0,0,4,0"
+                    Command="{s:Action HomePage,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome HomeSolid}" />
 
                 <TextBlock
-                    Grid.Column="1"
+                    Grid.Column="4"
+                    Margin="4,0"
+                    VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}Page: {0} / {1}">
+                            <Binding Path="Page" />
+                            <Binding Path="TotalPages" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <TextBlock
+                    Grid.Column="5"
                     Margin="4,0"
                     VerticalAlignment="Center"
                     Text="Filter:" />
 
                 <ComboBox
-                    Grid.Column="2"
+                    Grid.Column="6"
                     Margin="4,0"
                     ItemsSource="{Binding HistoryFilters, Mode=OneTime}"
                     SelectedItem="{Binding FilterStatus}" />
 
-                <TextBlock
+                <!--<TextBlock
                     Grid.Column="3"
                     Margin="4,0"
                     HorizontalAlignment="Left"
@@ -89,14 +111,30 @@
                                        ActionNotFound=Disable}"
                     Visibility="{Binding CanLoadMore, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
                     Load more
-                </Button>
+                </Button>-->
+
+
+                <TextBlock
+                    Grid.Column="8"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding Items.Count, StringFormat='{}[{0}]'}"
+                    ToolTip="Items in the list below." />
 
                 <TextBox
-                    Grid.Column="6"
+                    Grid.Column="9"
                     MinWidth="200"
-                    Margin="4,0,0,0"
+                    Margin="4,0,8,0"
                     extensions:WatermarkExtension.Watermark="Search..."
+                    PreviewKeyDown="{s:Action OnPreviewKeyDown}"
                     Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Button
+                    Grid.Column="10"
+                    Command="{s:Action HomePage,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome SearchSolid}"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
             </Grid>
         </GroupBox>
         <TextBlock
@@ -237,7 +275,7 @@
             Margin="2,0"
             VerticalAlignment="Bottom"
             extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
-            extensions:LayerExtension.IncreaseLayer="True"
+            
             Style="{StaticResource ExpanderCustom}"
             Visibility="{Binding ActiveItem, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
             <Expander.Header>
@@ -345,7 +383,8 @@
                         Content="Delete"
                         Foreground="White">
                         <controls:SplitButton.SplitMenu>
-                            <ContextMenu MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                            <ContextMenu
+                                MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
                                 <MenuItem
                                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                                     extensions:RippleExtension.BackgroundBrush="#EF5350"

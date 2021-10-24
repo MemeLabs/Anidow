@@ -32,8 +32,8 @@
             extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
             extensions:RippleExtension.BackgroundBrush="#EF5350"
             s:View.ActionTarget="{Binding Data, Source={StaticResource Proxy}}"
-            Background="#F44336"
-            BorderBrush="#F44336"
+            Background="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"
+            BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"
             Command="{s:Action DeleteItem,
                                ActionNotFound=Disable}"
             CommandParameter="{Binding ActiveItem}"
@@ -45,7 +45,7 @@
                         extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                         extensions:RippleExtension.BackgroundBrush="#EF5350"
                         s:View.ActionTarget="{Binding Data, Source={StaticResource Proxy}}"
-                        Background="#F44336"
+                        Background="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"
                         Command="{s:Action DeleteWithFile,
                                            NullTarget=Disable}"
                         Foreground="White"

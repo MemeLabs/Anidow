@@ -5,6 +5,7 @@
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:Anidow.Extensions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Anidow.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -41,10 +42,12 @@
                                 <ControlTemplate.Triggers>
 
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                                        <Setter TargetName="Border" Property="Background"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" />
+                                        <Setter TargetName="Border" Property="Background"
+                                                Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -59,7 +62,17 @@
                         HorizontalContentAlignment="Stretch"
                         VerticalContentAlignment="Stretch"
                         s:View.Model="{Binding}"
-                        IsTabStop="False" />
+                        IsTabStop="False">
+                        <extensions:ContentControlExtensions.ContentChangedAnimation>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    From="0"
+                                    To="1"
+                                    Duration="0:0:.2" />
+                            </Storyboard>
+                        </extensions:ContentControlExtensions.ContentChangedAnimation>
+                    </ContentControl>
                 </DataTemplate>
             </TabControl.ContentTemplate>
 
@@ -68,7 +81,7 @@
 
         <Border
             Height="27"
-            Margin="4,4"
+            Margin="4"
             Padding="6,4"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
@@ -108,7 +121,8 @@
                     Margin="10,0,0,0"
                     Content="H&amp;R: "
                     Visibility="{Binding Stats.HitAndRuns, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}" />
-                <TextBlock Grid.Column="4" Visibility="{Binding Stats.HitAndRuns, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                <TextBlock Grid.Column="4"
+                           Visibility="{Binding Stats.HitAndRuns, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
                     <Hyperlink
                         FontWeight="Bold"
                         Foreground="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"

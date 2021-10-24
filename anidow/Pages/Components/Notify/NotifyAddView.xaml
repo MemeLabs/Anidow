@@ -12,7 +12,6 @@
     xmlns:local="clr-namespace:Anidow.Pages.Components.Notify"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
-    xmlns:pages="clr-namespace:Anidow.Pages"
     xmlns:s="https://github.com/canton7/Stylet"
     Title="Setup Wizard"
     Width="700"
@@ -191,8 +190,8 @@
                                 Height="25"
                                 Margin="0,0,6,6"
                                 Padding="6,4"
-                                Background="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}"
-                                BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer2HighlightBorderBrush}}"
+                                Background="#31363d"
+                                BorderBrush="#1c1f23"
                                 BorderThickness="1"
                                 CornerRadius="4">
                                 <StackPanel Orientation="Horizontal">
@@ -244,7 +243,11 @@
                                             FontWeight="Bold"
                                             Text="aA" />
                                     </Border>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Word}" />
+                                    <TextBox
+                                        VerticalAlignment="Center"
+                                        IsReadOnly="True"
+                                        Style="{DynamicResource {x:Static adonisUi:Styles.SelectableTextBlockTextBox}}"
+                                        Text="{Binding Word}" />
                                     <Button
                                         Margin="6,0,0,0"
                                         Command="{s:Action RemoveKeyword,

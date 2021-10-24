@@ -24,7 +24,7 @@
         <GroupBox
             Margin="2"
             extensions:CornerRadiusExtension.CornerRadius="4"
-            extensions:LayerExtension.IncreaseLayer="True">
+            >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -38,7 +38,9 @@
                 <Button Grid.Column="0" Command="{s:Action Load, ActionNotFound=Disable}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <iconPacks:FontAwesome Kind="SyncAltSolid" />
+                            <ContentControl VerticalAlignment="Center">
+                                <iconPacks:FontAwesome Kind="SyncAltSolid" />
+                            </ContentControl>
                             <TextBlock
                                 Margin="4,0"
                                 VerticalAlignment="Center"

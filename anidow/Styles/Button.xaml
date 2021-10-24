@@ -28,8 +28,8 @@
         <Setter Property="Foreground" Value="White" />
         <Setter Property="extensions:CursorSpotlightExtension.BorderBrush" Value="#EF5350" />
         <Setter Property="extensions:RippleExtension.BackgroundBrush" Value="#EF5350" />
-        <Setter Property="Background" Value="#F44336" />
-        <Setter Property="BorderBrush" Value="#F44336" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />

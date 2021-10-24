@@ -2,18 +2,38 @@
     x:Class="Anidow.Pages.ImageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Anidow.Pages"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Anidow - Image"
     Width="500"
     Height="740"
+    SizeToContent="Width"
     WindowStartupLocation="CenterOwner"
     WindowStyle="ToolWindow"
-    SizeToContent="Width"
     mc:Ignorable="d">
+    <controls:AdonisWindow.TitleBarContent>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="1"
+                Click="ButtonCopy_OnClick"
+                Content="{iconPacks:FontAwesome CopySolid}"
+                Style="{DynamicResource {x:Static adonisUi:Styles.WindowButton}}"
+                ToolTip="Copy image url/path"
+                ToolTipService.Placement="Left" />
+        </Grid>
+    </controls:AdonisWindow.TitleBarContent>
     <Grid>
-        <Image x:Name="Image" RenderOptions.BitmapScalingMode="Fant" Stretch="Uniform"/>
+        <Image
+            x:Name="Image"
+            RenderOptions.BitmapScalingMode="Fant"
+            Stretch="Uniform" />
     </Grid>
 </controls:AdonisWindow>

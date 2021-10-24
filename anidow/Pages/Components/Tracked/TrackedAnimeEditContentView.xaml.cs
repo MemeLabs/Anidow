@@ -1,13 +1,12 @@
-﻿namespace Anidow.Pages.Components.Tracked
+﻿namespace Anidow.Pages.Components.Tracked;
+
+/// <summary>
+///     Interaktionslogik für TrackedAnimeEditContentView.xaml
+/// </summary>
+public partial class TrackedAnimeEditContentView
 {
-    /// <summary>
-    ///     Interaktionslogik für TrackedAnimeEditContentView.xaml
-    /// </summary>
-    public partial class TrackedAnimeEditContentView
+    public TrackedAnimeEditContentView()
     {
-        public TrackedAnimeEditContentView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

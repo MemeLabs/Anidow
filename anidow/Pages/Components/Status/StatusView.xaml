@@ -16,7 +16,7 @@
     mc:Ignorable="d">
     <Border
         Padding="6"
-        extensions:LayerExtension.IncreaseLayer="True"
+
         extensions:LayerExtension.Layer="2"
         Background="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}"
         BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer2BorderBrush}}"

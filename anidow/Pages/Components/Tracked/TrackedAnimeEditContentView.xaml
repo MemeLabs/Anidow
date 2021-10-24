@@ -1,13 +1,16 @@
-﻿<UserControl
+﻿<controls:AdonisWindow
     x:Class="Anidow.Pages.Components.Tracked.TrackedAnimeEditContentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUI="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:animeInfo="clr-namespace:Anidow.Pages.Components.AnimeInfo"
+    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:converters="clr-namespace:Anidow.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enums="clr-namespace:Anidow.Enums"
     xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
     xmlns:extensions1="clr-namespace:Anidow.Extensions"
+    xmlns:graphQl="clr-namespace:Anidow.GraphQL"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:listViewLayout="clr-namespace:Itenso.Windows.Controls.ListViewLayout;assembly=Itenso.Windows.Controls.ListViewLayout"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,371 +18,490 @@
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:tracked="clr-namespace:Anidow.Pages.Components.Tracked"
+    Title="{Binding Title, Mode=OneWay}"
+    Width="700"
+    Height="455"
     d:DataContext="{d:DesignInstance tracked:TrackedAnimeEditContentViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    ResizeMode="NoResize"
+    WindowStyle="ToolWindow"
     mc:Ignorable="d">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <GroupBox
-            Grid.Row="0"
-            Margin="2"
-            extensions:CornerRadiusExtension.CornerRadius="4"
-            extensions:LayerExtension.IncreaseLayer="True">
+    <TabControl
+        Margin="4"
+        SelectedIndex="1"
+        Style="{DynamicResource TabControlCustomAnimeBytes}">
+        <TabControl.Resources>
+            <Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border
+                                Name="Border"
+                                Height="27"
+                                Margin="2,2,2,2"
+                                Background="Transparent"
+                                CornerRadius="4">
+                                <ContentPresenter
+                                    x:Name="ContentSite"
+                                    Margin="10,4"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    ContentSource="Header" />
+                            </Border>
+                            <ControlTemplate.Triggers>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <Button
-                    Width="50"
-                    HorizontalAlignment="Left"
-                    Command="{s:Action Close}"
-                    Content="{iconPacks:FontAwesome ArrowLeftSolid}"
-                    Foreground="White"
-                    Style="{DynamicResource {x:Static adonisUI:Styles.AccentToolbarButton}}"
-                    ToolTip="Go back" />
-
-                <TextBlock
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    FontWeight="SemiBold"
-                    Foreground="White">
-                    Edit Anime
-                </TextBlock>
-
-                <TextBlock
-                    Grid.Column="2"
-                    Margin="8,0,4,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Text="{Binding Anime.Notification, Mode=OneWay}" />
-
-                <Button
-                    Grid.Column="3"
-                    Margin="4,0"
-                    VerticalAlignment="Center"
-                    Command="{s:Action SaveAnime,
-                                       ActionNotFound=Disable}"
-                    Content="Save"
-                    ToolTip="Save changes" />
-
-                <Button
-                    Grid.Column="4"
-                    Margin="4,0,0,0"
-                    VerticalAlignment="Center"
-                    extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
-                    extensions:RippleExtension.BackgroundBrush="#EF5350"
-                    Background="#F44336"
-                    Command="{s:Action Delete,
-                                       ActionNotFound=Disable}"
-                    Content="Delete"
-                    Foreground="White" />
-            </Grid>
-
-        </GroupBox>
-        <ScrollViewer
-            Grid.Row="1"
-            Margin="2,4,2,2"
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUI:Brushes.Layer0BackgroundBrush}}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </TabControl.Resources>
+        <TabItem
+            Header="Information"
+            Visibility="{Binding Anime.AniListAnime, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
+            <animeInfo:AnimeInfoPanel DataContext="{Binding Anime.AniListAnime}" />
+        </TabItem>
+        <TabItem
             Padding="0"
-            extensions1:TouchScrolling.IsEnabled="True"
-            VerticalScrollBarVisibility="Auto">
+            Header="Settings">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" MaxHeight="225" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-
-
-                <!--  Rounded mask (stretches to fill Grid)  -->
-                <Border
-                    Name="Mask"
-                    Margin="0,0,4,8"
-                    Background="{DynamicResource {x:Static adonisUI:Brushes.Layer0BackgroundBrush}}"
-                    CornerRadius="4" />
-
-                <Grid
+                <ScrollViewer
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="0,0,4,8"
-                    VerticalAlignment="Top">
-
-                    <Grid.OpacityMask>
-                        <VisualBrush Visual="{Binding ElementName=Mask}" />
-                    </Grid.OpacityMask>
-                    <Image
-                        Height="225"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Cursor="Hand"
-                        MouseLeftButtonUp="{s:Action ShowImage}"
-                        RenderOptions.BitmapScalingMode="HighQuality"
-                        Source="{Binding Anime.CoverData.FilePath, IsAsync=True}"
-                        Stretch="Uniform"
-                        Visibility="{Binding Anime.CoverData.File, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}" />
-
-                </Grid>
-                <!--<GridSplitter
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Width="2"
-                    VerticalAlignment="Stretch" />-->
-
-                <Border
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="4,0,0,8"
-                    Padding="4"
-                    extensions:LayerExtension.IncreaseLayer="True"
-                    Background="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}"
-                    CornerRadius="4">
+                    Margin="0,4"
+                    Padding="0"
+                    extensions1:TouchScrolling.IsEnabled="True"
+                    VerticalScrollBarVisibility="Auto">
                     <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Grid.ColumnSpan="3"
-                            Margin="4"
-                            FontSize="16"
-                            FontWeight="SemiBold"
-                            Text="{Binding Anime.Name}"
-                            TextWrapping="Wrap" />
-                        <Separator
+
+
+                        <!--  Image  -->
+                        <Border
+                            Margin="0,0,8,0"
+                            Padding="2"
+                            VerticalAlignment="Top"
+                            CornerRadius="4">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource {x:Static adonisUI:Brushes.AccentBrush}}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid>
+                                <!--  Rounded mask (stretches to fill Grid)  -->
+                                <Border
+                                    Name="Mask"
+                                    Background="{DynamicResource {x:Static adonisUI:Brushes.Layer0BackgroundBrush}}"
+                                    CornerRadius="4" />
+
+                                <Grid
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Top">
+                                    <Grid.OpacityMask>
+                                        <VisualBrush Visual="{Binding ElementName=Mask}" />
+                                    </Grid.OpacityMask>
+                                    <Button
+                                        Padding="0"
+                                        VerticalAlignment="Top"
+                                        BorderThickness="0"
+                                        Command="{s:Action ShowImage,
+                                                           ActionNotFound=Disable}"
+                                        Cursor="Hand">
+                                        <Image
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            Source="{Binding Anime.CoverData.FilePath, IsAsync=True}"
+                                            Stretch="Uniform" />
+                                    </Button>
+
+                                    <StackPanel
+                                        Grid.Row="0"
+                                        Margin="4,8"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Visibility="{Binding Anime.CoverData.File, Converter={x:Static converters:IsNotNullToVisibilityConverter.Instance}}">
+                                        <TextBox x:Name="CoverUrl" extensions:WatermarkExtension.Watermark="Url ..." />
+                                        <Button Command="{s:Action DownloadCover, ActionNotFound=Disable}" Content="Download Cover">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{x:Static converters:DownloadCoverConverter.Instance}">
+                                                    <Binding ElementName="CoverUrl" Path="Text" />
+                                                    <Binding Path="Anime" />
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <Grid Column="1" Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBox
+                                FontSize="16"
+                                IsReadOnly="True"
+                                Style="{DynamicResource {x:Static adonisUI:Styles.SelectableTextBlockTextBox}}"
+                                Text="{Binding Anime.Name, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+
+                            <Border
+                                Grid.Row="1"
+                                Margin="4,8,0,0"
+                                Padding="4"
+                                Background="{DynamicResource {x:Static adonisUI:Brushes.Layer1BackgroundBrush}}"
+                                CornerRadius="4">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--  Status  -->
+                                    <Grid
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Margin="4">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Margin="0,0,0,4" Text="Status:" />
+                                        <ComboBox Grid.Row="1" SelectedItem="{Binding Anime.Status, Mode=TwoWay}">
+                                            <enums:AnimeStatus>Watching</enums:AnimeStatus>
+                                            <enums:AnimeStatus>Completed</enums:AnimeStatus>
+                                            <enums:AnimeStatus>Dropped</enums:AnimeStatus>
+                                        </ComboBox>
+                                    </Grid>
+
+                                    <!--  Score  -->
+                                    <Grid
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="4"
+                                        IsEnabled="False"
+                                        Opacity=".3">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Margin="0,0,0,4" Text="Score:" />
+                                        <ComboBox Grid.Row="1" SelectedItem="{Binding Anime.Score, Mode=TwoWay}">
+                                            <system:Int16>1</system:Int16>
+                                            <system:Int16>2</system:Int16>
+                                            <system:Int16>3</system:Int16>
+                                            <system:Int16>4</system:Int16>
+                                            <system:Int16>5</system:Int16>
+                                            <system:Int16>6</system:Int16>
+                                            <system:Int16>7</system:Int16>
+                                            <system:Int16>8</system:Int16>
+                                            <system:Int16>9</system:Int16>
+                                            <system:Int16>10</system:Int16>
+                                        </ComboBox>
+
+                                    </Grid>
+
+                                    <!--  Date added  -->
+                                    <Grid
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        Margin="4">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Margin="0,0,0,4" Text="Date added:" />
+                                        <DatePicker Grid.Row="1" SelectedDate="{Binding Anime.Created, Mode=TwoWay}" />
+                                    </Grid>
+
+                                    <!--  Resolution  -->
+                                    <Grid
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="4">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Margin="0,0,0,4" Text="Resolution:" />
+                                        <ComboBox Grid.Row="1" SelectedItem="{Binding Anime.Resolution, Mode=TwoWay}">
+                                            <system:String>720p</system:String>
+                                            <system:String>1080p</system:String>
+                                        </ComboBox>
+                                    </Grid>
+
+                                    <!--  Group  -->
+                                    <Grid
+                                        Grid.Row="4"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Margin="4">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Margin="0,0,0,4" Text="Group:" />
+                                        <TextBox Grid.Row="1" Text="{Binding Anime.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+
+                                    <Grid
+                                        Grid.Row="2"
+                                        Grid.RowSpan="3"
+                                        Grid.Column="2"
+                                        Margin="4"
+                                        Visibility="{Binding CanSearchAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock
+                                            Text="Please choose the correct one from the list below."
+                                            TextWrapping="Wrap"
+                                            Visibility="{Binding SearchResults.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}" />
+                                        <ItemsControl
+                                            Grid.Row="1"
+                                            Margin="0,4"
+                                            ItemsSource="{Binding SearchResults, Mode=OneWay}"
+                                            Visibility="{Binding SearchResults.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="graphQl:AniListAnime">
+                                                    <Grid Margin="0,0,0,2">
+
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Button
+                                                            Margin="0,0,4,0"
+                                                            HorizontalContentAlignment="Left"
+                                                            Background="Transparent"
+                                                            BorderThickness="0"
+                                                            Command="{s:Action SetAniListAnime,
+                                                                               ActionNotFound=Disable}"
+                                                            CommandParameter="{Binding}">
+                                                            <TextBlock
+                                                                VerticalAlignment="Center"
+                                                                Text="{Binding TitleString, Mode=Default}"
+                                                                TextTrimming="CharacterEllipsis"
+                                                                TextWrapping="NoWrap"
+                                                                ToolTip="{Binding TitleString, Mode=OneWay}" />
+                                                        </Button>
+                                                        <Button
+                                                            Grid.Column="1"
+                                                            BorderThickness="0"
+                                                            Command="{s:Action ShowAniListAnime,
+                                                                               ActionNotFound=Disable}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="?" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Grid
                             Grid.Row="1"
                             Grid.Column="0"
-                            Grid.ColumnSpan="3" />
-
-                        <!--  Status  -->
-                        <Grid
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Margin="4">
+                            Grid.ColumnSpan="2"
+                            Margin="0,8">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TextBlock Margin="0,0,0,4" Text="Status:" />
-                            <ComboBox Grid.Row="1" SelectedItem="{Binding Anime.Status, Mode=TwoWay}">
-                                <enums:AnimeStatus>Watching</enums:AnimeStatus>
-                                <enums:AnimeStatus>Completed</enums:AnimeStatus>
-                                <enums:AnimeStatus>Dropped</enums:AnimeStatus>
-                            </ComboBox>
+                            <TextBlock
+                                Margin="4,0,4,4"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="Folder:" />
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox
+                                    IsReadOnly="True"
+                                    Text="{Binding Anime.Folder}"
+                                    TextAlignment="Left"
+                                    TextWrapping="Wrap" />
+
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="8,0,8,0"
+                                    Command="{s:Action OpenFolderBrowserDialog,
+                                                       ActionNotFound=Disable}"
+                                    Content="{iconPacks:FontAwesome FolderPlusSolid}"
+                                    ToolTip="Set new folder" />
+
+                                <Button
+                                    Grid.Column="2"
+                                    Command="{s:Action OpenFolderFilesWindow,
+                                                       ActionNotFound=Disable}"
+                                    Content="{iconPacks:FontAwesome FolderOpenSolid}"
+                                    ToolTip="Open folder" />
+                            </Grid>
+
+                            <Expander
+                                Grid.Row="2"
+                                Margin="0,8"
+                                Header="{Binding Anime.EpisodeList.Count}"
+                                HeaderStringFormat="{}{0} Episodes"
+                                Style="{StaticResource ExpanderCustom}"
+                                Visibility="{Binding Anime.EpisodeList.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
+                                <ListView
+                                    Margin="4"
+                                    extensions:GridViewSortExtension.AutoSort="True"
+                                    listViewLayout:ListViewLayoutManager.Enabled="true"
+                                    ItemContainerStyle="{StaticResource ListViewItemBase}"
+                                    ItemsSource="{Binding Anime.EpisodeList, Mode=OneWay}">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn
+                                                extensions:GridViewSortExtension.PropertyName="Name"
+                                                listViewLayout:RangeColumn.IsFillColumn="true"
+                                                Header="Name"
+                                                HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate DataType="models:Episode">
+                                                        <TextBlock
+                                                            Margin="-10,0,0,0"
+                                                            HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Center"
+                                                            Text="{Binding Name}"
+                                                            TextTrimming="CharacterEllipsis"
+                                                            TextWrapping="NoWrap"
+                                                            ToolTip="{Binding Name}"
+                                                            ToolTipService.Placement="Bottom" />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn
+                                                Width="85"
+                                                extensions:GridViewSortExtension.PropertyName="EpisodeNum"
+                                                listViewLayout:FixedColumn.Width="85"
+                                                Header="Episode"
+                                                HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate DataType="models:Episode">
+                                                        <TextBlock
+                                                            Width="78"
+                                                            Margin="-12,0"
+                                                            HorizontalAlignment="Left"
+                                                            Text="{Binding EpisodeNum}"
+                                                            TextAlignment="Center" />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn
+                                                Width="70"
+                                                listViewLayout:FixedColumn.Width="70"
+                                                CellTemplate="{DynamicResource WatchOpen}"
+                                                HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                            </Expander>
                         </Grid>
 
-                        <!--  Score  -->
-                        <Grid
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Margin="4"
-                            IsEnabled="False"
-                            Opacity=".3">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Margin="0,0,0,4" Text="Score:" />
-                            <ComboBox
-                                Grid.Row="1"
-                                extensions:LayerExtension.Layer="2"
-                                SelectedItem="{Binding Anime.Score, Mode=TwoWay}">
-                                <system:Int16>1</system:Int16>
-                                <system:Int16>2</system:Int16>
-                                <system:Int16>3</system:Int16>
-                                <system:Int16>4</system:Int16>
-                                <system:Int16>5</system:Int16>
-                                <system:Int16>6</system:Int16>
-                                <system:Int16>7</system:Int16>
-                                <system:Int16>8</system:Int16>
-                                <system:Int16>9</system:Int16>
-                                <system:Int16>10</system:Int16>
-                            </ComboBox>
 
-                        </Grid>
-
-                        <!--  Date added  -->
-                        <Grid
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            Margin="4">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Margin="0,0,0,4" Text="Date added:" />
-                            <DatePicker Grid.Row="1" Text="{Binding Anime.Created, Mode=TwoWay}" />
-                        </Grid>
-
-                        <!--  Resolution  -->
-                        <Grid
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Margin="4">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Margin="0,0,0,4" Text="Resolution:" />
-                            <ComboBox Grid.Row="1" SelectedItem="{Binding Anime.Resolution, Mode=TwoWay}">
-                                <system:String>720p</system:String>
-                                <system:String>1080p</system:String>
-                            </ComboBox>
-                        </Grid>
-
-                        <!--  Group  -->
-                        <Grid
-                            Grid.Row="4"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Margin="4">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Margin="0,0,0,4" Text="Group:" />
-                            <TextBox Grid.Row="1" Text="{Binding Anime.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>
                     </Grid>
-                </Border>
+                </ScrollViewer>
+                <GroupBox Grid.Row="1" extensions:CornerRadiusExtension.CornerRadius="4">
 
-                <Grid
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <TextBlock
-                        Margin="4,0,4,4"
-                        VerticalAlignment="Center"
-                        FontWeight="Bold"
-                        Text="Folder:" />
-
-                    <Grid Grid.Row="1">
+                    <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBox
-                            IsReadOnly="True"
-                            Text="{Binding Anime.Folder}"
-                            TextAlignment="Left"
-                            TextWrapping="Wrap" />
 
                         <Button
-                            Grid.Column="1"
-                            Margin="8,0,8,0"
-                            Command="{s:Action OpenFolderBrowserDialog,
+                            Grid.Column="0"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
+                            extensions:RippleExtension.BackgroundBrush="#EF5350"
+                            Background="#F44336"
+                            Command="{s:Action Delete,
                                                ActionNotFound=Disable}"
-                            Content="{iconPacks:FontAwesome FolderPlusSolid}"
-                            ToolTip="Set new folder" />
+                            Content="Delete"
+                            Foreground="White" />
 
-                        <Button
+                        <TextBlock
                             Grid.Column="2"
-                            Command="{s:Action OpenFolderFilesWindow,
+                            Margin="8,0,4,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Text="{Binding Anime.Notification, Mode=OneWay}" />
+
+                        <Button
+                            Grid.Column="3"
+                            Margin="8,0"
+                            VerticalAlignment="Center"
+                            Command="{s:Action SaveAnime,
                                                ActionNotFound=Disable}"
-                            Content="{iconPacks:FontAwesome FolderOpenSolid}"
-                            ToolTip="Open folder" />
+                            Content="Save"
+                            Style="{DynamicResource {x:Static adonisUI:Styles.AccentButton}}"
+                            ToolTip="Save changes" />
+
+                        <Button
+                            Grid.Column="4"
+                            VerticalAlignment="Center"
+                            Command="{s:Action RequestClose,
+                                               ActionNotFound=Disable}"
+                            Content="Close" />
+
                     </Grid>
 
-                    <Expander
-                        Grid.Row="2"
-                        Margin="0,8"
-                        extensions:LayerExtension.IncreaseLayer="True"
-                        Header="{Binding Anime.EpisodeList.Count}"
-                        HeaderStringFormat="{}{0} Episodes"
-                        Style="{StaticResource ExpanderCustom}"
-                        Visibility="{Binding Anime.EpisodeList.Count, Converter={x:Static converters:IsNotZeroToVisibilityConverter.Instance}}">
-                        <ListView
-                            Margin="4"
-                            extensions:GridViewSortExtension.AutoSort="True"
-                            listViewLayout:ListViewLayoutManager.Enabled="true"
-                            ItemContainerStyle="{StaticResource ListViewItemBase}"
-                            ItemsSource="{Binding Anime.EpisodeList, Mode=OneWay}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn
-                                        extensions:GridViewSortExtension.PropertyName="Name"
-                                        listViewLayout:RangeColumn.IsFillColumn="true"
-                                        Header="Name"
-                                        HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="models:Episode">
-                                                <TextBlock
-                                                    Margin="-10,0,0,0"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Center"
-                                                    Text="{Binding Name}"
-                                                    TextTrimming="CharacterEllipsis"
-                                                    TextWrapping="NoWrap"
-                                                    ToolTip="{Binding Name}"
-                                                    ToolTipService.Placement="Bottom" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn
-                                        Width="85"
-                                        extensions:GridViewSortExtension.PropertyName="EpisodeNum"
-                                        listViewLayout:FixedColumn.Width="85"
-                                        Header="Episode"
-                                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="models:Episode">
-                                                <TextBlock
-                                                    Width="78"
-                                                    Margin="-12,0"
-                                                    HorizontalAlignment="Left"
-                                                    Text="{Binding EpisodeNum}"
-                                                    TextAlignment="Center" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn
-                                        Width="70"
-                                        listViewLayout:FixedColumn.Width="70"
-                                        CellTemplate="{DynamicResource WatchOpen}"
-                                        HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}" />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-
-                    </Expander>
-                </Grid>
-
-
+                </GroupBox>
             </Grid>
-        </ScrollViewer>
+        </TabItem>
+    </TabControl>
 
 
-    </Grid>
-
-
-</UserControl>
+</controls:AdonisWindow>
