@@ -29,7 +29,7 @@
             <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:AdonisWindow}">
                 <!--<Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"></Setter>-->
             </Style>
-
+            
             <!-- <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer"> -->
             <!--     <Setter Property="extensions:ScrollViewerExtension.VerticalScrollBarPlacement" Value="Overlay" /> -->
             <!--     <Setter Property="extensions:ScrollViewerExtension.HorizontalScrollBarPlacement" Value="Overlay" /> -->
