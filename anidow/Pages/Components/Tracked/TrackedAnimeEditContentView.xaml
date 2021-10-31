@@ -257,9 +257,9 @@
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <TextBlock Margin="0,0,0,4" Text="Resolution:" />
-                                        <ComboBox Grid.Row="1" SelectedItem="{Binding Anime.Resolution, Mode=TwoWay}">
-                                            <system:String>720p</system:String>
-                                            <system:String>1080p</system:String>
+                                        <ComboBox Grid.Row="1" Text="{Binding Anime.Resolution, Mode=TwoWay}">
+                                            <ComboBoxItem>720p</ComboBoxItem>
+                                            <ComboBoxItem>1080p</ComboBoxItem>
                                         </ComboBox>
                                     </Grid>
 

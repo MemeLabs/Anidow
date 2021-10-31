@@ -18,10 +18,12 @@
     FontWeight="Medium"
     ResizeMode="NoResize"
     WindowStyle="None"
+    Background="Transparent"
+    AllowsTransparency="True"
     mc:Ignorable="d">
     <Border
-        BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}"
         Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
+        BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}"
         BorderThickness="2"
         CornerRadius="4">
         <Grid>
@@ -35,8 +37,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation=" Horizontal">
-                    <ContentControl VerticalAlignment="Center"
-                                    Content="{iconPacks:FontAwesome MagicSolid, Height=20, Width=20}" />
+                    <ContentControl VerticalAlignment="Center" Content="{iconPacks:FontAwesome MagicSolid, Height=20, Width=20}" />
                     <TextBlock
                         Margin="6,0,0,0"
                         VerticalAlignment="Center"

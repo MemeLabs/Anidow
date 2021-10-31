@@ -29,8 +29,7 @@
             <Style TargetType="Border">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background"
-                                Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                         <Setter Property="Cursor" Value="Hand" />
                         <Trigger.EnterActions>
                             <BeginStoryboard>
@@ -63,8 +62,7 @@
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
                         <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="Background"
-                                Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                         <!--<Setter Property="BorderThickness" Value="2" />-->
                     </Trigger>
                 </Style.Triggers>
@@ -121,6 +119,12 @@
                     HorizontalAlignment="Stretch">
                     <Grid.Background>
                         <SolidColorBrush Opacity=".4" Color="Black" />
+
+                        <!--<LinearGradientBrush Opacity=".5" StartPoint="0,1" EndPoint="0,0">
+                            <GradientStop Color="Transparent" Offset="1"/>
+                            <GradientStop Color="#7F000000" Offset="0.694"/>
+                            <GradientStop Color="Black" Offset="0.265"/>
+                        </LinearGradientBrush>-->
                     </Grid.Background>
 
                     <helpers:OutlinedTextBlock

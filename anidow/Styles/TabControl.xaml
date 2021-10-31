@@ -118,7 +118,7 @@
     </Style>
 
     <Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
-        <Setter Property="extensions:LayerExtension.Layer" Value="0"/>
+        <Setter Property="extensions:LayerExtension.Layer" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">

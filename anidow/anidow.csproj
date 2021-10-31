@@ -72,17 +72,17 @@
 		<PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
 		<PackageReference Include="BencodeNET" Version="4.0.0" />
 		<PackageReference Include="FluentScheduler" Version="5.5.1" />
-		<PackageReference Include="Fody" Version="6.5.3">
+		<PackageReference Include="Fody" Version="6.6.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="GraphQL.Client" Version="3.2.4" />
-		<PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="3.2.4" />
+		<PackageReference Include="GraphQL.Client" Version="4.0.1" />
+		<PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="4.0.1" />
 		<PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.18" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.37" />
 		<PackageReference Include="Humanizer.Core" Version="2.11.10" />
 		<PackageReference Include="Jot" Version="2.1.11" />
-		<PackageReference Include="MahApps.Metro.IconPacks.FontAwesome" Version="4.10.0" />
+		<PackageReference Include="MahApps.Metro.IconPacks.FontAwesome" Version="4.11.0" />
 		<PackageReference Include="Microsoft.AppCenter" Version="4.4.0" />
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
 		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
