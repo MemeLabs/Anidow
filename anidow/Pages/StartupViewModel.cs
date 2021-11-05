@@ -44,16 +44,7 @@ public class StartupViewModel : Screen
 
     public bool ShowError { get; set; }
     public string ErrorStack { get; set; }
-
-    // protected override void OnInitialActivate()
-    // {
-    //     LookForUpdates().ContinueWith(async _ =>
-    //     {
-    //         await PrepareDatabase()
-    //             .ContinueWith(async _ => await LoadSettings()
-    //                 .ContinueWith(async _ => await ShowSetupWizard()));
-    //     });
-    // }
+    
 
     protected override async void OnViewLoaded()
     {

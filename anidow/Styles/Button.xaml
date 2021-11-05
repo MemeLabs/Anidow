@@ -127,8 +127,7 @@
                             </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -137,15 +136,11 @@
 
         <Style.Triggers>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
             </Trigger>
 
-            <DataTrigger
-                Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                Value="False">
-                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+            <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -154,8 +149,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonHighlightBrush}}" />
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static adonisUi:Dimensions.BorderThickness}}" />
-        <Setter Property="extensions:CornerRadiusExtension.CornerRadius"
-                Value="{DynamicResource {x:Static adonisUi:Dimensions.CornerRadius}}" />
+        <Setter Property="extensions:CornerRadiusExtension.CornerRadius" Value="{DynamicResource {x:Static adonisUi:Dimensions.CornerRadius}}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Width" Value="45" />
         <Setter Property="Height" Value="30" />
@@ -194,22 +188,19 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                            <Setter TargetName="ContentPresenter" Property="TextElement.Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
                         </Trigger>
 
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="False">
                             <Setter TargetName="Border" Property="Background" Value="Transparent" />
                         </Trigger>
 
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Border" Property="Background"
-                                    Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -219,24 +210,18 @@
         <Style.Triggers>
 
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.WindowButtonInteractionBrush}}" />
             </Trigger>
 
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
             </Trigger>
 
-            <DataTrigger
-                Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                Value="False">
-                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+            <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
             </DataTrigger>
 
-            <DataTrigger
-                Binding="{Binding WindowState, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                Value="Maximized">
+            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Value="Maximized">
                 <Setter Property="Height" Value="22" />
             </DataTrigger>
         </Style.Triggers>

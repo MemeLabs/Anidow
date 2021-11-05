@@ -18,6 +18,15 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
+
+        <Grid.Resources>
+            <CollectionViewSource x:Key="Episodes" Source="{Binding Items}">
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="Anime.Name" />
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -33,7 +42,7 @@
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemContainerStyle="{StaticResource ListViewItemHome}"
-            ItemsSource="{Binding Items}"
+            ItemsSource="{Binding Source={StaticResource Episodes}}"
             SelectedItem="{Binding ActiveItem}"
             SelectionChanged="{s:Action SelectionChanged}">
             <ListView.ContextMenu>
@@ -162,6 +171,55 @@
                         HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}" />
                 </GridView>
             </ListView.View>
+
+            <ListView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Expander
+                                            Margin="0,4,0,0"
+                                            Style="{StaticResource ExpanderCustom}">
+                                            <Expander.Header>
+                                                <Grid Margin="0,0,20,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                        FontSize="14"
+                                                        FontWeight="SemiBold"
+                                                        Text="{Binding Name, FallbackValue='No Anime Group'}"
+                                                        TextTrimming="CharacterEllipsis" />
+                                                    <TextBlock
+                                                        Grid.Column="1"
+                                                        FontSize="14"
+                                                        FontWeight="SemiBold"
+                                                        Text="{Binding ItemCount, StringFormat='Eps. {0}'}" />
+                                                </Grid>
+                                            </Expander.Header>
+                                            <ItemsPresenter Margin="0,4" />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Name, FallbackValue=''}" Value="">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <ItemsPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListView.GroupStyle>
         </ListView>
 
         <StackPanel
@@ -233,8 +291,7 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock VerticalAlignment="Top" Text="{Binding DateString}">
                                                 <TextBlock.ToolTip>
-                                                    <ToolTip Content="{Binding DateLocal}"
-                                                             ContentStringFormat="{}{0:g}" />
+                                                    <ToolTip Content="{Binding DateLocal}" ContentStringFormat="{}{0:g}" />
                                                 </TextBlock.ToolTip>
                                             </TextBlock>
                                             <Separator

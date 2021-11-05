@@ -26,9 +26,7 @@
             </s:ApplicationLoader.MergedDictionaries>
 
 
-            <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:AdonisWindow}">
-                <!--<Setter Property="TitleBarBackground" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer0BackgroundBrush}}"></Setter>-->
-            </Style>
+            <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type controls:AdonisWindow}" />
 
             <!-- <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer"> -->
             <!--     <Setter Property="extensions:ScrollViewerExtension.VerticalScrollBarPlacement" Value="Overlay" /> -->
@@ -39,8 +37,7 @@
             <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="{x:Type ToolTip}">
                 <Setter Property="extensions:CornerRadiusExtension.CornerRadius" Value="4" />
                 <!-- <Setter Property="Padding" Value="4" /> -->
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                 <Setter Property="BorderBrush" Value="#2F5CC1" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
             </Style>
@@ -54,7 +51,7 @@
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="BorderBrush">
                     <Setter.Value>
-                        <SolidColorBrush Color="Black" Opacity=".4" />
+                        <SolidColorBrush Opacity=".4" Color="Black" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Margin" Value="2,0,2,2" />
@@ -69,7 +66,7 @@
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="BorderBrush">
                     <Setter.Value>
-                        <SolidColorBrush Color="Black" Opacity=".4" />
+                        <SolidColorBrush Opacity=".4" Color="Black" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Margin" Value="0,0,2,2" />
@@ -84,7 +81,7 @@
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="BorderBrush">
                     <Setter.Value>
-                        <SolidColorBrush Color="Black" Opacity=".4" />
+                        <SolidColorBrush Opacity=".4" Color="Black" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Margin" Value="2,0,0,2" />
@@ -131,8 +128,7 @@
                                     CanContentScroll="True"
                                     Focusable="False"
                                     VerticalScrollBarVisibility="Auto">
-                                    <ItemsPresenter
-                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </ScrollViewer>
                             </Border>
                         </ControlTemplate>
