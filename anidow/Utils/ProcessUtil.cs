@@ -49,15 +49,14 @@ public static class ProcessUtil
         episode.CanOpen = true;
     }
 
-    public static bool IsAllowedFile(string path)
+    public static bool IsAllowedFile(string extension)
     {
-        if (!File.Exists(path))
+        if (!MediaExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
         {
             return false;
         }
 
-        var file = new FileInfo(path);
-        return IsAllowedFile(file);
+        return true;
     }
 
     public static bool IsAllowedFile(FileInfo file)

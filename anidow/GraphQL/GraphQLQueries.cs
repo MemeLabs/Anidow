@@ -5,7 +5,7 @@ namespace Anidow.GraphQL;
 public class GraphQLQueries
 {
     public static GraphQLRequest SearchQuery(string search, int results = 5, int page = 1) =>
-        new GraphQLRequest
+        new()
         {
             Query = @"
                     query AnimeSearch($search: String, $perPage: Int) {

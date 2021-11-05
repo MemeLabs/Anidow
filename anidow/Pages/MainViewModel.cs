@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Anidow.Pages.Components.Status;
 using Anidow.Services;
 using Stylet;
@@ -55,13 +56,14 @@ public class MainViewModel : Conductor<Screen>.Collection.OneActive
     {
         ChangeActiveItem(Items.FirstOrDefault(), false);
         StatusViewModel.Init();
-        _notifyViewModel.Init().ContinueWith(_ =>
+        Task.Run(async () =>
         {
+            await _notifyViewModel.Init();
             if (_notifyViewModel.Items.Count > 0)
             {
 #if RELEASE
-                    StatusViewModel.StartNyaa();
-                    StatusViewModel.StartAnimeBytesAll();
+                StatusViewModel.StartNyaa();
+                StatusViewModel.StartAnimeBytesAll();
 #endif
             }
         });

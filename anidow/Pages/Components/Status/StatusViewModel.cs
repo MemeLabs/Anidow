@@ -215,4 +215,26 @@ public class StatusViewModel : Screen
 
         RunningAnimeBytesAll = true;
     }
+
+    public async Task CheckAll()
+    {
+        await CheckNyaa();
+        await CheckAnimeBytesAll();
+        await CheckAnimeBytesAiring();
+    }
+
+    public void PauseAll()
+    {
+        PauseNyaa();
+        PauseAnimeBytesAll();
+        PauseAnimeBytesAiring();
+    }
+
+
+    public void StartAll()
+    {
+        StartNyaa();
+        StartAnimeBytesAll();
+        StartAnimeBytesAiring();
+    }
 }

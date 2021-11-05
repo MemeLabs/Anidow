@@ -139,8 +139,6 @@ public class NotifyViewModel : Screen, IHandle<NotifyItemAddOrUpdateEvent>
             await DispatcherUtil.DispatchAsync(() => Items.Add(item));
         }
 
-        ;
-
         UpdateBadgeContent();
     }
 

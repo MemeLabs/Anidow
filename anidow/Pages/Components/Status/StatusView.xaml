@@ -16,14 +16,57 @@
     mc:Ignorable="d">
     <Border
         Padding="6"
-
         extensions:LayerExtension.Layer="2"
         Background="{DynamicResource {x:Static adonisUi:Brushes.Layer2BackgroundBrush}}"
-        BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer2BorderBrush}}"
-        BorderThickness="2"
+        BorderBrush="Black"
+        BorderThickness="1"
         CornerRadius="4">
         <StackPanel>
             <Label Margin="0,0,0,6" Content="RSS feed refresh timers" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"
+                    Content="0."
+                    IsChecked="{Binding AppState.ShowStatusMiniViewAll}" />
+
+                <Button
+                    Grid.Column="1"
+                    Command="{s:Action CheckAll,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome SyncSolid}" />
+
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="All" />
+
+
+                <Button
+                    Grid.Column="4"
+                    Margin="4,0,0,0"
+                    Command="{s:Action PauseAll,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome PauseSolid}" />
+                <Button
+                    Grid.Column="5"
+                    Margin="4,0,0,0"
+                    Command="{s:Action StartAll,
+                                       ActionNotFound=Disable}"
+                    Content="{iconPacks:FontAwesome PlaySolid}" />
+
+            </Grid>
+            <Separator Margin="0,4" Background="#2F5CC1" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />

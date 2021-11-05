@@ -54,7 +54,7 @@
             Padding="2"
             Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
             CornerRadius="4">
-            <Grid  extensions:LayerExtension.Layer="1">
+            <Grid extensions:LayerExtension.Layer="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -74,6 +74,27 @@
                     ToolTip="RSS feed refresh timers">
                     <ToggleButton.ContextMenu>
                         <ContextMenu StaysOpen="True">
+                            <MenuItem Header="All">
+                                <MenuItem
+                                    s:View.ActionTarget="{Binding StatusViewModel}"
+                                    Command="{s:Action CheckAll,
+                                                       ActionNotFound=Disable}"
+                                    Header="Check now"
+                                    Icon="{iconPacks:FontAwesome SyncSolid}" />
+                                <MenuItem
+                                    s:View.ActionTarget="{Binding StatusViewModel}"
+                                    Command="{s:Action StartAll,
+                                                       ActionNotFound=Disable}"
+                                    Header="Start"
+                                    Icon="{iconPacks:FontAwesome PlaySolid}" />
+                                <MenuItem
+                                    s:View.ActionTarget="{Binding StatusViewModel}"
+                                    Command="{s:Action PauseAll,
+                                                       ActionNotFound=Disable}"
+                                    Header="Pause"
+                                    Icon="{iconPacks:FontAwesome PauseSolid}" />
+                            </MenuItem>
+                            <Separator />
                             <MenuItem Header="Nyaa">
                                 <MenuItem.Icon>
                                     <ContentControl

@@ -86,11 +86,6 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
 
     public async Task HomePage()
     {
-        if (!CanLoadEpisodes)
-        {
-            return;
-        }
-
         var page = Page;
         Page = 1;
 
@@ -99,7 +94,7 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
 
     public async Task NextPage()
     {
-        if (Page == TotalPages || !CanLoadEpisodes)
+        if (Page == TotalPages)
         {
             return;
         }
@@ -112,7 +107,7 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
 
     public async Task PreviousPage()
     {
-        if (Page == 1 || !CanLoadEpisodes)
+        if (Page == 1)
         {
             return;
         }
@@ -123,7 +118,7 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
         await LoadPage(page);
     }
 
-    protected void ResetCancellationTokenSource()
+    private void ResetCancellationTokenSource()
     {
         _cancellationTokenSource.Cancel();
         _cancellationTokenSource.Dispose();
@@ -135,11 +130,9 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
         if (!CanLoadEpisodes)
         {
             ResetCancellationTokenSource();
-            return;
+            await Task.Delay(50);
         }
 
-        //await Execute.OnUIThreadAsync(async () =>
-        //{
         try
         {
             var token = _cancellationTokenSource.Token;
@@ -152,9 +145,11 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
         catch (OperationCanceledException)
         {
             // ignore
+        }
+        finally
+        {
             CanLoadEpisodes = true;
         }
-        //});
     }
 
 
@@ -203,7 +198,11 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
         _scrollViewer?.ScrollToTop();
 
         foreach (var episode in episodes.TakeWhile(_ => !cancellationToken.IsCancellationRequested))
-            await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
+        {
+            Items.Add(episode);
+            await Task.Delay(1, cancellationToken);
+        }
+
 
         ActiveItem = null;
 //#if DEBUG

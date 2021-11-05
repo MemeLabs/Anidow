@@ -31,6 +31,7 @@ public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHand
     private readonly TaskbarIcon _taskbarIcon;
     private readonly TrackedAnimeEditContentViewModel _trackedAnimeEditContentViewModel;
     private readonly IWindowManager _windowManager;
+    private AnimeStatus _filterStatus = AnimeStatus.Watching;
     private ScrollViewer[] _scrollViewers;
     private string _search;
 
@@ -50,7 +51,16 @@ public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHand
         DisplayName = "Tracked";
     }
 
-    public AnimeStatus FilterStatus { get; set; } = AnimeStatus.Watching;
+    public AnimeStatus FilterStatus
+    {
+        get => _filterStatus;
+        set
+        {
+            SetAndNotify(ref _filterStatus, value);
+            Debouncer.DebounceAction("load_tracked",
+                async _ => { await DispatcherUtil.DispatchAsync(async () => await Load()); });
+        }
+    }
 
     public string Search
     {
@@ -64,8 +74,6 @@ public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHand
     }
 
     public bool ViewToggle { get; set; }
-
-
     public bool CanLoad { get; set; }
 
     public void Handle(TrackedDeleteAnimeEvent message)
@@ -181,7 +189,7 @@ public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHand
         ListEditAnime(anime);
     }
 
-    private void ListEditAnime(Anime anime)
+    public void ListEditAnime(Anime anime)
     {
         _trackedAnimeEditContentViewModel.SetAnime(anime);
         _windowManager.ShowDialog(_trackedAnimeEditContentViewModel);

@@ -187,13 +187,14 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="models:NotifyItemKeyword">
                             <Border
-                                Height="25"
                                 Margin="0,0,6,6"
                                 Padding="6,4"
                                 Background="#31363d"
-                                BorderBrush="#1c1f23"
                                 BorderThickness="1"
                                 CornerRadius="4">
+                                <Border.BorderBrush>
+                                    <SolidColorBrush Color="Black" Opacity=".4" />
+                                </Border.BorderBrush>
                                 <StackPanel Orientation="Horizontal">
                                     <Border
                                         Width="18"
@@ -250,6 +251,7 @@
                                         Text="{Binding Word}" />
                                     <Button
                                         Margin="6,0,0,0"
+                                        VerticalAlignment="Center"
                                         Command="{s:Action RemoveKeyword,
                                                            ActionNotFound=Disable}"
                                         CommandParameter="{Binding}"
@@ -267,7 +269,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Text="no keywords"
-                    Visibility="{Binding Keywords.Count, Converter={x:Static converters:IsZeroToVisibilityConverter.Instance}}" />
+                    Visibility="{Binding Item.Keywords.Count, Converter={x:Static converters:IsZeroToVisibilityConverter.Instance}}" />
 
                 <CheckBox
                     Grid.Row="6"

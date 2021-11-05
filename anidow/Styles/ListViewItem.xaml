@@ -18,6 +18,15 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="8,4" />
         <Setter Property="Height" Value="27" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+            </Trigger>
+            <DataTrigger Binding="{Binding ShowInList}" Value="False">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style
@@ -26,8 +35,16 @@
         TargetType="ListViewItem">
         <Style.Triggers>
             <DataTrigger Binding="{Binding HomeHighlight}" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Opacity=".25" Color="#E67858" />
+                    </Setter.Value>
+                </Setter>
             </DataTrigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+            </Trigger>
             <!--  override design for futureepisode  -->
             <!--<DataTrigger Binding="{Binding IsFuture}" Value="True">
                 <Setter Property="Template">
@@ -49,7 +66,8 @@
                         Header="Information"
                         Icon="{iconPacks:FontAwesome InfoSolid}"
                         Visibility="{Binding HasAniListAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
-                    <Separator Visibility="{Binding HasAniListAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                    <Separator
+                        Visibility="{Binding HasAniListAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
 
                     <MenuItem
                         Command="{s:Action EditAnime,
@@ -80,7 +98,8 @@
                     <Separator />
                     <MenuItem CommandParameter="{Binding}" Icon="{iconPacks:FontAwesome TrashSolid}">
                         <MenuItem.Header>
-                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" Text="Delete" />
+                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
+                                       Text="Delete" />
                         </MenuItem.Header>
 
                         <MenuItem
@@ -145,8 +164,14 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Highlight}" Value="true">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </DataTrigger>
+
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+            </Trigger>
         </Style.Triggers>
     </Style>
 
@@ -164,7 +189,8 @@
                 </Setter>
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
             </Trigger>
             <DataTrigger Binding="{Binding ShowInList}" Value="False">
                 <!--<DataTrigger.EnterActions>
@@ -222,7 +248,8 @@
                 </Setter>
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -266,14 +293,14 @@
         <Grid>
             <Button
                 Command="{s:Action Watch}"
-                CommandParameter="{Binding File}"
+                CommandParameter="{Binding}"
                 Content="Watch"
                 Style="{StaticResource ColumnButton}"
                 ToolTip="Watch"
                 Visibility="{Binding CanOpenFile, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
             <Button
                 Command="{s:Action OpenFolder}"
-                CommandParameter="{Binding File.FullName}"
+                CommandParameter="{Binding Path}"
                 Content="{iconPacks:FontAwesome FolderOpenSolid}"
                 Style="{StaticResource ColumnButton}"
                 ToolTip="Open Folder"

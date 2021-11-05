@@ -25,8 +25,7 @@
         </Grid.RowDefinitions>
         <GroupBox
             Margin="2"
-            extensions:CornerRadiusExtension.CornerRadius="4"
-            >
+            extensions:CornerRadiusExtension.CornerRadius="4">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />

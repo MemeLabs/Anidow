@@ -207,8 +207,8 @@
                 <Border
                     Padding="8"
                     Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
-                    BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}"
-                    BorderThickness="2"
+                    BorderBrush="Black"
+                    BorderThickness="1"
                     CornerRadius="4">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -216,7 +216,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock>Predicted new releases today:</TextBlock>
+                        <Label>Predicted new releases today:</Label>
                         <Separator Grid.Row="1" />
                         <ItemsControl
                             Grid.Row="2"

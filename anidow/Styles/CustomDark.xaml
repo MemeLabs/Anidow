@@ -2,9 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
-    xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
-    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-    xmlns:presentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+    xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI">
 
     <!--  colors  -->
 
@@ -14,7 +12,8 @@
     <Color x:Key="{x:Static adonisUi:Colors.AccentIntenseHighlightBorderColor}">#E67858</Color>
     <Color x:Key="{x:Static adonisUi:Colors.AccentInteractionColor}">#e58a70</Color>
     <Color x:Key="{x:Static adonisUi:Colors.AccentInteractionBorderColor}">#e58a70</Color>
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.AccentInteractionForegroundColor}" ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.AccentInteractionForegroundColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
 
     <Color x:Key="{x:Static adonisUi:Colors.Layer0BackgroundColor}">#202428</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer0BorderColor}">#1c1f23</Color>
@@ -25,9 +24,12 @@
     <Color x:Key="{x:Static adonisUi:Colors.Layer1HighlightBorderColor}">#2C3036</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer1IntenseHighlightColor}">#454A54</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer1IntenseHighlightBorderColor}">#33373E</Color>
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer1InteractionColor}" ResourceKey="{x:Static adonisUi:Colors.AccentColor}" />
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer1InteractionBorderColor}" ResourceKey="{x:Static adonisUi:Colors.AccentInteractionColor}" />
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer1InteractionForegroundColor}" ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer1InteractionColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer1InteractionBorderColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentInteractionColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer1InteractionForegroundColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
 
     <Color x:Key="{x:Static adonisUi:Colors.Layer2BackgroundColor}">#202428</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer2BorderColor}">#202428</Color>
@@ -35,9 +37,12 @@
     <Color x:Key="{x:Static adonisUi:Colors.Layer2HighlightBorderColor}">#292E34</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer2IntenseHighlightColor}">#2D3135</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer2IntenseHighlightBorderColor}">#2D3135</Color>
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer2InteractionColor}" ResourceKey="{x:Static adonisUi:Colors.AccentColor}" />
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer2InteractionBorderColor}" ResourceKey="{x:Static adonisUi:Colors.AccentInteractionColor}" />
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer2InteractionForegroundColor}" ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer2InteractionColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer2InteractionBorderColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentInteractionColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer2InteractionForegroundColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
 
     <Color x:Key="{x:Static adonisUi:Colors.Layer3BackgroundColor}">#25292e</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer3BorderColor}">#1c1f23</Color>
@@ -45,9 +50,12 @@
     <Color x:Key="{x:Static adonisUi:Colors.Layer3HighlightBorderColor}">#2C3036</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer3IntenseHighlightColor}">#33373E</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer3IntenseHighlightBorderColor}">#33373E</Color>
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer3InteractionColor}" ResourceKey="{x:Static adonisUi:Colors.AccentColor}" />
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer3InteractionBorderColor}" ResourceKey="{x:Static adonisUi:Colors.AccentInteractionColor}" />
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer3InteractionForegroundColor}" ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer3InteractionColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer3InteractionBorderColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentInteractionColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer3InteractionForegroundColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
 
     <Color x:Key="{x:Static adonisUi:Colors.Layer4BackgroundColor}">#202428</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer4BorderColor}">#202428</Color>
@@ -55,9 +63,12 @@
     <Color x:Key="{x:Static adonisUi:Colors.Layer4HighlightBorderColor}">#292E34</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer4IntenseHighlightColor}">#2D3135</Color>
     <Color x:Key="{x:Static adonisUi:Colors.Layer4IntenseHighlightBorderColor}">#2D3135</Color>
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer4InteractionColor}" ResourceKey="{x:Static adonisUi:Colors.AccentColor}" />
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer4InteractionBorderColor}" ResourceKey="{x:Static adonisUi:Colors.AccentInteractionColor}" />
-    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer4InteractionForegroundColor}" ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer4InteractionColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer4InteractionBorderColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentInteractionColor}" />
+    <DynamicResource x:Key="{x:Static adonisUi:Colors.Layer4InteractionForegroundColor}"
+                     ResourceKey="{x:Static adonisUi:Colors.AccentForegroundColor}" />
 
     <Color x:Key="{x:Static adonisUi:Colors.ForegroundColor}">#f0f0f0</Color>
     <Color x:Key="{x:Static adonisUi:Colors.AccentForegroundColor}">#ffffff</Color>
@@ -86,7 +97,8 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderBrush" Value="#1c1f23" />
@@ -102,8 +114,10 @@
         <Style.Triggers>
 
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -115,8 +129,10 @@
         <Style.Triggers>
 
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

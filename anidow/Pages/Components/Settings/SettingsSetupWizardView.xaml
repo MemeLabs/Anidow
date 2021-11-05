@@ -37,7 +37,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation=" Horizontal">
-                    <ContentControl VerticalAlignment="Center" Content="{iconPacks:FontAwesome MagicSolid, Height=20, Width=20}" />
+                    <ContentControl VerticalAlignment="Center"
+                                    Content="{iconPacks:FontAwesome MagicSolid, Height=20, Width=20}" />
                     <TextBlock
                         Margin="6,0,0,0"
                         VerticalAlignment="Center"

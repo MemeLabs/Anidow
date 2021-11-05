@@ -488,7 +488,8 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
                                 .FirstOrDefaultAsync(a => a.GroupId == episode.AnimeId);
             episode.Anime = anime;
 
-            await DispatcherUtil.DispatchAsync(() => Items.Add(episode));
+            Items.Add(episode);
+            await Task.Delay(1);
         }
 
         ActiveItem = null;

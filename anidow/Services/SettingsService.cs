@@ -2,8 +2,6 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
-using AdonisUI;
 using Anidow.Model;
 using Anidow.Utils;
 using Hardcodet.Wpf.TaskbarNotification;

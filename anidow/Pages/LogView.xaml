@@ -82,36 +82,50 @@
                     <Border
                         Margin="0,0,0,5"
                         Padding="6"
+                        BorderThickness="1"
                         Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
                         CornerRadius="4">
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="Black" Opacity=".4" />
+                        </Border.BorderBrush>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Error}" />
-                                            <Condition Binding="{Binding DataContext.ShowError, ElementName=LogWindow}" Value="False" />
+                                            <Condition Binding="{Binding Level}"
+                                                       Value="{x:Static serilog:LogEventLevel.Error}" />
+                                            <Condition Binding="{Binding DataContext.ShowError, ElementName=LogWindow}"
+                                                       Value="False" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Information}" />
-                                            <Condition Binding="{Binding DataContext.ShowInformation, ElementName=LogWindow}" Value="False" />
+                                            <Condition Binding="{Binding Level}"
+                                                       Value="{x:Static serilog:LogEventLevel.Information}" />
+                                            <Condition
+                                                Binding="{Binding DataContext.ShowInformation, ElementName=LogWindow}"
+                                                Value="False" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Warning}" />
-                                            <Condition Binding="{Binding DataContext.ShowWarning, ElementName=LogWindow}" Value="False" />
+                                            <Condition Binding="{Binding Level}"
+                                                       Value="{x:Static serilog:LogEventLevel.Warning}" />
+                                            <Condition
+                                                Binding="{Binding DataContext.ShowWarning, ElementName=LogWindow}"
+                                                Value="False" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Debug}" />
-                                            <Condition Binding="{Binding DataContext.ShowDebug, ElementName=LogWindow}" Value="False" />
+                                            <Condition Binding="{Binding Level}"
+                                                       Value="{x:Static serilog:LogEventLevel.Debug}" />
+                                            <Condition Binding="{Binding DataContext.ShowDebug, ElementName=LogWindow}"
+                                                       Value="False" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </MultiDataTrigger>
@@ -137,28 +151,40 @@
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Verbose}">
-                                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
+                                                <DataTrigger Binding="{Binding Level}"
+                                                             Value="{x:Static serilog:LogEventLevel.Verbose}">
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource {x:Static adonisUi:Brushes.DisabledForegroundBrush}}" />
                                                 </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Debug}">
-                                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+                                                <DataTrigger Binding="{Binding Level}"
+                                                             Value="{x:Static serilog:LogEventLevel.Debug}">
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
                                                 </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Information}">
-                                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.SuccessBrush}}" />
+                                                <DataTrigger Binding="{Binding Level}"
+                                                             Value="{x:Static serilog:LogEventLevel.Information}">
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource {x:Static adonisUi:Brushes.SuccessBrush}}" />
                                                 </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Warning}">
-                                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.AlertBrush}}" />
+                                                <DataTrigger Binding="{Binding Level}"
+                                                             Value="{x:Static serilog:LogEventLevel.Warning}">
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource {x:Static adonisUi:Brushes.AlertBrush}}" />
                                                 </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Error}">
-                                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
+                                                <DataTrigger Binding="{Binding Level}"
+                                                             Value="{x:Static serilog:LogEventLevel.Error}">
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
                                                 </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding Level}" Value="{x:Static serilog:LogEventLevel.Fatal}">
-                                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
+                                                <DataTrigger Binding="{Binding Level}"
+                                                             Value="{x:Static serilog:LogEventLevel.Fatal}">
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" />
                                                     <Setter Property="FontWeight" Value="Bold" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -176,8 +202,10 @@
                                 Margin="0,2"
                                 TextAlignment="Left"
                                 TextWrapping="Wrap">
-                                <Run Text="{Binding ., Mode=OneWay, Converter={x:Static converters:LogEventRenderConverter.Instance}}" />
-                                <Run Foreground="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}" Text="{Binding Exception, Mode=OneWay}" />
+                                <Run
+                                    Text="{Binding ., Mode=OneWay, Converter={x:Static converters:LogEventRenderConverter.Instance}}" />
+                                <Run Foreground="{DynamicResource {x:Static adonisUi:Brushes.ErrorBrush}}"
+                                     Text="{Binding Exception, Mode=OneWay}" />
                             </TextBlock>
                         </Grid>
                     </Border>

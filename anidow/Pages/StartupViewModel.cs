@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Windows;
 using Anidow.Database;
 using Anidow.Helpers;
 using Anidow.Pages.Components.Settings;

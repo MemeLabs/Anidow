@@ -73,49 +73,48 @@
             </StackPanel>
         </Grid>
     </controls:AdonisWindow.TitleBarContent>
-    <Grid Margin="0,4,0,0">
-        <StackPanel
-            Margin="0,2,3,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Orientation="Horizontal" />
+    <Border BorderThickness="0,1,0,0">
+        <Border.BorderBrush>
+            <SolidColorBrush Opacity=".4" Color="Black" />
+        </Border.BorderBrush>
+        <Grid Margin="0,4,0,0">
+            <ContentControl
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                s:View.Model="{Binding ActiveItem, Mode=OneWay}">
+                <extensions1:ContentControlExtensions.ContentChangedAnimation>
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="Opacity"
+                            From="0"
+                            To="1"
+                            Duration="0:0:.2" />
+                    </Storyboard>
+                </extensions1:ContentControlExtensions.ContentChangedAnimation>
+            </ContentControl>
 
-        <ContentControl
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            s:View.Model="{Binding ActiveItem, Mode=OneWay}">
-            <extensions1:ContentControlExtensions.ContentChangedAnimation>
-                <Storyboard>
-                    <DoubleAnimation
-                        Storyboard.TargetProperty="Opacity"
-                        From="0"
-                        To="1"
-                        Duration="0:0:.2" />
-                </Storyboard>
-            </extensions1:ContentControlExtensions.ContentChangedAnimation>
-        </ContentControl>
+            <tb:TaskbarIcon
+                x:Name="TaskbarIcon"
+                s:View.ActionTarget="{Binding}"
+                DoubleClickCommand="{s:Action ShowWindow,
+                                              ActionNotFound=Disable}"
+                IconSource="../anidown_28v_icon.ico">
+                <tb:TaskbarIcon.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{s:Action ShowLogs, ActionNotFound=Disable}" Header="Logs" />
+                        <MenuItem
+                            Command="{s:Action Close,
+                                               ActionNotFound=Disable}"
+                            Header="Exit"
+                            Icon="{iconPacks:FontAwesome WindowCloseSolid}" />
+                    </ContextMenu>
+                </tb:TaskbarIcon.ContextMenu>
+            </tb:TaskbarIcon>
 
-        <tb:TaskbarIcon
-            x:Name="TaskbarIcon"
-            s:View.ActionTarget="{Binding}"
-            DoubleClickCommand="{s:Action ShowWindow,
-                                          ActionNotFound=Disable}"
-            IconSource="../anidown_28v_icon.ico">
-            <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Command="{s:Action ShowLogs, ActionNotFound=Disable}" Header="Logs" />
-                    <MenuItem
-                        Command="{s:Action Close,
-                                           ActionNotFound=Disable}"
-                        Header="Exit"
-                        Icon="{iconPacks:FontAwesome WindowCloseSolid}" />
-                </ContextMenu>
-            </tb:TaskbarIcon.ContextMenu>
-        </tb:TaskbarIcon>
-
-        <controls1:NotificationArea
-            x:Name="WindowArea"
-            MaxItems="4"
-            Position="BottomRight" />
-    </Grid>
+            <controls1:NotificationArea
+                x:Name="WindowArea"
+                MaxItems="4"
+                Position="BottomRight" />
+        </Grid>
+    </Border>
 </controls:AdonisWindow>

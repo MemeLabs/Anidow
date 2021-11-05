@@ -177,9 +177,9 @@ public class NotifyService
         }
 
         if (name.Contains(keyword.Word,
-            keyword.IsCaseSensitive
-                ? StringComparison.InvariantCulture
-                : StringComparison.InvariantCultureIgnoreCase))
+                keyword.IsCaseSensitive
+                    ? StringComparison.InvariantCulture
+                    : StringComparison.InvariantCultureIgnoreCase))
         {
             return true;
         }

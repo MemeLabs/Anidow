@@ -39,7 +39,8 @@
             <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="{x:Type ToolTip}">
                 <Setter Property="extensions:CornerRadiusExtension.CornerRadius" Value="4" />
                 <!-- <Setter Property="Padding" Value="4" /> -->
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                 <Setter Property="BorderBrush" Value="#2F5CC1" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
             </Style>
@@ -50,7 +51,12 @@
                 TargetType="{x:Type GridViewColumnHeader}">
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Black" Opacity=".4" />
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="Margin" Value="2,0,2,2" />
             </Style>
 
@@ -60,7 +66,12 @@
                 TargetType="{x:Type GridViewColumnHeader}">
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Black" Opacity=".4" />
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="Margin" Value="0,0,2,2" />
             </Style>
 
@@ -70,7 +81,12 @@
                 TargetType="{x:Type GridViewColumnHeader}">
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Black" Opacity=".4" />
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="Margin" Value="2,0,0,2" />
             </Style>
 
@@ -115,7 +131,8 @@
                                     CanContentScroll="True"
                                     Focusable="False"
                                     VerticalScrollBarVisibility="Auto">
-                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    <ItemsPresenter
+                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </ScrollViewer>
                             </Border>
                         </ControlTemplate>

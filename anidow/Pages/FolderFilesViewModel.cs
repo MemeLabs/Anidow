@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using AdonisUI.Controls;
@@ -21,7 +21,8 @@ public class FolderFilesViewModel : Screen
     private readonly Episode _episode;
     private readonly ILogger _logger;
     private readonly string _name;
-    private List<FolderFilesModel> _files;
+    private CancellationTokenSource _cancellationTokenSource = new();
+    private string _filter = string.Empty;
 
     public FolderFilesViewModel(ref Episode episode, ILogger logger)
     {
@@ -46,25 +47,54 @@ public class FolderFilesViewModel : Screen
     public BindableCollection<FolderFilesModel> FileInfos { get; }
 
     public string Folder { get; set; }
-    public bool HasParentFolder => !string.IsNullOrWhiteSpace(ParentFolder) && CanGoUpFolder;
+    public bool HasParentFolder => !string.IsNullOrWhiteSpace(ParentFolder);
     private string ParentFolder { get; set; }
 
     public bool CanLoadMore { get; set; }
+    public bool Loading { get; set; }
 
-    public bool CanOpenFolder { get; set; }
+    public string Filter
+    {
+        get => _filter;
+        set
+        {
+            SetAndNotify(ref _filter, value);
+            Debouncer.DebounceAction("folderView:filter", c =>
+            {
+                HighlightFoundItems(value);
+                return Task.CompletedTask;
+            }, TimeSpan.FromMilliseconds(100));
+        }
+    }
 
-    public bool CanGoUpFolder { get; set; } = true;
+    private void HighlightFoundItems(string value)
+    {
+        try
+        {
+            foreach (var item in FileInfos)
+                item.ShowInList = item.Name.Contains(value, StringComparison.CurrentCultureIgnoreCase);
+        }
+        catch (Exception)
+        {
+            // ignore
+        }
+    }
 
     protected override void OnActivate()
     {
         _ = OpenFolder(Folder);
     }
 
+    private void ResetCancellationTokenSource()
+    {
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
+        _cancellationTokenSource = new CancellationTokenSource();
+    }
+
     public async Task GoUpFolder()
     {
-        CanGoUpFolder = false;
         await OpenFolder(ParentFolder);
-        CanGoUpFolder = true;
     }
 
     public async Task GetFilesFromFolder(bool clear = false)
@@ -80,10 +110,15 @@ public class FolderFilesViewModel : Screen
                                                       f.Attributes.HasFlag(FileAttributes.Directory))
                                                   .ThenByDescending(f => f.LastWriteTime));
 
-        _files = new List<FolderFilesModel>();
-        foreach (var file in files)
+        if (clear)
         {
-            var item = new FolderFilesModel { File = file };
+            FileInfos.Clear();
+        }
+
+
+        foreach (var file in files.TakeWhile(_ => !_cancellationTokenSource.IsCancellationRequested))
+        {
+            var item = new FolderFilesModel(file);
             if (_episode != null)
             {
                 var nameSplit = file.Name
@@ -95,15 +130,12 @@ public class FolderFilesViewModel : Screen
                 }
             }
 
-            _files.Add(item);
+            item.ShowInList = item.Name.Contains(_filter, StringComparison.CurrentCultureIgnoreCase);
+            FileInfos.Add(item);
+            await Task.Delay(1, _cancellationTokenSource.Token);
         }
 
-        if (clear)
-        {
-            FileInfos.Clear();
-        }
 
-        await LoadMore();
 #if DEBUG
         if (FileInfos.Count >= 4)
         {
@@ -112,21 +144,13 @@ public class FolderFilesViewModel : Screen
 #endif
     }
 
-    public async Task LoadMore()
-    {
-        foreach (var filesModel in _files.Skip(FileInfos.Count).Take(MaxFilesInView))
-            await DispatcherUtil.DispatchAsync(() => FileInfos.Add(filesModel));
-        CanLoadMore = FileInfos.Count < _files.Count;
-        DisplayName = $"Files ({FileInfos.Count}/{_files.Count}) - {_name}";
-    }
-
-    public async Task Watch(FileInfo fileInfo)
+    public async Task Watch(FolderFilesModel file)
     {
         if (_episode != null)
         {
             if (string.IsNullOrWhiteSpace(_episode.File))
             {
-                _episode.File = fileInfo.FullName;
+                _episode.File = file.Path;
             }
 
             _episode.Watched = true;
@@ -144,7 +168,7 @@ public class FolderFilesViewModel : Screen
 
         try
         {
-            ProcessUtil.OpenFile(fileInfo.FullName);
+            ProcessUtil.OpenFile(file.Path);
         }
         catch (Exception e)
         {
@@ -159,19 +183,29 @@ public class FolderFilesViewModel : Screen
 
     public async Task OpenFolder(string path)
     {
-        CanOpenFolder = false;
+        if (!Loading)
+        {
+            ResetCancellationTokenSource();
+            await Task.Delay(50);
+        }
+
+        Loading = false;
         try
         {
             Folder = path;
             ParentFolder = Directory.GetParent(Folder)?.FullName;
             await GetFilesFromFolder(true);
         }
+        catch (OperationCanceledException)
+        {
+            // ignore
+        }
         catch (Exception e)
         {
             _logger.Error(e, "error opening folder");
         }
 
-        CanOpenFolder = true;
+        Loading = true;
     }
 
 
@@ -184,7 +218,7 @@ public class FolderFilesViewModel : Screen
     {
         try
         {
-            file.File.Delete();
+            File.Delete(file.Path);
             FileInfos.Remove(file);
         }
         catch (Exception e)
@@ -216,17 +250,17 @@ public class FolderFilesViewModel : Screen
         }
     }
 
-    public async Task SetFolder(FolderFilesModel files)
+    public async Task SetFolder(FolderFilesModel file)
     {
         if (_episode is not null)
         {
-            _episode.Folder = files.File.FullName;
+            _episode.Folder = file.Path;
             await _episode.UpdateInDatabase();
         }
 
         if (_anime is not null)
         {
-            _anime.Folder = files.File.FullName;
+            _anime.Folder = file.Path;
             await _episode.UpdateInDatabase();
         }
     }

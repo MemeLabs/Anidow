@@ -206,7 +206,7 @@ public class TrackedAnimeEditContentViewModel : Screen
         _graphQlClient.HttpClient.DefaultRequestHeaders.Authorization =
             AuthenticationHeaderValue.Parse($"Bearer {_settingsService.Settings.AniListJwt}");
         var name = Anime.Name;
-        
+
         if (name.Contains(" - TV Series ["))
         {
             name = name[..name.IndexOf(" - TV Series [", StringComparison.InvariantCulture)];
