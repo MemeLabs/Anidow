@@ -84,7 +84,7 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
 
     public async void Handle(AddToHomeEvent message)
     {
-        await DispatcherUtil.DispatchAsync(() => Items.Add(message.Episode));
+        Items.Add(message.Episode);
         await GetAiringEpisodesForToday();
     }
 
@@ -138,28 +138,30 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
         };
 
         await using var db = new TrackContext();
+
+        async Task GetAndSetAnime(TrackContext ctx, string id)
+        {
+            var anime = await ctx.Anime
+                                .Include(a => a.AniListAnime)
+                                .FirstOrDefaultAsync(a => a.GroupId == id);
+            if (anime is not null)
+            {
+                item.Anime ??= anime;
+                item.AnimeId = anime.GroupId;
+                item.CoverData ??= anime.CoverData;
+            }
+        }
+
         switch (message.Item)
         {
             case AnimeBytesTorrentItem abti:
             {
-                var anime = await db.Anime.FirstOrDefaultAsync(a => a.GroupId == abti.GroupId);
-                if (anime != null)
-                {
-                    item.AnimeId = anime.GroupId;
-                    item.CoverData ??= anime.CoverData;
-                }
-
+                await GetAndSetAnime(db, abti.GroupId);
                 break;
             }
             case AnimeBytesScrapeAnime absa:
             {
-                var anime = await db.Anime.FirstOrDefaultAsync(a => a.GroupId == absa.ID.ToString());
-                if (anime != null)
-                {
-                    item.AnimeId = anime.GroupId;
-                    item.CoverData ??= anime.CoverData;
-                }
-
+                await GetAndSetAnime(db, absa.ID.ToString());
                 break;
             }
         }
@@ -176,7 +178,7 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
         await db.AddAsync(item);
         await db.SaveChangesAsync();
 
-        if (!string.IsNullOrEmpty(item.AnimeId))
+        if (!string.IsNullOrEmpty(item.AnimeId) && item.Anime is null)
         {
             var animeDb = await db.Anime
                                   .Include(a => a.AniListAnime)

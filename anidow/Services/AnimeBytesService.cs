@@ -77,6 +77,7 @@ public class AnimeBytesService : RssFeedService, INotifyPropertyChanged
 
         await using var db = new TrackContext();
         var anime = await db.Anime
+                            .Include(a => a.AniListAnime)
                             .Where(a => a.Site == Site.AnimeBytes
                                         && a.Status == AnimeStatus.Watching)
                             .ToListAsync();
@@ -129,6 +130,7 @@ public class AnimeBytesService : RssFeedService, INotifyPropertyChanged
                 {
                     var newEpisode = new Episode
                     {
+                        Anime = a,
                         AnimeId = a.GroupId,
                         Name = item.Name,
                         Cover = a.Cover,
