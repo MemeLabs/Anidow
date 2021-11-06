@@ -20,9 +20,9 @@
     <Grid>
 
         <Grid.Resources>
-            <CollectionViewSource x:Key="Episodes" Source="{Binding Items}">
+            <CollectionViewSource x:Key="Episodes" Source="{Binding Items, Mode=OneWay}">
                 <CollectionViewSource.GroupDescriptions>
-                    <PropertyGroupDescription PropertyName="Anime.Name" />
+                    <PropertyGroupDescription PropertyName="AnimeName" />
                 </CollectionViewSource.GroupDescriptions>
             </CollectionViewSource>
         </Grid.Resources>
@@ -42,7 +42,7 @@
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemContainerStyle="{StaticResource ListViewItemHome}"
-            ItemsSource="{Binding Source={StaticResource Episodes}}"
+            ItemsSource="{Binding Source={StaticResource Episodes}, Mode=OneWay}"
             SelectedItem="{Binding ActiveItem}"
             SelectionChanged="{s:Action SelectionChanged}">
             <ListView.ContextMenu>
@@ -179,7 +179,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate>
-                                        <Expander Margin="0,4,0,0" Style="{StaticResource ExpanderCustom}">
+                                        <Expander Margin="0,4,0,0" Style="{DynamicResource ExpanderCustom}">
                                             <Expander.Header>
                                                 <Grid Margin="0,0,20,0">
                                                     <Grid.ColumnDefinitions>
@@ -189,13 +189,13 @@
                                                     <TextBlock
                                                         FontSize="14"
                                                         FontWeight="SemiBold"
-                                                        Text="{Binding Name, FallbackValue='No Anime Group'}"
+                                                        Text="{Binding Name, TargetNullValue='', FallbackValue='No Anime Group'}"
                                                         TextTrimming="CharacterEllipsis" />
                                                     <TextBlock
                                                         Grid.Column="1"
                                                         FontSize="14"
                                                         FontWeight="SemiBold"
-                                                        Text="{Binding ItemCount, StringFormat='Eps. {0}'}" />
+                                                        Text="{Binding ItemCount, TargetNullValue=0, FallbackValue=0, StringFormat='Eps. {0}'}" />
                                                 </Grid>
                                             </Expander.Header>
                                             <ItemsPresenter Margin="0,4" />

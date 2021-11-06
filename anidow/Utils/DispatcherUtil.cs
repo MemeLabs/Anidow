@@ -31,12 +31,19 @@ public class DispatcherUtil
 
     public static void DispatchSync(Action action)
     {
-        if (Application.Current is not null)
+        try
         {
-            Application.Current?.Dispatcher.Invoke(DispatcherPriority.Background, action);
-            return;
-        }
+            if (Application.Current is not null)
+            {
+                Application.Current?.Dispatcher.Invoke(DispatcherPriority.Background, action);
+                return;
+            }
 
-        action();
+            action();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }

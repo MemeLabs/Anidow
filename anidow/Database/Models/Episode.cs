@@ -47,6 +47,7 @@ public class Episode : ObservableObject, ITorrentItem, IEpisode
     [NotMapped] public string WatchedString => WatchedDate == default ? string.Empty : WatchedDate.Humanize();
     [NotMapped] public string EpisodeNum => Name.GetEpisode();
     [NotMapped] public bool HomeHighlight { get; set; }
+    [NotMapped] public string AnimeName => Anime?.Name ?? string.Empty;
 
     public string AnimeId { get; set; }
     public string Folder { get; set; }

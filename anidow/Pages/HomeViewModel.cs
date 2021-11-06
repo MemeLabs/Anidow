@@ -474,35 +474,46 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
 
     public async Task LoadEpisodes()
     {
-        await using var db = new TrackContext();
-        var episodes = await db.Episodes
-                               .Where(e => !e.Hide)
-                               .Include(e => e.CoverData)
-                               .OrderBy(e => e.Released)
-                               .ToListAsync();
-
-        Items.Clear();
-
-        foreach (var episode in episodes)
+        try
         {
-            var anime = await db.Anime
-                                .Include(a => a.AniListAnime)
-                                .FirstOrDefaultAsync(a => a.GroupId == episode.AnimeId);
-            episode.Anime = anime;
+            await using var db = new TrackContext();
+            var episodes = await db.Episodes
+                                   .Where(e => !e.Hide)
+                                   .Include(e => e.CoverData)
+                                   .OrderBy(e => e.Released)
+                                   .ToListAsync();
 
-            Items.Add(episode);
-            await Task.Delay(1);
+            Items.Clear();
+            await Task.Delay(100);
+
+            foreach (var episode in episodes)
+            {
+                var anime = await db.Anime
+                                    .Include(a => a.AniListAnime)
+                                    .FirstOrDefaultAsync(a => a.GroupId == episode.AnimeId);
+                if (anime is not null)
+                {
+                    episode.Anime = anime;
+                }
+
+                Items.Add(episode);
+                await Task.Delay(1);
+            }
+
+            ChangeActiveItem(null, false);
+    #if DEBUG
+            Items.Add(new Episode
+            {
+                Name = "test :: Episode 1",
+                Released = DateTime.UtcNow,
+                Folder = Directory.GetCurrentDirectory(),
+            });
+    #endif
         }
-
-        ActiveItem = null;
-#if DEBUG
-        Items.Add(new Episode
+        catch (Exception e)
         {
-            Name = "test :: Episode 1",
-            Released = DateTime.UtcNow,
-            Folder = Directory.GetCurrentDirectory(),
-        });
-#endif
+            _logger.Error(e, "failed loading episodes");
+        }
     }
 
     // this will create a crash log on closing the app
@@ -585,16 +596,16 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
 
     public void SelectionChanged()
     {
-        if (ActiveItem is null)
-        {
-            foreach (var episode in Items) episode.HomeHighlight = false;
-            return;
-        }
+        //if (ActiveItem is null)
+        //{
+        //    foreach (var episode in Items) episode.HomeHighlight = false;
+        //    return;
+        //}
 
-        foreach (var episode in Items)
-            episode.HomeHighlight = episode.AnimeId == ActiveItem.AnimeId
-                                    && episode.Id != ActiveItem.Id
-                                    && ActiveItem.AnimeId != null;
+        //foreach (var episode in Items)
+        //    episode.HomeHighlight = episode.AnimeId == ActiveItem.AnimeId
+        //                            && episode.Id != ActiveItem.Id
+        //                            && ActiveItem.AnimeId != null;
     }
 
     public void TrackAnime()
