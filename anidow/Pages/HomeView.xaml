@@ -34,11 +34,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        
 
         <ListView
             x:Name="ListView"
             Grid.Row="0"
             Margin="2"
+            ScrollViewer.CanContentScroll="False"
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemContainerStyle="{StaticResource ListViewItemHome}"
@@ -55,7 +57,7 @@
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
-                <GridView AllowsColumnReorder="False">
+                <GridView AllowsColumnReorder="False" >
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"

@@ -30,10 +30,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <GroupBox Margin="0,0,0,2" BorderThickness="0,1,0,1">
-            <GroupBox.BorderBrush>
-                <SolidColorBrush Opacity=".4" Color="Black" />
-            </GroupBox.BorderBrush>
+        <GroupBox
+            Margin="0,0,0,2"
+            BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}"
+            BorderThickness="0,1,0,1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />

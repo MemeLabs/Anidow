@@ -73,10 +73,7 @@
             </StackPanel>
         </Grid>
     </controls:AdonisWindow.TitleBarContent>
-    <Border BorderThickness="0,1,0,0">
-        <Border.BorderBrush>
-            <SolidColorBrush Opacity=".4" Color="Black" />
-        </Border.BorderBrush>
+    <Border BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}" BorderThickness="0,1,0,0">
         <Grid Margin="0,4,0,0">
             <ContentControl
                 HorizontalAlignment="Stretch"

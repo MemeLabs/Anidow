@@ -20,6 +20,7 @@
                         Padding="0"
                         extensions1:TouchScrolling.IsEnabled="True"
                         extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Overlay"
+                        extensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="AlwaysExpand"
                         VerticalScrollBarVisibility="Auto">
                         <ItemsPresenter />
                     </ScrollViewer>

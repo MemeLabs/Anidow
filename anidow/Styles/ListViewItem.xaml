@@ -20,10 +20,9 @@
         <Setter Property="Height" Value="27" />
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
             </Trigger>
-            <DataTrigger Binding="{Binding ShowInList}" Value="False">
+            <DataTrigger Binding="{Binding ShowInList, FallbackValue=True}" Value="False">
                 <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
         </Style.Triggers>
@@ -42,8 +41,7 @@
                 </Setter>
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
             </Trigger>
             <!--  override design for futureepisode  -->
             <!--<DataTrigger Binding="{Binding IsFuture}" Value="True">
@@ -66,8 +64,7 @@
                         Header="Information"
                         Icon="{iconPacks:FontAwesome InfoSolid}"
                         Visibility="{Binding HasAniListAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
-                    <Separator
-                        Visibility="{Binding HasAniListAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
+                    <Separator Visibility="{Binding HasAniListAnime, Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
 
                     <MenuItem
                         Command="{s:Action EditAnime,
@@ -98,8 +95,7 @@
                     <Separator />
                     <MenuItem CommandParameter="{Binding}" Icon="{iconPacks:FontAwesome TrashSolid}">
                         <MenuItem.Header>
-                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
-                                       Text="Delete" />
+                            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" Text="Delete" />
                         </MenuItem.Header>
 
                         <MenuItem
@@ -164,13 +160,11 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Highlight}" Value="true">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
             </DataTrigger>
 
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -189,8 +183,7 @@
                 </Setter>
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
             </Trigger>
             <DataTrigger Binding="{Binding ShowInList}" Value="False">
                 <!--<DataTrigger.EnterActions>
@@ -248,8 +241,7 @@
                 </Setter>
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background"
-                        Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
