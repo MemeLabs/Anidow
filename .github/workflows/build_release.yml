@@ -15,8 +15,7 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
+          dotnet-version: "6.0.x"
       - name: Restore
         run: dotnet restore
 
@@ -31,10 +30,10 @@ jobs:
           ./GenerateLicenseFile.ps1
 
       - name: Publish self-contained
-        run: dotnet publish --no-restore --configuration Release --self-contained true --runtime win-x64 --output windows/self-contained
+        run: dotnet publish --no-restore --configuration Release --self-contained true --runtime win-x64 -p:PublishSingleFile=true --output windows/self-contained
 
       - name: Publish framework-dependent
-        run: dotnet publish --no-restore --configuration Release --self-contained false --runtime win-x64 --output windows/framework-dependent
+        run: dotnet publish --no-restore --configuration Release --self-contained false --runtime win-x64 -p:PublishSingleFile=true --output windows/framework-dependent
 
       - name: zip win artifact self-contained
         run: |
