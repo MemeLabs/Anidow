@@ -11,7 +11,7 @@ namespace Anidow.Pages;
 
 public class LogViewModel : Screen, ILogEventSink
 {
-    private LogEvent _lastLogEvent;
+    private string _lastLogEvent;
 
     public LogViewModel()
     {
@@ -44,22 +44,23 @@ public class LogViewModel : Screen, ILogEventSink
         switch (logEvent.Level)
         {
             case LogEventLevel.Error:
-                if (_lastLogEvent.Exception?.Message != logEvent.Exception?.Message)
+                
+                var msg = logEvent.RenderMessage();
+
+                if (msg != _lastLogEvent)
                 {
-                    await NotificationUtil.ShowAsync("Error",
-                        $"{logEvent.RenderMessage()}\n\n{logEvent.Exception?.Message}",
-                        NotificationType.Error);
+                    await NotificationUtil.ShowAsync("Error", msg, NotificationType.Error);
+                    _lastLogEvent = msg;
                 }
 
                 break;
         }
 
-        NotifyOfPropertyChange(nameof(ErrorCount));
-        NotifyOfPropertyChange(nameof(WarningCount));
-        NotifyOfPropertyChange(nameof(InformationCount));
-        NotifyOfPropertyChange(nameof(DebugCount));
-
-        _lastLogEvent = logEvent;
+        //NotifyOfPropertyChange(nameof(ErrorCount));
+        //NotifyOfPropertyChange(nameof(WarningCount));
+        //NotifyOfPropertyChange(nameof(InformationCount));
+        //NotifyOfPropertyChange(nameof(DebugCount));
+        Refresh();
     }
 
     public void OpenLogsFolder()

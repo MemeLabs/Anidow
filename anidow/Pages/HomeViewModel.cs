@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using Anidow.Database;
 using Anidow.Database.Models;
 using Anidow.Enums;
@@ -47,6 +49,8 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
     private readonly TorrentService _torrentService;
     private readonly TrackedAnimeEditContentViewModel _trackedAnimeEditContentViewModel;
     private readonly IWindowManager _windowManager;
+    private bool _updatingTorrents = false;
+    private bool _listViewLoaded = false;
 
 
     public HomeViewModel(IEventAggregator eventAggregator, ILogger logger,
@@ -81,6 +85,7 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
     public Timer NextCheckTimer { get; set; }
     public IObservableCollection<FutureEpisode> AnimesToday { get; set; } = new BindableCollection<FutureEpisode>();
     public bool IsEnabled => _settingsService != null && !_settingsService.Settings.FirstStart;
+
 
     public async void Handle(AddToHomeEvent message)
     {
@@ -384,12 +389,12 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
     {
         _eventAggregator.Subscribe(this);
 
-        Task.Run(async () => await LoadEpisodes());
-        Task.Run(async () => await DownloadMissingCovers());
-        Task.Run(async () => await GetAiringEpisodesForToday());
+        _ = Task.Run(async () => await LoadEpisodes());
+        _ = Task.Run(async () => await DownloadMissingCovers());
+        _ = Task.Run(async () => await GetAiringEpisodesForToday());
 
         JobManager.AddJob(
-            () => { UpdateTorrents().Wait(); },
+            () => { _ = UpdateTorrents(); },
             s => s.WithName("Home:UpdateTorrents")
                   .NonReentrant()
                   .ToRunEvery(1)
@@ -525,11 +530,12 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
 
     private async Task UpdateTorrents()
     {
-        if (Items.Count <= 0)
+        if (Items.Count <= 0 || _updatingTorrents)
         {
             return;
         }
 
+        _updatingTorrents = true;
         try
         {
             await _torrentService.UpdateTorrentProgress(Items);
@@ -537,6 +543,10 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
         catch (Exception e)
         {
             _logger.Error(e, "failed updating torrent progress");
+        }
+        finally
+        {
+            _updatingTorrents = false;
         }
     }
 
@@ -643,6 +653,19 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
 
         _trackedAnimeEditContentViewModel.SetAnime(episode.Anime);
         _windowManager.ShowDialog(_trackedAnimeEditContentViewModel);
+    }
+
+    public void ListViewLoaded(object sender, RoutedEventArgs e)
+    {
+        if (!_settingsService.Settings.GroupHomeList || _listViewLoaded)
+        {
+            return;
+        }
+
+        var listView = (ListView)sender;
+        listView.Items.GroupDescriptions?.Add(new PropertyGroupDescription("AnimeName"));
+
+        _listViewLoaded = true;
     }
 
 

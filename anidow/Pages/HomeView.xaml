@@ -21,9 +21,9 @@
 
         <Grid.Resources>
             <CollectionViewSource x:Key="Episodes" Source="{Binding Items, Mode=OneWay}">
-                <CollectionViewSource.GroupDescriptions>
+                <!--<CollectionViewSource.GroupDescriptions>
                     <PropertyGroupDescription PropertyName="AnimeName" />
-                </CollectionViewSource.GroupDescriptions>
+                </CollectionViewSource.GroupDescriptions>-->
             </CollectionViewSource>
         </Grid.Resources>
 
@@ -34,17 +34,18 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        
+
 
         <ListView
             x:Name="ListView"
             Grid.Row="0"
             Margin="2"
-            ScrollViewer.CanContentScroll="False"
             extensions:GridViewSortExtension.AutoSort="True"
             listViewLayout:ListViewLayoutManager.Enabled="true"
             ItemContainerStyle="{StaticResource ListViewItemHome}"
             ItemsSource="{Binding Source={StaticResource Episodes}, Mode=OneWay}"
+            Loaded="{s:Action ListViewLoaded}"
+            ScrollViewer.CanContentScroll="False"
             SelectedItem="{Binding ActiveItem}"
             SelectionChanged="{s:Action SelectionChanged}">
             <ListView.ContextMenu>
@@ -57,7 +58,7 @@
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
-                <GridView AllowsColumnReorder="False" >
+                <GridView AllowsColumnReorder="False">
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
@@ -180,7 +181,7 @@
                         <Style TargetType="{x:Type GroupItem}">
                             <Setter Property="Template">
                                 <Setter.Value>
-                                    <ControlTemplate>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
                                         <Expander Margin="0,4,0,0" Style="{DynamicResource ExpanderCustom}">
                                             <Expander.Header>
                                                 <Grid Margin="0,0,20,0">
@@ -318,7 +319,7 @@
             Margin="2,0"
             VerticalAlignment="Bottom"
             extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
-            Style="{StaticResource ExpanderCustom}"
+            Style="{DynamicResource ExpanderCustom}"
             Visibility="{Binding ActiveItem, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
             <Expander.Header>
                 <Grid>

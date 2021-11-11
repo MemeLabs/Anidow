@@ -10,10 +10,10 @@ public class SettingsModel : ObservableObject
     public int RefreshTime { get; set; } = 5;
     public bool MinimizeToNotificationArea { get; set; }
     public bool StartTrackerAnimeBytesOnLaunch { get; set; } = true;
-    public bool IsDark { get; set; } = true;
     public bool Notifications { get; set; } = true;
     public bool TrackedIsCardView { get; set; }
     public bool FirstStart { get; set; } = true;
+    public bool GroupHomeList { get; set; } = true;
     public TorrentClient TorrentClient { get; set; } = TorrentClient.QBitTorrent;
     public QBitTorrentSettingsModel QBitTorrent { get; set; } = new();
     public AnimeBytesSettingsModel AnimeBytesSettings { get; set; } = new();

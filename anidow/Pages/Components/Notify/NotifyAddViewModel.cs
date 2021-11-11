@@ -132,14 +132,14 @@ public class NotifyAddViewModel : Screen
         RequestClose(true);
     }
 
-    public void Keyword_OnPreviewKeyDown(object _, KeyEventArgs e)
+    public async Task Keyword_OnPreviewKeyDown(object _, KeyEventArgs e)
     {
         if (e.Key != Key.Enter)
         {
             return;
         }
 
-        AddKeyword().ConfigureAwait(false);
+        await AddKeyword();
         e.Handled = true;
     }
 }

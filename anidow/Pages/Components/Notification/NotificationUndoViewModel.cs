@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Notifications.Wpf.Core;
 using Stylet;
 
@@ -19,7 +20,7 @@ public class NotificationUndoViewModel : Screen, INotificationViewModel
 
     public string? Title { get; init; }
     public string? Message { get; init; }
-    public Action? OnUndo { get; init; }
+    public Func<Task>? OnUndo { get; init; }
 
     // This method is called when the notification with this view/view model is
     // shown. It can be used to receive the identifier of the notification
@@ -28,8 +29,9 @@ public class NotificationUndoViewModel : Screen, INotificationViewModel
         _notificationIdentifier = identifier;
     }
 
-    public void Undo()
+    public async Task Undo()
     {
-        OnUndo?.Invoke();
+        if (OnUndo is null) return;
+        await OnUndo();
     }
 }

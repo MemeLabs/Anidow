@@ -40,7 +40,7 @@ public static class NotificationUtil
         }
     }
 
-    public static async Task ShowUndoAsync(string title, string message, Action? onUndo, Action? onClose = null,
+    public static async Task ShowUndoAsync(string title, string message, Func<Task>? onUndo, Action? onClose = null,
         TimeSpan? expiration = default)
     {
         var content = new NotificationUndoViewModel(NotificationManager)
