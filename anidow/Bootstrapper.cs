@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -30,7 +31,6 @@ using StyletIoC;
 using AdonisUI.Controls;
 using System.IO;
 using System.Windows.Threading;
-using System.Diagnostics;
 using System.Linq;
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
@@ -142,10 +142,8 @@ namespace Anidow
 
         private void InitLogger(ILogEventSink logViewModel)
         {
-            var logLevel = LogEventLevel.Information;
-#if DEBUG
-            logLevel = LogEventLevel.Verbose;
-#endif
+            var logLevel = Debugger.IsAttached ? LogEventLevel.Debug : LogEventLevel.Information;
+
             var logConfiguration = new LoggerConfiguration()
                                    .MinimumLevel.Is(logLevel)
                                    .Enrich.FromLogContext()
@@ -167,6 +165,7 @@ namespace Anidow
             JobManager.Stop();
             base.OnExit(e);
         }
+
         [DllImport("user32.dll")]
         private static extern IntPtr SetForegroundWindow(IntPtr hWnd);
 
@@ -181,7 +180,7 @@ namespace Anidow
             if (processes.Length > 1)
             {
                 var p = processes.FirstOrDefault();
-                if (p is not null )
+                if (p is not null)
                 {
                     ShowWindow(p.MainWindowHandle, 5);
                     SetForegroundWindow(p.MainWindowHandle);
