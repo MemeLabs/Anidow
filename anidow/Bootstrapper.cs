@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Markup;
 using Anidow.Factories;
@@ -30,6 +31,7 @@ using AdonisUI.Controls;
 using System.IO;
 using System.Windows.Threading;
 using System.Diagnostics;
+using System.Linq;
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
@@ -165,6 +167,11 @@ namespace Anidow
             JobManager.Stop();
             base.OnExit(e);
         }
+        [DllImport("user32.dll")]
+        private static extern IntPtr SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
 
         protected override void Configure()
         {
@@ -173,7 +180,12 @@ namespace Anidow
                 Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly()?.Location));
             if (processes.Length > 1)
             {
-                MessageBox.Show("Already running!", "Anidow");
+                var p = processes.FirstOrDefault();
+                if (p is not null )
+                {
+                    ShowWindow(p.MainWindowHandle, 5);
+                    SetForegroundWindow(p.MainWindowHandle);
+                }
                 Environment.Exit(0);
             }
 #endif

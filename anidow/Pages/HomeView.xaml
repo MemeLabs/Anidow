@@ -188,6 +188,7 @@
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
                                                     <TextBlock
                                                         FontSize="14"
@@ -196,6 +197,15 @@
                                                         TextTrimming="CharacterEllipsis" />
                                                     <TextBlock
                                                         Grid.Column="1"
+                                                        Margin="8,0"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="12"
+                                                        Opacity=".7"
+                                                        Text="{Binding ItemCount, TargetNullValue=0, FallbackValue=0, Converter={x:Static converters:IntToEstimatedWatchTimeConverter.Instance}}"
+                                                        ToolTip="Estimated watch time based on 23min per episode"
+                                                        ToolTipService.Placement="Left" />
+                                                    <TextBlock
+                                                        Grid.Column="2"
                                                         FontSize="14"
                                                         FontWeight="SemiBold"
                                                         Text="{Binding ItemCount, TargetNullValue=0, FallbackValue=0, StringFormat='Eps. {0}'}" />

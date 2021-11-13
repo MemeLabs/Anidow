@@ -606,16 +606,18 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
 
     public void SelectionChanged()
     {
-        //if (ActiveItem is null)
-        //{
-        //    foreach (var episode in Items) episode.HomeHighlight = false;
-        //    return;
-        //}
+        if(_settingsService.Settings.GroupHomeList) return;
 
-        //foreach (var episode in Items)
-        //    episode.HomeHighlight = episode.AnimeId == ActiveItem.AnimeId
-        //                            && episode.Id != ActiveItem.Id
-        //                            && ActiveItem.AnimeId != null;
+        if (ActiveItem is null)
+        {
+            foreach (var episode in Items) episode.HomeHighlight = false;
+            return;
+        }
+
+        foreach (var episode in Items)
+            episode.HomeHighlight = episode.AnimeId == ActiveItem.AnimeId
+                                    && episode.Id != ActiveItem.Id
+                                    && ActiveItem.AnimeId != null;
     }
 
     public void TrackAnime()
