@@ -15,15 +15,15 @@ you can download the latest version [here](https://github.com/MemeLabs/Anidow/re
 
 <table>
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/6447030/119039944-1fe12500-b9b5-11eb-9a07-3f10d1443cb3.png"></td>
-    <td><img src="https://user-images.githubusercontent.com/6447030/119040259-78b0bd80-b9b5-11eb-948e-5e2ed5d5c5cf.png"></td>
+    <td><img src="https://user-images.githubusercontent.com/6447030/141515595-614acbdf-6d14-484a-9ab1-9cbcfa2891c3.png"></td>
+    <td><img src="https://user-images.githubusercontent.com/6447030/141515652-93495d42-b318-4f38-b6c6-e52f3bb62529.png"></td>
   </tr>
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/6447030/119040408-ac8be300-b9b5-11eb-8029-78dfae4242fe.png"></td>
-    <td><img src="https://user-images.githubusercontent.com/6447030/119040812-2ae88500-b9b6-11eb-9aa9-5fbef7be7ada.png"></td>
+    <td><img src="https://user-images.githubusercontent.com/6447030/141515719-a7aa6c70-55f1-4d82-96ec-697c8574f584.png"></td>
+    <td><img src="https://user-images.githubusercontent.com/6447030/141515752-b77c56d3-307b-4b66-a8b5-7d23b8017e97.png"></td>
   </tr>
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/6447030/119040868-3936a100-b9b6-11eb-8731-9f96b02c6940.png"></td>
-    <td><img src="https://user-images.githubusercontent.com/6447030/119040978-566b6f80-b9b6-11eb-8262-8905a893c418.png"></td>
+    <td><img src="https://user-images.githubusercontent.com/6447030/141515814-f1286f57-670d-48ae-8774-167382966611.png"></td>
+    <td><img src="https://user-images.githubusercontent.com/6447030/141515840-2af90940-3217-48a2-a9d1-ed714d1ae9d6.png"></td>
   </tr>
  </table>
