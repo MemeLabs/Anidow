@@ -102,12 +102,12 @@ public class NyaaViewModel : Conductor<NyaaTorrentItem>.Collection.OneActive
         item.CanDownload = true;
     }
 
-    protected override async void OnInitialActivate()
+    protected override void OnInitialActivate()
     {
-        await GetItems();
+        _ = GetItems();
     }
 
-    public async void OnPreviewKeyDown(object _, KeyEventArgs e)
+    public async Task OnPreviewKeyDown(object _, KeyEventArgs e)
     {
         if (e.Key != Key.Enter)
         {

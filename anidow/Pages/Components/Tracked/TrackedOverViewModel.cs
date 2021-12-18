@@ -93,11 +93,11 @@ public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHand
         await Load();
     }
 
-    protected override async void OnInitialActivate()
+    protected override void OnInitialActivate()
     {
         _eventAggregator.Subscribe(this);
         ViewToggle = _settingsService.Settings.TrackedIsCardView;
-        await Load();
+        _ = Load();
     }
 
     public async Task Load()

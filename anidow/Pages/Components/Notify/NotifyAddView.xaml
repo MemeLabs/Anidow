@@ -68,6 +68,7 @@
                     <TextBox
                         Grid.Column="1"
                         Margin="6,0,0,0"
+                        PreviewKeyDown="{s:Action Name_OnPreviewKeyDown}"
                         Text="{Binding Item.Name, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 

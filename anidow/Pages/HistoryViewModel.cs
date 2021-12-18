@@ -74,9 +74,9 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
 
     public bool CanPreviousPage => Page > 1;
 
-    protected override async void OnInitialActivate()
+    protected override void OnInitialActivate()
     {
-        await HomePage();
+        _ = HomePage();
     }
 
     public async Task RefreshPage()
@@ -205,14 +205,14 @@ public class HistoryViewModel : Conductor<Episode>.Collection.OneActive
 
 
         ActiveItem = null;
-//#if DEBUG
-//        Items.Add(new Episode
-//        {
-//            Name = "test :: Episode 1",
-//            Released = DateTime.Today,
-//            Folder = Directory.GetCurrentDirectory(),
-//        });
-//#endif
+        //#if DEBUG
+        //        Items.Add(new Episode
+        //        {
+        //            Name = "test :: Episode 1",
+        //            Released = DateTime.Today,
+        //            Folder = Directory.GetCurrentDirectory(),
+        //        });
+        //#endif
 
         CanLoadEpisodes = true;
         return true;

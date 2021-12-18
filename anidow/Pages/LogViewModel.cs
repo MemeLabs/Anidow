@@ -55,11 +55,7 @@ public class LogViewModel : Screen, ILogEventSink
 
                 break;
         }
-
-        //NotifyOfPropertyChange(nameof(ErrorCount));
-        //NotifyOfPropertyChange(nameof(WarningCount));
-        //NotifyOfPropertyChange(nameof(InformationCount));
-        //NotifyOfPropertyChange(nameof(DebugCount));
+        
         Refresh();
     }
 

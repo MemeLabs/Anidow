@@ -58,11 +58,11 @@ public class AnimeBytesSearchViewModel : Conductor<AnimeBytesScrapeAnime>.Collec
 
     public bool CanGetItems { get; set; } = true;
 
-    protected override async void OnActivate()
+    protected override void OnActivate()
     {
         if (CanSearch && Items.Count <= 0)
         {
-            await GetItems();
+            _ = GetItems();
         }
     }
 
@@ -214,14 +214,14 @@ public class AnimeBytesSearchViewModel : Conductor<AnimeBytesScrapeAnime>.Collec
         LinkUtil.Open(link);
     }
 
-    public async void OnPreviewKeyDown(object sender, KeyEventArgs e)
+    public async Task OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key != Key.Enter)
         {
             return;
         }
 
-        await GetItems().ConfigureAwait(false);
+        await GetItems();
         e.Handled = true;
     }
 

@@ -190,14 +190,14 @@ public class TrackedAnimeEditContentViewModel : Screen
         ImageUtil.ShowImage(Anime.CoverData.FilePath);
     }
 
-    protected override async void OnActivate()
+    protected override void OnActivate()
     {
         if (Anime is null)
         {
             return;
         }
 
-        await SearchAnime();
+        _ = SearchAnime();
     }
 
     private async Task SearchAnime()
@@ -216,10 +216,17 @@ public class TrackedAnimeEditContentViewModel : Screen
             name = name[..name.IndexOf(" - ONA [", StringComparison.InvariantCulture)];
         }
 
-        var query = GraphQLQueries.SearchQuery(name);
-        var response = await _graphQlClient.SendQueryAsync<AnimeSearchResult>(query);
+        try
+        {
+            var query = GraphQLQueries.SearchQuery(name);
+            var response = await _graphQlClient.SendQueryAsync<AnimeSearchResult>(query);
 
-        SearchResults = new BindableCollection<AniListAnime>(response.Data.Page.Media);
+            SearchResults = new BindableCollection<AniListAnime>(response.Data.Page.Media);
+        }
+        catch (Exception e)
+        {
+            _logger.Error(e, "failed searching anime on Anidow\nyour token might be expired");
+        }
         SearchAnimeLoading = false;
     }
 

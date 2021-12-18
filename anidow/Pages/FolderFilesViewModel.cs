@@ -227,7 +227,7 @@ public class FolderFilesViewModel : Screen
         }
     }
 
-    public async void OnPreviewKeyDown(object sender, KeyEventArgs e)
+    public async Task OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key != Key.Enter)
         {

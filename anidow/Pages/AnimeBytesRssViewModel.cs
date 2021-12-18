@@ -80,11 +80,11 @@ public class AnimeBytesRssViewModel : Conductor<AnimeBytesTorrentItem>.Collectio
 
     //public bool CanDownload => ActiveItem != null && !string.IsNullOrWhiteSpace(ActiveItem.Folder);
 
-    protected override async void OnActivate()
+    protected override void OnActivate()
     {
         if (CanSearch && Items.Count <= 0)
         {
-            await GetItems();
+            _ = GetItems();
         }
     }
 

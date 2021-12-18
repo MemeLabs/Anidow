@@ -14,7 +14,10 @@ public class NotifyAddViewModel : Screen
 
     public NotifyAddViewModel(IEventAggregator eventAggregator)
     {
-        Item = new NotifyItem();
+        Item = new NotifyItem
+        {
+            Name = string.Empty,
+        };
         Title = "Add";
         _eventAggregator = eventAggregator;
     }
@@ -28,6 +31,11 @@ public class NotifyAddViewModel : Screen
         _eventAggregator = eventAggregator;
     }
 
+    protected override void OnActivate()
+    {
+        CanAddOrSaveCheck();
+    }
+
     public NotifyItem Item { get; set; }
 
     public string Title { get; set; }
@@ -39,26 +47,24 @@ public class NotifyAddViewModel : Screen
     public string Keyword { get; set; }
     public string ErrorMessage { get; set; }
 
-    public bool CanAdd => !_isEdit && CanCanAddMethod();
+    public bool CanAdd => !_isEdit && ErrorMessage is null;
 
-    private bool CanCanAddMethod()
+    private void CanAddOrSaveCheck()
     {
         if (string.IsNullOrEmpty(Item.Name))
         {
             ErrorMessage = "Name can not be empty";
-            return false;
+            return;
         }
 
         if (Item.Keywords.Count < 1)
         {
             ErrorMessage = "You need at least one keyword";
-            return false;
+            return;
         }
 
         ErrorMessage = null;
-        return true;
     }
-
     public async Task Add()
     {
         await using var db = new TrackContext();
@@ -101,6 +107,7 @@ public class NotifyAddViewModel : Screen
         Keyword = string.Empty;
         NotifyOfPropertyChange(() => CanAdd);
         NotifyOfPropertyChange(() => Item.Keywords);
+        CanAddOrSaveCheck();
     }
 
     public async Task RemoveKeyword(NotifyItemKeyword keyword)
@@ -117,8 +124,8 @@ public class NotifyAddViewModel : Screen
 
         NotifyOfPropertyChange(() => CanAdd);
         NotifyOfPropertyChange(() => Item.Keywords);
+        CanAddOrSaveCheck();
     }
-
     public async Task Close()
     {
         if (_isEdit)
@@ -141,5 +148,9 @@ public class NotifyAddViewModel : Screen
 
         await AddKeyword();
         e.Handled = true;
+    }
+    public void Name_OnPreviewKeyDown(object _, KeyEventArgs e)
+    {
+        CanAddOrSaveCheck();
     }
 }

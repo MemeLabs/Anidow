@@ -2,3 +2,9 @@
 
 # CS0067: The event 'AnimeModel.PropertyChanged' is never used
 dotnet_diagnostic.CS0067.severity = none
+
+# Default severity for analyzer diagnostics with category 'Usage'
+dotnet_analyzer_diagnostic.category-Usage.severity = none
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none

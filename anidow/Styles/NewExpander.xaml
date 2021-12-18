@@ -70,17 +70,8 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <ContentPresenter
-                                Grid.Column="2"
-                                VerticalAlignment="Center"
-                                Content="{TemplateBinding Content}"
-                                ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
-
                             <ToggleButton
                                 x:Name="ExpanderButton"
-                                Grid.Column="0"
                                 VerticalAlignment="Center"
                                 Foreground="{TemplateBinding Foreground}"
                                 IsChecked="{Binding Path=IsChecked, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
@@ -100,7 +91,17 @@
                                 </ToggleButton.Style>
                             </ToggleButton>
 
+                            <ContentPresenter
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Content}"
+                                ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+
+
                         </Grid>
+
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

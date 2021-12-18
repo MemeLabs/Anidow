@@ -227,4 +227,24 @@
         </Style.Triggers>
     </Style>
 
+    <Style
+        x:Key="CustomToggleButton"
+        BasedOn="{StaticResource {x:Static adonisUi:Styles.ToolbarToggleButton}}"
+        TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}" />
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+                <Setter Property="extensions:CursorSpotlightExtension.BackgroundBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionBrush}}" />
+
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>
