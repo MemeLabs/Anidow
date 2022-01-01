@@ -148,6 +148,7 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
         {
             var anime = await ctx.Anime
                                 .Include(a => a.AniListAnime)
+                                .Include(a => a.CoverData)
                                 .FirstOrDefaultAsync(a => a.GroupId == id);
             if (anime is not null)
             {
@@ -160,15 +161,15 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
         switch (message.Item)
         {
             case AnimeBytesTorrentItem abti:
-            {
-                await GetAndSetAnime(db, abti.GroupId);
-                break;
-            }
+                {
+                    await GetAndSetAnime(db, abti.GroupId);
+                    break;
+                }
             case AnimeBytesScrapeAnime absa:
-            {
-                await GetAndSetAnime(db, absa.ID.ToString());
-                break;
-            }
+                {
+                    await GetAndSetAnime(db, absa.ID.ToString());
+                    break;
+                }
         }
 
         if (_settingsService.Settings.Notifications)
@@ -187,6 +188,7 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
         {
             var animeDb = await db.Anime
                                   .Include(a => a.AniListAnime)
+                                  .Include(a => a.CoverData)
                                   .FirstOrDefaultAsync(a => a.GroupId == item.AnimeId);
             item.Anime = animeDb;
         }
@@ -506,14 +508,14 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
             }
 
             ChangeActiveItem(null, false);
-    #if DEBUG
+#if DEBUG
             Items.Add(new Episode
             {
                 Name = "test :: Episode 1",
                 Released = DateTime.UtcNow,
                 Folder = Directory.GetCurrentDirectory(),
             });
-    #endif
+#endif
         }
         catch (Exception e)
         {
@@ -606,7 +608,7 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
 
     public void SelectionChanged()
     {
-        if(_settingsService.Settings.GroupHomeList) return;
+        if (_settingsService.Settings.GroupHomeList) return;
 
         if (ActiveItem is null)
         {
@@ -650,7 +652,8 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
         }
 
         await using var db = new TrackContext();
-        var episodes = db.Episodes.Where(e => e.AnimeId == episode.Anime.GroupId);
+        var episodes = db.Episodes
+                         .Where(e => e.AnimeId == episode.Anime.GroupId);
         episode.Anime.EpisodeList = new BindableCollection<Episode>(episodes);
 
         _trackedAnimeEditContentViewModel.SetAnime(episode.Anime);
@@ -675,7 +678,7 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
 
-    [DllImport("user32.dll")]
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
     private string GetActiveWindowTitle()

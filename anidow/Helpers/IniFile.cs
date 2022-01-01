@@ -31,7 +31,7 @@ public class IniFile
     public string Read(string key, string? section = null)
     {
         var retVal = new StringBuilder(255);
-        GetPrivateProfileString(section!, key, "", retVal, 255, _path);
+        _ = GetPrivateProfileString(section!, key, "", retVal, 255, _path);
         return retVal.ToString();
     }
 

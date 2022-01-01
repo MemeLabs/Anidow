@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Forms.VisualStyles;
 using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Services;
@@ -47,6 +49,7 @@ public class StatusViewModel : Screen
     public DateTimeOffset LastCheckAnimeBytesAll { get; set; }
     public DateTimeOffset NextCheckAnimeBytesAll { get; set; }
 
+    public bool CanCheckAll => CanCheckNyaa && CanCheckAnimeBytesAll && CanCheckAnimeBytesAiring;
     public bool CanCheckNyaa { get; set; } = true;
     public bool CanCheckAnimeBytesAiring { get; set; } = true;
     public bool CanCheckAnimeBytesAll { get; set; } = true;
@@ -218,9 +221,15 @@ public class StatusViewModel : Screen
 
     public async Task CheckAll()
     {
-        await CheckNyaa();
-        await CheckAnimeBytesAll();
-        await CheckAnimeBytesAiring();
+        var tasks = new List<Task>
+        {
+            CheckNyaa(),
+            CheckAnimeBytesAll(),
+            CheckAnimeBytesAiring(),
+        };
+
+        await Task.WhenAll(tasks);
+
     }
 
     public void PauseAll()

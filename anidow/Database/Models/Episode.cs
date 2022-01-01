@@ -13,7 +13,7 @@ public class Episode : ObservableObject, ITorrentItem, IEpisode
 {
     public Site Site { get; set; }
     public string Cover { get; set; }
-    public virtual Cover CoverData { get; set; }
+    public Cover CoverData { get; set; }
     [NotMapped] public DateTime ReleasedLocal => Released.ToLocalTime();
     [NotMapped] public DateTime WatchedDateLocal => WatchedDate.ToLocalTime();
     [NotMapped] public string WatchedHeaderString => Watched ? "Not watched" : "Watched";

@@ -259,7 +259,7 @@ public class TrackedAnimeEditContentViewModel : Screen
             await Anime.UpdateInDatabase();
             _ = NotificationUtil.ShowAsync("Linking", "Successful", NotificationType.Success);
 
-            NotifyOfPropertyChange("CanSearchAnime");
+            NotifyOfPropertyChange(nameof(CanSearchAnime));
         }
         catch (Exception e)
         {
