@@ -24,8 +24,8 @@ public class AnimeBytesViewModel : Conductor<IScreen>.Collection.OneActive
     {
         _service = service ?? throw new ArgumentNullException(nameof(service));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        Items.Add(searchViewModel ?? throw new ArgumentNullException(nameof(searchViewModel)));
         Items.Add(rssViewModel ?? throw new ArgumentNullException(nameof(rssViewModel)));
+        Items.Add(searchViewModel ?? throw new ArgumentNullException(nameof(searchViewModel)));
         DisplayName = "AnimeBytes";
 
         this.Bind(x => x.StatsLoading, (_, _) => NotifyOfPropertyChange(() => CanGetStats));

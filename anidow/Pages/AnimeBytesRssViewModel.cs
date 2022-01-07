@@ -62,10 +62,10 @@ public class AnimeBytesRssViewModel : Conductor<AnimeBytesTorrentItem>.Collectio
         }
     }
 
-    public IReadOnlyList<string> Filters => new List<string>
+    public IReadOnlyList<string> Filters => new List<string>(2)
     {
-        "Anime torrents",
         "Airing anime torrents",
+        "Anime torrents",
     };
 
     public int SelectedFilterIndex { get; set; }
@@ -96,8 +96,8 @@ public class AnimeBytesRssViewModel : Conductor<AnimeBytesTorrentItem>.Collectio
 
         var items = await Task.Run(async () => SelectedFilterIndex switch
         {
-            0 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.All),
-            1 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.Airing),
+            0 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.Airing),
+            1 => await _animeBytesService.GetFeedItems(AnimeBytesFilter.All),
             _ => throw new NotImplementedException(),
         });
         if (items is not { Count: > 0 })
