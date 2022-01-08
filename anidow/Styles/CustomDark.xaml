@@ -94,17 +94,18 @@
 
     <Style
         x:Key="{x:Static adonisUi:Styles.AccentButton}"
-        BasedOn="{StaticResource {x:Static adonisUi:Styles.AccentButton}}"
+        BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
-
-        <Style.Triggers>
-
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentForegroundBrush}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}"/>
+        <Setter Property="extensions:RippleExtension.BackgroundBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionBrush}}"/>
+        <Setter Property="extensions:RippleExtension.BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionBorderBrush}}"/>
+        <Setter Property="extensions:RippleExtension.ForegroundBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionForegroundBrush}}"/>
     </Style>
+
+
+
     <Style
         x:Key="{x:Static adonisUi:Styles.AccentToolbarButton}"
         BasedOn="{StaticResource {x:Static adonisUi:Styles.AccentToolbarButton}}"

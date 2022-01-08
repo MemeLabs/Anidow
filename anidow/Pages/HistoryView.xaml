@@ -28,9 +28,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox
-            Margin="2"
-            extensions:CornerRadiusExtension.CornerRadius="4">
+        <GroupBox Margin="2" extensions:CornerRadiusExtension.CornerRadius="4">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -274,7 +272,6 @@
             Margin="2,0"
             VerticalAlignment="Bottom"
             extensions:GroupBoxExtension.HeaderBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
-
             Style="{StaticResource ExpanderCustom}"
             Visibility="{Binding ActiveItem, Converter={x:Static converters:IsNullToVisibilityConverter.Instance}}">
             <Expander.Header>
@@ -296,12 +293,12 @@
                     <Button
                         Grid.Column="0"
                         Margin="0,-4,8,-4"
+                        BorderThickness="0"
                         Command="{s:Action Download}"
                         CommandParameter="{Binding ActiveItem}"
                         Content="{iconPacks:FontAwesome DownloadSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
                         ToolTip="Re-add torrent to the torrent client" />
 
                     <TextBlock
@@ -318,12 +315,12 @@
                     <Button
                         Grid.Column="4"
                         Margin="0,-4"
+                        BorderThickness="0"
                         Command="{s:Action DeselectItem,
                                            ActionNotFound=Disable}"
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
-                                                        Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
+                                                        Width=15}" />
                 </Grid>
             </Expander.Header>
 
@@ -382,8 +379,7 @@
                         Content="Delete"
                         Foreground="White">
                         <controls:SplitButton.SplitMenu>
-                            <ContextMenu
-                                MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                            <ContextMenu MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
                                 <MenuItem
                                     extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                                     extensions:RippleExtension.BackgroundBrush="#EF5350"

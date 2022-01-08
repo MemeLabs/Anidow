@@ -354,7 +354,7 @@
                         Content="{iconPacks:FontAwesome DownloadSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
+                        BorderThickness="0"
                         ToolTip="Re-add torrent to the torrent client" />
 
                     <TextBlock
@@ -376,7 +376,7 @@
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
                                                         Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
+                        BorderThickness="0" />
                 </Grid>
             </Expander.Header>
 

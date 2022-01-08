@@ -13,15 +13,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Anidow.Database.Models"
     xmlns:s="https://github.com/canton7/Stylet"
-    Title="Setup Wizard"
+    Title="{Binding Title, StringFormat={}{0} Notification Rule}"
     Width="700"
     Height="350"
     d:DataContext="{d:DesignInstance local:NotifyAddViewModel}"
     Background="Transparent"
+    Closing="{s:Action Close}"
     FontSize="14"
     FontWeight="Medium"
     ResizeMode="NoResize"
-    WindowStyle="None"
+    WindowStyle="ToolWindow"
     mc:Ignorable="d">
     <Border
         Background="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}"
@@ -31,20 +32,11 @@
         <Grid>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock
-                Margin="0,4"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="22"
-                FontWeight="SemiBold"
-                Text="{Binding Title, StringFormat={}{0} Notification Rule}" />
 
-
-            <Grid Grid.Row="1" Margin="8">
+            <Grid Grid.Row="0" Margin="8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -194,7 +186,7 @@
                                 BorderThickness="1"
                                 CornerRadius="4">
                                 <Border.BorderBrush>
-                                    <SolidColorBrush Color="Black" Opacity=".4" />
+                                    <SolidColorBrush Opacity=".4" Color="Black" />
                                 </Border.BorderBrush>
                                 <StackPanel Orientation="Horizontal">
                                     <Border
@@ -279,7 +271,7 @@
                     IsChecked="{Binding Item.MatchAll, Mode=TwoWay}" />
             </Grid>
 
-            <Grid Grid.Row="2" Margin="10,0,10,10">
+            <Grid Grid.Row="1" Margin="10,0,10,10">
 
                 <TextBlock
                     VerticalAlignment="Center"
@@ -287,13 +279,13 @@
                     Text="{Binding ErrorMessage}" />
 
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button
+                    <!--<Button
                         Margin="8,0"
                         extensions:CursorSpotlightExtension.BackgroundBrush="#EF5350"
                         Command="{s:Action Close,
                                            ActionNotFound=Disable}"
                         Content="Close"
-                        Style="{DynamicResource DeleteButton}" />
+                        Style="{DynamicResource DeleteButton}" />-->
                     <Button
                         Command="{s:Action Add,
                                            ActionNotFound=Disable}"

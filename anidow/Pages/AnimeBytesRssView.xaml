@@ -201,11 +201,11 @@
                     <Button
                         Grid.Column="7"
                         Margin="0,-4"
+                        BorderThickness="0"
                         Command="{s:Action DeselectItem}"
                         Content="{iconPacks:FontAwesome TimesSolid,
                                                         Height=15,
-                                                        Width=15}"
-                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" />
+                                                        Width=15}" />
                 </Grid>
             </Expander.Header>
 
@@ -216,8 +216,8 @@
                 </Grid.ColumnDefinitions>
 
                 <Image
-                    MaxWidth="150"
                     Grid.Column="0"
+                    MaxWidth="150"
                     MaxHeight="{Binding ElementName=Panel, Path=ActualHeight, Mode=OneWay, FallbackValue=100}"
                     Margin="0,0,8,0"
                     VerticalAlignment="Top"

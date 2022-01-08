@@ -135,8 +135,6 @@ public class NotifyAddViewModel : Screen
             db.Update(Item);
             await db.SaveChangesAsync();
         }
-
-        RequestClose(true);
     }
 
     public async Task Keyword_OnPreviewKeyDown(object _, KeyEventArgs e)
