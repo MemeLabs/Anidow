@@ -87,7 +87,11 @@ public class TrackedAnimeEditContentViewModel : Screen
     {
         if (string.IsNullOrWhiteSpace(Anime.Group))
         {
-            await NotificationUtil.ShowAsync("Warning", "Group can not be empty!", NotificationType.Warning);
+            await NotificationUtil.ShowAsync(
+                "Warning",
+                "Group can not be empty!",
+                NotificationType.Warning,
+                area: NotificationUtil.TrackedEditArea);
             return;
         }
 
@@ -98,7 +102,10 @@ public class TrackedAnimeEditContentViewModel : Screen
         }
         else
         {
-            await NotificationUtil.ShowAsync(Anime.Name, "Saved!", NotificationType.Success);
+            await NotificationUtil.ShowAsync(Anime.Name,
+                "Saved!",
+                NotificationType.Success,
+                area: NotificationUtil.TrackedEditArea);
         }
     }
 
@@ -257,7 +264,11 @@ public class TrackedAnimeEditContentViewModel : Screen
             Anime.AniListAnime = anime;
 
             await Anime.UpdateInDatabase();
-            _ = NotificationUtil.ShowAsync("Linking", "Successful", NotificationType.Success);
+            _ = NotificationUtil.ShowAsync(
+                "Linking", 
+                "Successful", 
+                NotificationType.Success,
+                area: NotificationUtil.TrackedEditArea);
 
             NotifyOfPropertyChange(nameof(CanSearchAnime));
         }

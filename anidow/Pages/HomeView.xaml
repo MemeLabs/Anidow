@@ -45,7 +45,6 @@
             ItemContainerStyle="{StaticResource ListViewItemHome}"
             ItemsSource="{Binding Source={StaticResource Episodes}, Mode=OneWay}"
             Loaded="{s:Action ListViewLoaded}"
-            ScrollViewer.CanContentScroll="False"
             SelectedItem="{Binding ActiveItem}"
             SelectionChanged="{s:Action SelectionChanged}">
             <ListView.ContextMenu>
@@ -58,7 +57,7 @@
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
-                <GridView AllowsColumnReorder="False">
+                <GridView AllowsColumnReorder="False" >
                     <GridViewColumn
                         extensions:GridViewSortExtension.PropertyName="Name"
                         listViewLayout:RangeColumn.IsFillColumn="true"
@@ -179,6 +178,8 @@
                 <GroupStyle HidesIfEmpty="True">
                     <GroupStyle.ContainerStyle>
                         <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Margin" Value="0,0,50,0"/>
+                            <Setter Property="HorizontalAlignment" Value="Left"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type GroupItem}">

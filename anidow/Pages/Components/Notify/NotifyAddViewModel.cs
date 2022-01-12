@@ -147,6 +147,7 @@ public class NotifyAddViewModel : Screen
         await AddKeyword();
         e.Handled = true;
     }
+
     public void Name_OnPreviewKeyDown(object _, KeyEventArgs e)
     {
         CanAddOrSaveCheck();

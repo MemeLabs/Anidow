@@ -10,7 +10,8 @@ namespace Anidow.Utils;
 
 public static class NotificationUtil
 {
-    private const string WindowArea = "WindowArea";
+    public const string WindowArea = "WindowArea";
+    public const string TrackedEditArea = "TrackedEditArea";
     private static readonly NotificationManager NotificationManager = new();
 
     public static async Task ShowAsync(
@@ -18,7 +19,8 @@ public static class NotificationUtil
         string message,
         NotificationType type = NotificationType.Information,
         TimeSpan? duration = null,
-        Action? onClick = null)
+        Action? onClick = null,
+        string area = WindowArea)
     {
         try
         {
@@ -29,7 +31,7 @@ public static class NotificationUtil
                     Message = message,
                     Type = type,
                 },
-                WindowArea,
+                area,
                 duration,
                 onClick);
         }
