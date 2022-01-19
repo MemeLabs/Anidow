@@ -49,6 +49,7 @@
             </Button>
         </Grid>
         <ScrollViewer
+            Loaded="{s:Action ScrollViewerLoaded}"
             Grid.Row="1"
             Margin="2"
             extensions1:TouchScrolling.IsEnabled="True"

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text.Json.Serialization;
 using Anidow.Enums;
 
 namespace Anidow.Model;
@@ -19,4 +21,5 @@ public class SettingsModel : ObservableObject
     public AnimeBytesSettingsModel AnimeBytesSettings { get; set; } = new();
     public NyaaSettingsModel NyaaSettings { get; set; } = new();
     public string AniListJwt { get; set; }
+    [JsonIgnore] public DateTime AniListJwtExpires { get; set; }
 }

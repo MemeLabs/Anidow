@@ -54,12 +54,17 @@ public class TrackedAnimeEditContentViewModel : Screen
 
     public bool CanSaveAnime { get; set; } = true;
 
-    public BindableCollection<AniListAnime> SearchResults { get; set; }
+    public BindableCollection<AniListAnime> SearchResults { get; set; } = new();
     public bool SearchAnimeLoading { get; set; }
 
     public bool CanSearchAnime => !string.IsNullOrWhiteSpace(_settingsService.Settings.AniListJwt)
                                   && !SearchAnimeLoading
-                                  && Anime.AniListAnime is null;
+                                  && !AniListJwtExpired
+                                  && Anime?.AniListAnime is null;
+
+    public bool AniListJwtExpired => _settingsService.Settings.AniListJwtExpires < DateTime.Now;
+
+    public bool IsLinkedToAniList => Anime?.AniListAnime is not null;
 
     public void SetAnime(Anime anime)
     {
@@ -199,11 +204,12 @@ public class TrackedAnimeEditContentViewModel : Screen
 
     protected override void OnActivate()
     {
-        if (Anime is null)
+        if (Anime is null || !CanSearchAnime)
         {
             return;
         }
 
+        SearchResults.Clear();
         _ = SearchAnime();
     }
 
@@ -228,13 +234,19 @@ public class TrackedAnimeEditContentViewModel : Screen
             var query = GraphQLQueries.SearchQuery(name);
             var response = await _graphQlClient.SendQueryAsync<AnimeSearchResult>(query);
 
-            SearchResults = new BindableCollection<AniListAnime>(response.Data.Page.Media);
+            SearchResults.AddRange(response.Data.Page.Media);
         }
         catch (Exception e)
         {
             _logger.Error(e, "failed searching anime on Anidow\nyour token might be expired");
         }
         SearchAnimeLoading = false;
+    }
+
+    public void GoToSettings()
+    {
+        ShellViewModel.Instance.ToggleSettings();
+        Close();
     }
 
     public void ShowAniListAnime(AniListAnime anime)

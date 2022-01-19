@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -38,6 +39,7 @@ public class SettingsViewModel : Screen
 
     public SettingsService SettingsService { get; }
     public SettingsModel Settings => SettingsService.TempSettings;
+    public ScrollViewer ScrollViewer { get; set; }
 
     public void SetAnimeFolder()
     {
@@ -90,4 +92,10 @@ public class SettingsViewModel : Screen
     {
         _windowManager.ShowDialog(_setupWizardViewModel);
     }
+
+    public void ScrollViewerLoaded(object sender, RoutedEventArgs _)
+    {
+        ScrollViewer ??= (ScrollViewer)sender;
+    }
+
 }

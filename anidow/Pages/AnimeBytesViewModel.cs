@@ -38,7 +38,7 @@ public class AnimeBytesViewModel : Conductor<IScreen>.Collection.OneActive
 
     protected override void OnInitialActivate()
     {
-        JobManager.AddJob(async () => await GetStats(),
+        JobManager.AddJob(() => GetStats().Wait(),
             s => s.WithName("AnimeBytes:GetStats")
                   .NonReentrant()
                   .ToRunNow()
