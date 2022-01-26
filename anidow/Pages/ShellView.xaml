@@ -95,7 +95,7 @@
                 s:View.ActionTarget="{Binding}"
                 DoubleClickCommand="{s:Action ShowWindow,
                                               ActionNotFound=Disable}"
-                IconSource="../anidown_28v_icon.ico">
+                IconSource="../AnidowIcon.ico">
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="{s:Action ShowLogs, ActionNotFound=Disable}" Header="Logs" />
