@@ -97,7 +97,7 @@
                             VerticalAlignment="Center"
                             Text="Keywords:" />
                         <TextBox
-                            MinWidth="150"
+                            Width="150"
                             Margin="6,0"
                             VerticalAlignment="Center"
                             extensions:WatermarkExtension.Watermark="Keyword..."
