@@ -12,7 +12,6 @@ using Anidow.Events;
 using Anidow.Extensions;
 using Anidow.Services;
 using Anidow.Utils;
-using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.EntityFrameworkCore;
 using Notifications.Wpf.Core;
 using Serilog;
@@ -28,20 +27,18 @@ public class TrackedOverViewModel : Conductor<Anime>.Collection.OneActive, IHand
     private readonly HttpClient _httpClient;
     private readonly ILogger _logger;
     private readonly SettingsService _settingsService;
-    private readonly TaskbarIcon _taskbarIcon;
     private readonly TrackedAnimeEditContentViewModel _trackedAnimeEditContentViewModel;
     private readonly IWindowManager _windowManager;
     private AnimeStatus _filterStatus = AnimeStatus.Watching;
     private ScrollViewer[] _scrollViewers;
     private string _search;
 
-    public TrackedOverViewModel(SettingsService settingsService, HttpClient httpClient, TaskbarIcon taskbarIcon,
+    public TrackedOverViewModel(SettingsService settingsService, HttpClient httpClient,
         TrackedAnimeEditContentViewModel trackedAnimeEditContentViewModel,
         IEventAggregator eventAggregator, IWindowManager windowManager, ILogger logger)
     {
         _settingsService = settingsService ?? throw new ArgumentNullException(nameof(settingsService));
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        _taskbarIcon = taskbarIcon ?? throw new ArgumentNullException(nameof(taskbarIcon));
         _trackedAnimeEditContentViewModel = trackedAnimeEditContentViewModel ??
                                             throw new ArgumentNullException(
                                                 nameof(trackedAnimeEditContentViewModel));

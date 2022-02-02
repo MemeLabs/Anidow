@@ -96,12 +96,12 @@
         x:Key="{x:Static adonisUi:Styles.AccentButton}"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="Button">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentForegroundBrush}}"/>
-        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}"/>
-        <Setter Property="extensions:RippleExtension.BackgroundBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionBrush}}"/>
-        <Setter Property="extensions:RippleExtension.BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionBorderBrush}}"/>
-        <Setter Property="extensions:RippleExtension.ForegroundBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionForegroundBrush}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentForegroundBrush}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentIntenseHighlightBrush}}" />
+        <Setter Property="extensions:RippleExtension.BackgroundBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionBrush}}" />
+        <Setter Property="extensions:RippleExtension.BorderBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionBorderBrush}}" />
+        <Setter Property="extensions:RippleExtension.ForegroundBrush" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentInteractionForegroundBrush}}" />
     </Style>
 
 
