@@ -141,6 +141,7 @@
                         Command="{s:Action AddKeyword,
                                            ActionNotFound=Disable}"
                         Content="{iconPacks:FontAwesome PlusSolid}"
+                        Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}"
                         ToolTip="Add keyword" />
                     <!--<TextBlock
                         Grid.Column="3"
