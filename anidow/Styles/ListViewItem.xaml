@@ -25,6 +25,18 @@
             <DataTrigger Binding="{Binding ShowInList, FallbackValue=True}" Value="False">
                 <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
+
+            <EventTrigger RoutedEvent="ListViewItem.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="(ListViewItem.Opacity)"
+                            From="0"
+                            To="1"
+                            Duration="0:0:0.2" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
         </Style.Triggers>
     </Style>
 

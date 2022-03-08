@@ -36,13 +36,14 @@
 
         <ScrollViewer
             Grid.Row="0"
+            Margin="2"
+            Padding="0"
             extensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="AlwaysExpand"
             extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
             VerticalScrollBarVisibility="Auto">
 
             <ListView
                 x:Name="ListView"
-                Margin="2"
                 extensions:GridViewSortExtension.AutoSort="True"
                 listViewLayout:ListViewLayoutManager.Enabled="true"
                 ItemContainerStyle="{StaticResource ListViewItemHome}"
@@ -230,6 +231,17 @@
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>
+                                    <EventTrigger RoutedEvent="GroupItem.Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetProperty="(GroupItem.Opacity)"
+                                                    From="0"
+                                                    To="1"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
                                 </Style.Triggers>
                             </Style>
                         </GroupStyle.ContainerStyle>

@@ -56,7 +56,24 @@
             BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer1BorderBrush}}"
             BorderThickness="1"
             CornerRadius="4">
-            <Grid extensions:LayerExtension.Layer="1">
+            <Grid>
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="Grid.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="(Grid.Height)"
+                                            From="0"
+                                            To="30"
+                                            Duration="0:0:1.5" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />

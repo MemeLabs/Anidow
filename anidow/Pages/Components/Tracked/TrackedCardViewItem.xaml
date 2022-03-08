@@ -29,8 +29,7 @@
             <Style TargetType="Border">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background"
-                                Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
+                        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.AccentHighlightBrush}}" />
                         <Setter Property="Cursor" Value="Hand" />
                         <Trigger.EnterActions>
                             <BeginStoryboard>
@@ -63,8 +62,7 @@
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
                         <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="Background"
-                                Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
+                        <Setter Property="Background" Value="{DynamicResource {x:Static adonisUi:Brushes.Layer1BackgroundBrush}}" />
                         <!--<Setter Property="BorderThickness" Value="2" />-->
                     </Trigger>
                 </Style.Triggers>
@@ -91,7 +89,14 @@
                     <VisualBrush Visual="{Binding ElementName=Mask}" />
                 </Grid.OpacityMask>
 
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Opacity=".6"
+                    Text="Loading..." />
+
                 <Image
+                    Grid.Row="0"
                     Grid.RowSpan="2"
                     RenderOptions.BitmapScalingMode="HighQuality"
                     Source="{Binding CoverData.FilePath, IsAsync=True}"

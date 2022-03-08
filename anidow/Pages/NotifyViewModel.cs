@@ -150,6 +150,7 @@ public class NotifyViewModel : Screen, IHandle<NotifyItemAddOrUpdateEvent>
     public void Edit(NotifyItem item)
     {
         _windowManager.ShowDialog(new NotifyAddViewModel(item, _eventAggregator));
+        // ReSharper disable once ExplicitCallerInfoArgument
         item.OnPropertyChanged("KeywordsString");
     }
 
