@@ -34,221 +34,217 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ScrollViewer
-            Grid.Row="0"
+        <ListView
+            x:Name="ListView"
             Margin="2"
             Padding="0"
+            extensions:GridViewSortExtension.AutoSort="True"
             extensions:ScrollViewerExtension.VerticalScrollBarExpansionMode="AlwaysExpand"
             extensions:ScrollViewerExtension.VerticalScrollBarPlacement="Docked"
-            VerticalScrollBarVisibility="Auto">
+            listViewLayout:ListViewLayoutManager.Enabled="true"
+            ItemContainerStyle="{StaticResource ListViewItemHome}"
+            ItemsSource="{Binding Source={StaticResource Episodes}, Mode=OneWay}"
+            Loaded="{s:Action ListViewLoaded}"
+            ScrollViewer.CanContentScroll="False"
+            SelectedItem="{Binding ActiveItem}"
+            SelectionChanged="{s:Action SelectionChanged}">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{s:Action LoadEpisodes,
+                                           ActionNotFound=Disable}"
+                        Header="Reload"
+                        Icon="{iconPacks:FontAwesome SyncAltSolid}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn
+                        extensions:GridViewSortExtension.PropertyName="Name"
+                        listViewLayout:RangeColumn.IsFillColumn="true"
+                        Header="Name"
+                        HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="models:Episode">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button
+                                        Width="27"
+                                        Margin="-14,-4,0,-4"
+                                        Padding="4,5,4,4"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
+                                        extensions:RippleExtension.BackgroundBrush="#EF5350"
+                                        Command="{s:Action HideItem,
+                                                           ActionNotFound=Disable}"
+                                        CommandParameter="{Binding}"
+                                        Content="{iconPacks:FontAwesome TimesSolid,
+                                                                        Width=10,
+                                                                        Height=10}"
+                                        Style="{StaticResource HideButton}"
+                                        ToolTip="Hide" />
 
-            <ListView
-                x:Name="ListView"
-                extensions:GridViewSortExtension.AutoSort="True"
-                listViewLayout:ListViewLayoutManager.Enabled="true"
-                ItemContainerStyle="{StaticResource ListViewItemHome}"
-                ItemsSource="{Binding Source={StaticResource Episodes}, Mode=OneWay}"
-                Loaded="{s:Action ListViewLoaded}"
-                SelectedItem="{Binding ActiveItem}"
-                SelectionChanged="{s:Action SelectionChanged}">
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem
-                            Command="{s:Action LoadEpisodes,
-                                               ActionNotFound=Disable}"
-                            Header="Reload"
-                            Icon="{iconPacks:FontAwesome SyncAltSolid}" />
-                    </ContextMenu>
-                </ListView.ContextMenu>
-                <ListView.View>
-                    <GridView AllowsColumnReorder="False">
-                        <GridViewColumn
-                            extensions:GridViewSortExtension.PropertyName="Name"
-                            listViewLayout:RangeColumn.IsFillColumn="true"
-                            Header="Name"
-                            HeaderContainerStyle="{StaticResource GridViewFirstCenteredContainerStyle}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate DataType="models:Episode">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Button
-                                            Width="27"
-                                            Margin="-14,-4,0,-4"
-                                            Padding="4,5,4,4"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch"
-                                            HorizontalContentAlignment="Center"
-                                            extensions:CursorSpotlightExtension.BackgroundBrush="Transparent"
-                                            extensions:RippleExtension.BackgroundBrush="#EF5350"
-                                            Command="{s:Action HideItem,
-                                                               ActionNotFound=Disable}"
-                                            CommandParameter="{Binding}"
-                                            Content="{iconPacks:FontAwesome TimesSolid,
-                                                                            Width=10,
-                                                                            Height=10}"
-                                            Style="{StaticResource HideButton}"
-                                            ToolTip="Hide" />
-
-                                        <TextBlock
-                                            x:Name="Name"
-                                            Grid.Column="1"
-                                            Margin="8,0,0,0"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Center"
-                                            Text="{Binding Name}"
-                                            TextTrimming="CharacterEllipsis"
-                                            TextWrapping="NoWrap"
-                                            ToolTip="{Binding Name}"
-                                            ToolTipService.Placement="Bottom" />
-
-                                        <ProgressBar
-                                            Grid.Column="2"
-                                            Width="50"
-                                            Margin="8,0,0,0"
-                                            extensions:ProgressBarExtension.Content="{Binding TorrentProgressContent}"
-                                            extensions:ProgressBarExtension.IsProgressAnimationEnabled="False"
-                                            Maximum="1"
-                                            Minimum="0"
-                                            ToolTip="Download progress"
-                                            Visibility="{Binding TorrentShowProgress, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
-                                            Value="{Binding TorrentProgress}" />
-
-                                        <Grid
-                                            Grid.Column="3"
-                                            Margin="4,0,2,0"
-                                            VerticalAlignment="Center"
-                                            Background="Transparent"
-                                            ToolTip="Download finished"
-                                            Visibility="{Binding TorrentFinished, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
-                                            <ContentControl Content="{iconPacks:FontAwesome CheckSolid}" />
-                                        </Grid>
-                                    </Grid>
-
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding Watched}" Value="True">
-                                            <Setter TargetName="Name" Property="Opacity" Value="0.3" />
-                                        </DataTrigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn
-                            Width="85"
-                            extensions:GridViewSortExtension.PropertyName="EpisodeNum"
-                            listViewLayout:FixedColumn.Width="85"
-                            Header="Episode"
-                            HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate DataType="models:Episode">
                                     <TextBlock
-                                        Width="78"
-                                        Margin="-12,0"
-                                        HorizontalAlignment="Left"
-                                        Text="{Binding EpisodeNum}"
-                                        TextAlignment="Center" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn
-                            Width="120"
-                            extensions:GridViewSortExtension.PropertyName="Released"
-                            listViewLayout:FixedColumn.Width="120"
-                            Header="Added"
-                            HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate DataType="models:Episode">
-                                    <TextBlock Text="{Binding ReleasedString}" ToolTipService.Placement="Bottom">
-                                        <TextBlock.ToolTip>
-                                            <ToolTip Content="{Binding ReleasedLocal}" ContentStringFormat="{}{0:g}" />
-                                        </TextBlock.ToolTip>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn
-                            Width="70"
-                            listViewLayout:FixedColumn.Width="70"
-                            CellTemplate="{DynamicResource WatchOpen}"
-                            HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}" />
-                    </GridView>
-                </ListView.View>
+                                        x:Name="Name"
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Name}"
+                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="NoWrap"
+                                        ToolTip="{Binding Name}"
+                                        ToolTipService.Placement="Bottom" />
 
-                <ListView.GroupStyle>
-                    <GroupStyle HidesIfEmpty="True">
-                        <GroupStyle.ContainerStyle>
-                            <Style TargetType="{x:Type GroupItem}">
-                                <Setter Property="Margin" Value="0,0,50,0" />
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type GroupItem}">
-                                            <Expander Margin="0,4,0,0" Style="{DynamicResource ExpanderCustom}">
-                                                <Expander.Header>
-                                                    <Grid Margin="0,0,20,0">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*" />
-                                                            <ColumnDefinition Width="Auto" />
-                                                            <ColumnDefinition Width="Auto" />
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock
-                                                            FontSize="14"
-                                                            FontWeight="SemiBold"
-                                                            Text="{Binding Name, TargetNullValue='', FallbackValue='No Anime Group'}"
-                                                            TextTrimming="CharacterEllipsis" />
-                                                        <TextBlock
-                                                            Grid.Column="1"
-                                                            Margin="8,0"
-                                                            VerticalAlignment="Center"
-                                                            FontSize="12"
-                                                            Opacity=".7"
-                                                            Text="{Binding ItemCount, TargetNullValue=0, FallbackValue=0, Converter={x:Static converters:IntToEstimatedWatchTimeConverter.Instance}}"
-                                                            ToolTip="Estimated watch time based on 23min per episode"
-                                                            ToolTipService.Placement="Left" />
-                                                        <TextBlock
-                                                            Grid.Column="2"
-                                                            FontSize="14"
-                                                            FontWeight="SemiBold"
-                                                            Text="{Binding ItemCount, TargetNullValue=0, FallbackValue=0, StringFormat='Eps. {0}'}" />
-                                                    </Grid>
-                                                </Expander.Header>
-                                                <ItemsPresenter Margin="0,4" />
-                                            </Expander>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Name, FallbackValue=''}" Value="">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate>
-                                                    <ItemsPresenter />
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
+                                    <ProgressBar
+                                        Grid.Column="2"
+                                        Width="50"
+                                        Margin="8,0,0,0"
+                                        extensions:ProgressBarExtension.Content="{Binding TorrentProgressContent}"
+                                        extensions:ProgressBarExtension.IsProgressAnimationEnabled="False"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        ToolTip="Download progress"
+                                        Visibility="{Binding TorrentShowProgress, Converter={x:Static s:BoolToVisibilityConverter.Instance}}"
+                                        Value="{Binding TorrentProgress}" />
+
+                                    <Grid
+                                        Grid.Column="3"
+                                        Margin="4,0,2,0"
+                                        VerticalAlignment="Center"
+                                        Background="Transparent"
+                                        ToolTip="Download finished"
+                                        Visibility="{Binding TorrentFinished, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                                        <ContentControl Content="{iconPacks:FontAwesome CheckSolid}" />
+                                    </Grid>
+                                </Grid>
+
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Watched}" Value="True">
+                                        <Setter TargetName="Name" Property="Opacity" Value="0.3" />
                                     </DataTrigger>
-                                    <EventTrigger RoutedEvent="GroupItem.Loaded">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetProperty="(GroupItem.Opacity)"
-                                                    From="0"
-                                                    To="1"
-                                                    Duration="0:0:0.2" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </GroupStyle.ContainerStyle>
-                    </GroupStyle>
-                </ListView.GroupStyle>
-            </ListView>
-        </ScrollViewer>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
+                        Width="85"
+                        extensions:GridViewSortExtension.PropertyName="EpisodeNum"
+                        listViewLayout:FixedColumn.Width="85"
+                        Header="Episode"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="models:Episode">
+                                <TextBlock
+                                    Width="78"
+                                    Margin="-12,0"
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding EpisodeNum}"
+                                    TextAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
+                        Width="120"
+                        extensions:GridViewSortExtension.PropertyName="Released"
+                        listViewLayout:FixedColumn.Width="120"
+                        Header="Added"
+                        HeaderContainerStyle="{StaticResource GridViewCenteredContainerStyle}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="models:Episode">
+                                <TextBlock Text="{Binding ReleasedString}" ToolTipService.Placement="Bottom">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Content="{Binding ReleasedLocal}" ContentStringFormat="{}{0:g}" />
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
+                        Width="70"
+                        listViewLayout:FixedColumn.Width="70"
+                        CellTemplate="{DynamicResource WatchOpen}"
+                        HeaderContainerStyle="{StaticResource GridViewLastCenteredContainerStyle}" />
+                </GridView>
+            </ListView.View>
+
+            <ListView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Margin" Value="0,0,50,0" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander Margin="0,4,0,0" Style="{DynamicResource ExpanderCustom}">
+                                            <Expander.Header>
+                                                <Grid Margin="0,0,20,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                        FontSize="14"
+                                                        FontWeight="SemiBold"
+                                                        Text="{Binding Name, TargetNullValue='', FallbackValue='No Anime Group'}"
+                                                        TextTrimming="CharacterEllipsis" />
+                                                    <TextBlock
+                                                        Grid.Column="1"
+                                                        Margin="8,0"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="12"
+                                                        Opacity=".7"
+                                                        Text="{Binding ItemCount, TargetNullValue=0, FallbackValue=0, Converter={x:Static converters:IntToEstimatedWatchTimeConverter.Instance}}"
+                                                        ToolTip="Estimated watch time based on 23min per episode"
+                                                        ToolTipService.Placement="Left" />
+                                                    <TextBlock
+                                                        Grid.Column="2"
+                                                        FontSize="14"
+                                                        FontWeight="SemiBold"
+                                                        Text="{Binding ItemCount, TargetNullValue=0, FallbackValue=0, StringFormat='Eps. {0}'}" />
+                                                </Grid>
+                                            </Expander.Header>
+                                            <ItemsPresenter Margin="0,4" />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Name, FallbackValue=''}" Value="">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <ItemsPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <EventTrigger RoutedEvent="GroupItem.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(GroupItem.Opacity)"
+                                                From="0"
+                                                To="1"
+                                                Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListView.GroupStyle>
+        </ListView>
 
 
         <StackPanel
