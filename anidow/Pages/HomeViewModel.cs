@@ -25,7 +25,8 @@ using Anidow.Services;
 using Anidow.Utils;
 using BencodeNET.Torrents;
 using FluentScheduler;
-using Hardcodet.Wpf.TaskbarNotification;
+using H.NotifyIcon;
+using H.NotifyIcon.Core;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -174,7 +175,7 @@ public class HomeViewModel : Conductor<IEpisode>.Collection.OneActive, IHandle<D
 
         if (_settingsService.Settings.Notifications)
         {
-            _taskbarIcon.ShowBalloonTip("Added", item.Name, BalloonIcon.None);
+            _taskbarIcon.ShowNotification("Added", item.Name);
         }
         else
         {

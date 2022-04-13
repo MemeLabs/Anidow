@@ -16,7 +16,7 @@ using Anidow.Properties;
 using Anidow.Services;
 using Anidow.Torrent_Clients;
 using FluentScheduler;
-using Hardcodet.Wpf.TaskbarNotification;
+using H.NotifyIcon;
 using Jot;
 using Jot.Storage;
 using Microsoft.AppCenter;

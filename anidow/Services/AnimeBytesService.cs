@@ -17,7 +17,7 @@ using Anidow.Model;
 using Anidow.Properties;
 using Anidow.Utils;
 using BencodeNET.Torrents;
-using Hardcodet.Wpf.TaskbarNotification;
+using H.NotifyIcon;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stylet;
@@ -154,7 +154,7 @@ public class AnimeBytesService : RssFeedService, INotifyPropertyChanged
 
                     if (_settingsService.Settings.Notifications)
                     {
-                        _taskbarIcon.ShowBalloonTip("Added", item.Name, BalloonIcon.None);
+                        _taskbarIcon.ShowNotification("Added", item.Name);
                     }
                     else
                     {

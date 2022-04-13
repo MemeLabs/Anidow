@@ -8,7 +8,8 @@ using Anidow.Database.Models;
 using Anidow.Enums;
 using Anidow.Events;
 using Anidow.Model;
-using Hardcodet.Wpf.TaskbarNotification;
+using H.NotifyIcon;
+using H.NotifyIcon.Core;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -297,9 +298,9 @@ public class NotifyService
 
     private void NotifyUser(NotifyItem item, int matches)
     {
-        _taskbarIcon.ShowBalloonTip(
+        _taskbarIcon.ShowNotification(
             $"New {"match".ToQuantity(matches)} found!",
             $"Found {matches} new {"match".ToQuantity(matches, ShowQuantityAs.None)} for {item.Name}",
-            BalloonIcon.Info);
+            NotificationIcon.Info);
     }
 }

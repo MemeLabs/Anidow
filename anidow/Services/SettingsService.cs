@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Anidow.Model;
 using Anidow.Utils;
-using Hardcodet.Wpf.TaskbarNotification;
+using H.NotifyIcon;
 using Notifications.Wpf.Core;
 using Serilog;
 using Stylet;

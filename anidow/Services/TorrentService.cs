@@ -129,12 +129,21 @@ public class TorrentService
 
     public async Task UpdateTorrentProgress(IEnumerable<IEpisode> items)
     {
-        var torrents = _settingsService.Settings.TorrentClient switch
+        object[] torrents;
+        try
         {
-            TorrentClient.QBitTorrent => (object[])await GetTorrents<QBitTorrentEntry[]>(),
-            TorrentClient.Deluge => null,
-            _ => null,
-        };
+            torrents = _settingsService.Settings.TorrentClient switch
+            {
+                TorrentClient.QBitTorrent => (object[])await GetTorrents<QBitTorrentEntry[]>(),
+                TorrentClient.Deluge => null,
+                _ => null,
+            };
+        }
+        catch (Exception)
+        {
+            // ignore
+            return;
+        }
 
         if (torrents is null)
         {

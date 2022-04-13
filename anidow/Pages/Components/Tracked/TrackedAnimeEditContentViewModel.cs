@@ -14,7 +14,8 @@ using Anidow.Services;
 using Anidow.Utils;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.SystemTextJson;
-using Hardcodet.Wpf.TaskbarNotification;
+using H.NotifyIcon;
+using H.NotifyIcon.Core;
 using Microsoft.EntityFrameworkCore;
 using Notifications.Wpf.Core;
 using Serilog;
@@ -103,7 +104,7 @@ public class TrackedAnimeEditContentViewModel : Screen
         await Anime.UpdateInDatabase();
         if (_settingsService.Settings.Notifications)
         {
-            _taskbarIcon.ShowBalloonTip("Saved", Anime.Name, BalloonIcon.Info);
+            _taskbarIcon.ShowNotification("Saved", Anime.Name, NotificationIcon.Info);
         }
         else
         {
